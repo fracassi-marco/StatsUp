@@ -12,4 +12,4 @@
 /build
 /captures
 .externalNativeBuild
-application.properties
+app/src/main/assets/application.properties
