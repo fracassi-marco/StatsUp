@@ -20,16 +20,16 @@ class FrequencyFragment : Fragment() {
         val view = inflater.inflate(R.layout.frequency_fragment, container, false)
         val yearBarChart = view.findViewById<BarChart>(R.id.year_frequency_bar_chart)
 
-        val data = mutableListOf<BarEntry>()
-        for (i in 0..35) {
-            data.add(BarEntry(i.toFloat(), i.toFloat()))
+        val groups = Group().byMonths(ActivityRepository().all())
+
+        var count = 0
+        val data = groups.map {
+            BarEntry(count++.toFloat(), it.value.size.toFloat())
         }
 
-        val barDataSet = BarDataSet(data, "Ciao").apply {
+        val barDataSet = BarDataSet(data, "number of activities").apply {
             valueFormatter = BarChartValueFormatter()
         }
-        //barDataSet.valueTextSize = 10f
-        //barDataSet.color = resources.getColor(R.color.DarkOrange)
         yearBarChart.data = BarData(barDataSet)
 
         yearBarChart.setVisibleXRangeMaximum(12.toFloat())
@@ -71,3 +71,4 @@ class FrequencyFragment : Fragment() {
         }
     }
 }
+

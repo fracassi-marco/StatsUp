@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.statsup">
+          package="com.statsup"
+          android:installLocation="auto">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
             android:allowBackup="true"
@@ -15,10 +18,15 @@
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <data android:host="com-sportshub" android:scheme="oauth"/>
+            </intent-filter>
         </activity>
+        <activity
+                android:name="com.sweetzpot.stravazpot.authenticaton.ui.StravaLoginActivity"
+                android:label="@string/login_strava" />
     </application>
 
 </manifest>

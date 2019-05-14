@@ -13,4 +13,40 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+
+    <string name="login_strava">Login Strava</string>
+
+    <string name="run_title_default">Running</string>
+    <string name="walk_title_default">Walking</string>
+    <string name="workout_title_default">Workout</string>
+    <string name="alpine_ski_title_default">Apline Ski</string>
+    <string name="backcountry_ski">Backcountry Ski</string>
+    <string name="canoeing">Canoeing</string>
+    <string name="crossfit">Crossfit</string>
+    <string name="ebike_ride">eBike Ride</string>
+    <string name="elliptical">Elliptical</string>
+    <string name="hand_cycle">Hand Cycle</string>
+    <string name="ride">Riding</string>
+    <string name="hike">Hiking</string>
+    <string name="ice_skate">Ice Skate</string>
+    <string name="inline_skate">Inline Skate</string>
+    <string name="kayak">Kayaking</string>
+    <string name="kitesurf">Kitesurf</string>
+    <string name="nordic_ski">Nordic Ski</string>
+    <string name="climbing">Climbing</string>
+    <string name="roller_ski">Roller Ski</string>
+    <string name="rowing">Rowing</string>
+    <string name="snowboard">Snowboard</string>
+    <string name="snowshoe">Snowshoe</string>
+    <string name="stepper">Stepper</string>
+    <string name="paddleboard">Paddleboarding</string>
+    <string name="surf">Surfing</string>
+    <string name="swim">Swimming</string>
+    <string name="cyclette">Cyclette</string>
+    <string name="treadmill">Treadmill</string>
+    <string name="weight_training">Weight Training</string>
+    <string name="wheelchair">Wheelchair</string>
+    <string name="windsurf">Windsurfing</string>
+    <string name="yoga">Yoga</string>
+    <string name="meditation">Meditation</string>
 </resources>
