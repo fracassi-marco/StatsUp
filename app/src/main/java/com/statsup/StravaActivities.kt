@@ -42,7 +42,7 @@ class StravaActivities(private val code: String, private val confs: Confs) : Asy
     }
 
     override fun onPostExecute(activities: List<Activity>) {
-        ActivityRepository().addAll(activities.map { asRun(it) })
+        ActivityRepository.addAll(activities.map { asRun(it) })
     }
 
     private fun asRun(it: Activity): com.statsup.Activity {

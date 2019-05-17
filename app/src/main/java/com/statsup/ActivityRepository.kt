@@ -1,16 +1,18 @@
 package com.statsup
 
-class ActivityRepository {
+import java.util.*
 
-    companion object {
-        private var activities: MutableList<Activity> = mutableListOf()
-    }
+object ActivityRepository {
+
+    private val listeners: MutableList<Listener<List<Activity>>> = ArrayList()
+    private var activities: MutableList<Activity> = mutableListOf()
 
     fun addAll(value: List<Activity>) {
         activities.addAll(value)
+        listeners.forEach { it.update(activities) }
     }
 
-    fun all(): List<Activity> {
-        return activities
+    fun listen(listener: Listener<List<Activity>>) {
+        listeners.add(listener)
     }
 }

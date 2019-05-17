@@ -12,7 +12,6 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import org.joda.time.DateTime
 
 class FrequencyFragment : Fragment() {
 
@@ -20,17 +19,22 @@ class FrequencyFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.frequency_fragment, container, false)
+
+        ActivityRepository.listen(object : Listener<List<Activity>> {
+            override fun update(subject: List<Activity>) {
+                refresh(view, subject)
+            }
+        })
+
+        return view
+    }
+
+    fun refresh(view: View, subject: List<Activity>) {
+
         val yearBarChart = view.findViewById<BarChart>(R.id.year_frequency_bar_chart)
         val yearLabel = view.findViewById<TextView>(R.id.year_label)
 
-        val activities = ActivityRepository().all()
-        /*val activities = listOf(
-            Activity(Sports.ALPINE_SKI, 1f, 1, DateTime.parse("2019-01-01T01:01:01Z")),
-            Activity(Sports.ALPINE_SKI, 1f, 1, DateTime.parse("2019-12-31T01:01:01Z")),
-            Activity(Sports.ALPINE_SKI, 1f, 1, DateTime.parse("2018-01-01T01:01:01Z")),
-            Activity(Sports.ALPINE_SKI, 1f, 1, DateTime.parse("2017-01-01T01:01:01Z"))
-        )*/
-        val groups = Group().byMonths(activities)
+        val groups = Group().byMonths(subject)
 
         var count = 0
         val data = groups.map {
@@ -44,7 +48,6 @@ class FrequencyFragment : Fragment() {
 
         yearBarChart.setVisibleXRangeMaximum(12.toFloat())
         year = groups.keys.last().year
-        moveIndex(groups, 0, yearBarChart, yearLabel)
 
         yearBarChart.axisLeft.isEnabled = false
         yearBarChart.axisLeft.setDrawGridLines(false)
@@ -56,7 +59,6 @@ class FrequencyFragment : Fragment() {
         yearBarChart.xAxis.valueFormatter = MonthLabels()
         yearBarChart.setTouchEnabled(false)
 
-        yearBarChart.invalidate()
 
         val previousYearButton = view.findViewById<ImageView>(R.id.previous_year_button)
         previousYearButton.setOnClickListener {
@@ -67,7 +69,7 @@ class FrequencyFragment : Fragment() {
             moveIndex(groups, 1, yearBarChart, yearLabel)
         }
 
-        return view
+        moveIndex(groups, 0, yearBarChart, yearLabel)
     }
 
     private fun moveIndex(
@@ -76,15 +78,16 @@ class FrequencyFragment : Fragment() {
         yearBarChart: BarChart,
         yearLabel: TextView
     ) {
-        println("year = ${year} amount = $amount")
         val newYear = year + amount
-        if(newYear >= groups.keys.first().year && newYear <= groups.keys.last().year) {
+        if (newYear >= groups.keys.first().year && newYear <= groups.keys.last().year) {
 
             val offset = newYear - groups.keys.last().year
 
             yearBarChart.moveViewToX(yearBarChart.xChartMax + (offset * 12) - 12)
             yearLabel.text = newYear.toString()
             year = newYear
+            yearBarChart.moveViewToX(yearBarChart.xChartMax + (offset * 12) - 12)
+
         }
     }
 }

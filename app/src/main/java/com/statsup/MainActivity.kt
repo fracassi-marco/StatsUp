@@ -43,9 +43,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val fragment = when (menuItem.itemId) {
-            R.id.nav_home -> {
-                FrequencyFragment()
-            }
             R.id.nav_gallery -> {
                 val intent = StravaLogin.withContext(applicationContext)
                     .withClientID(Confs(applicationContext).stravaClientId())
@@ -54,18 +51,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .withAccessScope(AccessScope.VIEW_PRIVATE_WRITE)
                     .makeIntent()
                 startActivityForResult(intent, STRAVA_REQUEST_CODE)
-                FrequencyFragment()
-            }
-            R.id.nav_slideshow -> {
-                FrequencyFragment()
-            }
-            R.id.nav_tools -> {
-                FrequencyFragment()
-            }
-            R.id.nav_share -> {
-                FrequencyFragment()
-            }
-            R.id.nav_send -> {
                 FrequencyFragment()
             }
             else -> {
