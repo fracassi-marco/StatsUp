@@ -58,14 +58,13 @@ class FrequencyFragment : Fragment() {
         yearBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         yearBarChart.xAxis.valueFormatter = MonthLabels()
         yearBarChart.setTouchEnabled(false)
+        yearBarChart.description = null
+        yearBarChart.animateXY(1500, 1500)
 
-
-        val previousYearButton = view.findViewById<ImageView>(R.id.previous_year_button)
-        previousYearButton.setOnClickListener {
+        view.findViewById<ImageView>(R.id.previous_year_button).setOnClickListener {
             moveIndex(groups, -1, yearBarChart, yearLabel)
         }
-        val nextYearButton = view.findViewById<ImageView>(R.id.next_year_button)
-        nextYearButton.setOnClickListener {
+        view.findViewById<ImageView>(R.id.next_year_button).setOnClickListener {
             moveIndex(groups, 1, yearBarChart, yearLabel)
         }
 

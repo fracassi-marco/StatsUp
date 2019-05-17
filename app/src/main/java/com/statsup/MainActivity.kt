@@ -18,6 +18,7 @@ private const val STRAVA_REQUEST_CODE = 1001
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private val frequencyFragment = FrequencyFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +52,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .withAccessScope(AccessScope.VIEW_PRIVATE_WRITE)
                     .makeIntent()
                 startActivityForResult(intent, STRAVA_REQUEST_CODE)
-                FrequencyFragment()
+                frequencyFragment
             }
             else -> {
-                FrequencyFragment()
+                frequencyFragment
             }
         }
 
