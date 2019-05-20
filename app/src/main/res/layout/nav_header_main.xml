@@ -22,6 +22,7 @@
             android:id="@+id/imageView"/>
 
     <TextView
+            android:id="@+id/sidebar_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"

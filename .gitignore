@@ -13,3 +13,4 @@
 /captures
 .externalNativeBuild
 app/src/main/assets/application.properties
+app/google-services.json

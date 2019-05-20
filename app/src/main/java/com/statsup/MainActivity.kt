@@ -1,5 +1,6 @@
 package com.statsup
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -8,6 +9,10 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.widget.TextView
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.sweetzpot.stravazpot.authenticaton.api.AccessScope
 import com.sweetzpot.stravazpot.authenticaton.api.ApprovalPrompt
 import com.sweetzpot.stravazpot.authenticaton.api.StravaLogin
@@ -15,10 +20,12 @@ import com.sweetzpot.stravazpot.authenticaton.ui.StravaLoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 private const val STRAVA_REQUEST_CODE = 1001
+private const val SIGNIN = 1002
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val frequencyFragment = FrequencyFragment()
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +39,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        openFragment("Home", frequencyFragment)
+        startLogin()
     }
 
     override fun onBackPressed() {
@@ -59,14 +69,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, fragment)
-            .commit()
-
-        supportActionBar!!.title = menuItem.title
+        openFragment(menuItem.title, fragment)
 
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun openFragment(title: CharSequence?, fragment: FrequencyFragment) {
+        supportActionBar!!.title = title
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, fragment)
+            .commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -79,5 +92,50 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             StravaActivities(code, Confs(applicationContext)).execute()
         }
+        else if (requestCode == SIGNIN) {
+            if (resultCode == Activity.RESULT_OK) {
+                initUserListener()
+                openFragment("Home", frequencyFragment)
+            } else {
+                startLogin()
+            }
+        }
+    }
+
+    private fun initUserListener() {
+        if(!::user.isInitialized) {
+            UserRepository.listen(object : Listener<User> {
+                override fun update(subject: User) {
+                    user = subject
+                    updateGui()
+                }
+            })
+        }
+    }
+
+    private fun updateGui() {
+        if(::user.isInitialized) {
+            nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_username).text = user.name
+        }
+    }
+
+    private fun startLogin() {
+        if (currentUser() == null) {
+            startActivityForResult(
+                AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(
+                        arrayListOf(
+                            AuthUI.IdpConfig.GoogleBuilder().build()
+                        )
+                    )
+                    .build(),
+                SIGNIN
+            )
+        }
+    }
+
+    private fun currentUser(): FirebaseUser? {
+        return FirebaseAuth.getInstance().currentUser
     }
 }
