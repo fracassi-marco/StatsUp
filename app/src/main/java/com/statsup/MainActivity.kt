@@ -64,6 +64,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivityForResult(intent, STRAVA_REQUEST_CODE)
                 frequencyFragment
             }
+
+            R.id.nav_logout -> {
+                UserRepository.cleanListeners()
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener { startLogin() }
+                frequencyFragment
+            }
+
             else -> {
                 frequencyFragment
             }
@@ -103,7 +112,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initUserListener() {
-        if(!::user.isInitialized) {
+        if (!::user.isInitialized) {
             UserRepository.listen(object : Listener<User> {
                 override fun update(subject: User) {
                     user = subject
@@ -114,7 +123,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updateGui() {
-        if(::user.isInitialized) {
+        if (::user.isInitialized) {
             nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_username).text = user.name
         }
     }

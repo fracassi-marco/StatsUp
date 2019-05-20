@@ -20,7 +20,7 @@ object UserRepository {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var user = dataSnapshot.getValue(User::class.java)
                     if (user == null) {
-                        user = User(name = currentUser().displayName!!, image = randomImage(), id = currentUser().uid)
+                        user = User(name = currentUser().displayName!!, image = "none", id = currentUser().uid)
                     }
                     else {
                         user.id = dataSnapshot.key!!
@@ -35,24 +35,6 @@ object UserRepository {
             userDatabaseRef.addValueEventListener(userListener)
         }
         listeners.add(listener)
-    }
-
-    private fun randomImage(): String {
-        return "hero${Random().nextInt(19)}"
-    }
-
-    fun listenOnce(listener: Listener<User>) {
-        val userListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val subject = dataSnapshot.getValue<User>(User::class.java)!!
-                subject.id = dataSnapshot.key!!
-                listener.update(subject)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-            }
-        }
-        userDatabaseRef.addListenerForSingleValueEvent(userListener)
     }
 
     private fun currentUser(): FirebaseUser {
