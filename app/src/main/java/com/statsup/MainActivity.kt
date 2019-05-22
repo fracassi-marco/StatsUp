@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_logout -> {
                 UserRepository.cleanListeners()
+                ActivityRepository.cleanListeners()
                 AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener { startLogin() }

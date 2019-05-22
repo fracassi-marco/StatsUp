@@ -35,6 +35,9 @@ class FrequencyFragment : Fragment() {
         val yearLabel = view.findViewById<TextView>(R.id.year_label)
 
         val groups = Group().byMonths(subject)
+        if(groups.isEmpty()) {
+            return
+        }
 
         var count = 0
         val data = groups.map {

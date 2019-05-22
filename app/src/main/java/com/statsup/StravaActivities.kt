@@ -7,7 +7,6 @@ import com.sweetzpot.stravazpot.authenticaton.api.AuthenticationAPI
 import com.sweetzpot.stravazpot.authenticaton.model.AppCredentials
 import com.sweetzpot.stravazpot.common.api.AuthenticationConfig
 import com.sweetzpot.stravazpot.common.api.StravaConfig
-import org.joda.time.DateTime
 
 
 class StravaActivities(private val code: String, private val confs: Confs) : AsyncTask<Void, Void, List<Activity>>() {
@@ -42,12 +41,12 @@ class StravaActivities(private val code: String, private val confs: Confs) : Asy
     }
 
     override fun onPostExecute(activities: List<Activity>) {
-        ActivityRepository.addAll(activities.map { asRun(it) })
+        ActivityRepository.addIfNotExists(activities.map { asRun(it) })
     }
 
     private fun asRun(it: Activity): com.statsup.Activity {
         val sport = mapSport(it.type.name)
-        return Activity(sport, it.distance.meters, it.elapsedTime.seconds, DateTime(it.startDateLocal))
+        return Activity(sport, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time)
     }
 
     private fun mapSport(sport: String): Sports {

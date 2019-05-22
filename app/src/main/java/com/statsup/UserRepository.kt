@@ -37,12 +37,12 @@ object UserRepository {
         listeners.add(listener)
     }
 
-    private fun currentUser(): FirebaseUser {
-        return FirebaseAuth.getInstance().currentUser!!
-    }
-
     fun cleanListeners() {
         listeners.clear()
+    }
+
+    private fun currentUser(): FirebaseUser {
+        return FirebaseAuth.getInstance().currentUser!!
     }
 }
 
