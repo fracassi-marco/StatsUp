@@ -59,7 +59,7 @@ class FrequencyFragment : Fragment() {
             BarEntry(count++.toFloat(), it.value.size.toFloat())
         }
 
-        val barDataSet = BarDataSet(data, "number of activities").apply {
+        val barDataSet = BarDataSet(data, "Numero di attività").apply {
             valueFormatter = BarChartValueFormatter()
         }
         yearBarChart.data = BarData(barDataSet)

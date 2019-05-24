@@ -24,7 +24,7 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.Holder>() {
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val activity = dataSet[position]
 
-        holder.layout.history_list_item_title_text.text = "Attività"
+        holder.layout.history_list_item_title_text.text = activity.title
         holder.layout.history_list_item_icon.setImageResource(activity.sport.icon)
         holder.layout.history_list_item_date_text.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm:ss"))
         val hours = activity.durationInSeconds / 3600;

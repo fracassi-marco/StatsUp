@@ -7,6 +7,7 @@ import com.sweetzpot.stravazpot.authenticaton.api.AuthenticationAPI
 import com.sweetzpot.stravazpot.authenticaton.model.AppCredentials
 import com.sweetzpot.stravazpot.common.api.AuthenticationConfig
 import com.sweetzpot.stravazpot.common.api.StravaConfig
+import kotlin.coroutines.coroutineContext
 
 
 class StravaActivities(
@@ -51,7 +52,11 @@ class StravaActivities(
 
     private fun asRun(it: Activity): com.statsup.Activity {
         val sport = mapSport(it.type.name)
-        return Activity(sport, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time)
+        var title = it.name
+        if (title.isEmpty()) {
+            title = sport.name.capitalize()
+        }
+        return Activity(sport, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time, title)
     }
 
     private fun mapSport(sport: String): Sports {
