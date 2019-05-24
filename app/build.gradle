@@ -35,6 +35,8 @@ dependencies {
 
     implementation "com.github.PhilJay:MPAndroidChart:v3.0.1"
     implementation "joda-time:joda-time:2.10.2"
+    implementation "com.squareup.picasso:picasso:2.5.2"
+    implementation "de.hdodenhof:circleimageview:2.1.0"
 
     //Strava
     implementation project(":strava-zpot")

@@ -11,14 +11,17 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.squareup.picasso.Picasso
 import com.sweetzpot.stravazpot.authenticaton.api.AccessScope
 import com.sweetzpot.stravazpot.authenticaton.api.ApprovalPrompt
 import com.sweetzpot.stravazpot.authenticaton.api.StravaLogin
 import com.sweetzpot.stravazpot.authenticaton.ui.StravaLoginActivity
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 
 private const val STRAVA_REQUEST_CODE = 1001
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val fragment = when (menuItem.itemId) {
-            R.id.nav_history-> {
+            R.id.nav_history -> {
                 historyFragment
             }
             R.id.nav_import_from_strava -> {
@@ -107,7 +110,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
 
             progressbar.visibility = View.VISIBLE
-            StravaActivities(code, Confs(applicationContext)){progressbar.visibility = View.INVISIBLE}.execute()
+            StravaActivities(code, Confs(applicationContext)) { progressbar.visibility = View.INVISIBLE }.execute()
         }
         else if (requestCode == SIGNIN) {
             if (resultCode == Activity.RESULT_OK) {
@@ -131,8 +134,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updateGui() {
-        if (::user.isInitialized) {
-            nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_username).text = user.name
+        nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_username).text = currentUser()!!.displayName
+        nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_email).text = currentUser()!!.email
+
+        for (info in currentUser()!!.providerData) {
+            if (info.getProviderId() == "google.com") {
+                val image = nav_view.getHeaderView(0).findViewById<CircleImageView>(R.id.sidebar_image)
+                Picasso.with(applicationContext)
+                    .load(info.photoUrl)
+                    .placeholder(android.R.color.darker_gray)
+                    .into(image)
+                break
+            }
         }
     }
 
@@ -149,6 +162,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .build(),
                 SIGNIN
             )
+        } else {
+            updateGui()
         }
     }
 
