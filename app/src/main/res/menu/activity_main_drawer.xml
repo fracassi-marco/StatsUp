@@ -4,17 +4,21 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+        <!--item
+                android:id="@+id/nav_history"
+                android:icon="@drawable/outline_view_list_24"
+                android:title="@string/menu_history"/-->
         <item
-                android:id="@+id/nav_home"
+                android:id="@+id/nav_stats"
                 android:icon="@drawable/outline_dashboard_24"
-                android:title="@string/menu_home"/>
+                android:title="@string/menu_stats"/>
         <item
-                android:id="@+id/nav_gallery"
+                android:id="@+id/nav_import_from_strava"
                 android:icon="@drawable/outline_cloud_download_24"
                 android:title="@string/menu_import_from_strava"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/menu_other">
         <menu>
             <item
                     android:id="@+id/nav_logout"

@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val fragment = when (menuItem.itemId) {
-            R.id.nav_gallery -> {
+            R.id.nav_import_from_strava -> {
                 val intent = StravaLogin.withContext(applicationContext)
                     .withClientID(Confs(applicationContext).stravaClientId())
                     .withRedirectURI("oauth://com-sportshub")
