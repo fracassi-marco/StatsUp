@@ -39,19 +39,23 @@ class FrequencyFragment : Fragment() {
     }
 
     fun refresh(subject: List<Activity>) {
-        val groups = Group().byMonths(subject)
-        if (groups.isEmpty()) {
+        if (subject.isEmpty()) {
             year = 0
+            yearLabel.text = ""
             yearBarChart.data = BarData(emptyList())
             yearBarChart.invalidate()
             return
         }
+        val groups = Group().byMonths(subject)
         if (year == 0) {
             year = groups.keys.last().year
         }
 
+        yearBarChart.axisLeft.axisMinimum = 0f
+        yearBarChart.axisLeft.axisMaximum = groups.values.maxBy { it.size }!!.size.toFloat()
+
         var count = 0
-        val data = groups.map {
+        val data = groups.filter { it.key.year == year }.map {
             BarEntry(count++.toFloat(), it.value.size.toFloat())
         }
 
@@ -60,31 +64,20 @@ class FrequencyFragment : Fragment() {
         }
         yearBarChart.data = BarData(barDataSet)
         yearBarChart.setVisibleXRangeMaximum(12.toFloat())
+        yearBarChart.invalidate()
+        yearLabel.text = year.toString()
 
         previousYearButton.setOnClickListener {
-            moveIndex(groups, -1)
+            if (year > groups.keys.first().year) {
+                year += -1
+                refresh(subject)
+            }
         }
         nextYearButton.setOnClickListener {
-            moveIndex(groups, 1)
-        }
-
-        moveIndex(groups, 0)
-    }
-
-    private fun moveIndex(
-        groups: Map<Month, List<Activity>>,
-        amount: Int
-    ) {
-        val newYear = year + amount
-        if (newYear >= groups.keys.first().year && newYear <= groups.keys.last().year) {
-
-            val offset = newYear - groups.keys.last().year
-
-            yearBarChart.moveViewToX(yearBarChart.xChartMax + (offset * 12) - 12)
-            yearLabel.text = newYear.toString()
-            year = newYear
-            yearBarChart.moveViewToX(yearBarChart.xChartMax + (offset * 12) - 12)
-            yearBarChart.invalidate()
+            if (year < groups.keys.last().year) {
+                year += 1
+                refresh(subject)
+            }
         }
     }
 
