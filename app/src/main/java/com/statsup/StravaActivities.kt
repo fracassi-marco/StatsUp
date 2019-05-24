@@ -29,7 +29,7 @@ class StravaActivities(private val code: String, private val confs: Confs) : Asy
     }
 
     private fun download(activityAPI: ActivityAPI, page: Int): MutableList<Activity> {
-        val itemsPerPage = 50
+        val itemsPerPage = 100
         val activities = activityAPI.listMyActivities()
                 .inPage(page)
                 .perPage(itemsPerPage)

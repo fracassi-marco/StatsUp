@@ -20,6 +20,7 @@ object ActivityRepository {
             val eventListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val items = dataSnapshot.children.map { it.getValue(Activity::class.java)!! }
+                    activities = items.toMutableList()
                     listeners.forEach { it.update(items) }
                 }
 
@@ -32,18 +33,25 @@ object ActivityRepository {
     }
 
     fun addIfNotExists(newActivities: List<Activity>) {
-        val toAdd = newActivities.filter { !activities.contains(it) }
-        toAdd.forEach { add(it) }
-        activities.union(toAdd)
+        val toAdd = newActivities.minus(activities)
+        if(toAdd.isNotEmpty()) {
+            saveAll(toAdd)
+            activities.union(toAdd)
+        }
+    }
+
+    private fun saveAll(toAdd: List<Activity>) {
+        val children = HashMap<String, Any>()
+        toAdd.forEach {
+            val key = activitiesDatabaseRef.push().key!!
+            children.put(key, it.apply { id = key })
+
+        }
+        activitiesDatabaseRef.updateChildren(children)
     }
 
     fun cleanListeners() {
         listeners.clear()
     }
 
-    private fun add(activity: Activity) {
-        val ref = activitiesDatabaseRef.push()
-        activity.id = ref.key!!
-        ref.setValue(activity)
-    }
 }
