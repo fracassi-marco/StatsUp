@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -100,7 +101,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 StravaLoginActivity.RESULT_CODE
             )
 
-            StravaActivities(code, Confs(applicationContext)).execute()
+            progressbar.visibility = View.VISIBLE
+            StravaActivities(code, Confs(applicationContext)){progressbar.visibility = View.INVISIBLE}.execute()
         }
         else if (requestCode == SIGNIN) {
             if (resultCode == Activity.RESULT_OK) {

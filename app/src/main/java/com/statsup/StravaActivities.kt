@@ -9,7 +9,11 @@ import com.sweetzpot.stravazpot.common.api.AuthenticationConfig
 import com.sweetzpot.stravazpot.common.api.StravaConfig
 
 
-class StravaActivities(private val code: String, private val confs: Confs) : AsyncTask<Void, Void, List<Activity>>() {
+class StravaActivities(
+    private val code: String,
+    private val confs: Confs,
+    private val onComplete: () -> Unit
+) : AsyncTask<Void, Void, List<Activity>>() {
 
     override fun doInBackground(vararg ignore: Void): List<Activity> {
         val authenticationConfig = AuthenticationConfig.create()
@@ -42,6 +46,7 @@ class StravaActivities(private val code: String, private val confs: Confs) : Asy
 
     override fun onPostExecute(activities: List<Activity>) {
         ActivityRepository.addIfNotExists(activities.map { asRun(it) })
+        onComplete.invoke()
     }
 
     private fun asRun(it: Activity): com.statsup.Activity {
