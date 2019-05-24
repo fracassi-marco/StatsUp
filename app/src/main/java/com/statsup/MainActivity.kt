@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -26,6 +27,7 @@ private const val SIGNIN = 1002
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val frequencyFragment = FrequencyFragment()
+    private val historyFragment = HistoryFragment()
     private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +57,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val fragment = when (menuItem.itemId) {
+            R.id.nav_history-> {
+                historyFragment
+            }
             R.id.nav_import_from_strava -> {
                 val intent = StravaLogin.withContext(applicationContext)
                     .withClientID(Confs(applicationContext).stravaClientId())
@@ -86,7 +91,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun openFragment(title: CharSequence?, fragment: FrequencyFragment) {
+    private fun openFragment(title: CharSequence?, fragment: Fragment) {
         supportActionBar!!.title = title
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment)

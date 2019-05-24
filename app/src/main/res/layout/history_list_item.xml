@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:foreground="?android:attr/selectableItemBackground">
+
+    <android.support.constraint.ConstraintLayout
+            android:id="@+id/history_list_item_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+        <TextView
+                android:id="@+id/history_list_item_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintTop_creator="1"
+                tools:text="My favourite activity" />
+
+        <ImageView
+                android:id="@+id/history_list_item_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintTop_toBottomOf="@+id/history_list_item_title_text"
+                tools:src="@drawable/run" />
+
+        <TextView
+                android:id="@+id/history_list_item_distance_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toRightOf="@+id/history_list_item_icon"
+                app:layout_constraintTop_toBottomOf="@+id/history_list_item_title_text"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintTop_creator="1"
+                tools:text="2.34 km" />
+
+        <TextView
+                android:id="@+id/history_list_item_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="@+id/history_list_item_distance_text"
+                app:layout_constraintRight_toRightOf="@+id/history_list_item_distance_text"
+                app:layout_constraintTop_toBottomOf="@+id/history_list_item_distance_text"
+                tools:layout_constraintLeft_creator="1"
+                tools:layout_constraintRight_creator="1"
+                tools:layout_constraintTop_creator="1"
+                tools:text="00:11:23" />
+
+        <TextView
+                android:id="@+id/history_list_item_date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintBaseline_toBaselineOf="@id/history_list_item_distance_text"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="Sun, 1/8/2017" />
+
+        <TextView
+                android:id="@+id/history_list_item_pace_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="15sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/history_list_item_time_text"
+                app:layout_constraintRight_toRightOf="@+id/history_list_item_date_text"
+                tools:text="7:40/mi" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

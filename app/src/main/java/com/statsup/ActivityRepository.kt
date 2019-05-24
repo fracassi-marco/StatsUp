@@ -21,6 +21,7 @@ object ActivityRepository {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val items = dataSnapshot.children.map { it.getValue(Activity::class.java)!! }
                     activities = items.toMutableList()
+                    activities.sortByDescending { it.dateInMillis }
                     listeners.forEach { it.update(items) }
                 }
 
@@ -30,6 +31,7 @@ object ActivityRepository {
             activitiesDatabaseRef.addValueEventListener(eventListener)
         }
         listeners.add(listener)
+        listener.update(activities)
     }
 
     fun addIfNotExists(newActivities: List<Activity>) {

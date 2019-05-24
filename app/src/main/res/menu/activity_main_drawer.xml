@@ -4,10 +4,10 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <!--item
+        <item
                 android:id="@+id/nav_history"
                 android:icon="@drawable/outline_view_list_24"
-                android:title="@string/menu_history"/-->
+                android:title="@string/menu_history"/>
         <item
                 android:id="@+id/nav_stats"
                 android:icon="@drawable/outline_dashboard_24"
