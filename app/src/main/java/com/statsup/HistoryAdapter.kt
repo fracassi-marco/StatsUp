@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.history_list_item.view.*
 import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
 
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.Holder>() {
@@ -15,7 +14,7 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.Holder>() {
 
     private var dataSet: List<Activity> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryAdapter.Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val item = LayoutInflater.from(parent.context)
             .inflate(R.layout.history_list_item, parent, false) as CardView
 
@@ -32,7 +31,8 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.Holder>() {
         val minutes = (activity.durationInSeconds % 3600) / 60;
         val seconds = activity.durationInSeconds % 60;
         holder.layout.history_list_item_time_text.text = "${hours}h ${minutes}m ${seconds}s"
-        holder.layout.history_list_item_distance_text.text = activity.distanceInMeters.toString() + "m"
+        val div = activity.distanceInMeters.div(1000f)
+        holder.layout.history_list_item_distance_text.text = String.format("%.2f", div) + "km"
         holder.layout.history_list_item_pace_text.text = ""
     }
 
