@@ -1,7 +1,8 @@
 package com.statsup
 
-class Group {
-    fun byMonths(activities: List<Activity>) : Map<Month, List<Activity>> {
+class Group(private val activities: List<Activity>) {
+
+    fun byMonths() : Map<Month, List<Activity>> {
 
         if(activities.isEmpty()) {
             return emptyMap()
@@ -23,5 +24,23 @@ class Group {
         }
 
         return result
+    }
+
+    fun ofYear(year: Int): List<Activity> {
+        return activities.filter { it.date().year().get() == year }
+    }
+
+    fun maxValue(): Float {
+        if(activities.isEmpty())
+            return 0f
+
+        return byMonths().values.map { it.size }.max()!!.toFloat()
+    }
+
+    fun years(): List<Int> {
+        return activities
+            .map { it.date().year().get() }
+            .distinct()
+            .sorted()
     }
 }
