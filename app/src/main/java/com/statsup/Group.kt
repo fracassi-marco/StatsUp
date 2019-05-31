@@ -30,11 +30,18 @@ class Group(private val activities: List<Activity>) {
         return activities.filter { it.date().year().get() == year }
     }
 
-    fun maxValue(): Float {
+    fun maxMonthlyFrequency(): Float {
         if(activities.isEmpty())
             return 0f
 
         return byMonths().values.map { it.size }.max()!!.toFloat()
+    }
+
+    fun averageMonthlyFrequency() : Float {
+        if(activities.isEmpty())
+            return 0f
+
+        return byMonths().values.map { it.size }.average().toFloat()
     }
 
     fun years(): List<Int> {
