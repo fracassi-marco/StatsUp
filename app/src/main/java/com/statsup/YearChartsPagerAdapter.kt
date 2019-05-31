@@ -13,7 +13,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 
-class YearChartsPagerAdapter(private val context: Context, private val activities: List<Activity>) : PagerAdapter() {
+class YearChartsPagerAdapter(private val context: Context, private val allActivities: List<Activity>) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val inflater = LayoutInflater.from(context)
@@ -21,15 +21,11 @@ class YearChartsPagerAdapter(private val context: Context, private val activitie
         val label = view.findViewById<TextView>(R.id.year_label)
         val chart = view.findViewById<BarChart>(R.id.year_frequency_bar_chart)
 
-        val maxMonthlyFrequency = Group(activities).maxMonthlyFrequency()
-        val averageMonthlyFrequency = Group(activities).averageMonthlyFrequency()
-        val years = Group(activities).years()
-        val activitiesOfYear = Group(activities).ofYear(years[position])
-
-        label.text = years[position].toString()
+        val activities = Activities(allActivities)
+        label.text = activities.yearInPosition(position).toString()
 
         configureChart(chart)
-        refresh(chart, activitiesOfYear, maxMonthlyFrequency, averageMonthlyFrequency)
+        refresh(position, chart, activities)
 
         container.addView(view)
 
@@ -44,29 +40,30 @@ class YearChartsPagerAdapter(private val context: Context, private val activitie
     }
 
     override fun getCount(): Int {
-        return Group(activities).years().size
+        return Activities(allActivities).years().size
     }
 
-    private fun refresh(
-        chart: BarChart,
-        activities: List<Activity>,
-        maxHeight: Float,
-        averageMonthlyFrequency: Float
+    private fun refresh(position: Int,
+                        chart: BarChart,
+                        activities: Activities
     ) {
-        val subject = Group(activities).byMonths()
+        val byMonth = activities.ofYearInPosition(position)
 
-        if (subject.isEmpty()) {
+        if (byMonth.isEmpty()) {
             chart.data = BarData(emptyList())
             chart.invalidate()
             return
         }
 
         chart.axisLeft.axisMinimum = 0f
-        chart.axisLeft.axisMaximum = maxHeight
-        chart.axisLeft.addLimitLine(LimitLine(averageMonthlyFrequency, "Media: ${String.format("%.2f", averageMonthlyFrequency)}").apply { textSize = 10f })
+        chart.axisLeft.axisMaximum = activities.maxMonthlyFrequency()
+        val averageMonthlyFrequency = activities.averageMonthlyFrequency()
+        chart.axisLeft.addLimitLine(LimitLine(averageMonthlyFrequency, "Media: ${String.format("%.2f", averageMonthlyFrequency)}").apply {
+            textSize = 10f
+        })
 
         var count = 0
-        val data = subject.map {
+        val data = byMonth.map {
             BarEntry(count++.toFloat(), it.value.size.toFloat())
         }
 
@@ -74,7 +71,7 @@ class YearChartsPagerAdapter(private val context: Context, private val activitie
             valueFormatter = BarChartValueFormatter()
         }
         chart.data = BarData(barDataSet)
-        chart.setVisibleXRangeMaximum(12.toFloat())
+
         chart.invalidate()
     }
 
