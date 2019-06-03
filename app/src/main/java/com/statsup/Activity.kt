@@ -11,4 +11,12 @@ data class Activity(val sport: Sports, val distanceInMeters: Float, val duration
     fun date() : DateTime {
         return DateTime(dateInMillis)
     }
+
+    fun durationInHours() : Double {
+        return durationInSeconds / 3600.0
+    }
+
+    fun distanceInKilometers(): Double {
+        return distanceInMeters / 1000.0
+    }
 }

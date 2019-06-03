@@ -30,6 +30,7 @@ private const val SIGNIN = 1002
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val frequencyFragment = FrequencyFragment()
+    private val activityStatsFragment = ActivityStatsFragment()
     private val historyFragment = HistoryFragment()
     private lateinit var user: User
 
@@ -84,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             else -> {
-                frequencyFragment
+                activityStatsFragment
             }
         }
 

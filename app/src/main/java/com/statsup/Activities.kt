@@ -10,11 +10,39 @@ class Activities(private val activities: List<Activity>) {
     fun yearInPosition(position: Int) = years()[position]
 
     fun maxMonthlyFrequency(): Float {
-        return byMonth(activities).values.map { it.size }.max()!!.toFloat()
+        return byMonth(activities).values.map {
+            it.size
+        }.max()!!.toFloat()
+    }
+
+    fun maxMonthlyDistance(): Float {
+        return byMonth(activities).values.map {
+            it.sumByDouble { it.distanceInKilometers() }
+        }.max()!!.toFloat()
+    }
+
+    fun maxMonthlyDuration(): Float {
+        return byMonth(activities).values.map {
+            it.sumByDouble { it.durationInHours() }
+        }.max()!!.toFloat()
     }
 
     fun averageMonthlyFrequency() : Float {
-        return byMonth(activities).values.map { it.size }.average().toFloat()
+        return byMonth(activities).values.map {
+            it.size
+        }.average().toFloat()
+    }
+
+    fun averageMonthlyDistance() : Float {
+        return byMonth(activities).values.map {
+            it.sumByDouble { it.distanceInKilometers() }
+        }.average().toFloat()
+    }
+
+    fun averageMonthlyDuration() : Float {
+        return byMonth(activities).values.map {
+            it.sumByDouble { it.durationInHours() }
+        }.average().toFloat()
     }
 
     fun years(): List<Int> {

@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-class FrequencyFragment : Fragment() {
+class DurationFragment : Fragment() {
 
     private lateinit var viewpager: ViewPager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.frequency_fragment, container, false)
+        val view = inflater.inflate(R.layout.duration_fragment, container, false)
 
         ActivityRepository.listen(object : Listener<List<Activity>> {
             override fun update(subject: List<Activity>) {
@@ -22,10 +22,10 @@ class FrequencyFragment : Fragment() {
                 }
 
                 val activities = Activities(subject)
-                val adapter = YearlyChartsPagerAdapter(context!!, activities, "Frequanza ", activities.maxMonthlyFrequency(), activities.averageMonthlyFrequency()) {
-                    it.size.toFloat()
+                val adapter = YearlyChartsPagerAdapter(context!!, activities, "Durata [h] ", activities.maxMonthlyDuration(), activities.averageMonthlyDuration()) {
+                    it.sumByDouble { activity -> activity.durationInHours() }.toFloat()
                 }
-                viewpager = view.findViewById(R.id.frequency_view_pager)
+                viewpager = view.findViewById(R.id.duration_view_pager)
                 viewpager.adapter = adapter
                 viewpager.currentItem = adapter.count - 1
             }
