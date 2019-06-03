@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.github.mikephil.charting.charts.BarChart
 
-class YearlyChartsPagerAdapter(private val context: Context, private val allActivities: Activities, private val labelText: String,
+class YearlyChartsPagerAdapter(private val context: Context,
+                               private val allActivities: Activities,
+                               private val color: Int,
+                               private val labelText: String,
                                private val maxValue: Float,
                                private val averageValue: Float,
                                private val valueProvider: (List<Activity>) -> Float) : PagerAdapter() {
@@ -21,7 +24,7 @@ class YearlyChartsPagerAdapter(private val context: Context, private val allActi
 
         label.text = allActivities.yearInPosition(position).toString()
 
-        YearlyChart(chart, labelText, maxValue, averageValue) {
+        YearlyChart(chart, color, labelText, maxValue, averageValue) {
             valueProvider.invoke(it)
         }.refresh(allActivities, position)
 

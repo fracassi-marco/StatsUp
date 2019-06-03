@@ -1,5 +1,6 @@
 package com.statsup
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
@@ -22,7 +23,7 @@ class DistanceFragment : Fragment() {
                 }
 
                 val activities = Activities(subject)
-                val adapter = YearlyChartsPagerAdapter(context!!, activities, "Distanza [km] ", activities.maxMonthlyDistance(), activities.averageMonthlyDistance()) {
+                val adapter = YearlyChartsPagerAdapter(context!!, activities, Color.rgb(244,67,54), "Distanza [km] ", activities.maxMonthlyDistance(), activities.averageMonthlyDistance()) {
                     it.sumByDouble { activity -> activity.distanceInKilometers() }.toFloat()
                 }
                 viewpager = view.findViewById(R.id.distance_view_pager)

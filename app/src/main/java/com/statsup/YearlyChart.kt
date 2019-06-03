@@ -9,6 +9,7 @@ import com.github.mikephil.charting.data.BarEntry
 
 class YearlyChart(
     private val chart: BarChart,
+    private val barColor: Int,
     private val label: String,
     private val maxValue: Float,
     private val averageValue: Float,
@@ -44,6 +45,7 @@ class YearlyChart(
 
             val barDataSet = BarDataSet(data, label).apply {
                 valueFormatter = BarChartValueFormatter()
+                color = barColor
             }
             chart.data = BarData(barDataSet)
         }

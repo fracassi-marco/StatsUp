@@ -1,5 +1,6 @@
 package com.statsup
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
@@ -22,7 +23,7 @@ class DurationFragment : Fragment() {
                 }
 
                 val activities = Activities(subject)
-                val adapter = YearlyChartsPagerAdapter(context!!, activities, "Durata [h] ", activities.maxMonthlyDuration(), activities.averageMonthlyDuration()) {
+                val adapter = YearlyChartsPagerAdapter(context!!, activities, Color.rgb(33, 150, 243), "Durata [h] ", activities.maxMonthlyDuration(), activities.averageMonthlyDuration()) {
                     it.sumByDouble { activity -> activity.durationInHours() }.toFloat()
                 }
                 viewpager = view.findViewById(R.id.duration_view_pager)

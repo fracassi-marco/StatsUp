@@ -1,5 +1,6 @@
 package com.statsup
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
@@ -22,7 +23,7 @@ class FrequencyFragment : Fragment() {
                 }
 
                 val activities = Activities(subject)
-                val adapter = YearlyChartsPagerAdapter(context!!, activities, "Frequanza ", activities.maxMonthlyFrequency(), activities.averageMonthlyFrequency()) {
+                val adapter = YearlyChartsPagerAdapter(context!!, activities, Color.rgb(76,175,80), "Frequanza ", activities.maxMonthlyFrequency(), activities.averageMonthlyFrequency()) {
                     it.size.toFloat()
                 }
                 viewpager = view.findViewById(R.id.frequency_view_pager)
