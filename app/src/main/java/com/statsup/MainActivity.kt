@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -29,8 +28,8 @@ private const val SIGNIN = 1002
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private val activityStatsFragment = ActivityStatsFragment()
-    private val historyFragment = HistoryFragment()
+    private lateinit var activityStatsFragment: Fragment
+    private lateinit var historyFragment: Fragment
     private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +45,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        openDefaultFragment()
         startLogin()
     }
 
@@ -88,8 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-
-
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
         return true
     }
@@ -115,9 +111,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else if (requestCode == SIGNIN) {
             if (resultCode == Activity.RESULT_OK) {
                 initUserListener()
-                openDefaultFragment()
-            } else {
-                startLogin()
             }
         }
     }
@@ -134,6 +127,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun updateGui() {
+        activityStatsFragment = ActivityStatsFragment()
+        historyFragment = HistoryFragment()
+        openDefaultFragment()
+
         nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_username).text = currentUser()!!.displayName
         nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_email).text = currentUser()!!.email
 

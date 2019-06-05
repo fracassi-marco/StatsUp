@@ -35,4 +35,3 @@ class FrequencyFragment : Fragment() {
         return view
     }
 }
-
