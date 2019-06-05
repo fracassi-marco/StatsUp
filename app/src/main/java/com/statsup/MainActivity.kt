@@ -29,7 +29,6 @@ private const val SIGNIN = 1002
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private val frequencyFragment = FrequencyFragment()
     private val activityStatsFragment = ActivityStatsFragment()
     private val historyFragment = HistoryFragment()
     private lateinit var user: User
@@ -47,8 +46,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        openFragment("Home", frequencyFragment)
+        openDefaultFragment()
         startLogin()
+    }
+
+    private fun openDefaultFragment() {
+        openFragment("Elenco", historyFragment)
     }
 
     override fun onBackPressed() {
@@ -60,9 +63,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        val fragment = when (menuItem.itemId) {
+        when (menuItem.itemId) {
             R.id.nav_history -> {
-                historyFragment
+                openFragment(menuItem.title, historyFragment)
+            }
+            R.id.nav_stats -> {
+                openFragment(menuItem.title, activityStatsFragment)
             }
             R.id.nav_import_from_strava -> {
                 val intent = StravaLogin.withContext(applicationContext)
@@ -72,24 +78,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .withAccessScope(AccessScope.VIEW_PRIVATE_WRITE)
                     .makeIntent()
                 startActivityForResult(intent, STRAVA_REQUEST_CODE)
-                frequencyFragment
             }
-
             R.id.nav_logout -> {
                 UserRepository.cleanListeners()
                 ActivityRepository.cleanListeners()
                 AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener { startLogin() }
-                frequencyFragment
-            }
-
-            else -> {
-                activityStatsFragment
             }
         }
 
-        openFragment(menuItem.title, fragment)
+
 
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
         return true
@@ -116,7 +115,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else if (requestCode == SIGNIN) {
             if (resultCode == Activity.RESULT_OK) {
                 initUserListener()
-                openFragment("Home", frequencyFragment)
+                openDefaultFragment()
             } else {
                 startLogin()
             }
