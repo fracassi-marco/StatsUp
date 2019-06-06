@@ -116,14 +116,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initUserListener() {
-        if (!::user.isInitialized) {
-            UserRepository.listen(object : Listener<User> {
-                override fun update(subject: User) {
-                    user = subject
-                    updateGui()
-                }
-            })
-        }
+        UserRepository.listen(object : Listener<User> {
+            override fun update(subject: User) {
+                user = subject
+                updateGui()
+            }
+        })
     }
 
     private fun updateGui() {
