@@ -14,22 +14,23 @@ object ActivityRepository {
     private val user = FirebaseAuth.getInstance().currentUser!!
     private val activitiesDatabaseRef = FirebaseDatabase.getInstance().getReference("users/${user.uid}/activities/")
 
-    fun listen(listener: Listener<List<Activity>>) {
-        if (listeners.isEmpty()) {
-
-            val eventListener = object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val items = dataSnapshot.children.map { it.getValue(Activity::class.java)!! }
-                    activities = items.toMutableList()
-                    activities.sortByDescending { it.dateInMillis }
-                    listeners.forEach { it.update(items) }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                }
+    init {
+        val eventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val items = dataSnapshot.children.map { it.getValue(Activity::class.java)!! }
+                activities = items.toMutableList()
+                activities.sortByDescending { it.dateInMillis }
+                listeners.forEach { it.update(items) }
             }
-            activitiesDatabaseRef.addValueEventListener(eventListener)
+
+            override fun onCancelled(databaseError: DatabaseError) {
+            }
+
         }
+        activitiesDatabaseRef.addValueEventListener(eventListener)
+    }
+
+    fun listen(listener: Listener<List<Activity>>) {
         listeners.add(listener)
         listener.update(activities)
     }
@@ -56,4 +57,7 @@ object ActivityRepository {
         listeners.clear()
     }
 
+    fun removeListener(listener: Listener<List<Activity>>) {
+        listeners.remove(listener)
+    }
 }

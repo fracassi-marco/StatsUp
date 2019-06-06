@@ -14,6 +14,11 @@ class HistoryFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private val adapter: HistoryAdapter = HistoryAdapter()
+    private val listener = object : Listener<List<Activity>> {
+        override fun update(subject: List<Activity>) {
+            adapter.update(subject)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.history_fragment, container, false)
@@ -24,13 +29,15 @@ class HistoryFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 
-        ActivityRepository.listen(object : Listener<List<Activity>> {
-            override fun update(subject: List<Activity>) {
-                adapter.update(subject)
-            }
-        })
+        ActivityRepository.listen(listener)
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        ActivityRepository.removeListener(listener)
     }
 }
 
