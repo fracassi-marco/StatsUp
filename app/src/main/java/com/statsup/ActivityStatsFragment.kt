@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ class ActivityStatsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
 
-        val viewPager = view.findViewById<ViewPager>(R.id.stats_view_pager)
+        val viewPager = view.findViewById<UnswappableViewPager>(R.id.stats_view_pager)
         viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
 
         view.findViewById<TabLayout>(R.id.stats_tab_layout).also {
@@ -38,3 +37,4 @@ class ActivityStatsFragment : Fragment() {
         return view
     }
 }
+

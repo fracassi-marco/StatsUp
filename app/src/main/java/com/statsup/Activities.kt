@@ -74,4 +74,8 @@ class Activities(private val activities: List<Activity>) {
 
         return result
     }
+
+    fun frequencyByDay(): Map<Int, List<Activity>> {
+        return activities.groupBy { it.date().dayOfWeek }
+    }
 }

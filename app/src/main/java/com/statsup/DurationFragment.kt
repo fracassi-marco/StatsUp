@@ -22,7 +22,7 @@ class DurationFragment : Fragment() {
             val adapter = YearlyChartsPagerAdapter(
                 context!!,
                 activities,
-                Tabs.DISTANCE.color,
+                Tabs.DURATION.color,
                 "Durata [h] ",
                 activities.maxMonthlyDuration(),
                 activities.averageMonthlyDuration()
