@@ -106,7 +106,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
 
             progressbar.visibility = View.VISIBLE
-            StravaActivities(code, Confs(applicationContext)) { progressbar.visibility = View.INVISIBLE }.execute()
+            StravaActivities(code, Confs(applicationContext)) {
+                progressbar.visibility = View.INVISIBLE
+            }.execute()
         }
         else if (requestCode == SIGNIN) {
             if (resultCode == Activity.RESULT_OK) {

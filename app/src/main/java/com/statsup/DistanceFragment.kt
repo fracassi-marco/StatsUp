@@ -23,7 +23,7 @@ class DistanceFragment : Fragment() {
                 context!!,
                 activities,
                 Tabs.DISTANCE.color,
-                "Distanza [km] ",
+                "Chilometri percorsi ",
                 activities.maxMonthlyDistance(),
                 activities.averageMonthlyDistance()
             ) {

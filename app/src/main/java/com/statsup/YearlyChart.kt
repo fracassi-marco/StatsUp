@@ -1,55 +1,74 @@
 package com.statsup
 
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.LimitLine
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
+import android.graphics.Color
+import lecho.lib.hellocharts.model.*
+import lecho.lib.hellocharts.view.ColumnChartView
+
 
 class YearlyChart(
-    private val chart: BarChart,
+    private val chart: ColumnChartView,
     private val barColor: Int,
     private val label: String,
     private val maxValue: Float,
-    private val averageValue: Float,
     private val valueProvider: (List<Activity>) -> Float
 ) {
 
     init {
-        chart.axisLeft.isEnabled = false
-        chart.axisLeft.axisMinimum = 0f
-        chart.axisRight.isEnabled = false
-        chart.xAxis.setDrawGridLines(false)
-        chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        chart.xAxis.valueFormatter = MonthLabels()
-        chart.setTouchEnabled(false)
-        chart.description = null
+        chart.isInteractive = false
     }
 
     fun refresh(activities: Activities, position: Int) {
         val byMonth = activities.ofYearInPosition(position)
         if (byMonth.isEmpty()) {
-            chart.data = BarData(emptyList())
+            chart.columnChartData = ColumnChartData(emptyList())
         } else {
-            chart.axisLeft.axisMaximum = maxValue
-            val average = averageValue
-            chart.axisLeft.addLimitLine(LimitLine(average, "Media: ${String.format("%.2f", average)}").apply {
-                textSize = 10f
-            })
-
-            var count = 0
-            val data = byMonth.map {
-                BarEntry(count++.toFloat(), valueProvider.invoke(it.value))
-            }
-
-            val barDataSet = BarDataSet(data, label).apply {
-                valueFormatter = BarChartValueFormatter()
-                color = barColor
-            }
-            chart.data = BarData(barDataSet)
+            chart.columnChartData = data(byMonth)
+            setMinAndMax()
         }
         chart.invalidate()
+    }
+
+    private fun data(byMonth: Map<Month, List<Activity>>): ColumnChartData {
+        val columns = byMonth.map {
+            Column(listOf(SubcolumnValue(valueProvider.invoke(it.value), barColor))).apply {
+                this.setHasLabels(true)
+            }
+        }
+
+        return ColumnChartData(columns).apply {
+            axisXBottom = Axis(labels()).apply {
+                textColor = Color.BLACK
+                name = label
+            }
+            isValueLabelBackgroundEnabled = false
+        }.also {
+            it.setValueLabelsTextColor(Color.BLACK)
+        }
+    }
+
+    private fun labels(): List<AxisValue> {
+        return listOf(
+            AxisValue(0f).also { it.setLabel("Gen") },
+            AxisValue(1f).also { it.setLabel("Feb") },
+            AxisValue(2f).also { it.setLabel("Mar") },
+            AxisValue(3f).also { it.setLabel("Apr") },
+            AxisValue(4f).also { it.setLabel("Mag") },
+            AxisValue(5f).also { it.setLabel("Giu") },
+            AxisValue(6f).also { it.setLabel("Lug") },
+            AxisValue(7f).also { it.setLabel("Ago") },
+            AxisValue(8f).also { it.setLabel("Set") },
+            AxisValue(9f).also { it.setLabel("Ott") },
+            AxisValue(10f).also { it.setLabel("Nov") },
+            AxisValue(11f).also { it.setLabel("Dic") })
+    }
+
+    private fun setMinAndMax() {
+        chart.maximumViewport.apply {
+            bottom = 0f
+            top = maxValue
+        }
+        chart.currentViewport = chart.maximumViewport
+        chart.isViewportCalculationEnabled = false;
     }
 
 }

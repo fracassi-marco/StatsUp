@@ -35,7 +35,7 @@ class FrequencyFragment : Fragment() {
             context!!,
             activities,
             Tabs.FREQUENCY.color,
-            "Frequanza ",
+            "Numero di allenamenti ",
             activities.maxMonthlyFrequency(),
             activities.averageMonthlyFrequency()
         ) {
@@ -64,7 +64,7 @@ class FrequencyFragment : Fragment() {
             value
         }
 
-        val data = PieChartData(values)
+        val data = PieChartData(values).apply { isValueLabelBackgroundEnabled = false }
         data.setHasLabels(true)
         data.setHasCenterCircle(true)
 

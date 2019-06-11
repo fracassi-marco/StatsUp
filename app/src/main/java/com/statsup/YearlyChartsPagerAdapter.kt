@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.github.mikephil.charting.charts.BarChart
+import lecho.lib.hellocharts.view.ColumnChartView
 
 class YearlyChartsPagerAdapter(private val context: Context,
                                private val allActivities: Activities,
@@ -20,11 +20,11 @@ class YearlyChartsPagerAdapter(private val context: Context,
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.chart_pager_item, container, false)
         val label = view.findViewById<TextView>(R.id.year_label)
-        val chart = view.findViewById<BarChart>(R.id.year_bar_chart)
+        val chart = view.findViewById<ColumnChartView>(R.id.year_bar_chart)
 
         label.text = allActivities.yearInPosition(position).toString()
 
-        YearlyChart(chart, color, labelText, maxValue, averageValue) {
+        YearlyChart(chart, color, labelText, maxValue) {
             valueProvider.invoke(it)
         }.refresh(allActivities, position)
 

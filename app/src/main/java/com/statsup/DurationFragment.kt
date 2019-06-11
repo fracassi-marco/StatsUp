@@ -23,7 +23,7 @@ class DurationFragment : Fragment() {
                 context!!,
                 activities,
                 Tabs.DURATION.color,
-                "Durata [h] ",
+                "Ore di allenamento ",
                 activities.maxMonthlyDuration(),
                 activities.averageMonthlyDuration()
             ) {
