@@ -2,11 +2,11 @@ package com.statsup
 
 import android.graphics.Color
 import lecho.lib.hellocharts.model.*
-import lecho.lib.hellocharts.view.ColumnChartView
+import lecho.lib.hellocharts.view.ComboLineColumnChartView
 
 
 class YearlyChart(
-    private val chart: ColumnChartView,
+    private val chart: ComboLineColumnChartView,
     private val barColor: Int,
     private val label: String,
     private val maxValue: Float,
@@ -20,9 +20,17 @@ class YearlyChart(
     fun refresh(activities: Activities, position: Int) {
         val byMonth = activities.ofYearInPosition(position)
         if (byMonth.isEmpty()) {
-            chart.columnChartData = ColumnChartData(emptyList())
+            chart.comboLineColumnChartData = ComboLineColumnChartData(ColumnChartData(emptyList()), LineChartData(emptyList())
+            )
         } else {
-            chart.columnChartData = data(byMonth)
+            val line = Line(listOf(PointValue(0f, 5f), PointValue(11f, 5f)))
+            line.setHasLabels(true)
+            line.setHasLines(true)
+            line.setHasPoints(false)
+
+            val lineChartData = LineChartData(listOf(line))
+            chart.comboLineColumnChartData = ComboLineColumnChartData(data(byMonth), lineChartData)
+
             setMinAndMax()
         }
         chart.invalidate()

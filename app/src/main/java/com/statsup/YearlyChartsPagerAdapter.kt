@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import lecho.lib.hellocharts.view.ColumnChartView
+import lecho.lib.hellocharts.view.ComboLineColumnChartView
 
 class YearlyChartsPagerAdapter(private val context: Context,
                                private val allActivities: Activities,
@@ -20,7 +21,7 @@ class YearlyChartsPagerAdapter(private val context: Context,
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.chart_pager_item, container, false)
         val label = view.findViewById<TextView>(R.id.year_label)
-        val chart = view.findViewById<ColumnChartView>(R.id.year_bar_chart)
+        val chart = view.findViewById<ComboLineColumnChartView>(R.id.year_bar_chart)
 
         label.text = allActivities.yearInPosition(position).toString()
 
