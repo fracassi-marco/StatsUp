@@ -46,4 +46,6 @@
     <string name="windsurf">Windsurfing</string>
     <string name="yoga">Yoga</string>
     <string name="meditation">Meditation</string>
+
+    <string name="empty">Importa le tue attività da Strava</string>
 </resources>

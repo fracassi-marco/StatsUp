@@ -10,9 +10,11 @@ import android.view.ViewGroup
 
 class ActivityStatsFragment : Fragment() {
 
+    private lateinit var listener: Listener<List<Activity>>
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
-
+        val noActivitiesLayout = view.findViewById<View>(R.id.no_activities_layout)
         val viewPager = view.findViewById<UnswappableViewPager>(R.id.stats_view_pager)
         viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
 
@@ -20,7 +22,7 @@ class ActivityStatsFragment : Fragment() {
             it.setupWithViewPager(viewPager)
             it.setSelectedTabIndicatorColor(Tabs.at(0).color)
             it.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabReselected(p0: TabLayout.Tab?) {
+                override fun onTabReselected(p0: TabLayout.Tab) {
 
                 }
 
@@ -34,7 +36,16 @@ class ActivityStatsFragment : Fragment() {
             })
         }
 
+        listener = NoActivitiesListener(viewPager, noActivitiesLayout)
+        ActivityRepository.listen(listener)
+
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        ActivityRepository.removeListener(listener)
     }
 }
 

@@ -30,9 +30,11 @@ object ActivityRepository {
         activitiesDatabaseRef.addValueEventListener(eventListener)
     }
 
-    fun listen(listener: Listener<List<Activity>>) {
-        listeners.add(listener)
-        listener.update(activities)
+    fun listen(vararg listeners: Listener<List<Activity>>) {
+        listeners.forEach {
+            this.listeners.add(it)
+            it.update(activities)
+        }
     }
 
     fun addIfNotExists(newActivities: List<Activity>) {
@@ -57,7 +59,7 @@ object ActivityRepository {
         listeners.clear()
     }
 
-    fun removeListener(listener: Listener<List<Activity>>) {
-        listeners.remove(listener)
+    fun removeListener(vararg listeners: Listener<List<Activity>>) {
+        listeners.forEach { this.listeners.remove(it) }
     }
 }
