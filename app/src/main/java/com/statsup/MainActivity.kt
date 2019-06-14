@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -105,9 +106,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 StravaLoginActivity.RESULT_CODE
             )
 
-            progressbar.visibility = View.VISIBLE
+            showProgressBar()
             StravaActivities(code, Confs(applicationContext)) {
-                progressbar.visibility = View.INVISIBLE
+                hideProgressBar()
             }.execute()
         }
         else if (requestCode == SIGNIN) {
@@ -115,6 +116,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 initUserListener()
             }
         }
+    }
+
+    private fun hideProgressBar() {
+        progressbar.visibility = View.GONE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun showProgressBar() {
+        progressbar.visibility = View.VISIBLE
+        progressbar.bringToFront()
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
     private fun initUserListener() {
