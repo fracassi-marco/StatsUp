@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import lecho.lib.hellocharts.model.PieChartData
 import lecho.lib.hellocharts.model.SliceValue
-import lecho.lib.hellocharts.util.ChartUtils
 import lecho.lib.hellocharts.view.PieChartView
+import kotlin.math.roundToInt
 
 
 class FrequencyFragment : Fragment() {
@@ -36,11 +36,8 @@ class FrequencyFragment : Fragment() {
             activities,
             Tabs.FREQUENCY.color,
             "Numero di allenamenti ",
-            activities.maxMonthlyFrequency(),
-            activities.averageMonthlyFrequency()
-        ) {
-            it.size.toFloat()
-        }
+            Frequencies(activities)
+        )
         viewpager.adapter = adapter
         viewpager.currentItem = adapter.count - 1
     }
@@ -49,6 +46,7 @@ class FrequencyFragment : Fragment() {
         val view = inflater.inflate(R.layout.frequency_fragment, container, false)
         viewpager = view.findViewById(R.id.frequency_view_pager)
         pieChart = view.findViewById(R.id.frequency_pie_chart)
+        pieChart.isInteractive = false
 
         ActivityRepository.listen(listener)
 
@@ -58,9 +56,10 @@ class FrequencyFragment : Fragment() {
     private fun refreshPieChart(activities: Activities) {
         val byDay = activities.frequencyByDay()
 
-        val values = byDay.map {
-            val value = SliceValue(it.value.size.toFloat(), ChartUtils.pickColor())
-            value.setLabel(label(it.key) + "\n" + it.value.size)
+        val values = byDay
+            .map {
+            val value = SliceValue(it.value.size.toFloat(), Tabs.FREQUENCY.color)
+            value.setLabel("${day(it.key)} ${percentage(it.value.size, activities.count())}%")
             value
         }
 
@@ -76,21 +75,25 @@ class FrequencyFragment : Fragment() {
         pieChart.pieChartData = data
     }
 
+    private fun percentage(actualCounter: Int, allCounter: Int): Int {
+        return (actualCounter/allCounter.toFloat() * 100).roundToInt()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
 
         ActivityRepository.removeListener(listener)
     }
 
-    private fun label(position: Int) : String {
+    private fun day(position: Int) : String {
         return when(position) {
-            1 -> "Lunedì"
-            2 -> "Martedì"
-            3 -> "Mercoledì"
-            4 -> "Giovedì"
-            5 -> "Venerdì"
-            6 -> "Sabato"
-            else -> "Domenica"
+            1 -> "Lun"
+            2 -> "Mar"
+            3 -> "Mer"
+            4 -> "Gio"
+            5 -> "Ven"
+            6 -> "Sab"
+            else -> "Dom"
         }
     }
 }

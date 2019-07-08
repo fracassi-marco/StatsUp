@@ -24,11 +24,8 @@ class DurationFragment : Fragment() {
                 activities,
                 Tabs.DURATION.color,
                 "Ore di allenamento ",
-                activities.maxMonthlyDuration(),
-                activities.averageMonthlyDuration()
-            ) {
-                it.sumByDouble { activity -> activity.durationInHours() }.toFloat()
-            }
+                Durations(activities)
+            )
             viewpager.adapter = adapter
             viewpager.currentItem = adapter.count - 1
         }

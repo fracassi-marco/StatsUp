@@ -2,43 +2,36 @@ package com.statsup
 
 import android.graphics.Color
 import lecho.lib.hellocharts.model.*
-import lecho.lib.hellocharts.view.ComboLineColumnChartView
+import lecho.lib.hellocharts.view.ColumnChartView
 
 
 class YearlyChart(
-    private val chart: ComboLineColumnChartView,
+    private val chart: ColumnChartView,
     private val barColor: Int,
-    private val label: String,
-    private val maxValue: Float,
-    private val valueProvider: (List<Activity>) -> Float
+    private val label: String
 ) {
 
     init {
         chart.isInteractive = false
     }
 
-    fun refresh(activities: Activities, position: Int) {
-        val byMonth = activities.ofYearInPosition(position)
-        if (byMonth.isEmpty()) {
-            chart.comboLineColumnChartData = ComboLineColumnChartData(ColumnChartData(emptyList()), LineChartData(emptyList())
-            )
+    fun refresh(value: Value, position: Int) {
+        val cane = value.ofYear(position)
+        if (cane.isEmpty()) {
+            chart.columnChartData = ColumnChartData(emptyList())
         } else {
-            val line = Line(listOf(PointValue(0f, 5f), PointValue(11f, 5f)))
-            line.setHasLabels(true)
-            line.setHasLines(true)
-            line.setHasPoints(false)
+            chart.columnChartData = data(cane)
 
-            val lineChartData = LineChartData(listOf(line))
-            chart.comboLineColumnChartData = ComboLineColumnChartData(data(byMonth), lineChartData)
-
-            setMinAndMax()
+            setMinAndMax(value)
         }
         chart.invalidate()
     }
 
-    private fun data(byMonth: Map<Month, List<Activity>>): ColumnChartData {
-        val columns = byMonth.map {
-            Column(listOf(SubcolumnValue(valueProvider.invoke(it.value), barColor))).apply {
+    private fun data(
+        cane: List<Float>
+    ): ColumnChartData {
+        val columns = cane.map {
+            Column(listOf(SubcolumnValue(it, barColor))).apply {
                 this.setHasLabels(true)
             }
         }
@@ -49,6 +42,7 @@ class YearlyChart(
                 name = label
             }
             isValueLabelBackgroundEnabled = false
+            label
         }.also {
             it.setValueLabelsTextColor(Color.BLACK)
         }
@@ -70,13 +64,13 @@ class YearlyChart(
             AxisValue(11f).also { it.setLabel("Dic") })
     }
 
-    private fun setMinAndMax() {
+    private fun setMinAndMax(value: Value) {
         chart.maximumViewport.apply {
             bottom = 0f
-            top = maxValue
+            top = value.max()
         }
         chart.currentViewport = chart.maximumViewport
-        chart.isViewportCalculationEnabled = false;
+        chart.isViewportCalculationEnabled = false
     }
 
 }

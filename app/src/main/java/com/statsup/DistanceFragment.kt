@@ -24,11 +24,8 @@ class DistanceFragment : Fragment() {
                 activities,
                 Tabs.DISTANCE.color,
                 "Chilometri percorsi ",
-                activities.maxMonthlyDistance(),
-                activities.averageMonthlyDistance()
-            ) {
-                it.sumByDouble { activity -> activity.distanceInKilometers() }.toFloat()
-            }
+                Distances(activities)
+            )
 
             viewpager.adapter = adapter
             viewpager.currentItem = adapter.count - 1

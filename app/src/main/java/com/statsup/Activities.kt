@@ -52,6 +52,10 @@ class Activities(private val activities: List<Activity>) {
             .sorted()
     }
 
+    fun byMonth(): List<List<Activity>> {
+        return byMonth(activities).values.toList()
+    }
+
     private fun byMonth(activities: List<Activity>): Map<Month, List<Activity>> {
         if (activities.isEmpty()) {
             return emptyMap()
@@ -76,6 +80,16 @@ class Activities(private val activities: List<Activity>) {
     }
 
     fun frequencyByDay(): Map<Int, List<Activity>> {
-        return activities.groupBy { it.date().dayOfWeek }
+        return activities
+            .groupBy { it.date().dayOfWeek }
+            .toSortedMap()
+    }
+
+    fun count(): Int {
+        return activities.size
+    }
+
+    fun all(): List<Activity> {
+        return activities
     }
 }
