@@ -1,9 +1,9 @@
 package com.statsup
 
 interface Value {
-    fun totalOfYear(position: Int): Float
-    fun averageOfYear(position: Int): Float
+    fun totalOfYear(position: Int): Double
+    fun averageOfYear(position: Int): Double
     fun ofYear(position: Int): List<Float>
     fun max(): Float
-    fun average(): Float
+    fun average(): Double
 }

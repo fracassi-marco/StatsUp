@@ -53,7 +53,7 @@ class YearlyChartsPagerAdapter(
         return view
     }
 
-    private fun asString(value: Float): String {
+    private fun asString(value: Double): String {
         return String.format("%.2f", value)
     }
 

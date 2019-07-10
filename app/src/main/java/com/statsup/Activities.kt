@@ -1,6 +1,9 @@
 package com.statsup
 
-class Activities(private val activities: List<Activity>) {
+import java.util.*
+
+class Activities(private val activities: List<Activity>, private val today: Calendar) {
+    constructor(activities: List<Activity>) : this(activities, GregorianCalendar())
 
     fun ofYearInPosition(position: Int): Map<Month, List<Activity>> {
         val year = yearInPosition(position)
@@ -52,4 +55,32 @@ class Activities(private val activities: List<Activity>) {
     fun count(): Int {
         return activities.size
     }
+
+    fun average(value: (List<Activity>) -> Double) : Double {
+        val sum = byMonth()
+            .sumByDouble { value.invoke(it) }
+        return sum / numberOfMonths()
+    }
+
+    fun averageOfYear(position: Int, value: (List<Activity>) -> Double) : Double {
+        val sum = ofYearInPosition(position)
+            .values
+            .sumByDouble { value.invoke(it) }
+        return sum / numberOfMonths(position)
+    }
+
+    private fun numberOfMonths(): Int {
+        return byMonth().size - (11 - actualMonth())
+    }
+
+    private fun numberOfMonths(position: Int): Int {
+        if (yearInPosition(position) == actualYear()) {
+            return actualMonth() + 1
+        }
+        return 12
+    }
+
+    private fun actualYear() = today.get(Calendar.YEAR)
+
+    private fun actualMonth() = today.get(Calendar.MONTH)
 }
