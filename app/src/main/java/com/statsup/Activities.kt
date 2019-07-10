@@ -75,6 +75,18 @@ class Activities(private val activities: List<Activity>, private val today: Cale
             .sumByDouble { value.invoke(it) }
     }
 
+    fun ofYear(position: Int, value: (List<Activity>) -> Double): List<Double> {
+        return ofYearInPosition(position)
+            .values
+            .map { value.invoke(it) }
+    }
+
+    fun max(value: (List<Activity>) -> Double): Double {
+        return byMonth()
+            .map { value.invoke(it) }
+            .max()!!
+    }
+
     private fun numberOfMonths(): Int {
         return byMonth().size - (11 - actualMonth())
     }

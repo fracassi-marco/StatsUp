@@ -16,22 +16,20 @@ class YearlyChart(
     }
 
     fun refresh(value: Value, position: Int) {
-        val cane = value.ofYear(position)
-        if (cane.isEmpty()) {
+        val byMonth = value.ofYear(position)
+        if (byMonth.isEmpty()) {
             chart.columnChartData = ColumnChartData(emptyList())
         } else {
-            chart.columnChartData = data(cane)
+            chart.columnChartData = data(byMonth)
 
             setMinAndMax(value)
         }
         chart.invalidate()
     }
 
-    private fun data(
-        cane: List<Float>
-    ): ColumnChartData {
-        val columns = cane.map {
-            Column(listOf(SubcolumnValue(it, barColor))).apply {
+    private fun data(byMonth: List<Double>): ColumnChartData {
+        val columns = byMonth.map {
+            Column(listOf(SubcolumnValue(it.toFloat(), barColor))).apply {
                 this.setHasLabels(true)
             }
         }
@@ -67,7 +65,7 @@ class YearlyChart(
     private fun setMinAndMax(value: Value) {
         chart.maximumViewport.apply {
             bottom = 0f
-            top = value.max()
+            top = value.max().toFloat()
         }
         chart.currentViewport = chart.maximumViewport
         chart.isViewportCalculationEnabled = false
