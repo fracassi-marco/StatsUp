@@ -37,13 +37,16 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.Holder>() {
     }
 
     override fun getItemCount() = dataSet.size
-    fun update(users: List<Activity>) {
 
-        val diff = DiffCallback(users, dataSet)
+    fun update(newItems: List<Activity>) {
+
+        val orderedNewItems = newItems.sortedByDescending { it.dateInMillis }
+
+        val diff = DiffCallback(orderedNewItems, dataSet)
         val diffResult = DiffUtil.calculateDiff(diff)
 
         diffResult.dispatchUpdatesTo(this)
-        dataSet = users
+        dataSet = orderedNewItems
     }
 }
 
