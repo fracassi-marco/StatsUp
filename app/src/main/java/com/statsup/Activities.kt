@@ -69,6 +69,12 @@ class Activities(private val activities: List<Activity>, private val today: Cale
         return sum / numberOfMonths(position)
     }
 
+    fun totalOfYear(position: Int, value: (List<Activity>) -> Double): Double {
+        return ofYearInPosition(position)
+            .values
+            .sumByDouble { value.invoke(it) }
+    }
+
     private fun numberOfMonths(): Int {
         return byMonth().size - (11 - actualMonth())
     }

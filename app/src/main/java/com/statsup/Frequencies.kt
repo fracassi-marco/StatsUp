@@ -25,9 +25,6 @@ class Frequencies(private val activities: Activities) : Value {
     }
 
     override fun totalOfYear(position: Int): Double {
-        return activities
-            .ofYearInPosition(position)
-            .values
-            .sumByDouble { it.size.toDouble() }
+        return activities.totalOfYear(position) { it.size.toDouble() }
     }
 }

@@ -24,9 +24,6 @@ class Distances(private val activities: Activities) : Value {
     }
 
     override fun totalOfYear(position: Int): Double {
-        return activities
-            .ofYearInPosition(position)
-            .values
-            .sumByDouble { it.sumByDouble { activity -> activity.distanceInKilometers() } }
+        return activities.totalOfYear(position) { it.sumByDouble { activity -> activity.distanceInKilometers() } }
     }
 }
