@@ -18,8 +18,7 @@ object ActivityRepository {
         val eventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val items = dataSnapshot.children.map { it.getValue(Activity::class.java)!! }
-                activities = items.toMutableList()
-                activities.sortByDescending { it.dateInMillis }
+                activities = items.sortedByDescending { it.dateInMillis }.toMutableList()
                 listeners.forEach { it.update(items) }
             }
 
