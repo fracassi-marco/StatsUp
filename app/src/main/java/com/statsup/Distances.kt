@@ -1,7 +1,7 @@
 package com.statsup
 
 class Distances(private val activities: Activities) : Value {
-    private val provider =  { list: List<Activity> -> list.sumByDouble { activity -> activity.durationInHours() } }
+    private val provider =  { list: List<Activity> -> list.sumByDouble { activity -> activity.distanceInKilometers() } }
 
     override fun average(): Double {
         return activities.average(provider)
