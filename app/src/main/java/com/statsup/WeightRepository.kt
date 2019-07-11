@@ -44,6 +44,11 @@ object WeightRepository {
         }
     }
 
+    fun delete(weight: Weight) {
+        weights.remove(weight)
+        databaseRef.child(weight.id).removeValue()
+    }
+
     private fun saveAll(toAdd: List<Weight>) {
         val children = HashMap<String, Any>()
         toAdd.forEach {
