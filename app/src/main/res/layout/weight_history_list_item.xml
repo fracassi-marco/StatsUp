@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:foreground="?android:attr/selectableItemBackground">
+
+    <android.support.constraint.ConstraintLayout
+            android:id="@+id/history_list_item_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+        <ImageView
+                android:id="@+id/weight_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="32sp"
+                android:maxWidth="32sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:src="@drawable/weight_scale" />
+
+        <TextView
+                android:id="@+id/weight_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/weight_icon"
+                app:layout_constraintTop_toTopOf="@+id/weight_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/weight_icon"
+                tools:text="116.7Kg" />
+
+        <ImageView
+                android:id="@+id/date_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="24sp"
+                android:maxWidth="24sp"
+                app:layout_constraintTop_toTopOf="@+id/weight_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/weight_icon"
+                app:layout_constraintLeft_toRightOf="@+id/weight_text"
+                android:src="@drawable/calendar" />
+
+        <TextView
+                android:id="@+id/date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toRightOf="@+id/date_icon"
+                app:layout_constraintTop_toTopOf="@+id/date_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/date_icon"
+                tools:text="12/11/2019" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

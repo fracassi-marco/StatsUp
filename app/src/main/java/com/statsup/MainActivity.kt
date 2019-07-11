@@ -23,14 +23,20 @@ import com.sweetzpot.stravazpot.authenticaton.api.StravaLogin
 import com.sweetzpot.stravazpot.authenticaton.ui.StravaLoginActivity
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.BufferedReader
+import java.io.FileNotFoundException
+import java.io.InputStreamReader
 
 private const val STRAVA_REQUEST_CODE = 1001
-private const val SIGNIN = 1002
+private const val SIGNIN_REQUEST_CODE = 1002
+private const val WEIGHT_IMPORT_REQUEST_CODE = 1003
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var activityStatsFragment: Fragment
-    private lateinit var historyFragment: Fragment
+    private lateinit var weightStatsFragment: Fragment
+    private lateinit var activityHistoryFragment: Fragment
+    private lateinit var weightHistoryFragment: Fragment
     private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun openDefaultFragment() {
-        openFragment("Elenco", historyFragment)
+        openFragment("Elenco", activityHistoryFragment)
     }
 
     override fun onBackPressed() {
@@ -64,7 +70,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_history -> {
-                openFragment(menuItem.title, historyFragment)
+                openFragment(menuItem.title, activityHistoryFragment)
             }
             R.id.nav_stats -> {
                 openFragment(menuItem.title, activityStatsFragment)
@@ -77,6 +83,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .withAccessScope(AccessScope.VIEW_PRIVATE_WRITE)
                     .makeIntent()
                 startActivityForResult(intent, STRAVA_REQUEST_CODE)
+            }
+            R.id.nav_weight_stats -> {
+                openFragment(menuItem.title, weightStatsFragment)
+            }
+            R.id.nav_weight_history->{
+                openFragment(menuItem.title, weightHistoryFragment)
+            }
+            R.id.nav_weight_import -> {
+                val openWeightCsvIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                openWeightCsvIntent.addCategory(Intent.CATEGORY_OPENABLE)
+                openWeightCsvIntent.type = "*/*"
+                startActivityForResult(openWeightCsvIntent, WEIGHT_IMPORT_REQUEST_CODE)
             }
             R.id.nav_logout -> {
                 UserRepository.cleanListeners()
@@ -101,7 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == STRAVA_REQUEST_CODE && resultCode == RESULT_OK && data != null) run {
+        if (requestCode == STRAVA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             val code = data.getStringExtra(
                 StravaLoginActivity.RESULT_CODE
             )
@@ -111,9 +129,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 hideProgressBar()
             }.execute()
         }
-        else if (requestCode == SIGNIN) {
+        else if (requestCode == SIGNIN_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 initUserListener()
+            }
+        }
+        else if (requestCode == WEIGHT_IMPORT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            showProgressBar()
+            try {
+                val inputStream = contentResolver.openInputStream(data.data!!)
+                val reader = BufferedReader(InputStreamReader(inputStream!!))
+                CsvWeights(reader){
+                    hideProgressBar()
+                }.execute()
+            } catch (e: FileNotFoundException) {
+                println("e = ${e}")
             }
         }
     }
@@ -140,7 +170,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun updateGui() {
         activityStatsFragment = ActivityStatsFragment()
-        historyFragment = HistoryFragment()
+        weightStatsFragment = WeightStatsFragment()
+        activityHistoryFragment = ActivityHistoryFragment()
+        weightHistoryFragment = WeightHistoryFragment()
         openDefaultFragment()
 
         nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_username).text = currentUser()!!.displayName
@@ -169,7 +201,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         )
                     )
                     .build(),
-                SIGNIN
+                SIGNIN_REQUEST_CODE
             )
         } else {
             updateGui()

@@ -33,7 +33,7 @@ class DurationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.duration_fragment, container, false)
-                viewpager = view.findViewById(R.id.duration_view_pager)
+        viewpager = view.findViewById(R.id.duration_view_pager)
 
         ActivityRepository.listen(listener)
 
