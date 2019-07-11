@@ -20,9 +20,9 @@ class WeightEditorView : AppCompatActivity() {
 
         val latestKilograms = intent.getDoubleExtra("latestKilograms", 50.0)
 
-        findViewById<RelativeLayout>(R.id.weight_editor_value).setOnClickListener { _ -> showWeightDialog(latestKilograms) }
+        findViewById<RelativeLayout>(R.id.weight_editor_value).setOnClickListener { showWeightDialog(latestKilograms) }
 
-        findViewById<RelativeLayout>(R.id.weight_editor_date).setOnClickListener { _ -> showDatePickerDialog() }
+        findViewById<RelativeLayout>(R.id.weight_editor_date).setOnClickListener { showDatePickerDialog() }
 
         setKilogramsValue(latestKilograms.toString())
         setDateValue(DateTime())

@@ -8,11 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_history_fragment.view.*
+import kotlinx.android.synthetic.main.no_items_layout.view.*
 
 //https://stackoverflow.com/questions/30895580/recyclerview-no-adapter-attached-skipping-layout-for-recyclerview-in-fragmen
 class ActivityHistoryFragment : Fragment() {
 
-    private lateinit var noActivitiesLayout: View
     private lateinit var recyclerView: RecyclerView
     private val adapter = ActivityHistoryAdapter()
     private lateinit var noActivitiesListener: Listener<List<Activity>>
@@ -20,7 +20,8 @@ class ActivityHistoryFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.activity_history_fragment, container, false)
-        noActivitiesLayout = view.findViewById(R.id.no_activities_layout)
+        val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
+        noItemLayout.no_activities_text_view.text = resources.getString(R.string.empty_activities)
 
         recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
@@ -33,7 +34,7 @@ class ActivityHistoryFragment : Fragment() {
                 adapter.update(subject)
             }
         }
-        noActivitiesListener = NoActivitiesListener(recyclerView, noActivitiesLayout)
+        noActivitiesListener = NoActivitiesListener(recyclerView, noItemLayout)
 
         ActivityRepository.listen(listener, noActivitiesListener)
 

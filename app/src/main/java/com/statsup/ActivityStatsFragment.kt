@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.no_items_layout.view.*
 
 class ActivityStatsFragment : Fragment() {
 
@@ -14,7 +15,8 @@ class ActivityStatsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
-        val noActivitiesLayout = view.findViewById<View>(R.id.no_activities_layout)
+        val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
+        noItemLayout.no_activities_text_view.text = resources.getString(R.string.empty_activities)
         val viewPager = view.findViewById<UnswappableViewPager>(R.id.stats_view_pager)
         viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
 
@@ -36,7 +38,7 @@ class ActivityStatsFragment : Fragment() {
             })
         }
 
-        listener = NoActivitiesListener(viewPager, noActivitiesLayout)
+        listener = NoActivitiesListener(viewPager, noItemLayout)
         ActivityRepository.listen(listener)
 
         return view

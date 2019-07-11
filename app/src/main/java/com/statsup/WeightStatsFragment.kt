@@ -6,13 +6,14 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.no_items_layout.view.*
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.view.LineChartView
 
 
 class WeightStatsFragment : Fragment() {
     private lateinit var lineChart: LineChartView
-
+    private lateinit var noItemListener: Listener<List<Weight>>
     private val listener = object : Listener<List<Weight>> {
         override fun update(subject: List<Weight>) {
             if (subject.isEmpty()) {
@@ -27,7 +28,11 @@ class WeightStatsFragment : Fragment() {
         val view = inflater.inflate(R.layout.weight_stats_fragment, container, false)
         lineChart = view.findViewById(R.id.line_chart)
 
-        WeightRepository.listen(listener)
+        val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
+        noItemLayout.no_activities_text_view.text = resources.getString(R.string.empty_weight)
+
+        noItemListener = NoActivitiesListener(lineChart, noItemLayout)
+        WeightRepository.listen(listener, noItemListener)
 
         return view
     }
@@ -92,6 +97,6 @@ class WeightStatsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        WeightRepository.removeListener(listener)
+        WeightRepository.removeListener(listener, noItemListener)
     }
 }

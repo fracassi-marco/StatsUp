@@ -2,17 +2,16 @@ package com.statsup
 
 import android.view.View
 
-class NoActivitiesListener(private val viewWithActivities: View, private val viewWithoutActivities: View) :
-    Listener<List<Activity>> {
-    override fun update(subject: List<Activity>) {
+class NoActivitiesListener<T>(private val viewWithItem: View, private val viewWithoutItem: View) :
+    Listener<List<T>> {
+    override fun update(subject: List<T>) {
         if(subject.isEmpty()) {
-            viewWithoutActivities.visibility = View.VISIBLE
-            viewWithActivities.visibility = View.GONE
+            viewWithoutItem.visibility = View.VISIBLE
+            viewWithItem.visibility = View.GONE
         }
         else {
-            viewWithoutActivities.visibility = View.GONE
-            viewWithActivities.visibility = View.VISIBLE
+            viewWithoutItem.visibility = View.GONE
+            viewWithItem.visibility = View.VISIBLE
         }
     }
-
 }

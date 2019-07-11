@@ -8,20 +8,21 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.no_items_layout.view.*
 import kotlinx.android.synthetic.main.weight_history_fragment.view.*
 import org.joda.time.DateTime
 
 class WeightHistoryFragment : Fragment() {
-    //private lateinit var noActivitiesLayout: View
     private lateinit var recyclerView: RecyclerView
     private val adapter = WeightHistoryAdapter()
-    //private lateinit var noActivitiesListener: Listener<List<Weight>>
+    private lateinit var noItemListener: Listener<List<Weight>>
     private lateinit var listener: Listener<List<Weight>>
     private var latestWeight = Weight(50.0, DateTime().millis)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.weight_history_fragment, container, false)
-        //noActivitiesLayout = view.findViewById(R.id.no_activities_layout)
+        val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
+        noItemLayout.no_activities_text_view.text = resources.getString(R.string.empty_weight)
 
         recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
@@ -46,9 +47,9 @@ class WeightHistoryFragment : Fragment() {
                 adapter.update(items)
             }
         }
-        //noActivitiesListener = NoActivitiesListener(recyclerView, noActivitiesLayout)
+        noItemListener = NoActivitiesListener(recyclerView, noItemLayout)
 
-        WeightRepository.listen(listener/*, noActivitiesListener*/)
+        WeightRepository.listen(listener, noItemListener)
 
         return view
     }
@@ -56,6 +57,6 @@ class WeightHistoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        WeightRepository.removeListener(listener/*, noActivitiesListener*/)
+        WeightRepository.removeListener(listener, noItemListener)
     }
 }

@@ -62,5 +62,6 @@
     <string name="yoga">Yoga</string>
     <string name="meditation">Meditation</string>
 
-    <string name="empty">Importa le tue attività da Strava</string>
+    <string name="empty_activities">Importa le tue attività da Strava</string>
+    <string name="empty_weight">Aggiungi o importa le tue pesate</string>
 </resources>

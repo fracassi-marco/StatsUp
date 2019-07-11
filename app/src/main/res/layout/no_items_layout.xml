@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/no_activities_layout"
+        android:id="@+id/no_item_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,13 +17,12 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/empty"/>
+            android:contentDescription="@string/empty_activities"/>
 
     <TextView
             android:id="@+id/no_activities_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/empty"
             android:textColor="@android:color/black"
             android:textSize="24sp"
             android:textStyle="bold"
