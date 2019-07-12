@@ -20,7 +20,7 @@
             android:contentDescription="@string/empty_activities"/>
 
     <TextView
-            android:id="@+id/no_activities_text_view"
+            android:id="@+id/label_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
