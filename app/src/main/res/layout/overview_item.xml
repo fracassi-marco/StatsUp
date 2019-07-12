@@ -1,52 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?selectableItemBackground">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground">
 
     <TextView
-        android:id="@+id/overview_item_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="16 mi" />
+            android:id="@+id/left_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/black"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/center_value"
+            app:layout_constraintEnd_toStartOf="@+id/center_value"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="left val"/>
 
     <TextView
-        android:id="@+id/overview_item_value_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="This month"
-        app:layout_constraintStart_toStartOf="@+id/overview_item_value"
-        app:layout_constraintTop_toBottomOf="@+id/overview_item_value" />
+            android:id="@+id/left_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/left_value"
+            app:layout_constraintTop_toBottomOf="@+id/left_value"
+            tools:text="left text"/>
 
     <TextView
-        android:id="@+id/overview_item_increase_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textColor="@color/Green"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@id/overview_item_value"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="+5" />
+            android:id="@+id/center_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/right_value"
+            app:layout_constraintStart_toEndOf="@+id/left_value"
+            tools:text="center val"/>
 
     <TextView
-        android:id="@+id/overview_item_increase_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Than last Month"
-        app:layout_constraintEnd_toEndOf="@+id/overview_item_increase_value"
-        app:layout_constraintTop_toBottomOf="@+id/overview_item_increase_value" />
+            android:id="@+id/center_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="@+id/center_value"
+            app:layout_constraintEnd_toEndOf="@+id/center_value"
+            app:layout_constraintTop_toBottomOf="@+id/center_value"
+            tools:text="center text"/>
+
+    <TextView
+            android:id="@+id/right_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/Green"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textAlignment="viewEnd"
+            app:layout_constraintBaseline_toBaselineOf="@+id/center_value"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/center_value"
+            tools:text="right val"/>
+
+    <TextView
+            android:id="@+id/right_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewEnd"
+            app:layout_constraintEnd_toEndOf="@+id/right_value"
+            app:layout_constraintTop_toBottomOf="@+id/right_value"
+            tools:text="right text"/>
 
 </android.support.constraint.ConstraintLayout>

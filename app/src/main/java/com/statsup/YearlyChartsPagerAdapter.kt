@@ -35,16 +35,16 @@ class YearlyChartsPagerAdapter(
         nextYearImage.visibility = if (position < allActivities.years().size - 1) View.VISIBLE else View.INVISIBLE
 
         val totalOverviewItem = view.findViewById<View>(R.id.total_overview_item)
-        totalOverviewItem.findViewById<TextView>(R.id.overview_item_value).text = asString(value.totalOfYear(position))
-        totalOverviewItem.findViewById<TextView>(R.id.overview_item_value_text).text = "Totale $year"
+        totalOverviewItem.findViewById<TextView>(R.id.left_value).text = asString(value.totalOfYear(position))
+        totalOverviewItem.findViewById<TextView>(R.id.left_text).text = "Totale $year"
 
         val averageOverviewItem = view.findViewById<View>(R.id.average_overview_item)
-        averageOverviewItem.findViewById<TextView>(R.id.overview_item_value).text = asString(value.averageOfYear(position))
-        averageOverviewItem.findViewById<TextView>(R.id.overview_item_value_text).text = "Media mensile $year"
+        averageOverviewItem.findViewById<TextView>(R.id.left_value).text = asString(value.averageOfYear(position))
+        averageOverviewItem.findViewById<TextView>(R.id.left_text).text = "Media mensile $year"
 
         val fullAverageOverviewItem = view.findViewById<View>(R.id.full_average_overview_item)
-        fullAverageOverviewItem.findViewById<TextView>(R.id.overview_item_value).text = asString(value.average())
-        fullAverageOverviewItem.findViewById<TextView>(R.id.overview_item_value_text).text = "Media di sempre"
+        fullAverageOverviewItem.findViewById<TextView>(R.id.left_value).text = asString(value.average())
+        fullAverageOverviewItem.findViewById<TextView>(R.id.left_text).text = "Media di sempre"
 
         YearlyChart(chart, color, labelText).refresh(value, position)
 
