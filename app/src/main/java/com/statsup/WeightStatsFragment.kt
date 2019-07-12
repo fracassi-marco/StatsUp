@@ -7,13 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.no_items_layout.view.*
+import kotlinx.android.synthetic.main.overview_item.view.*
 import kotlinx.android.synthetic.main.weight_stats_fragment.view.*
-import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.view.LineChartView
+import org.joda.time.DateTime
 
 
 class WeightStatsFragment : Fragment() {
     private lateinit var lineChart: LineChartView
+    private lateinit var monthVariationOverviewItem: View
+    private lateinit var yearVariationOverviewItem: View
+    private lateinit var fullVariationOverviewItem: View
     private lateinit var noItemListener: Listener<List<Weight>>
     private val listener = object : Listener<List<Weight>> {
         override fun update(subject: List<Weight>) {
@@ -21,82 +25,65 @@ class WeightStatsFragment : Fragment() {
                 return
             }
 
-            updateChart(subject)
+            val weights = subject.sortedBy { it.dateInMillis }
+            updateChart(weights)
+            updateOverviews(weights)
         }
+    }
+
+    private fun updateOverviews(weights: List<Weight>) {
+        val today = DateTime()
+        val finalValue = weights.last().kilograms
+
+        updateOverview(weights, today.minusMonths(1), finalValue, monthVariationOverviewItem, "Variazione ultimi 30 giorni")
+        updateOverview(weights, today.minusYears(1), finalValue, yearVariationOverviewItem, "Variazione ultimo anno")
+        updateOverview(weights, weights.first().date(), finalValue, fullVariationOverviewItem, "Variazione totale")
+    }
+
+    private fun updateOverview(weights: List<Weight>, fromDate: DateTime, finalValue: Double, view: View, label: String) {
+        val initialValue = weights.lastOrNull { it.date() <= fromDate }
+        if (initialValue != null) {
+            val percentage = (finalValue / initialValue.kilograms * 100) - 100
+            view.overview_item_value.text = asUnit(finalValue - initialValue.kilograms, "Kg")
+            view.overview_item_increase_value.text = asUnit(percentage, "%")
+            if (percentage > 0) {
+                view.overview_item_increase_value.setTextColor(Color.RED)
+            }
+        }
+        else {
+            view.overview_item_value.text = "-"
+            view.overview_item_increase_value.text = "-"
+        }
+        view.overview_item_value_text.text = label
+    }
+
+    private fun asUnit(value: Double, label: String): String {
+        var result = ""
+        if(value > 0) {
+            result += "+"
+        }
+        return result + String.format("%.2f", value) + label
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.weight_stats_fragment, container, false)
         lineChart = view.line_chart
+        monthVariationOverviewItem = view.month_variation_overview_item
+        yearVariationOverviewItem = view.year_variation_overview_item
+        fullVariationOverviewItem = view.full_variation_overview_item
 
         val noItemLayout = view.no_item_layout.apply {
             label_text.text = resources.getString(R.string.empty_weight)
         }
 
-        noItemListener = NoActivitiesListener(lineChart, noItemLayout)
+        noItemListener = NoActivitiesListener(view.weight_stats_scroll, noItemLayout)
         WeightRepository.listen(listener, noItemListener)
 
         return view
     }
 
-    private fun updateChart(subject: List<Weight>) {
-        lineChart.lineChartData = generateData(subject)
-        lineChart.currentViewport = Viewport(lineChart.maximumViewport.right - 90, lineChart.maximumViewport.top, lineChart.maximumViewport.right, lineChart.maximumViewport.bottom);
-        lineChart.isViewportCalculationEnabled = false;
-    }
-
-    private fun daysBetween(from: Long, to: Long): Float {
-        val deltaMillis = to - from
-        return (deltaMillis / 86400000).toFloat()
-    }
-
-    private fun generateData(weights: List<Weight>): LineChartData {
-        val orderedWeights = weights.sortedBy { it.dateInMillis }
-
-        val line = Line(values(orderedWeights)).also {
-            it.shape = ValueShape.CIRCLE
-            it.pointRadius = 4
-            it.setHasLabels(false)
-            it.setHasLabelsOnlyForSelected(true)
-            it.setHasLines(true)
-            it.setHasPoints(true)
-            it.color = Color.rgb(255, 185, 97)
-        }
-
-        return LineChartData(listOf(line)).also {
-            it.axisXBottom = Axis(axisXLabels(orderedWeights)).also {
-                it.setHasTiltedLabels(true)
-                it.name = "Peso [Kg]"
-                it.textColor = Color.BLACK
-            }
-            it.axisYLeft = Axis().also {
-                it.setHasLines(true)
-                it.textColor = Color.BLACK
-            }
-            it.setValueLabelsTextColor(Color.BLACK)
-        }
-    }
-
-    private fun values(orderedWeights: List<Weight>): List<PointValue> {
-        val zero = orderedWeights.first().dateInMillis
-        return orderedWeights.map { weight ->
-            val point = daysBetween(zero, weight.dateInMillis)
-            PointValue(point, weight.kilograms.toFloat()).also {
-                it.setLabel("${weight.kilograms}Kg - ${weight.date().toString("dd/MM/yyyy")}")
-            }
-        }
-    }
-
-    private fun axisXLabels(orderedWeights: List<Weight>): List<AxisValue> {
-        val zero = orderedWeights.first().dateInMillis
-        return orderedWeights.map { weight ->
-            val point = daysBetween(zero, weight.dateInMillis)
-            AxisValue(point).also {
-                val date =
-                    "${weight.date().dayOfMonth}/${weight.date().monthOfYear}/${weight.date().year.toString().substring(2)}"
-                it.setLabel(date)
-            }
-        }
+    private fun updateChart(weights: List<Weight>) {
+        WeightChart(lineChart).refresh(weights)
     }
 
     override fun onDestroyView() {

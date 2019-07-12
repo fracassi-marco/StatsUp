@@ -4,7 +4,6 @@ import android.graphics.Color
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.view.ColumnChartView
 
-
 class YearlyChart(
     private val chart: ColumnChartView,
     private val barColor: Int,
