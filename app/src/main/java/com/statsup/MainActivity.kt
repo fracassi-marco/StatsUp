@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun openDefaultFragment() {
-        openFragment("Elenco", activityHistoryFragment)
+        openFragment(getString(R.string.menu_stats), activityStatsFragment)
     }
 
     override fun onBackPressed() {
