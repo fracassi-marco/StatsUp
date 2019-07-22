@@ -44,15 +44,16 @@ class WeightStatsFragment : Fragment() {
 
     private fun updateMinMaxOverview(weights: List<Weight>) {
         minMaxOverviewItem.left_value.text = asUnit(weights.minBy { it.kilograms }!!.kilograms, "Kg", "")
-        minMaxOverviewItem.left_value.textSize = 22f
+        minMaxOverviewItem.left_value.textSize = 21f
         minMaxOverviewItem.left_text.text = "Peso minimo"
 
         minMaxOverviewItem.center_value.text = asUnit(weights.last().kilograms, "Kg", "")
+        minMaxOverviewItem.center_value.textSize = 26f
         minMaxOverviewItem.center_text.text = "Peso attuale"
 
         minMaxOverviewItem.right_value.text = asUnit(weights.maxBy { it.kilograms }!!.kilograms, "Kg", "")
         minMaxOverviewItem.right_value.setTextColor(Color.BLACK)
-        minMaxOverviewItem.right_value.textSize = 22f
+        minMaxOverviewItem.right_value.textSize = 21f
         minMaxOverviewItem.right_text.text = "Peso massimo"
     }
 
