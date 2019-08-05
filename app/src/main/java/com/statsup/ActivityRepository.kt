@@ -9,7 +9,7 @@ import java.util.*
 
 object ActivityRepository {
 
-    private val listeners: MutableList<Listener<List<Activity>>> = ArrayList()
+    private val listeners: MutableList<Listener<List<Activity>>> = mutableListOf()
     private var activities: MutableList<Activity> = mutableListOf()
     private val user = FirebaseAuth.getInstance().currentUser!!
     private val activitiesDatabaseRef = FirebaseDatabase.getInstance().getReference("users/${user.uid}/activities/")

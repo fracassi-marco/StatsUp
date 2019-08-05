@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/height_editor_content_main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/LightGrey"
+              android:orientation="vertical"
+>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+
+            android:background="@drawable/mild_rounded_button"
+            android:orientation="vertical">
+
+        <RelativeLayout
+                android:id="@+id/height_editor_value"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                    android:id="@+id/height_editor_value_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/weight_scale" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/height_editor_value_image"
+                    android:text="@string/height_editor_value_text"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/height_editor_value_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="30dp"
+                    android:text="@string/all_empty_field" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

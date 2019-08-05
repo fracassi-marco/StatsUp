@@ -14,6 +14,7 @@
     <string name="menu_weight_history">Pesate</string>
     <string name="menu_weight_import">Import da CSV</string>
     <string name="menu_other">Altro</string>
+    <string name="menu_configurations">Configurazioni</string>
     <string name="menu_logout">Esci</string>
     <string name="login_strava">Login Strava</string>
 
@@ -25,8 +26,12 @@
     <string name="weight_editor_value_label">%s Kg</string>
     <string name="editor_activity_view_title">Aggiungi</string>
     <string name="weight_editor_value_text">Peso</string>
-    <string name="all_empty_field">N/A</string>
+    <string name="all_empty_field"> - </string>
     <string name="weight_editor_date_text">Data</string>
+
+    <string name="integer_dialog_height">Altezza</string>
+    <string name="height_unit_cm">Cm</string>
+    <string name="height_editor_value_text">Altezza in centimetri</string>
 
     <string name="run_title_default">Running</string>
     <string name="walk_title_default">Walking</string>

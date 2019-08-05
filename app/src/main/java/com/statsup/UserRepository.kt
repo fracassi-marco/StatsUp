@@ -10,7 +10,7 @@ import java.util.*
 
 object UserRepository {
 
-    private val listeners: MutableList<Listener<User>> = ArrayList()
+    private val listeners: MutableList<Listener<User>> = mutableListOf()
     private val userDatabaseRef = FirebaseDatabase.getInstance().getReference("users/${currentUser().uid}/")
 
     fun listen(listener: Listener<User>) {
@@ -20,7 +20,9 @@ object UserRepository {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var user = dataSnapshot.getValue(User::class.java)
                     if (user == null) {
-                        user = User(name = currentUser().displayName!!, image = "none", id = currentUser().uid)
+                        user = User(name = currentUser().displayName!!, image = "none", height = 0).apply {
+                            id = currentUser().uid
+                        }
                     }
                     else {
                         user.id = dataSnapshot.key!!
@@ -35,6 +37,14 @@ object UserRepository {
             userDatabaseRef.addValueEventListener(userListener)
         }
         listeners.add(listener)
+    }
+
+    fun update(user: User) {
+        userDatabaseRef.updateChildren(mapOf("height" to user.height))
+    }
+
+    fun removeListener(vararg listeners: Listener<User>) {
+        listeners.forEach { this.listeners.remove(it) }
     }
 
     fun cleanListeners() {

@@ -31,13 +31,13 @@ class WeightEditorView : AppCompatActivity() {
     }
 
     private fun showWeightDialog(value: Double) {
-        val distanceDialog = DecimalDialog(
+        DecimalDialog(
             applicationContext.getString(R.string.decimal_dialog_weight),
             applicationContext.getString(R.string.weight_unit_kg),
             value
         ) { integer, decimal -> onValueDialogPositiveButton(integer, decimal) }
-
-        distanceDialog.makeDialog(this).show()
+            .makeDialog(this)
+            .show()
     }
 
     private fun onValueDialogPositiveButton(wholeNum: Int, fractionalNum: Int) {

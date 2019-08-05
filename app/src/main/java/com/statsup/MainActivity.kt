@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var weightStatsFragment: Fragment
     private lateinit var activityHistoryFragment: Fragment
     private lateinit var weightHistoryFragment: Fragment
+    private lateinit var configurationsFragment: Fragment
     private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +96,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 openWeightCsvIntent.addCategory(Intent.CATEGORY_OPENABLE)
                 openWeightCsvIntent.type = "*/*"
                 startActivityForResult(openWeightCsvIntent, WEIGHT_IMPORT_REQUEST_CODE)
+            }
+            R.id.nav_configurations -> {
+                openFragment(menuItem.title, configurationsFragment)
             }
             R.id.nav_logout -> {
                 UserRepository.cleanListeners()
@@ -173,6 +177,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         weightStatsFragment = WeightStatsFragment()
         activityHistoryFragment = ActivityHistoryFragment()
         weightHistoryFragment = WeightHistoryFragment()
+        configurationsFragment = ConfigurationsFragment()
         openDefaultFragment()
 
         nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_username).text = currentUser()!!.displayName
