@@ -1,6 +1,6 @@
 package com.statsup
 
-object Unit {
+object Measure {
     fun of(value: Double, label: String, positiveSign: String = "+"): String {
         var result = ""
         if(value == Double.POSITIVE_INFINITY) {

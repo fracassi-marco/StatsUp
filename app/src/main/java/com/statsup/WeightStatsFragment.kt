@@ -69,15 +69,15 @@ class WeightStatsFragment : Fragment() {
     }
 
     private fun updateMinMaxOverview(weights: List<Weight>) {
-        minMaxOverviewItem.left_value.text = Unit.of(weights.minBy { it.kilograms }!!.kilograms, "Kg", "")
+        minMaxOverviewItem.left_value.text = Measure.of(weights.minBy { it.kilograms }!!.kilograms, "Kg", "")
         minMaxOverviewItem.left_value.textSize = 21f
         minMaxOverviewItem.left_text.text = "Peso minimo"
 
-        minMaxOverviewItem.center_value.text = Unit.of(weights.last().kilograms, "Kg", "")
+        minMaxOverviewItem.center_value.text = Measure.of(weights.last().kilograms, "Kg", "")
         minMaxOverviewItem.center_value.textSize = 26f
         minMaxOverviewItem.center_text.text = "Peso attuale"
 
-        minMaxOverviewItem.right_value.text = Unit.of(weights.maxBy { it.kilograms }!!.kilograms, "Kg", "")
+        minMaxOverviewItem.right_value.text = Measure.of(weights.maxBy { it.kilograms }!!.kilograms, "Kg", "")
         minMaxOverviewItem.right_value.setTextColor(Color.BLACK)
         minMaxOverviewItem.right_value.textSize = 21f
         minMaxOverviewItem.right_text.text = "Peso massimo"
@@ -87,8 +87,8 @@ class WeightStatsFragment : Fragment() {
         val initialValue = weights.lastOrNull { it.date() <= fromDate }
         if (initialValue != null) {
             val percentage = (finalValue / initialValue.kilograms * 100) - 100
-            view.left_value.text = Unit.of(finalValue - initialValue.kilograms, "Kg")
-            view.right_value.text = Unit.of(percentage, "%")
+            view.left_value.text = Measure.of(finalValue - initialValue.kilograms, "Kg")
+            view.right_value.text = Measure.of(percentage, "%")
             if (percentage > 0) {
                 view.right_value.setTextColor(Color.RED)
             }

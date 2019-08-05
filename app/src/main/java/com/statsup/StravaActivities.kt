@@ -7,7 +7,6 @@ import com.sweetzpot.stravazpot.authenticaton.api.AuthenticationAPI
 import com.sweetzpot.stravazpot.authenticaton.model.AppCredentials
 import com.sweetzpot.stravazpot.common.api.AuthenticationConfig
 import com.sweetzpot.stravazpot.common.api.StravaConfig
-import kotlin.coroutines.coroutineContext
 
 
 class StravaActivities(
