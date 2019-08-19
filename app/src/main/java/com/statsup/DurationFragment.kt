@@ -22,7 +22,7 @@ class DurationFragment : Fragment() {
             val adapter = YearlyChartsPagerAdapter(
                 context!!,
                 activities,
-                Tabs.DURATION.color,
+                ActivityTabs.DURATION.color,
                 "Ore di allenamento ",
                 Durations(activities)
             )
@@ -46,4 +46,3 @@ class DurationFragment : Fragment() {
         ActivityRepository.removeListener(listener)
     }
 }
-

@@ -5,7 +5,6 @@ import com.google.firebase.database.IgnoreExtraProperties
 import kotlinx.android.parcel.Parcelize
 import org.joda.time.DateTime
 
-@IgnoreExtraProperties
 @Parcelize
 data class User(
     var name: String = "Super uper",

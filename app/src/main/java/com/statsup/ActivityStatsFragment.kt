@@ -22,7 +22,7 @@ class ActivityStatsFragment : Fragment() {
 
         view.findViewById<TabLayout>(R.id.stats_tab_layout).also {
             it.setupWithViewPager(viewPager)
-            it.setSelectedTabIndicatorColor(Tabs.at(0).color)
+            it.setSelectedTabIndicatorColor(ActivityTabs.at(0).color)
             it.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(p0: TabLayout.Tab) {
 
@@ -33,12 +33,12 @@ class ActivityStatsFragment : Fragment() {
                 }
 
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    it.setSelectedTabIndicatorColor(Tabs.at(tab.position).color)
+                    it.setSelectedTabIndicatorColor(ActivityTabs.at(tab.position).color)
                 }
             })
         }
 
-        listener = NoActivitiesListener(viewPager, noItemLayout)
+        listener = NoItemsListener(viewPager, noItemLayout)
         ActivityRepository.listen(listener)
 
         return view

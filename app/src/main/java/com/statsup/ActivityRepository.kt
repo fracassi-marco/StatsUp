@@ -15,7 +15,7 @@ object ActivityRepository {
     private val activitiesDatabaseRef = FirebaseDatabase.getInstance().getReference("users/${user.uid}/activities/")
 
     init {
-        val eventListener = object : ValueEventListener {
+        activitiesDatabaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val items = dataSnapshot.children.map { it.getValue(Activity::class.java)!! }
                 activities = items.sortedByDescending { it.dateInMillis }.toMutableList()
@@ -25,8 +25,7 @@ object ActivityRepository {
             override fun onCancelled(databaseError: DatabaseError) {
             }
 
-        }
-        activitiesDatabaseRef.addValueEventListener(eventListener)
+        })
     }
 
     fun listen(vararg listeners: Listener<List<Activity>>) {

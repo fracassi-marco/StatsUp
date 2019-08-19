@@ -34,7 +34,7 @@ class ActivityHistoryFragment : Fragment() {
                 adapter.update(subject)
             }
         }
-        noActivitiesListener = NoActivitiesListener(recyclerView, noItemLayout)
+        noActivitiesListener = NoItemsListener(recyclerView, noItemLayout)
 
         ActivityRepository.listen(listener, noActivitiesListener)
 

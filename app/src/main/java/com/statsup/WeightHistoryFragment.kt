@@ -47,7 +47,7 @@ class WeightHistoryFragment : Fragment() {
                 adapter.update(items)
             }
         }
-        noItemListener = NoActivitiesListener(recyclerView, noItemLayout)
+        noItemListener = NoItemsListener(recyclerView, noItemLayout)
 
         WeightRepository.listen(listener, noItemListener)
 

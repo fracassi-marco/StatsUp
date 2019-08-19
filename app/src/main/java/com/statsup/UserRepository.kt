@@ -6,37 +6,38 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.util.*
 
 object UserRepository {
 
+    private var user = User()
     private val listeners: MutableList<Listener<User>> = mutableListOf()
     private val userDatabaseRef = FirebaseDatabase.getInstance().getReference("users/${currentUser().uid}/")
 
-    fun listen(listener: Listener<User>) {
-        if (listeners.isEmpty()) {
-
-            val userListener = object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    var user = dataSnapshot.getValue(User::class.java)
-                    if (user == null) {
-                        user = User(name = currentUser().displayName!!, image = "none", height = 0).apply {
-                            id = currentUser().uid
-                        }
+    init {
+        userDatabaseRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var item = dataSnapshot.getValue(User::class.java)
+                if (item == null) {
+                    item = User(name = currentUser().displayName!!, image = "none", height = 0).apply {
+                        id = currentUser().uid
                     }
-                    else {
-                        user.id = dataSnapshot.key!!
-                    }
-
-                    listeners.forEach { it.update(user) }
+                }
+                else {
+                    item.id = dataSnapshot.key!!
                 }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                }
+                user = item
+                listeners.forEach { it.update(item) }
             }
-            userDatabaseRef.addValueEventListener(userListener)
-        }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+            }
+        })
+    }
+
+    fun listen(listener: Listener<User>) {
         listeners.add(listener)
+        listener.update(user)
     }
 
     fun update(user: User) {

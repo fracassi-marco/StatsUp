@@ -34,7 +34,7 @@ class FrequencyFragment : Fragment() {
         val adapter = YearlyChartsPagerAdapter(
             context!!,
             activities,
-            Tabs.FREQUENCY.color,
+            ActivityTabs.FREQUENCY.color,
             "Numero di allenamenti ",
             Frequencies(activities)
         )
@@ -58,7 +58,7 @@ class FrequencyFragment : Fragment() {
 
         val values = byDay
             .map {
-            val value = SliceValue(it.value.size.toFloat(), Tabs.FREQUENCY.color)
+            val value = SliceValue(it.value.size.toFloat(), ActivityTabs.FREQUENCY.color)
             value.setLabel("${day(it.key)} ${percentage(it.value.size, activities.count())}%")
             value
         }

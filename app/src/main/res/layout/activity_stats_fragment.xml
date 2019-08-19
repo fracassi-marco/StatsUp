@@ -15,26 +15,7 @@
                 android:id="@+id/stats_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top">
-
-            <android.support.design.widget.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Frequenza"
-                    android:icon="@drawable/outline_timer_24"/>
-
-            <android.support.design.widget.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Durata"
-                    android:icon="@drawable/outline_place_24"/>
-
-            <android.support.design.widget.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Distanza"
-                    android:icon="@drawable/outline_dashboard_24"/>
-        </android.support.design.widget.TabLayout>
+                android:layout_gravity="top"/>
 
     </com.statsup.UnswappableViewPager>
 

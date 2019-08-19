@@ -22,7 +22,7 @@ class DistanceFragment : Fragment() {
             val adapter = YearlyChartsPagerAdapter(
                 context!!,
                 activities,
-                Tabs.DISTANCE.color,
+                ActivityTabs.DISTANCE.color,
                 "Chilometri percorsi ",
                 Distances(activities)
             )

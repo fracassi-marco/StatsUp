@@ -3,9 +3,11 @@ package com.statsup
 import kotlin.math.pow
 
 object Bmi {
-    fun of(weight: Weight, height: Int) : String {
-        val bmi = (1.3 * weight.kilograms) / (height / 100.0).pow(2.5)
+    fun labelFor(weight: Weight, height: Int) : String {
+        return Measure.of(valueFor(weight, height), "", "")
+    }
 
-        return Measure.of(bmi, "", "")
+    fun valueFor(weight: Weight, height: Int) : Double {
+        return (1.3 * weight.kilograms) / (height / 100.0).pow(2.5)
     }
 }
