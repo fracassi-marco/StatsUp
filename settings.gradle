@@ -1,1 +1,1 @@
-include ':app', ':strava-zpot'
+include ':app'

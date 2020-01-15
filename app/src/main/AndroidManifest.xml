@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.sweetzpot.stravazpot.authenticaton.ui.StravaLoginActivity"
+                android:name="com.statsup.strava.StravaLoginActivity"
                 android:label="@string/login_strava" />
         <activity
                 android:name=".WeightEditorView"

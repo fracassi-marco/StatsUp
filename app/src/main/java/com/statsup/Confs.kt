@@ -19,8 +19,8 @@ class Confs(private val context: Context) {
         load(context)
     }
 
-    fun stravaClientId(): Int {
-        return properties.getProperty("strava.clientId").toInt()
+    fun stravaClientId(): String {
+        return properties.getProperty("strava.clientId")
     }
 
     fun stravaClientSecret(): String {

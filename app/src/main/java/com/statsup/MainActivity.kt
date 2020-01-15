@@ -17,10 +17,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.squareup.picasso.Picasso
-import com.sweetzpot.stravazpot.authenticaton.api.AccessScope
-import com.sweetzpot.stravazpot.authenticaton.api.ApprovalPrompt
-import com.sweetzpot.stravazpot.authenticaton.api.StravaLogin
-import com.sweetzpot.stravazpot.authenticaton.ui.StravaLoginActivity
+import com.statsup.strava.StravaLoginActivity
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
@@ -77,11 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 openFragment(menuItem.title, activityStatsFragment)
             }
             R.id.nav_import_from_strava -> {
-                val intent = StravaLogin.withContext(applicationContext)
-                    .withClientID(Confs(applicationContext).stravaClientId())
-                    .withRedirectURI("oauth://com-sportshub")
-                    .withApprovalPrompt(ApprovalPrompt.AUTO)
-                    .withAccessScope(AccessScope.VIEW_PRIVATE_WRITE)
+                val intent = StravaLogin(applicationContext, Confs(applicationContext).stravaClientId())
                     .makeIntent()
                 startActivityForResult(intent, STRAVA_REQUEST_CODE)
             }
@@ -124,9 +117,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == STRAVA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            val code = data.getStringExtra(
-                StravaLoginActivity.RESULT_CODE
-            )
+            val code = data.getStringExtra(StravaLoginActivity.RESULT_CODE)
 
             showProgressBar()
             StravaActivities(code, Confs(applicationContext)) {
