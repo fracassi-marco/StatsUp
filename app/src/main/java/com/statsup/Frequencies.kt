@@ -7,6 +7,14 @@ class Frequencies(private val activities: Activities) : Value {
         return activities.average(provider)
     }
 
+    override fun cumulativeOfCurrentMont(): List<Double> {
+        return activities.cumulativeOfCurrentMont(provider)
+    }
+
+    override fun cumulativeOfPreviousMont(): List<Double> {
+        return activities.cumulativeOfPreviousMont(provider)
+    }
+
     override fun max(): Double {
         return activities.max(provider)
     }

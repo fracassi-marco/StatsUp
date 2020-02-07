@@ -39,7 +39,6 @@ class YearlyChart(
                 name = label
             }
             isValueLabelBackgroundEnabled = false
-            label
         }.also {
             it.setValueLabelsTextColor(Color.BLACK)
         }

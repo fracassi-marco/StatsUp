@@ -3,7 +3,7 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                                             xmlns:app="http://schemas.android.com/apk/res-auto"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
+                                            android:layout_height="match_parent"
                                             android:fillViewport="true"
                                             android:orientation="vertical"
                                             app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -15,10 +15,20 @@
         <android.support.v4.view.ViewPager
                 android:id="@+id/distance_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_height="520dp"
                 app:layout_constraintTop_toTopOf="parent"
         />
+
+        <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/month_over_month_chart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/distance_view_pager"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

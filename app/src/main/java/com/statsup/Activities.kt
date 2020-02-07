@@ -87,18 +87,37 @@ class Activities(private val activities: List<Activity>, private val today: Cale
             .max()!!
     }
 
+    fun cumulativeOfCurrentMont(value: (List<Activity>) -> Double): List<Double> {
+        return cumulativeOfMonth(12 - currentMonth(), value)
+    }
+
+    fun cumulativeOfPreviousMont(value: (List<Activity>) -> Double): List<Double> {
+        return cumulativeOfMonth(13 - currentMonth(), value)
+    }
+
+    private fun cumulativeOfMonth(index: Int, value: (List<Activity>) -> Double): List<Double> {
+        val byMonth = byMonth()
+        val currentMonthActivities = byMonth[byMonth.size - index]
+        var currentMonthTotal = 0.0
+        return (1..31).map { i ->
+            currentMonthTotal += value.invoke(currentMonthActivities.filter { it.date().dayOfMonth == i })
+            currentMonthTotal
+        }
+    }
+
     private fun numberOfMonths(): Int {
-        return byMonth().size - (11 - actualMonth())
+        return byMonth().size - (11 - currentMonth())
     }
 
     private fun numberOfMonths(position: Int): Int {
         if (yearInPosition(position) == actualYear()) {
-            return actualMonth() + 1
+            return currentMonth() + 1
         }
         return 12
     }
 
     private fun actualYear() = today.get(Calendar.YEAR)
 
-    private fun actualMonth() = today.get(Calendar.MONTH)
+    private fun currentMonth() = today.get(Calendar.MONTH)
+
 }

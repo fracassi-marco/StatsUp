@@ -10,8 +10,8 @@ android {
         applicationId "com.statsup"
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 11002
-        versionName "1.10.2"
+        versionCode 11100
+        versionName "1.11.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

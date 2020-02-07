@@ -19,11 +19,21 @@
                 app:layout_constraintTop_toTopOf="parent"
         />
 
+        <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/month_over_month_chart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frequency_view_pager"/>
+
         <lecho.lib.hellocharts.view.PieChartView
                 android:id="@+id/frequency_pie_chart"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                app:layout_constraintTop_toBottomOf="@id/frequency_view_pager"
+                android:layout_height="200dp"
+                app:layout_constraintTop_toBottomOf="@id/month_over_month_chart"
         />
 
     </android.support.constraint.ConstraintLayout>

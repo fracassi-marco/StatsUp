@@ -6,10 +6,14 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.statsup.ActivityTabs.DISTANCE
+import kotlinx.android.synthetic.main.distance_fragment.view.*
+import lecho.lib.hellocharts.view.LineChartView
 
 class DistanceFragment : Fragment() {
 
     private lateinit var viewpager: ViewPager
+    private lateinit var monthOverMonthChart: LineChartView
 
     private val listener = object : Listener<List<Activity>> {
         override fun update(subject: List<Activity>) {
@@ -19,22 +23,26 @@ class DistanceFragment : Fragment() {
             }
 
             val activities = Activities(subject)
+            val value = Distances(activities)
             val adapter = YearlyChartsPagerAdapter(
                 context!!,
                 activities,
-                ActivityTabs.DISTANCE.color,
+                DISTANCE.color,
                 "Chilometri percorsi ",
-                Distances(activities)
+                value
             )
 
             viewpager.adapter = adapter
             viewpager.currentItem = adapter.count - 1
+            MonthOverMonthChart(monthOverMonthChart, DISTANCE.color).refresh(value)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.distance_fragment, container, false)
         viewpager = view.findViewById(R.id.distance_view_pager)
+        monthOverMonthChart = view.month_over_month_chart
+        monthOverMonthChart.isInteractive = false
 
         ActivityRepository.listen(listener)
 
