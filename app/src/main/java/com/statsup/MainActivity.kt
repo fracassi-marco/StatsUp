@@ -12,13 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.TextView
-import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.squareup.picasso.Picasso
 import com.statsup.strava.StravaLoginActivity
-import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
 import java.io.FileNotFoundException
@@ -50,7 +44,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        startLogin()
+        ActivityRepository.load(applicationContext)
+        UserRepository.load(applicationContext)
+        WeightRepository.load(applicationContext)
+        updateGui()
     }
 
     private fun openDefaultFragment() {
@@ -93,13 +90,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_configurations -> {
                 openFragment(menuItem.title, configurationsFragment)
             }
-            R.id.nav_logout -> {
-                UserRepository.cleanListeners()
-                ActivityRepository.cleanListeners()
-                AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener { startLogin() }
-            }
         }
 
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(GravityCompat.START)
@@ -120,7 +110,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val code = data.getStringExtra(StravaLoginActivity.RESULT_CODE)
 
             showProgressBar()
-            StravaActivities(code, Confs(applicationContext)) {
+            StravaActivities(applicationContext, code, Confs(applicationContext)) {
                 hideProgressBar()
             }.execute()
         }
@@ -134,11 +124,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             try {
                 val inputStream = contentResolver.openInputStream(data.data!!)
                 val reader = BufferedReader(InputStreamReader(inputStream!!))
-                CsvWeights(reader){
+                CsvWeights(applicationContext, reader){
                     hideProgressBar()
                 }.execute()
             } catch (e: FileNotFoundException) {
-                println("e = ${e}")
+                println(e.message)
             }
         }
     }
@@ -170,41 +160,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         weightHistoryFragment = WeightHistoryFragment()
         configurationsFragment = ConfigurationsFragment()
         openDefaultFragment()
-
-        nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_username).text = currentUser()!!.displayName
-        nav_view.getHeaderView(0).findViewById<TextView>(R.id.sidebar_email).text = currentUser()!!.email
-
-        for (info in currentUser()!!.providerData) {
-            if (info.getProviderId() == "google.com") {
-                val image = nav_view.getHeaderView(0).findViewById<CircleImageView>(R.id.sidebar_image)
-                Picasso.with(applicationContext)
-                    .load(info.photoUrl)
-                    .placeholder(android.R.color.darker_gray)
-                    .into(image)
-                break
-            }
-        }
-    }
-
-    private fun startLogin() {
-        if (currentUser() == null) {
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(
-                        arrayListOf(
-                            AuthUI.IdpConfig.GoogleBuilder().build()
-                        )
-                    )
-                    .build(),
-                SIGNIN_REQUEST_CODE
-            )
-        } else {
-            updateGui()
-        }
-    }
-
-    private fun currentUser(): FirebaseUser? {
-        return FirebaseAuth.getInstance().currentUser
     }
 }

@@ -23,7 +23,7 @@ class WeightHistoryAdapter : RecyclerView.Adapter<WeightHistoryAdapter.Holder>()
                 .Builder(layout.context)
                 .setMessage("Vuoi cancellare questa pesata?")
                 .setNegativeButton("No") { _, _ -> }
-                .setPositiveButton("Si") { _, _ -> WeightRepository.delete(dataSet[adapterPosition]) }
+                .setPositiveButton("Si") { _, _ -> WeightRepository.delete(layout.context, dataSet[adapterPosition]) }
                 .show()
         }
     }
@@ -48,11 +48,14 @@ class WeightHistoryAdapter : RecyclerView.Adapter<WeightHistoryAdapter.Holder>()
     }
 
     fun update(newItems: List<Weight>) {
-        val diff = DiffCallback(newItems, dataSet)
+
+        val orderedNewItems = newItems.sortedByDescending { it.dateInMillis }
+
+        val diff = DiffCallback(orderedNewItems, dataSet)
         val diffResult = DiffUtil.calculateDiff(diff)
 
         diffResult.dispatchUpdatesTo(this)
-        dataSet = newItems
+        dataSet = orderedNewItems
     }
 }
 

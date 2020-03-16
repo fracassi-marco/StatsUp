@@ -1,32 +1,79 @@
 package com.statsup
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import java.util.*
+import android.content.ContentValues
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+
+class DbHelper(context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("""CREATE TABLE users (height INTEGER)""")
+
+        db.execSQL(
+            """CREATE TABLE activities (
+            id INTEGER PRIMARY KEY,
+            sportId INTEGER,
+            distanceInMeters REAL,
+            durationInSeconds INTEGER,
+            dateInMillis INTEGER,
+            title TEXT)"""
+        )
+
+        db.execSQL(
+            """CREATE TABLE weights (
+            dateInMillis INTEGER PRIMARY KEY,
+            kilograms INTEGER)"""
+        )
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+    }
+
+    override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        onUpgrade(db, oldVersion, newVersion)
+    }
+
+    companion object {
+        const val DATABASE_VERSION = 1
+        const val DATABASE_NAME = "StatsUp.db"
+    }
+}
+
 
 object ActivityRepository {
 
     private val listeners: MutableList<Listener<List<Activity>>> = mutableListOf()
-    private var activities: MutableList<Activity> = mutableListOf()
-    private val user = FirebaseAuth.getInstance().currentUser!!
-    private val activitiesDatabaseRef = FirebaseDatabase.getInstance().getReference("users/${user.uid}/activities/")
+    private var activities: List<Activity> = emptyList()
 
-    init {
-        activitiesDatabaseRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val items = dataSnapshot.children.map { it.getValue(Activity::class.java)!! }
-                activities = items.sortedByDescending { it.dateInMillis }.toMutableList()
-                listeners.forEach { it.update(items) }
+    fun load(context: Context) {
+        val result = mutableListOf<Activity>()
+        DbHelper(context).readableDatabase.query(
+            "activities",
+            null,
+            null,
+            null,
+            null,
+            null,
+            "dateInMillis"
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                result.add(
+                    Activity(
+                        cursor.getLong(cursor.getColumnIndexOrThrow("id")),
+                        Sports.byId(cursor.getLong(cursor.getColumnIndexOrThrow("sportId"))),
+                        cursor.getFloat(cursor.getColumnIndexOrThrow("distanceInMeters")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("durationInSeconds")),
+                        cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("title"))
+                    )
+                )
             }
+        }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-            }
-
-        })
+        activities = result
     }
+
 
     fun listen(vararg listeners: Listener<List<Activity>>) {
         listeners.forEach {
@@ -35,26 +82,32 @@ object ActivityRepository {
         }
     }
 
-    fun addIfNotExists(newActivities: List<Activity>) {
+    private fun update() {
+        listeners.forEach { it.update(activities) }
+    }
+
+    fun addIfNotExists(context: Context, newActivities: List<Activity>) {
         val toAdd = newActivities.minus(activities)
-        if(toAdd.isNotEmpty()) {
-            saveAll(toAdd)
-            activities.union(toAdd)
+        if (toAdd.isNotEmpty()) {
+            saveAll(context, toAdd)
+            activities = activities.plus(toAdd)
         }
+        update()
     }
 
-    private fun saveAll(toAdd: List<Activity>) {
-        val children = HashMap<String, Any>()
+    private fun saveAll(context: Context, toAdd: List<Activity>) {
         toAdd.forEach {
-            val key = activitiesDatabaseRef.push().key!!
-            children.put(key, it.apply { id = key })
+            val values = ContentValues().apply {
+                put("id", it.id)
+                put("sportId", it.sport.id)
+                put("distanceInMeters", it.distanceInMeters)
+                put("durationInSeconds", it.durationInSeconds)
+                put("dateInMillis", it.dateInMillis)
+                put("title", it.title)
+            }
 
+            DbHelper(context).writableDatabase.insert("activities", null, values)
         }
-        activitiesDatabaseRef.updateChildren(children)
-    }
-
-    fun cleanListeners() {
-        listeners.clear()
     }
 
     fun removeListener(vararg listeners: Listener<List<Activity>>) {

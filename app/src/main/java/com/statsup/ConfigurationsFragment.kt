@@ -42,6 +42,6 @@ class ConfigurationsFragment : Fragment() {
 
     private fun onValueDialogPositiveButton(number: Int) {
         user.height = number
-        UserRepository.update(user)
+        UserRepository.update(context!!, user)
     }
 }

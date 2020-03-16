@@ -1,12 +1,13 @@
 package com.statsup
 
+import android.content.Context
 import android.os.AsyncTask
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
 import org.joda.time.format.DateTimeFormat
 import java.io.Reader
 
-class CsvWeights(private val reader: Reader, private val onComplete: () -> Unit) :  AsyncTask<Void, Void, Void>() {
+class CsvWeights(private val context: Context, private val reader: Reader, private val onComplete: () -> Unit) :  AsyncTask<Void, Void, Void>() {
 
     override fun doInBackground(vararg ignore: Void): Void? {
         val weights : List<Weight> = CSVReaderBuilder(reader)
@@ -18,7 +19,7 @@ class CsvWeights(private val reader: Reader, private val onComplete: () -> Unit)
                 .map {
                     asWeight(it)
                 }
-        WeightRepository.addIfNotExists(weights)
+        WeightRepository.addIfNotExists(context, weights)
         return null
     }
 

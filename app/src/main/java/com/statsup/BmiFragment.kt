@@ -17,9 +17,9 @@ class BmiFragment : Fragment() {
 
     private lateinit var minMaxOverviewItem: View
     private lateinit var bmiChart: SegmentedBarView
-    private lateinit var weights: List<Weight>
     private lateinit var content: ConstraintLayout
     private lateinit var noItemsLayout: View
+    private var weights = emptyList<Weight>()
     private var height: Int = 0
 
     private val userListener = object : Listener<User> {

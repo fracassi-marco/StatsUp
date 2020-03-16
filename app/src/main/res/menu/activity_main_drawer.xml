@@ -41,10 +41,6 @@
                     android:id="@+id/nav_configurations"
                     android:icon="@drawable/ic_menu_manage"
                     android:title="@string/menu_configurations"/>
-            <item
-                    android:id="@+id/nav_logout"
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="@string/menu_logout"/>
         </menu>
     </item>
 

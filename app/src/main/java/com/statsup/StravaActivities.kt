@@ -1,10 +1,13 @@
 package com.statsup
 
+import android.content.Context
 import android.os.AsyncTask
 import com.statsup.strava.*
+import kotlin.coroutines.coroutineContext
 
 
 class StravaActivities(
+    private val context: Context,
     private val code: String,
     private val confs: Confs,
     private val onComplete: () -> Unit
@@ -37,7 +40,7 @@ class StravaActivities(
     }
 
     override fun onPostExecute(activities: List<com.statsup.strava.Activity>) {
-        ActivityRepository.addIfNotExists(activities.map { asRun(it) })
+        ActivityRepository.addIfNotExists(context, activities.map { asRun(it) })
         onComplete.invoke()
     }
 
@@ -46,6 +49,6 @@ class StravaActivities(
         if (title.isEmpty()) {
             title = it.type.name.capitalize()
         }
-        return Activity(it.type, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time, title)
+        return Activity(it.id, it.type, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time, title)
     }
 }

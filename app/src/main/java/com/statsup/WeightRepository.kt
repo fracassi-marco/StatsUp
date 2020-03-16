@@ -1,32 +1,35 @@
 package com.statsup
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import java.util.ArrayList
-import java.util.HashMap
+import android.content.ContentValues
+import android.content.Context
+import java.util.*
 
 object WeightRepository {
     private val listeners: MutableList<Listener<List<Weight>>> = ArrayList()
     private var weights: MutableList<Weight> = mutableListOf()
-    private val user = FirebaseAuth.getInstance().currentUser!!
-    private val databaseRef = FirebaseDatabase.getInstance().getReference("users/${user.uid}/weights/")
 
-    init {
-        val eventListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val items = dataSnapshot.children.map { it.getValue(Weight::class.java)!! }
-                weights = items.sortedByDescending { it.dateInMillis }.toMutableList()
-                listeners.forEach { it.update(items) }
+    fun load(context: Context) {
+        val result = mutableListOf<Weight>()
+        DbHelper(context).readableDatabase.query(
+            "weights",
+            null,
+            null,
+            null,
+            null,
+            null,
+            "dateInMillis DESC"
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                result.add(
+                    Weight(
+                        cursor.getDouble(cursor.getColumnIndexOrThrow("kilograms")),
+                        cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis"))
+                    )
+                )
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-            }
-
         }
-        databaseRef.addValueEventListener(eventListener)
+
+        weights = result
     }
 
     fun listen(vararg listeners: Listener<List<Weight>>) {
@@ -36,31 +39,37 @@ object WeightRepository {
         }
     }
 
-    fun addIfNotExists(newActivities: List<Weight>) {
+    private fun update() {
+        listeners.forEach { it.update(weights) }
+    }
+
+    fun addIfNotExists(context: Context, newActivities: List<Weight>) {
         val toAdd = newActivities.minus(weights)
         if(toAdd.isNotEmpty()) {
-            saveAll(toAdd)
-            weights.union(toAdd)
+            saveAll(context, toAdd)
+            weights = weights.plus(toAdd).toMutableList()
         }
+
+        update()
     }
 
-    fun delete(weight: Weight) {
+    fun delete(context: Context, weight: Weight) {
         weights.remove(weight)
-        databaseRef.child(weight.id).removeValue()
+
+        DbHelper(context).writableDatabase.delete("weights", "dateInMillis = ?", arrayOf(weight.dateInMillis.toString()))
+
+        update()
     }
 
-    private fun saveAll(toAdd: List<Weight>) {
-        val children = HashMap<String, Any>()
+    private fun saveAll(context: Context, toAdd: List<Weight>) {
         toAdd.forEach {
-            val key = databaseRef.push().key!!
-            children[key] = it.apply { id = key }
+            val values = ContentValues().apply {
+                put("kilograms", it.kilograms)
+                put("dateInMillis", it.dateInMillis)
+            }
 
+            DbHelper(context).writableDatabase.insert("weights", null, values)
         }
-        databaseRef.updateChildren(children)
-    }
-
-    fun cleanListeners() {
-        listeners.clear()
     }
 
     fun removeListener(vararg listeners: Listener<List<Weight>>) {
