@@ -37,6 +37,7 @@ class MonthOverMonthChart(private val monthOverMonthChart: LineChartView, privat
         }
         monthOverMonthChart.currentViewport = monthOverMonthChart.maximumViewport
         monthOverMonthChart.isViewportCalculationEnabled = false
+        monthOverMonthChart.isInteractive = false
         monthOverMonthChart.invalidate()
     }
 

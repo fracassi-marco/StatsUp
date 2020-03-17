@@ -12,10 +12,10 @@ import lecho.lib.hellocharts.view.LineChartView
 
 class DistanceFragment : Fragment() {
 
-    private lateinit var viewpager: ViewPager
-    private lateinit var monthOverMonthChart: LineChartView
-
-    private val listener = object : Listener<List<Activity>> {
+    private fun listener(
+        viewpager: ViewPager,
+        monthOverMonthChart: LineChartView
+    ) = object : Listener<List<Activity>> {
         override fun update(subject: List<Activity>) {
 
             if (subject.isEmpty()) {
@@ -40,11 +40,11 @@ class DistanceFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.distance_fragment, container, false)
-        viewpager = view.findViewById(R.id.distance_view_pager)
-        monthOverMonthChart = view.month_over_month_chart
+        val viewpager = view.distance_view_pager
+        val monthOverMonthChart = view.month_over_month_chart
         monthOverMonthChart.isInteractive = false
 
-        ActivityRepository.listen(listener)
+        ActivityRepository.listen("DistanceFragment", listener(viewpager, monthOverMonthChart))
 
         return view
     }
@@ -52,7 +52,7 @@ class DistanceFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        ActivityRepository.removeListener(listener)
+        ActivityRepository.removeListener("DistanceFragment")
     }
 }
 

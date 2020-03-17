@@ -11,8 +11,6 @@ import kotlinx.android.synthetic.main.no_items_layout.view.*
 
 class ActivityStatsFragment : Fragment() {
 
-    private lateinit var listener: Listener<List<Activity>>
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
         val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
@@ -38,8 +36,8 @@ class ActivityStatsFragment : Fragment() {
             })
         }
 
-        listener = NoItemsListener(viewPager, noItemLayout)
-        ActivityRepository.listen(listener)
+        val listener: Listener<List<Activity>> = NoItemsListener(viewPager, noItemLayout)
+        ActivityRepository.listen("ActivityStatsFragment", listener)
 
         return view
     }
@@ -47,7 +45,7 @@ class ActivityStatsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        ActivityRepository.removeListener(listener)
+        ActivityRepository.removeListener("ActivityStatsFragment")
     }
 }
 

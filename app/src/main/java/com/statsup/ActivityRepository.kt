@@ -2,48 +2,11 @@ package com.statsup
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
-
-class DbHelper(context: Context) :
-    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("""CREATE TABLE users (height INTEGER)""")
-
-        db.execSQL(
-            """CREATE TABLE activities (
-            id INTEGER PRIMARY KEY,
-            sportId INTEGER,
-            distanceInMeters REAL,
-            durationInSeconds INTEGER,
-            dateInMillis INTEGER,
-            title TEXT)"""
-        )
-
-        db.execSQL(
-            """CREATE TABLE weights (
-            dateInMillis INTEGER PRIMARY KEY,
-            kilograms INTEGER)"""
-        )
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-    }
-
-    override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        onUpgrade(db, oldVersion, newVersion)
-    }
-
-    companion object {
-        const val DATABASE_VERSION = 1
-        const val DATABASE_NAME = "StatsUp.db"
-    }
-}
 
 
 object ActivityRepository {
 
-    private val listeners: MutableList<Listener<List<Activity>>> = mutableListOf()
+    private val listeners: MutableMap<String, Listener<List<Activity>>> = mutableMapOf()
     private var activities: List<Activity> = emptyList()
 
     fun load(context: Context) {
@@ -75,15 +38,13 @@ object ActivityRepository {
     }
 
 
-    fun listen(vararg listeners: Listener<List<Activity>>) {
-        listeners.forEach {
-            this.listeners.add(it)
-            it.update(activities)
-        }
+    fun listen(key: String, listener: Listener<List<Activity>>) {
+        listeners.put(key, listener)
+        listener.update(activities)
     }
 
     private fun update() {
-        listeners.forEach { it.update(activities) }
+        listeners.values.forEach { it.update(activities) }
     }
 
     fun addIfNotExists(context: Context, newActivities: List<Activity>) {
@@ -110,7 +71,9 @@ object ActivityRepository {
         }
     }
 
-    fun removeListener(vararg listeners: Listener<List<Activity>>) {
-        listeners.forEach { this.listeners.remove(it) }
+    fun removeListener(key: String) {
+        if(listeners.containsKey(key)){
+            listeners.remove(key)
+        }
     }
 }

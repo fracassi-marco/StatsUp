@@ -17,11 +17,11 @@ import kotlin.math.roundToInt
 
 class FrequencyFragment : Fragment() {
 
-    private lateinit var pieChart: PieChartView
-    private lateinit var monthOverMonthChart: LineChartView
-    private lateinit var viewpager: ViewPager
-
-    private val listener = object : Listener<List<Activity>> {
+    private fun listener(
+        pieChart: PieChartView,
+        monthOverMonthChart: LineChartView,
+        viewpager: ViewPager
+    ) = object : Listener<List<Activity>> {
         override fun update(subject: List<Activity>) {
 
             if (subject.isEmpty()) {
@@ -29,13 +29,16 @@ class FrequencyFragment : Fragment() {
             }
 
             val activities = Activities(subject)
-            refreshBarCharts(activities)
-            refreshPieChart(activities)
-            refreshMonthOverMonthChart(activities)
+            refreshBarCharts(activities, viewpager)
+            refreshPieChart(activities, pieChart)
+            refreshMonthOverMonthChart(activities, monthOverMonthChart)
         }
     }
 
-    private fun refreshBarCharts(activities: Activities) {
+    private fun refreshBarCharts(
+        activities: Activities,
+        viewpager: ViewPager
+    ) {
         val adapter = YearlyChartsPagerAdapter(
             context!!,
             activities,
@@ -49,23 +52,29 @@ class FrequencyFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.frequency_fragment, container, false)
-        viewpager = view.frequency_view_pager
-        pieChart = view.frequency_pie_chart
+        val viewpager = view.frequency_view_pager
+        val pieChart = view.frequency_pie_chart
         pieChart.isInteractive = false
-        monthOverMonthChart = view.month_over_month_chart
-        monthOverMonthChart.isInteractive = false
+        val monthOverMonthChart = view.month_over_month_chart
 
-        ActivityRepository.listen(listener)
+        val listener = listener(pieChart, monthOverMonthChart, viewpager)
+        ActivityRepository.listen("FrequencyFragment", listener)
 
         return view
     }
 
-    private fun refreshMonthOverMonthChart(activities: Activities) {
+    private fun refreshMonthOverMonthChart(
+        activities: Activities,
+        monthOverMonthChart: LineChartView
+    ) {
         val value = Frequencies(activities)
         MonthOverMonthChart(monthOverMonthChart, FREQUENCY.color).refresh(value)
     }
 
-    private fun refreshPieChart(activities: Activities) {
+    private fun refreshPieChart(
+        activities: Activities,
+        pieChart: PieChartView
+    ) {
         val byDay = activities.frequencyByDay()
 
         val values = byDay
@@ -94,7 +103,7 @@ class FrequencyFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        ActivityRepository.removeListener(listener)
+        ActivityRepository.removeListener("FrequencyFragment")
     }
 
     private fun day(position: Int) : String {
