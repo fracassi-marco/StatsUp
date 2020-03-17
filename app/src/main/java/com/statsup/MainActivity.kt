@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import com.statsup.strava.StravaLoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import leakcanary.LeakCanary
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 

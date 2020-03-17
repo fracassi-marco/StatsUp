@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.weight_history_fragment.view.*
 import org.joda.time.DateTime
 
 class WeightHistoryFragment : Fragment() {
-    private lateinit var recyclerView: RecyclerView
+
     private val adapter = WeightHistoryAdapter()
     private lateinit var noItemListener: Listener<List<Weight>>
     private lateinit var listener: Listener<List<Weight>>
@@ -24,7 +24,7 @@ class WeightHistoryFragment : Fragment() {
         val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
         noItemLayout.label_text.text = resources.getString(R.string.empty_weight)
 
-        recyclerView = view.recycler_view
+        val recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
