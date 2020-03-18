@@ -2,10 +2,9 @@ package com.statsup
 
 import android.content.ContentValues
 import android.content.Context
-import java.util.*
 
 object WeightRepository {
-    private val listeners: MutableList<Listener<List<Weight>>> = ArrayList()
+    private val listeners: MutableMap<String, Listener<List<Weight>>> = mutableMapOf()
     private var weights: MutableList<Weight> = mutableListOf()
 
     fun load(context: Context) {
@@ -32,15 +31,13 @@ object WeightRepository {
         weights = result
     }
 
-    fun listen(vararg listeners: Listener<List<Weight>>) {
-        listeners.forEach {
-            this.listeners.add(it)
-            it.update(weights)
-        }
+    fun listen(key: String, listener: Listener<List<Weight>>) {
+        listeners[key] = listener
+        listener.update(weights)
     }
 
     private fun update() {
-        listeners.forEach { it.update(weights) }
+        listeners.values.forEach { it.update(weights) }
     }
 
     fun addIfNotExists(context: Context, newActivities: List<Weight>) {
@@ -72,7 +69,9 @@ object WeightRepository {
         }
     }
 
-    fun removeListener(vararg listeners: Listener<List<Weight>>) {
-        listeners.forEach { this.listeners.remove(it) }
+    fun removeListener(key: String) {
+        if(listeners.containsKey(key)){
+            listeners.remove(key)
+        }
     }
 }

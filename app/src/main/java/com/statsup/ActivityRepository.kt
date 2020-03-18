@@ -39,7 +39,7 @@ object ActivityRepository {
 
 
     fun listen(key: String, listener: Listener<List<Activity>>) {
-        listeners.put(key, listener)
+        listeners[key] = listener
         listener.update(activities)
     }
 

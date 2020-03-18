@@ -83,7 +83,7 @@ class BalanceFragment : Fragment() {
         fullVariationOverviewItem = view.full_variation_overview_item
         minMaxOverviewItem = view.min_max_overview_item
 
-        WeightRepository.listen(listener)
+        WeightRepository.listen("BalanceFragment", listener)
 
         return view
     }
@@ -95,6 +95,6 @@ class BalanceFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        WeightRepository.removeListener(listener)
+        WeightRepository.removeListener("BalanceFragment")
     }
 }

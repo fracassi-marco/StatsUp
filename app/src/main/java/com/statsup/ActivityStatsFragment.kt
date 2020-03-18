@@ -7,18 +7,19 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.activity_stats_fragment.view.*
 import kotlinx.android.synthetic.main.no_items_layout.view.*
 
 class ActivityStatsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
-        val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
+        val noItemLayout = view.no_item_layout
         noItemLayout.label_text.text = resources.getString(R.string.empty_activities)
-        val viewPager = view.findViewById<UnswappableViewPager>(R.id.stats_view_pager)
+        val viewPager = view.stats_view_pager
         viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
 
-        view.findViewById<TabLayout>(R.id.stats_tab_layout).also {
+        view.stats_tab_layout.also {
             it.setupWithViewPager(viewPager)
             it.setSelectedTabIndicatorColor(ActivityTabs.at(0).color)
             it.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

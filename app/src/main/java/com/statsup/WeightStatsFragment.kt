@@ -12,8 +12,6 @@ import kotlinx.android.synthetic.main.weight_stats_fragment.view.*
 
 class WeightStatsFragment : Fragment() {
 
-    private lateinit var listener: Listener<List<Weight>>
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.weight_stats_fragment, container, false)
         val noItemLayout = view.no_item_layout
@@ -40,8 +38,7 @@ class WeightStatsFragment : Fragment() {
             })
         }
 
-        listener = NoItemsListener(viewPager, noItemLayout)
-        WeightRepository.listen(listener)
+        WeightRepository.listen("WeightStatsFragment", NoItemsListener(viewPager, noItemLayout))
 
         return view
     }
@@ -49,7 +46,7 @@ class WeightStatsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        WeightRepository.removeListener(listener)
+        WeightRepository.removeListener("WeightStatsFragment")
     }
 }
 

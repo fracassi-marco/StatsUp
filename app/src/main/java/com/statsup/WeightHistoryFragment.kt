@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +13,6 @@ import org.joda.time.DateTime
 
 class WeightHistoryFragment : Fragment() {
 
-    private val adapter = WeightHistoryAdapter()
-    private lateinit var noItemListener: Listener<List<Weight>>
-    private lateinit var listener: Listener<List<Weight>>
-    private var latestWeight = Weight(50.0, DateTime().millis)
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.weight_history_fragment, container, false)
         val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
@@ -27,16 +21,18 @@ class WeightHistoryFragment : Fragment() {
         val recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = WeightHistoryAdapter()
         recyclerView.adapter = adapter
         recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 
-        view.add_weight_button.setOnClickListener { _ ->
+        var latestWeight = Weight(50.0, DateTime().millis)
+        view.add_weight_button.setOnClickListener {
             val intent = Intent(context, WeightEditorView::class.java)
             intent.putExtra("latestKilograms", latestWeight.kilograms)
             startActivity(intent)
         }
 
-        listener = object : Listener<List<Weight>> {
+        val listener: Listener<List<Weight>> = object : Listener<List<Weight>> {
             override fun update(subject: List<Weight>) {
                 if(subject.isEmpty()) {
                     return
@@ -47,9 +43,10 @@ class WeightHistoryFragment : Fragment() {
                 adapter.update(items)
             }
         }
-        noItemListener = NoItemsListener(recyclerView, noItemLayout)
+        val noItemListener: Listener<List<Weight>> = NoItemsListener(recyclerView, noItemLayout)
 
-        WeightRepository.listen(listener, noItemListener)
+        WeightRepository.listen("WeightHistoryFragment1", listener)
+        WeightRepository.listen("WeightHistoryFragment2", noItemListener)
 
         return view
     }
@@ -57,6 +54,7 @@ class WeightHistoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        WeightRepository.removeListener(listener, noItemListener)
+        WeightRepository.removeListener("WeightHistoryFragment1")
+        WeightRepository.removeListener("WeightHistoryFragment2")
     }
 }

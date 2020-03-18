@@ -66,7 +66,7 @@ class BmiFragment : Fragment() {
         setVisibleView()
 
         UserRepository.listen(userListener)
-        WeightRepository.listen(weightListener)
+        WeightRepository.listen("BmiFragment", weightListener)
 
         return view
     }
@@ -75,7 +75,7 @@ class BmiFragment : Fragment() {
         super.onDestroyView()
 
         UserRepository.removeListener(userListener)
-        WeightRepository.removeListener(weightListener)
+        WeightRepository.removeListener("BmiFragment")
     }
 
     private fun updateBmiOverviews() {

@@ -65,7 +65,7 @@ class WeightInfoFragment : Fragment() {
         weightOverviewItem  = view.weightOverviewItem
         howLongOverviewItem = view.howLongOverviewItem
 
-        WeightRepository.listen(weightListener)
+        WeightRepository.listen("WeightInfoFragment", weightListener)
 
         return view
     }
@@ -73,6 +73,6 @@ class WeightInfoFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        WeightRepository.removeListener(weightListener)
+        WeightRepository.removeListener("WeightInfoFragment")
     }
 }
