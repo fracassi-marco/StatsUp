@@ -22,11 +22,11 @@ private const val WEIGHT_IMPORT_REQUEST_CODE = 1003
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var activityStatsFragment: Fragment
+/*    private lateinit var activityStatsFragment: Fragment
     private lateinit var weightStatsFragment: Fragment
     private lateinit var activityHistoryFragment: Fragment
     private lateinit var weightHistoryFragment: Fragment
-    private lateinit var configurationsFragment: Fragment
+    private lateinit var configurationsFragment: Fragment*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +45,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ActivityRepository.load(applicationContext)
         UserRepository.load(applicationContext)
         WeightRepository.load(applicationContext)
-        updateGui()
+        openDefaultFragment()
     }
 
     private fun openDefaultFragment() {
-        openFragment(getString(R.string.menu_stats), activityStatsFragment)
+        openFragment(getString(R.string.menu_stats), ActivityStatsFragment())
     }
 
     override fun onBackPressed() {
@@ -63,10 +63,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_history -> {
-                openFragment(menuItem.title, activityHistoryFragment)
+                openFragment(menuItem.title, ActivityHistoryFragment())
             }
             R.id.nav_stats -> {
-                openFragment(menuItem.title, activityStatsFragment)
+                openFragment(menuItem.title, ActivityStatsFragment())
             }
             R.id.nav_import_from_strava -> {
                 val intent = StravaLogin(applicationContext, Confs(applicationContext).stravaClientId())
@@ -74,10 +74,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivityForResult(intent, STRAVA_REQUEST_CODE)
             }
             R.id.nav_weight_stats -> {
-                openFragment(menuItem.title, weightStatsFragment)
+                openFragment(menuItem.title, WeightStatsFragment())
             }
             R.id.nav_weight_history->{
-                openFragment(menuItem.title, weightHistoryFragment)
+                openFragment(menuItem.title, WeightHistoryFragment())
             }
             R.id.nav_weight_import -> {
                 val openWeightCsvIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivityForResult(openWeightCsvIntent, WEIGHT_IMPORT_REQUEST_CODE)
             }
             R.id.nav_configurations -> {
-                openFragment(menuItem.title, configurationsFragment)
+                openFragment(menuItem.title, ConfigurationsFragment())
             }
         }
 
@@ -138,12 +138,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun updateGui() {
-        activityStatsFragment = ActivityStatsFragment()
-        weightStatsFragment = WeightStatsFragment()
-        activityHistoryFragment = ActivityHistoryFragment()
-        weightHistoryFragment = WeightHistoryFragment()
-        configurationsFragment = ConfigurationsFragment()
-        openDefaultFragment()
-    }
 }

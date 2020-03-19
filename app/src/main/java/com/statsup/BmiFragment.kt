@@ -99,7 +99,7 @@ class BmiFragment : Fragment() {
         minMaxOverviewItem.right_value.text = Bmi.labelFor(weights.maxBy { it.kilograms }!!, height)
         minMaxOverviewItem.right_value.setTextColor(Color.BLACK)
         minMaxOverviewItem.right_value.textSize = 21f
-        minMaxOverviewItem.right_text.text = getString(R.string.bmi_min)
+        minMaxOverviewItem.right_text.text = getString(R.string.bmi_max)
     }
 
     private fun updateBmiChart(bmiChart: SegmentedBarView) {
