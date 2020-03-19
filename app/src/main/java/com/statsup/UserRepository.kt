@@ -14,18 +14,11 @@ object UserRepository {
     }
 
     fun load(context: Context) {
-        DbHelper(context).readableDatabase.query(
-            "users",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "1"
-        ).use { cursor ->
-            if (cursor.moveToNext()) {
-                user = User(cursor.getInt(cursor.getColumnIndexOrThrow("height")))
+        DbHelper(context).readableDatabase.use {
+            it.query("users", null, null, null, null, null, null, "1").use { cursor ->
+                if (cursor.moveToNext()) {
+                    user = User(cursor.getInt(cursor.getColumnIndexOrThrow("height")))
+                }
             }
         }
     }
@@ -40,12 +33,9 @@ object UserRepository {
             put("height", user.height)
         }
 
-        DbHelper(context).writableDatabase.insertWithOnConflict(
-            "users",
-            null,
-            values,
-            CONFLICT_REPLACE
-        )
+        DbHelper(context).writableDatabase.use {
+            it.insertWithOnConflict("users", null, values, CONFLICT_REPLACE)
+        }
 
         this.user = user
         update()

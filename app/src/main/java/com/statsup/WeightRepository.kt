@@ -9,22 +9,16 @@ object WeightRepository {
 
     fun load(context: Context) {
         val result = mutableListOf<Weight>()
-        DbHelper(context).readableDatabase.query(
-            "weights",
-            null,
-            null,
-            null,
-            null,
-            null,
-            "dateInMillis DESC"
-        ).use { cursor ->
-            while (cursor.moveToNext()) {
-                result.add(
-                    Weight(
-                        cursor.getDouble(cursor.getColumnIndexOrThrow("kilograms")),
-                        cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis"))
+        DbHelper(context).readableDatabase.use {
+            it.query("weights", null, null, null, null, null, "dateInMillis DESC").use { cursor ->
+                while (cursor.moveToNext()) {
+                    result.add(
+                        Weight(
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("kilograms")),
+                            cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis"))
+                        )
                     )
-                )
+                }
             }
         }
 
@@ -53,7 +47,9 @@ object WeightRepository {
     fun delete(context: Context, weight: Weight) {
         weights.remove(weight)
 
-        DbHelper(context).writableDatabase.delete("weights", "dateInMillis = ?", arrayOf(weight.dateInMillis.toString()))
+        DbHelper(context).writableDatabase.use {
+            it.delete("weights", "dateInMillis = ?", arrayOf(weight.dateInMillis.toString()))
+        }
 
         update()
     }
@@ -65,7 +61,7 @@ object WeightRepository {
                 put("dateInMillis", it.dateInMillis)
             }
 
-            DbHelper(context).writableDatabase.insert("weights", null, values)
+            DbHelper(context).writableDatabase.use { it.insert("weights", null, values) }
         }
     }
 

@@ -11,26 +11,28 @@ object ActivityRepository {
 
     fun load(context: Context) {
         val result = mutableListOf<Activity>()
-        DbHelper(context).readableDatabase.query(
-            "activities",
-            null,
-            null,
-            null,
-            null,
-            null,
-            "dateInMillis"
-        ).use { cursor ->
-            while (cursor.moveToNext()) {
-                result.add(
-                    Activity(
-                        cursor.getLong(cursor.getColumnIndexOrThrow("id")),
-                        Sports.byId(cursor.getLong(cursor.getColumnIndexOrThrow("sportId"))),
-                        cursor.getFloat(cursor.getColumnIndexOrThrow("distanceInMeters")),
-                        cursor.getInt(cursor.getColumnIndexOrThrow("durationInSeconds")),
-                        cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis")),
-                        cursor.getString(cursor.getColumnIndexOrThrow("title"))
+        DbHelper(context).readableDatabase.use {
+            it.query(
+                "activities",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "dateInMillis"
+            ).use { cursor ->
+                while (cursor.moveToNext()) {
+                    result.add(
+                        Activity(
+                            cursor.getLong(cursor.getColumnIndexOrThrow("id")),
+                            Sports.byId(cursor.getLong(cursor.getColumnIndexOrThrow("sportId"))),
+                            cursor.getFloat(cursor.getColumnIndexOrThrow("distanceInMeters")),
+                            cursor.getInt(cursor.getColumnIndexOrThrow("durationInSeconds")),
+                            cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis")),
+                            cursor.getString(cursor.getColumnIndexOrThrow("title"))
+                        )
                     )
-                )
+                }
             }
         }
 
@@ -67,7 +69,7 @@ object ActivityRepository {
                 put("title", it.title)
             }
 
-            DbHelper(context).writableDatabase.insert("activities", null, values)
+            DbHelper(context).writableDatabase.use { it.insert("activities", null, values) }
         }
     }
 
