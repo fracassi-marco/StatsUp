@@ -21,13 +21,7 @@ private const val STRAVA_REQUEST_CODE = 1001
 private const val WEIGHT_IMPORT_REQUEST_CODE = 1003
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-/*    private lateinit var activityStatsFragment: Fragment
-    private lateinit var weightStatsFragment: Fragment
-    private lateinit var activityHistoryFragment: Fragment
-    private lateinit var weightHistoryFragment: Fragment
-    private lateinit var configurationsFragment: Fragment*/
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
