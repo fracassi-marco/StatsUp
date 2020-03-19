@@ -3,7 +3,8 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <item android:title="@string/menu_activities">
+        <menu>
         <item
                 android:id="@+id/nav_stats"
                 android:icon="@drawable/running"
@@ -16,7 +17,8 @@
                 android:id="@+id/nav_import_from_strava"
                 android:icon="@drawable/outline_cloud_download_24"
                 android:title="@string/menu_import_from_strava"/>
-    </group>
+        </menu>
+    </item>
 
     <item android:title="@string/menu_weight">
         <menu>

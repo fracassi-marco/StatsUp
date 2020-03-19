@@ -6,6 +6,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="sidebar_image_desc">Profile image</string>
 
+    <string name="menu_activities">Attività</string>
     <string name="menu_stats">Statistiche</string>
     <string name="menu_history">Elenco</string>
     <string name="menu_import_from_strava">Import da Strava</string>
@@ -15,7 +16,7 @@
     <string name="menu_weight_import">Import da CSV</string>
     <string name="menu_other">Altro</string>
     <string name="menu_configurations">Configurazioni</string>
-    <string name="menu_logout">Esci</string>
+
     <string name="login_strava">Login Strava</string>
 
     <string name="negative_button">Annulla</string>
