@@ -65,6 +65,18 @@
                 app:layout_constraintBottom_toBottomOf="@+id/date_icon"
                 tools:text="12/11/2019" />
 
+        <TextView
+                android:id="@+id/delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/date_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/date_icon"
+                tools:text="+1.44%" />
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

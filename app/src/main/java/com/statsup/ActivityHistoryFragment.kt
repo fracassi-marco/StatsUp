@@ -3,7 +3,6 @@ package com.statsup
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +27,7 @@ class ActivityHistoryFragment : Fragment() {
         val listener = object : Listener<List<Activity>> {
             override fun update(subject: List<Activity>) {
                 adapter.update(subject)
+                recyclerView.scrollToPosition(0)
             }
         }
         val noActivitiesListener: Listener<List<Activity>> = NoItemsListener(view.recycler_view, noItemLayout)

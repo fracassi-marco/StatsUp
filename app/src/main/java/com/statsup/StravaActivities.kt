@@ -3,7 +3,6 @@ package com.statsup
 import android.content.Context
 import android.os.AsyncTask
 import com.statsup.strava.*
-import kotlin.coroutines.coroutineContext
 
 
 class StravaActivities(

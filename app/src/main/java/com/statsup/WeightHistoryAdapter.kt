@@ -1,6 +1,8 @@
 package com.statsup
 
 import android.app.AlertDialog
+import android.graphics.Color.GREEN
+import android.graphics.Color.RED
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
@@ -12,7 +14,8 @@ import org.joda.time.format.DateTimeFormat
 
 
 class WeightHistoryAdapter : RecyclerView.Adapter<WeightHistoryAdapter.Holder>() {
-    inner class Holder(val layout: CardView) : RecyclerView.ViewHolder(layout), View.OnClickListener {
+    inner class Holder(val layout: CardView) : RecyclerView.ViewHolder(layout),
+        View.OnClickListener {
 
         init {
             layout.setOnClickListener(this)
@@ -23,7 +26,12 @@ class WeightHistoryAdapter : RecyclerView.Adapter<WeightHistoryAdapter.Holder>()
                 .Builder(layout.context)
                 .setMessage("Vuoi cancellare questa pesata?")
                 .setNegativeButton("No") { _, _ -> }
-                .setPositiveButton("Si") { _, _ -> WeightRepository.delete(layout.context, dataSet[adapterPosition]) }
+                .setPositiveButton("Si") { _, _ ->
+                    WeightRepository.delete(
+                        layout.context,
+                        dataSet[adapterPosition]
+                    )
+                }
                 .show()
         }
     }
@@ -40,7 +48,18 @@ class WeightHistoryAdapter : RecyclerView.Adapter<WeightHistoryAdapter.Holder>()
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val item = dataSet[position]
         holder.layout.weight_text.text = String.format("%.1f", item.kilograms) + "Kg"
-        holder.layout.date_text.text = item.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm"))
+        holder.layout.date_text.text =
+            item.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm"))
+        holder.layout.delta.setTextColor(GREEN)
+        if (position != dataSet.size -1) {
+            val initialValue = dataSet[position + 1].kilograms
+            val finalValue = item.kilograms
+            val percentVariation = ((finalValue / initialValue) * 100.0) - 100.0
+            holder.layout.delta.text = Measure.of(percentVariation, "%")
+            if(percentVariation > 0) holder.layout.delta.setTextColor(RED)
+        } else {
+            holder.layout.delta.text = Measure.of(0.0, "%")
+        }
     }
 
     override fun getItemCount(): Int {

@@ -18,10 +18,10 @@ class WeightHistoryFragment : Fragment() {
         val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
         noItemLayout.label_text.text = resources.getString(R.string.empty_weight)
 
+        val adapter = WeightHistoryAdapter()
         val recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = WeightHistoryAdapter()
         recyclerView.adapter = adapter
         recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 
@@ -41,6 +41,7 @@ class WeightHistoryFragment : Fragment() {
                 val items = subject.sortedByDescending { it.dateInMillis }
                 latestWeight = items.first()
                 adapter.update(items)
+                recyclerView.scrollToPosition(0)
             }
         }
         val noItemListener: Listener<List<Weight>> = NoItemsListener(recyclerView, noItemLayout)
