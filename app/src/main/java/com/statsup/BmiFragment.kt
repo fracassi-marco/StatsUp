@@ -15,26 +15,30 @@ import mobi.gspd.segmentedbarview.SegmentedBarView
 
 class BmiFragment : Fragment() {
 
-    private lateinit var minMaxOverviewItem: View
-    private lateinit var bmiChart: SegmentedBarView
-    private lateinit var content: ConstraintLayout
-    private lateinit var noItemsLayout: View
     private var weights = emptyList<Weight>()
     private var height: Int = 0
 
-    private val userListener = object : Listener<User> {
+    private fun userListener(
+        content: ConstraintLayout,
+        noItemsLayout: ConstraintLayout,
+        bmiChart: SegmentedBarView,
+        minMaxOverviewItem: View
+    ) = object : Listener<User> {
         override fun update(subject: User) {
             height = subject.height
-            setVisibleView()
+            setVisibleView(content, noItemsLayout)
 
             if(height != 0 && weights.isNotEmpty()) {
-                updateBmiOverviews()
-                updateBmiChart()
+                updateBmiOverviews(minMaxOverviewItem)
+                updateBmiChart(bmiChart)
             }
         }
     }
 
-    private fun setVisibleView() {
+    private fun setVisibleView(
+        content: ConstraintLayout,
+        noItemsLayout: ConstraintLayout
+    ) {
         if(height == 0) {
             content.visibility = View.GONE
             noItemsLayout.visibility = View.VISIBLE
@@ -44,29 +48,34 @@ class BmiFragment : Fragment() {
         }
     }
 
-    private val weightListener = object : Listener<List<Weight>> {
+    private fun weightListener(
+        content: ConstraintLayout,
+        noItemsLayout: ConstraintLayout,
+        bmiChart: SegmentedBarView,
+        minMaxOverviewItem: View
+    ) = object : Listener<List<Weight>> {
         override fun update(subject: List<Weight>) {
             weights = subject.sortedBy { it.dateInMillis }
-            setVisibleView()
+            setVisibleView(content, noItemsLayout)
 
             if(height != 0 && weights.isNotEmpty()) {
-                updateBmiOverviews()
-                updateBmiChart()
+                updateBmiOverviews(minMaxOverviewItem)
+                updateBmiChart(bmiChart)
             }
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.bmi_fragment, container, false)
-        bmiChart = view.bmiChart
-        minMaxOverviewItem = view.min_max_overview_item
-        content = view.content
-        noItemsLayout = view.no_item_layout
+        val bmiChart = view.bmiChart
+        val minMaxOverviewItem = view.min_max_overview_item
+        val content = view.content
+        val noItemsLayout = view.no_item_layout
 
-        setVisibleView()
+        setVisibleView(content, noItemsLayout)
 
-        UserRepository.listen(userListener)
-        WeightRepository.listen("BmiFragment", weightListener)
+        UserRepository.listen("BmiFragment", userListener(content, noItemsLayout, bmiChart, minMaxOverviewItem))
+        WeightRepository.listen("BmiFragment", weightListener(content, noItemsLayout, bmiChart, minMaxOverviewItem))
 
         return view
     }
@@ -74,11 +83,11 @@ class BmiFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        UserRepository.removeListener(userListener)
+        UserRepository.removeListener("BmiFragment")
         WeightRepository.removeListener("BmiFragment")
     }
 
-    private fun updateBmiOverviews() {
+    private fun updateBmiOverviews(minMaxOverviewItem: View) {
         minMaxOverviewItem.left_value.text = Bmi.labelFor(weights.minBy { it.kilograms }!!, height)
         minMaxOverviewItem.left_value.textSize = 21f
         minMaxOverviewItem.left_text.text = getString(R.string.bmi_min)
@@ -93,7 +102,7 @@ class BmiFragment : Fragment() {
         minMaxOverviewItem.right_text.text = getString(R.string.bmi_min)
     }
 
-    private fun updateBmiChart() {
+    private fun updateBmiChart(bmiChart: SegmentedBarView) {
         bmiChart.setSegments(listOf(
             Segment(0f, 15.99f, "< 16", getString(R.string.bmi_too_low), Color.parseColor("#2196f3")),
             Segment(16f, 18.49f, "16 - 18.5", getString(R.string.bmi_low), Color.parseColor("#21daf3")),

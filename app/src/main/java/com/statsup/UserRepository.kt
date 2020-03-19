@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE
 object UserRepository {
 
     private var user = User()
-    private val listeners: MutableList<Listener<User>> = mutableListOf()
+    private val listeners: MutableMap<String, Listener<User>> = mutableMapOf()
 
     private fun update() {
-        listeners.forEach { it.update(user) }
+        listeners.values.forEach { it.update(user) }
     }
 
     fun load(context: Context) {
@@ -30,8 +30,8 @@ object UserRepository {
         }
     }
 
-    fun listen(listener: Listener<User>) {
-        listeners.add(listener)
+    fun listen(key: String, listener: Listener<User>) {
+        listeners[key] = listener
         listener.update(user)
     }
 
@@ -51,8 +51,10 @@ object UserRepository {
         update()
     }
 
-    fun removeListener(vararg listeners: Listener<User>) {
-        listeners.forEach { this.listeners.remove(it) }
+    fun removeListener(key: String) {
+        if(listeners.containsKey(key)){
+            listeners.remove(key)
+        }
     }
 }
 

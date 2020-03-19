@@ -14,36 +14,29 @@ class DecimalDialog(
     private val actualValue: Double,
     private val listener: (wholeNum: Int, fractionalNum: Int) -> Unit
 ) {
-    private lateinit var pickerInteger: NumberPicker
-    private lateinit var pickerDecimal: NumberPicker
-
     fun makeDialog(activity: Activity): AlertDialog {
         val view = activity.layoutInflater.inflate(R.layout.decimal_dialog, null)
 
-        initNumberPickers(view)
+        val doubleAsString = actualValue.toString()
+        val indexOfDecimal = doubleAsString.indexOf(".")
+
+        val pickerInteger = view.picker_integer.apply {
+            maxValue = 199
+            value = doubleAsString.substring(0, indexOfDecimal).toInt()
+        }
+        val pickerDecimal = view.picker_decimal.apply {
+            maxValue = 9
+            value = doubleAsString.substring(indexOfDecimal + 1).toInt()
+        }
+
         initUnitText(view)
 
         return AlertDialog.Builder(activity)
             .setView(view)
             .setTitle(label)
             .setNegativeButton(R.string.negative_button) { dialog, _ -> onNegativeClick(dialog) }
-            .setPositiveButton(R.string.positive_button) { dialog, _ -> onPositiveClick(dialog) }
+            .setPositiveButton(R.string.positive_button) { dialog, _ -> onPositiveClick(dialog, pickerInteger, pickerDecimal) }
             .create()
-    }
-
-    private fun initNumberPickers(view: View) {
-        val doubleAsString = actualValue.toString()
-        val indexOfDecimal = doubleAsString.indexOf(".")
-
-        pickerInteger = view.picker_integer.apply {
-            maxValue = 199
-            value = doubleAsString.substring(0, indexOfDecimal).toInt()
-        }
-
-        pickerDecimal = view.picker_decimal.apply {
-            maxValue = 9
-            value = doubleAsString.substring(indexOfDecimal + 1).toInt()
-        }
     }
 
     private fun initUnitText(view: View) {
@@ -55,7 +48,11 @@ class DecimalDialog(
         dialog.cancel()
     }
 
-    private fun onPositiveClick(dialog: DialogInterface) {
+    private fun onPositiveClick(
+        dialog: DialogInterface,
+        pickerInteger: NumberPicker,
+        pickerDecimal: NumberPicker
+    ) {
         listener.invoke(pickerInteger.value, pickerDecimal.value)
         dialog.dismiss()
     }

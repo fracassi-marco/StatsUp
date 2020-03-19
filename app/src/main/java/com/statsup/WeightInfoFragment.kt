@@ -1,6 +1,5 @@
 package com.statsup
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -14,20 +13,22 @@ import java.util.*
 
 class WeightInfoFragment : Fragment() {
 
-    private lateinit var weights: List<Weight>
-    private lateinit var weightOverviewItem: View
-    private lateinit var howLongOverviewItem: View
-
-    private val weightListener = object : Listener<List<Weight>> {
+    private fun weightListener(
+        weightOverviewItem: View,
+        howLongOverviewItem: View
+    ) = object : Listener<List<Weight>> {
         override fun update(subject: List<Weight>) {
-            weights = subject.sortedBy { it.dateInMillis }
+            val weights = subject.sortedBy { it.dateInMillis }
 
-            updateUi(weights)
+            updateUi(weights, weightOverviewItem, howLongOverviewItem)
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun updateUi(weights: List<Weight>) {
+    private fun updateUi(
+        weights: List<Weight>,
+        weightOverviewItem: View,
+        howLongOverviewItem: View
+    ) {
         weightOverviewItem.left_text.text = "Numero di pesate"
         weightOverviewItem.left_value.text = weights.size.toString()
 
@@ -62,10 +63,10 @@ class WeightInfoFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.weight_info_fragment, container, false)
-        weightOverviewItem  = view.weightOverviewItem
-        howLongOverviewItem = view.howLongOverviewItem
+        val weightOverviewItem  = view.weightOverviewItem
+        val howLongOverviewItem = view.howLongOverviewItem
 
-        WeightRepository.listen("WeightInfoFragment", weightListener)
+        WeightRepository.listen("WeightInfoFragment", weightListener(weightOverviewItem, howLongOverviewItem))
 
         return view
     }

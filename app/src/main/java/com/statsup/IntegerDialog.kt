@@ -14,28 +14,22 @@ class IntegerDialog(
     private val actualValue: Int,
     private val listener: (number: Int) -> Unit
 ) {
-    private lateinit var pickerInteger: NumberPicker
-
     fun makeDialog(activity: FragmentActivity): AlertDialog {
         val view = activity.layoutInflater.inflate(R.layout.integer_dialog, null)
+        val pickerInteger = view.picker_integer.apply {
+            minValue = 100
+            maxValue = 299
+            value = actualValue
+        }
 
-        initNumberPickers(view)
         initUnitText(view)
 
         return AlertDialog.Builder(activity)
             .setView(view)
             .setTitle(label)
             .setNegativeButton(R.string.negative_button) { dialog, _ -> onNegativeClick(dialog) }
-            .setPositiveButton(R.string.positive_button) { dialog, _ -> onPositiveClick(dialog) }
+            .setPositiveButton(R.string.positive_button) { dialog, _ -> onPositiveClick(dialog, pickerInteger) }
             .create()
-    }
-
-    private fun initNumberPickers(view: View) {
-        pickerInteger = view.picker_integer.apply {
-            minValue = 100
-            maxValue = 299
-            value = actualValue
-        }
     }
 
     private fun initUnitText(view: View) {
@@ -47,7 +41,10 @@ class IntegerDialog(
         dialog.cancel()
     }
 
-    private fun onPositiveClick(dialog: DialogInterface) {
+    private fun onPositiveClick(
+        dialog: DialogInterface,
+        pickerInteger: NumberPicker
+    ) {
         listener.invoke(pickerInteger.value)
         dialog.dismiss()
     }

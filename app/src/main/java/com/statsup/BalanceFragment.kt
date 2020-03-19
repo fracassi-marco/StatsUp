@@ -12,36 +12,45 @@ import lecho.lib.hellocharts.view.LineChartView
 import org.joda.time.DateTime
 
 class BalanceFragment : Fragment() {
-    private lateinit var weights: List<Weight>
-    private lateinit var lineChart: LineChartView
-    private lateinit var monthVariationOverviewItem: View
-    private lateinit var yearVariationOverviewItem: View
-    private lateinit var fullVariationOverviewItem: View
-    private lateinit var minMaxOverviewItem: View
 
-    private val listener = object : Listener<List<Weight>> {
+    private fun listener(
+        lineChart: LineChartView,
+        monthVariationOverviewItem: View,
+        yearVariationOverviewItem: View,
+        fullVariationOverviewItem: View,
+        minMaxOverviewItem: View
+    ) = object : Listener<List<Weight>> {
         override fun update(subject: List<Weight>) {
             if (subject.isEmpty()) {
                 return
             }
 
-            weights = subject.sortedBy { it.dateInMillis }
-            updateChart(weights)
-            updateOverviews(weights)
+            val weights = subject.sortedBy { it.dateInMillis }
+            updateChart(weights, lineChart)
+            updateOverviews(weights, monthVariationOverviewItem, yearVariationOverviewItem, fullVariationOverviewItem, minMaxOverviewItem)
         }
     }
 
-    private fun updateOverviews(weights: List<Weight>) {
+    private fun updateOverviews(
+        weights: List<Weight>,
+        monthVariationOverviewItem: View,
+        yearVariationOverviewItem: View,
+        fullVariationOverviewItem: View,
+        minMaxOverviewItem: View
+    ) {
         val today = DateTime()
         val finalValue = weights.last().kilograms
 
         updateOverview(weights, today.minusMonths(1), finalValue, monthVariationOverviewItem, "Variazione ultimi 30 giorni")
         updateOverview(weights, today.minusYears(1), finalValue, yearVariationOverviewItem, "Variazione ultimo anno")
         updateOverview(weights, weights.first().date(), finalValue, fullVariationOverviewItem, "Variazione totale")
-        updateMinMaxOverview(weights)
+        updateMinMaxOverview(weights, minMaxOverviewItem)
     }
 
-    private fun updateMinMaxOverview(weights: List<Weight>) {
+    private fun updateMinMaxOverview(
+        weights: List<Weight>,
+        minMaxOverviewItem: View
+    ) {
         minMaxOverviewItem.left_value.text =
             Measure.of(weights.minBy { it.kilograms }!!.kilograms, "Kg", "")
         minMaxOverviewItem.left_value.textSize = 21f
@@ -77,18 +86,18 @@ class BalanceFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.balance_fragment, container, false)
-        lineChart = view.line_chart
-        monthVariationOverviewItem = view.month_variation_overview_item
-        yearVariationOverviewItem = view.year_variation_overview_item
-        fullVariationOverviewItem = view.full_variation_overview_item
-        minMaxOverviewItem = view.min_max_overview_item
+        val lineChart = view.line_chart
+        val monthVariationOverviewItem = view.month_variation_overview_item
+        val yearVariationOverviewItem = view.year_variation_overview_item
+        val fullVariationOverviewItem = view.full_variation_overview_item
+        val minMaxOverviewItem = view.min_max_overview_item
 
-        WeightRepository.listen("BalanceFragment", listener)
+        WeightRepository.listen("BalanceFragment", listener(lineChart, monthVariationOverviewItem, yearVariationOverviewItem, fullVariationOverviewItem, minMaxOverviewItem))
 
         return view
     }
 
-    private fun updateChart(weights: List<Weight>) {
+    private fun updateChart(weights: List<Weight>, lineChart: LineChartView) {
         WeightChart(lineChart).refresh(weights)
     }
 

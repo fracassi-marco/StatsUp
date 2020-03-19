@@ -1,6 +1,5 @@
 package com.statsup
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -19,7 +18,6 @@ import java.io.FileNotFoundException
 import java.io.InputStreamReader
 
 private const val STRAVA_REQUEST_CODE = 1001
-private const val SIGNIN_REQUEST_CODE = 1002
 private const val WEIGHT_IMPORT_REQUEST_CODE = 1003
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -29,7 +27,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var activityHistoryFragment: Fragment
     private lateinit var weightHistoryFragment: Fragment
     private lateinit var configurationsFragment: Fragment
-    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,11 +112,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 hideProgressBar()
             }.execute()
         }
-        else if (requestCode == SIGNIN_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                initUserListener()
-            }
-        }
+
         else if (requestCode == WEIGHT_IMPORT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             showProgressBar()
             try {
@@ -143,15 +136,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         progressbar.visibility = View.VISIBLE
         progressbar.bringToFront()
         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-    }
-
-    private fun initUserListener() {
-        UserRepository.listen(object : Listener<User> {
-            override fun update(subject: User) {
-                user = subject
-                updateGui()
-            }
-        })
     }
 
     private fun updateGui() {
