@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.statsup.ActivityTabs.DURATION
 import kotlinx.android.synthetic.main.duration_fragment.view.*
 import lecho.lib.hellocharts.view.LineChartView
 
@@ -23,16 +24,10 @@ class DurationFragment : Fragment() {
 
             val activities = Activities(subject)
             val value = Durations(activities)
-            val adapter = YearlyChartsPagerAdapter(
-                context!!,
-                activities,
-                ActivityTabs.DURATION.color,
-                "Ore di allenamento ",
-                value
-            )
+            val adapter = YearlyChartsPagerAdapter(context!!, activities, DURATION.color, "Ore di allenamento ", value)
             viewpager.adapter = adapter
             viewpager.currentItem = adapter.count - 1
-            MonthOverMonthChart(monthOverMonthChart, ActivityTabs.DISTANCE.color).refresh(value)
+            MonthOverMonthChart(monthOverMonthChart, DURATION.color).refresh(value)
         }
     }
 
