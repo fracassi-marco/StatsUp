@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.statsup.ActivityTabs.FREQUENCY
 import kotlinx.android.synthetic.main.frequency_fragment.view.*
 import lecho.lib.hellocharts.model.PieChartData
@@ -20,6 +21,7 @@ class FrequencyFragment : Fragment() {
     private fun listener(
         pieChart: PieChartView,
         monthOverMonthChart: LineChartView,
+        monthOverMonthTitle: TextView,
         viewpager: ViewPager
     ) = object : Listener<List<Activity>> {
         override fun update(subject: List<Activity>) {
@@ -31,7 +33,7 @@ class FrequencyFragment : Fragment() {
             val activities = Activities(subject)
             refreshBarCharts(activities, viewpager)
             refreshPieChart(activities, pieChart)
-            refreshMonthOverMonthChart(activities, monthOverMonthChart)
+            refreshMonthOverMonthChart(activities, monthOverMonthChart, monthOverMonthTitle)
         }
     }
 
@@ -56,8 +58,9 @@ class FrequencyFragment : Fragment() {
         val pieChart = view.frequency_pie_chart
         pieChart.isInteractive = false
         val monthOverMonthChart = view.month_over_month_chart
+        val monthOverMonthChartTitle = view.month_over_month_title
 
-        val listener = listener(pieChart, monthOverMonthChart, viewpager)
+        val listener = listener(pieChart, monthOverMonthChart, monthOverMonthChartTitle, viewpager)
         ActivityRepository.listen("FrequencyFragment", listener)
 
         return view
@@ -65,10 +68,11 @@ class FrequencyFragment : Fragment() {
 
     private fun refreshMonthOverMonthChart(
         activities: Activities,
-        monthOverMonthChart: LineChartView
+        monthOverMonthChart: LineChartView,
+        monthOverMonthTitle: TextView
     ) {
         val value = Frequencies(activities)
-        MonthOverMonthChart(monthOverMonthChart, FREQUENCY.color).refresh(value)
+        MonthOverMonthChart(monthOverMonthChart, monthOverMonthTitle, FREQUENCY.color).refresh(value)
     }
 
     private fun refreshPieChart(

@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.statsup.ActivityTabs.DURATION
 import kotlinx.android.synthetic.main.duration_fragment.view.*
 import lecho.lib.hellocharts.view.LineChartView
@@ -14,7 +15,8 @@ class DurationFragment : Fragment() {
 
     private fun listener(
         viewpager: ViewPager,
-        monthOverMonthChart: LineChartView
+        monthOverMonthChart: LineChartView,
+        monthOverMonthTitle: TextView
     ) = object : Listener<List<Activity>> {
         override fun update(subject: List<Activity>) {
 
@@ -27,7 +29,7 @@ class DurationFragment : Fragment() {
             val adapter = YearlyChartsPagerAdapter(context!!, activities, DURATION.color, "Ore di allenamento ", value)
             viewpager.adapter = adapter
             viewpager.currentItem = adapter.count - 1
-            MonthOverMonthChart(monthOverMonthChart, DURATION.color).refresh(value)
+            MonthOverMonthChart(monthOverMonthChart, monthOverMonthTitle, DURATION.color).refresh(value)
         }
     }
 
@@ -35,9 +37,10 @@ class DurationFragment : Fragment() {
         val view = inflater.inflate(R.layout.duration_fragment, container, false)
         val viewpager = view.duration_view_pager
         val monthOverMonthChart = view.month_over_month_chart
+        val monthOverMonthTitle = view.month_over_month_title
         monthOverMonthChart.isInteractive = false
 
-        ActivityRepository.listen("DurationFragment", listener(viewpager, monthOverMonthChart))
+        ActivityRepository.listen("DurationFragment", listener(viewpager, monthOverMonthChart, monthOverMonthTitle))
 
         return view
     }

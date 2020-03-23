@@ -45,19 +45,9 @@ class YearlyChart(
     }
 
     private fun labels(): List<AxisValue> {
-        return listOf(
-            AxisValue(0f).also { it.setLabel("Gen") },
-            AxisValue(1f).also { it.setLabel("Feb") },
-            AxisValue(2f).also { it.setLabel("Mar") },
-            AxisValue(3f).also { it.setLabel("Apr") },
-            AxisValue(4f).also { it.setLabel("Mag") },
-            AxisValue(5f).also { it.setLabel("Giu") },
-            AxisValue(6f).also { it.setLabel("Lug") },
-            AxisValue(7f).also { it.setLabel("Ago") },
-            AxisValue(8f).also { it.setLabel("Set") },
-            AxisValue(9f).also { it.setLabel("Ott") },
-            AxisValue(10f).also { it.setLabel("Nov") },
-            AxisValue(11f).also { it.setLabel("Dic") })
+        return (1..12).map { index ->
+            AxisValue(index - 1f).also { it.setLabel(Months.labelOf(index)) }
+        }
     }
 
     private fun setMinAndMax(value: Value) {
@@ -68,5 +58,4 @@ class YearlyChart(
         chart.currentViewport = chart.maximumViewport
         chart.isViewportCalculationEnabled = false
     }
-
 }
