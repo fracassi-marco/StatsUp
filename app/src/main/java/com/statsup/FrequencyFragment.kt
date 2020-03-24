@@ -8,18 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.statsup.ActivityTabs.FREQUENCY
+import com.statsup.barchart.Bar
+import com.statsup.barchart.HorizontalBarChart
 import kotlinx.android.synthetic.main.frequency_fragment.view.*
-import lecho.lib.hellocharts.model.PieChartData
-import lecho.lib.hellocharts.model.SliceValue
 import lecho.lib.hellocharts.view.LineChartView
-import lecho.lib.hellocharts.view.PieChartView
 import kotlin.math.roundToInt
 
 
 class FrequencyFragment : Fragment() {
 
     private fun listener(
-        pieChart: PieChartView,
+        dayOfWeekChart: HorizontalBarChart,
         monthOverMonthChart: LineChartView,
         monthOverMonthTitle: TextView,
         viewpager: ViewPager
@@ -32,7 +31,7 @@ class FrequencyFragment : Fragment() {
 
             val activities = Activities(subject)
             refreshBarCharts(activities, viewpager)
-            refreshPieChart(activities, pieChart)
+            refreshPieChart(activities, dayOfWeekChart)
             refreshMonthOverMonthChart(activities, monthOverMonthChart, monthOverMonthTitle)
         }
     }
@@ -55,12 +54,11 @@ class FrequencyFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.frequency_fragment, container, false)
         val viewpager = view.frequency_view_pager
-        val pieChart = view.frequency_pie_chart
-        pieChart.isInteractive = false
+        val dayOfWeekChart = view.day_of_week_cart
         val monthOverMonthChart = view.month_over_month_chart
         val monthOverMonthChartTitle = view.month_over_month_title
 
-        val listener = listener(pieChart, monthOverMonthChart, monthOverMonthChartTitle, viewpager)
+        val listener = listener(dayOfWeekChart, monthOverMonthChart, monthOverMonthChartTitle, viewpager)
         ActivityRepository.listen("FrequencyFragment", listener)
 
         return view
@@ -75,29 +73,12 @@ class FrequencyFragment : Fragment() {
         MonthOverMonthChart(monthOverMonthChart, monthOverMonthTitle, FREQUENCY.color).refresh(value)
     }
 
-    private fun refreshPieChart(
-        activities: Activities,
-        pieChart: PieChartView
-    ) {
-        val byDay = activities.frequencyByDay()
-
-        val values = byDay
-            .map {
-            val value = SliceValue(it.value.size.toFloat(), FREQUENCY.color)
-            value.setLabel("${day(it.key)} ${percentage(it.value.size, activities.count())}%")
-            value
+    private fun refreshPieChart(activities: Activities, dayOfWeekChart: HorizontalBarChart) {
+        val bars = activities.frequencyByDay().map {
+            Bar(percentage(it.value.size, activities.count()), FREQUENCY.color, day(it.key))
         }
 
-        val data = PieChartData(values).apply { isValueLabelBackgroundEnabled = false }
-        data.setHasLabels(true)
-        data.setHasCenterCircle(true)
-
-        data.centerText1 = "Distribuzione"
-        data.centerText1FontSize = 25
-        data.centerText2 = "per giorno"
-        data.centerText2FontSize = 25
-
-        pieChart.pieChartData = data
+        dayOfWeekChart.setData(100, bars)
     }
 
     private fun percentage(actualCounter: Int, allCounter: Int): Int {

@@ -79,4 +79,6 @@
 
     <string name="empty_activities">Importa le tue attività da Strava</string>
     <string name="empty_weight">Aggiungi o importa le tue pesate</string>
+
+    <string name="day_of_week_title">Distribuzione per giorno (da sempre)</string>
 </resources>
