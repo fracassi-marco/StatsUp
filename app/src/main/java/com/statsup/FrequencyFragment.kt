@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.frequency_fragment.view.*
 import lecho.lib.hellocharts.view.LineChartView
 import kotlin.math.roundToInt
 
-
 class FrequencyFragment : Fragment() {
 
     private fun listener(
@@ -51,14 +50,19 @@ class FrequencyFragment : Fragment() {
         viewpager.currentItem = adapter.count - 1
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.frequency_fragment, container, false)
         val viewpager = view.frequency_view_pager
         val dayOfWeekChart = view.day_of_week_cart
         val monthOverMonthChart = view.month_over_month_chart
         val monthOverMonthChartTitle = view.month_over_month_title
 
-        val listener = listener(dayOfWeekChart, monthOverMonthChart, monthOverMonthChartTitle, viewpager)
+        val listener =
+            listener(dayOfWeekChart, monthOverMonthChart, monthOverMonthChartTitle, viewpager)
         ActivityRepository.listen("FrequencyFragment", listener)
 
         return view
@@ -70,7 +74,11 @@ class FrequencyFragment : Fragment() {
         monthOverMonthTitle: TextView
     ) {
         val value = Frequencies(activities)
-        MonthOverMonthChart(monthOverMonthChart, monthOverMonthTitle, FREQUENCY.color).refresh(value)
+        MonthOverMonthChart(
+            monthOverMonthChart,
+            monthOverMonthTitle,
+            FREQUENCY.color
+        ).refresh(value)
     }
 
     private fun refreshPieChart(activities: Activities, dayOfWeekChart: HorizontalBarChart) {
@@ -82,7 +90,7 @@ class FrequencyFragment : Fragment() {
     }
 
     private fun percentage(actualCounter: Int, allCounter: Int): Int {
-        return (actualCounter/allCounter.toFloat() * 100).roundToInt()
+        return (actualCounter / allCounter.toFloat() * 100).roundToInt()
     }
 
     override fun onDestroyView() {
@@ -91,8 +99,8 @@ class FrequencyFragment : Fragment() {
         ActivityRepository.removeListener("FrequencyFragment")
     }
 
-    private fun day(position: Int) : String {
-        return when(position) {
+    private fun day(position: Int): String {
+        return when (position) {
             1 -> "Lun"
             2 -> "Mar"
             3 -> "Mer"
