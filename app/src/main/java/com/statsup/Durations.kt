@@ -2,7 +2,8 @@ package com.statsup
 
 class Durations(private val activities: Activities) : Value {
 
-    private val provider =  { list: List<Activity> -> list.sumByDouble { activity -> activity.durationInHours() } }
+    private val provider =
+        { list: List<Activity> -> list.sumByDouble { activity -> activity.durationInHours() } }
 
     override fun average(): Double {
         return activities.average(provider)
@@ -16,6 +17,14 @@ class Durations(private val activities: Activities) : Value {
         return activities.cumulativeOfPreviousMont(provider)
     }
 
+    override fun yearInPosition(position: Int) = activities.yearInPosition(position)
+
+    override fun years(): List<Int> = activities.years()
+
+    override fun groupByDay(): Map<Days, Double> {
+        return activities.groupByDay(provider)
+    }
+
     override fun max(): Double {
         return activities.max(provider)
     }
@@ -27,6 +36,8 @@ class Durations(private val activities: Activities) : Value {
     override fun averageOfYear(position: Int): Double {
         return activities.averageOfYear(position, provider)
     }
+
+    override fun total() = activities.total(provider)
 
     override fun totalOfYear(position: Int): Double {
         return activities.totalOfYear(position, provider)

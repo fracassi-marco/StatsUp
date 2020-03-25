@@ -18,3 +18,19 @@ enum class Months(private val index: Int, val label: String) {
         fun labelOf(index: Int) = values().single { it.index == index }.label
     }
 }
+
+enum class Days(private val index: Int, val label: String) {
+    Monday(1, "Lun"),
+    Tuesday(2, "Mar"),
+    Wednesday(3, "Mer"),
+    Thursday(4, "Gio"),
+    Friday(5, "Ven"),
+    Saturday(6, "Sab"),
+    Sunday(7, "Dom");
+
+    companion object {
+        fun labelOf(index: Int) = byIndex(index).label
+
+        fun byIndex(index: Int) = values().single { it.index == index }
+    }
+}

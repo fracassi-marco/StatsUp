@@ -5,7 +5,7 @@ import java.util.*
 class Activities(private val activities: List<Activity>, private val today: Calendar) {
     constructor(activities: List<Activity>) : this(activities, GregorianCalendar())
 
-    fun ofYearInPosition(position: Int): Map<Month, List<Activity>> {
+    private fun ofYearInPosition(position: Int): Map<Month, List<Activity>> {
         val year = yearInPosition(position)
         return byMonth(activities.filter { it.date().year().get() == year })
     }
@@ -19,7 +19,7 @@ class Activities(private val activities: List<Activity>, private val today: Cale
             .sorted()
     }
 
-    fun byMonth(): List<List<Activity>> {
+    private fun byMonth(): List<List<Activity>> {
         return byMonth(activities).values.toList()
     }
 
@@ -46,16 +46,6 @@ class Activities(private val activities: List<Activity>, private val today: Cale
         return result
     }
 
-    fun frequencyByDay(): Map<Int, List<Activity>> {
-        return activities
-            .groupBy { it.date().dayOfWeek }
-            .toSortedMap()
-    }
-
-    fun count(): Int {
-        return activities.size
-    }
-
     fun average(value: (List<Activity>) -> Double) : Double {
         val sum = byMonth()
             .sumByDouble { value.invoke(it) }
@@ -73,6 +63,10 @@ class Activities(private val activities: List<Activity>, private val today: Cale
         return ofYearInPosition(position)
             .values
             .sumByDouble { value.invoke(it) }
+    }
+
+    fun total(value: (List<Activity>) -> Double): Double {
+        return value.invoke(activities)
     }
 
     fun ofYear(position: Int, value: (List<Activity>) -> Double): List<Double> {
@@ -93,6 +87,14 @@ class Activities(private val activities: List<Activity>, private val today: Cale
 
     fun cumulativeOfPreviousMont(value: (List<Activity>) -> Double): List<Double> {
         return cumulativeOfMonth(13 - currentMonth(), value)
+    }
+
+    fun groupByDay(cane: (List<Activity>) -> Double): Map<Days, Double> {
+        return activities
+            .groupBy { it.date().dayOfWeek }
+            .map { Days.byIndex(it.key) to cane.invoke(it.value) }
+            .toMap()
+            .toSortedMap()
     }
 
     private fun cumulativeOfMonth(index: Int, value: (List<Activity>) -> Double): List<Double> {

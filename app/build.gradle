@@ -10,8 +10,8 @@ android {
         applicationId "com.statsup"
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 11300
-        versionName "1.13.0"
+        versionCode 11400
+        versionName "1.14.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -35,7 +35,6 @@ dependencies {
     implementation 'com.opencsv:opencsv:4.6'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
     implementation 'com.google.code.gson:gson:2.8.6'
-
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

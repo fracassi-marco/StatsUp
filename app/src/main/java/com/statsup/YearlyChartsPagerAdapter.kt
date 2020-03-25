@@ -4,6 +4,8 @@ import android.content.Context
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,11 +13,9 @@ import lecho.lib.hellocharts.view.ColumnChartView
 
 class YearlyChartsPagerAdapter(
     private val context: Context,
-    private val allActivities: Activities,
     private val color: Int,
     private val labelText: String,
-    private val value: Value
-) : PagerAdapter() {
+    private val value: Value) : PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val inflater = LayoutInflater.from(context)
@@ -27,12 +27,12 @@ class YearlyChartsPagerAdapter(
         val previousYearImage = view.findViewById<ImageView>(R.id.previous_year_image)
         val nextYearImage = view.findViewById<ImageView>(R.id.next_year_image)
 
-        val year = allActivities.yearInPosition(position)
+        val year = value.yearInPosition(position)
         label.text = year.toString()
         previousYearLabel.text = if (position > 0) (year - 1).toString() else ""
-        nextYearLabel.text = if (position < allActivities.years().size - 1) (year + 1).toString() else ""
-        previousYearImage.visibility = if (position > 0) View.VISIBLE else View.INVISIBLE
-        nextYearImage.visibility = if (position < allActivities.years().size - 1) View.VISIBLE else View.INVISIBLE
+        nextYearLabel.text = if (position < value.years().size - 1) (year + 1).toString() else ""
+        previousYearImage.visibility = if (position > 0) VISIBLE else INVISIBLE
+        nextYearImage.visibility = if (position < value.years().size - 1) VISIBLE else INVISIBLE
 
         val totalOverviewItem = view.findViewById<View>(R.id.total_overview_item)
         totalOverviewItem.findViewById<TextView>(R.id.left_value).text = asString(value.totalOfYear(position))
@@ -65,6 +65,6 @@ class YearlyChartsPagerAdapter(
     }
 
     override fun getCount(): Int {
-        return allActivities.years().size
+        return value.years().size
     }
 }
