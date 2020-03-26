@@ -1,7 +1,7 @@
 package com.statsup.barchart
 
 import android.content.Context
-import android.graphics.Color
+import android.graphics.Color.BLACK
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.Gravity
@@ -14,27 +14,28 @@ import android.widget.LinearLayout
 import com.statsup.R
 import com.statsup.R.styleable.*
 import kotlinx.android.synthetic.main.bar.view.*
-import java.util.*
 
 class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx, attrs) {
-    private var mBarSpaces = 0
-    private var mBarTextColor = 0
-    private var mBarDimension = 0
-    private var mBarTextSize = 0
+    private var spacesBetweenBars = 0
+    private var labelColor = 0
+    private var barHeight = 0
+    private var labelSize = 0f
+    private var valueSuffix = ""
     private lateinit var linearParentLayout: LinearLayout
 
     init {
         val attributes = context.obtainStyledAttributes(attrs, HorizontalBarChart, 0, 0)
-        mBarDimension = attributes.getDimensionPixelSize(
-            HorizontalBarChart_width,
+        barHeight = attributes.getDimensionPixelSize(
+            HorizontalBarChart_bar_height,
             convertDpToPixel(20f, context)
         )
-        mBarTextSize = convertPixelsToDp(
-            attributes.getDimensionPixelSize(HorizontalBarChart_text_size, convertDpToPixel(15f, context)
+        labelSize = convertPixelsToDp(
+            attributes.getDimensionPixelSize(HorizontalBarChart_label_size, convertDpToPixel(15f, context)
             ).toFloat(), context
         )
-        mBarTextColor = attributes.getColor(HorizontalBarChart_text_color, Color.BLACK)
-        mBarSpaces = attributes.getDimensionPixelSize(HorizontalBarChart_spaces, convertDpToPixel(5f, context))
+        labelColor = attributes.getColor(HorizontalBarChart_label_color, BLACK)
+        spacesBetweenBars = attributes.getDimensionPixelSize(HorizontalBarChart_spaces_between_bars, convertDpToPixel(5f, context))
+        valueSuffix = attributes.getString(HorizontalBarChart_value_suffix) ?: ""
         attributes.recycle()
         initLayout()
     }
@@ -61,13 +62,13 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
         view.linear_bar.setBackgroundColor(bar.color)
         view.text_view_bar_label.apply {
             text = bar.label
-            textSize = mBarTextSize.toFloat()
-            setTextColor(mBarTextColor)
+            textSize = labelSize
+            setTextColor(labelColor)
         }
-        view.text_view_raters.text = String.format(Locale.getDefault(), "%s", bar.value)
+        view.text_view_raters.text =  "${bar.value}${valueSuffix}"
         view.linear_bar.layoutParams.width = dimension * bar.value / maxBarValue
-        view.layoutParams.height = mBarDimension
-        (view.layoutParams as MarginLayoutParams).bottomMargin = mBarSpaces
+        view.layoutParams.height = barHeight
+        (view.layoutParams as MarginLayoutParams).bottomMargin = spacesBetweenBars
         linearParentLayout.addView(view)
     }
 
@@ -98,8 +99,8 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
                 DisplayMetrics.DENSITY_DEFAULT)).toInt()
     }
 
-    private fun convertPixelsToDp(px: Float, context: Context): Int {
+    private fun convertPixelsToDp(px: Float, context: Context): Float {
         return (px / (context.resources
-            .displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)).toInt()
+            .displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT))
     }
 }

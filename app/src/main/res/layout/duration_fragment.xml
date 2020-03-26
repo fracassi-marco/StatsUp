@@ -67,9 +67,10 @@
                 app:layout_constraintTop_toBottomOf="@id/day_of_week_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:spaces="4dp"
-                app:text_size="14sp"
-                app:width="20dp"/>
+                app:spaces_between_bars="4dp"
+                app:label_size="14sp"
+                app:bar_height="20dp"
+                app:value_suffix="%"/>
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

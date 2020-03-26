@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="HorizontalBarChart">
-        <attr name="width" format="dimension" />
-        <attr name="text_size" format="dimension" />
-        <attr name="text_color" format="color" />
-        <attr name="spaces" format="dimension" />
+        <attr name="bar_height" format="dimension" />
+        <attr name="label_size" format="dimension" />
+        <attr name="label_color" format="color" />
+        <attr name="spaces_between_bars" format="dimension" />
+        <attr name="value_suffix" format="string" />
     </declare-styleable>
 </resources>

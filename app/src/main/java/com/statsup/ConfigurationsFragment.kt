@@ -17,20 +17,18 @@ class ConfigurationsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.configurations_fragment, container, false)
         val heightEditorValueInput = view.height_editor_value_input
 
         view.delete_activities_button.setOnClickListener {
             ActivityRepository.clean(context!!)
-            val toast = Toast.makeText(context!!, settings_delete_activities_complete, LENGTH_SHORT)
-            toast.show()
+            Toast.makeText(context!!, settings_delete_activities_complete, LENGTH_SHORT).show()
         }
 
         view.delete_weights_button.setOnClickListener {
             WeightRepository.clean(context!!)
-            val toast = Toast.makeText(context!!, settings_delete_weights_complete, LENGTH_SHORT)
-            toast.show()
+            Toast.makeText(context!!, settings_delete_weights_complete, LENGTH_SHORT).show()
         }
 
         UserRepository.listen("ConfigurationsFragment", object : Listener<User> {

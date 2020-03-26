@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.statsup.R.string.empty_activities
 import kotlinx.android.synthetic.main.activity_history_fragment.view.*
 import kotlinx.android.synthetic.main.no_items_layout.view.*
 
@@ -15,7 +16,7 @@ class ActivityHistoryFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.activity_history_fragment, container, false)
         val noItemLayout = view.findViewById<View>(R.id.no_item_layout)
-        noItemLayout.label_text.text = resources.getString(R.string.empty_activities)
+        noItemLayout.label_text.text = resources.getString(empty_activities)
 
         val adapter = ActivityHistoryAdapter()
         val recyclerView =view.recycler_view
