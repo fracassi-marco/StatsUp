@@ -7,6 +7,12 @@ object WeightRepository {
     private val listeners: MutableMap<String, Listener<List<Weight>>> = mutableMapOf()
     private var weights: MutableList<Weight> = mutableListOf()
 
+    fun clean(context: Context) {
+        DbHelper(context).writableDatabase.use { it.delete("weights", null, null) }
+        weights = mutableListOf()
+        update()
+    }
+
     fun load(context: Context) {
         val result = mutableListOf<Weight>()
         DbHelper(context).readableDatabase.use {

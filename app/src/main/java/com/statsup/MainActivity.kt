@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 import com.statsup.strava.StravaLoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
@@ -123,13 +124,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun hideProgressBar() {
         progressbar.visibility = View.GONE
-        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        window.clearFlags(FLAG_NOT_TOUCHABLE)
     }
 
     private fun showProgressBar() {
         progressbar.visibility = View.VISIBLE
         progressbar.bringToFront()
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        window.setFlags(FLAG_NOT_TOUCHABLE, FLAG_NOT_TOUCHABLE)
     }
 
 }

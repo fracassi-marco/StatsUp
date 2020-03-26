@@ -9,6 +9,12 @@ object ActivityRepository {
     private val listeners: MutableMap<String, Listener<List<Activity>>> = mutableMapOf()
     private var activities: List<Activity> = emptyList()
 
+    fun clean(context: Context) {
+        DbHelper(context).writableDatabase.use { it.delete("activities", null, null) }
+        activities = emptyList()
+        update()
+    }
+
     fun load(context: Context) {
         val result = mutableListOf<Activity>()
         DbHelper(context).readableDatabase.use {

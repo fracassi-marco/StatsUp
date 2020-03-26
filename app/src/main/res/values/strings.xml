@@ -81,4 +81,9 @@
     <string name="empty_weight">Aggiungi o importa le tue pesate</string>
 
     <string name="day_of_week_title">Distribuzione per giorno (da sempre)</string>
+
+    <string name="settings_delete_activities">Cancella attività in locale</string>
+    <string name="settings_delete_activities_complete">Attività cancellate</string>
+    <string name="settings_delete_weights">Cancella pesate</string>
+    <string name="settings_delete_weights_complete">Pesate cancellate</string>
 </resources>
