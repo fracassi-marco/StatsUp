@@ -6,13 +6,11 @@ import android.content.Context
 
 object ActivityRepository {
 
-    private val listeners: MutableMap<String, Listener<List<Activity>>> = mutableMapOf()
     private var activities: List<Activity> = emptyList()
 
     fun clean(context: Context) {
         DbHelper(context).writableDatabase.use { it.delete("activities", null, null) }
         activities = emptyList()
-        update()
     }
 
     fun load(context: Context) {
@@ -45,23 +43,12 @@ object ActivityRepository {
         activities = result
     }
 
-
-    fun listen(key: String, listener: Listener<List<Activity>>) {
-        listeners[key] = listener
-        listener.update(activities)
-    }
-
-    private fun update() {
-        listeners.values.forEach { it.update(activities) }
-    }
-
     fun addIfNotExists(context: Context, newActivities: List<Activity>) {
         val toAdd = newActivities.minus(activities)
         if (toAdd.isNotEmpty()) {
             saveAll(context, toAdd)
             activities = activities.plus(toAdd)
         }
-        update()
     }
 
     private fun saveAll(context: Context, toAdd: List<Activity>) {
@@ -79,9 +66,7 @@ object ActivityRepository {
         }
     }
 
-    fun removeListener(key: String) {
-        if(listeners.containsKey(key)){
-            listeners.remove(key)
-        }
-    }
+    fun anyActivities()= activities.isNotEmpty()
+
+    fun all(): List<Activity> = activities
 }

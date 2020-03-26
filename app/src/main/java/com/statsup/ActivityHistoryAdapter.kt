@@ -1,6 +1,5 @@
 package com.statsup
 
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,10 +8,8 @@ import kotlinx.android.synthetic.main.activity_history_list_item.view.*
 import org.joda.time.format.DateTimeFormat
 
 
-class ActivityHistoryAdapter : RecyclerView.Adapter<ActivityHistoryAdapter.Holder>() {
+class ActivityHistoryAdapter(private val dataSet: List<Activity>) : RecyclerView.Adapter<ActivityHistoryAdapter.Holder>() {
     class Holder(val layout: CardView) : RecyclerView.ViewHolder(layout)
-
-    private var dataSet: List<Activity> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val item = LayoutInflater.from(parent.context)
@@ -37,16 +34,5 @@ class ActivityHistoryAdapter : RecyclerView.Adapter<ActivityHistoryAdapter.Holde
     }
 
     override fun getItemCount() = dataSet.size
-
-    fun update(newItems: List<Activity>) {
-
-        val orderedNewItems = newItems.sortedByDescending { it.dateInMillis }
-
-        val diff = DiffCallback(orderedNewItems, dataSet)
-        val diffResult = DiffUtil.calculateDiff(diff)
-
-        diffResult.dispatchUpdatesTo(this)
-        dataSet = orderedNewItems
-    }
 }
 

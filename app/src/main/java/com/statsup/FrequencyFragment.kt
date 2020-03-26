@@ -16,45 +16,20 @@ import lecho.lib.hellocharts.view.LineChartView
 
 class FrequencyFragment : Fragment() {
 
-    private fun listener(
-        dayOfWeekChart: HorizontalBarChart,
-        monthOverMonthChart: LineChartView,
-        monthOverMonthTitle: TextView,
-        viewpager: ViewPager
-    ) = object : Listener<List<Activity>> {
-        override fun update(subject: List<Activity>) {
-
-            if (subject.isEmpty()) {
-                return
-            }
-
-            val values = Frequencies(Activities(subject))
-            refreshBarCharts(values, viewpager)
-            refreshDayOfWeekChart(values, dayOfWeekChart)
-            refreshMonthOverMonthChart(values, monthOverMonthChart, monthOverMonthTitle)
-        }
-    }
-
-    private fun refreshBarCharts(values: Value, viewpager: ViewPager) {
-        val adapter = YearlyChartsPagerAdapter(context!!, FREQUENCY.color, "Numero di allenamenti ", values)
-        viewpager.adapter = adapter
-        viewpager.currentItem = adapter.count - 1
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.frequency_fragment, container, false)
-        val viewpager = view.view_pager
-        val dayOfWeekChart = view.day_of_week_cart
         val monthOverMonthChart = view.month_over_month_chart
         val monthOverMonthChartTitle = view.month_over_month_title
 
-        val listener =
-            listener(dayOfWeekChart, monthOverMonthChart, monthOverMonthChartTitle, viewpager)
-        ActivityRepository.listen(javaClass.simpleName, listener)
+        val subject = ActivityRepository.all()
+        val values = Distances(Activities(subject))
+        refreshBarCharts(values, view.view_pager)
+        refreshDayOfWeekChart(values, view.day_of_week_cart)
+        refreshMonthOverMonthChart(values, monthOverMonthChart, monthOverMonthChartTitle)
 
         return view
     }
@@ -75,10 +50,10 @@ class FrequencyFragment : Fragment() {
         dayOfWeekChart.setData(100, bars)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        ActivityRepository.removeListener(javaClass.simpleName)
+    private fun refreshBarCharts(values: Value, viewpager: ViewPager) {
+        val adapter = YearlyChartsPagerAdapter(context!!, FREQUENCY.color, "Numero di allenamenti ", values)
+        viewpager.adapter = adapter
+        viewpager.currentItem = adapter.count - 1
     }
 }
 
