@@ -10,14 +10,16 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_stats_fragment.view.*
-import kotlinx.android.synthetic.main.no_items_layout.view.*
+import kotlinx.android.synthetic.main.no_activities_layout.view.*
 
 class ActivityStatsFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
-        val noItemLayout = view.no_item_layout
-        noItemLayout.label_text.text = resources.getString(R.string.empty_activities)
         val viewPager = view.stats_view_pager
         viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
 
@@ -37,7 +39,11 @@ class ActivityStatsFragment : Fragment() {
             })
         }
 
-        showActivitiesOrEmptyPage(noItemLayout, viewPager)
+        view.no_activities_layout.import_button.setOnClickListener {
+            (activity as MainActivity).startImportFromStrava()
+        }
+
+        showActivitiesOrEmptyPage(view.no_activities_layout, viewPager)
 
         return view
     }

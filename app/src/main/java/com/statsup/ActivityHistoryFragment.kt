@@ -8,9 +8,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import com.statsup.R.string.empty_activities
 import kotlinx.android.synthetic.main.activity_history_fragment.view.*
-import kotlinx.android.synthetic.main.no_items_layout.view.*
+import kotlinx.android.synthetic.main.no_activities_layout.view.*
 
 //https://stackoverflow.com/questions/30895580/recyclerview-no-adapter-attached-skipping-layout-for-recyclerview-in-fragmen
 class ActivityHistoryFragment : Fragment() {
@@ -21,8 +20,6 @@ class ActivityHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.activity_history_fragment, container, false)
-        val noItemLayout = view.no_item_layout
-        noItemLayout.label_text.text = resources.getString(empty_activities)
 
         val recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
@@ -30,7 +27,11 @@ class ActivityHistoryFragment : Fragment() {
         recyclerView.adapter = ActivityHistoryAdapter(ActivityRepository.all())
         recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 
-        showContentOrEmptyPage(noItemLayout, view.recycler_view)
+        view.no_activities_layout.import_button.setOnClickListener {
+            (activity as MainActivity).startImportFromStrava()
+        }
+
+        showContentOrEmptyPage(view.no_activities_layout, view.recycler_view)
 
         return view
     }

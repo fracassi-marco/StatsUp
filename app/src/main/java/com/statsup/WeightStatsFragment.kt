@@ -14,8 +14,7 @@ class WeightStatsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.weight_stats_fragment, container, false)
-        val noItemLayout = view.no_item_layout
-        noItemLayout.label_text.text = resources.getString(R.string.empty_weight)
+        val noItemLayout = view.no_items_layout
         val viewPager = view.stats_view_pager.apply {
             adapter = WeightStatsPagerAdapter(childFragmentManager)
         }

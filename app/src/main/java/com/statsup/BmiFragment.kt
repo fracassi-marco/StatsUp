@@ -70,7 +70,7 @@ class BmiFragment : Fragment() {
         val bmiChart = view.bmiChart
         val minMaxOverviewItem = view.min_max_overview_item
         val content = view.content
-        val noItemsLayout = view.no_item_layout
+        val noItemsLayout = view.no_items_layout
 
         setVisibleView(content, noItemsLayout)
 

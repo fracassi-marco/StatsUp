@@ -77,8 +77,9 @@
     <string name="yoga">Yoga</string>
     <string name="meditation">Meditation</string>
 
-    <string name="empty_activities">Importa le tue attività da Strava</string>
-    <string name="empty_weight">Aggiungi o importa le tue pesate</string>
+    <string name="empty_activities">Non hai ancora attività!!</string>
+    <string name="import_button">Importale da Strava</string>
+    <string name="empty_weight">Aggiungi o importa le tue pesate!!</string>
 
     <string name="day_of_week_title">Distribuzione per giorno (da sempre)</string>
 

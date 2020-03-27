@@ -4,14 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
 import android.support.v4.view.GravityCompat.START
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 import com.statsup.strava.StravaLoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,7 +17,7 @@ import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
 
-private const val STRAVA_REQUEST_CODE = 1001
+const val STRAVA_REQUEST_CODE = 1001
 private const val WEIGHT_IMPORT_REQUEST_CODE = 1003
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -65,9 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 openFragment(menuItem.title, ActivityStatsFragment())
             }
             R.id.nav_import_from_strava -> {
-                val intent = StravaLogin(applicationContext, Confs(applicationContext).stravaClientId())
-                    .makeIntent()
-                startActivityForResult(intent, STRAVA_REQUEST_CODE)
+                startImportFromStrava()
             }
             R.id.nav_weight_stats -> {
                 openFragment(menuItem.title, WeightStatsFragment())
@@ -88,6 +84,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(START)
         return true
+    }
+
+    fun startImportFromStrava() {
+        val intent = StravaLogin(applicationContext, Confs(applicationContext).stravaClientId())
+            .makeIntent()
+        startActivityForResult(intent, STRAVA_REQUEST_CODE)
     }
 
     private fun openFragment(title: CharSequence?, fragment: Fragment) {
