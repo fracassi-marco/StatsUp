@@ -90,9 +90,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="0dp"
+                android:textAlignment="textEnd"
                 app:layout_constraintBaseline_toBaselineOf="@id/history_list_item_distance_text"
                 app:layout_constraintRight_toRightOf="parent"
-                tools:text="Sun, 1/8/2017" />
+                tools:text="04/10/2017 18:11:23" />
 
         <TextView
                 android:id="@+id/history_list_item_pace_text"

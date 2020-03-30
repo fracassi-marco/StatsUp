@@ -89,6 +89,7 @@
     <string name="settings_delete_weights">Cancella pesate</string>
     <string name="settings_delete_weights_complete">Pesate cancellate</string>
 
+    <string name="records_average_speed">Velocità media pià alta</string>
     <string name="records_speed">Velocità di punta</string>
     <string name="records_duration">Attività più lunga</string>
     <string name="records_distance">Percorso più lungo</string>

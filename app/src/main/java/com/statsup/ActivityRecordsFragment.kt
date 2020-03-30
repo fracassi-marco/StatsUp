@@ -21,8 +21,12 @@ class ActivityRecordsFragment : Fragment() {
         val view = inflater.inflate(R.layout.activity_records_fragment, container, false)
 
         if (ActivityRepository.anyActivities()) {
+            val bestAverageSpeed = ActivityRepository.all().maxBy { it.averageSpeedInKmH() }!!
+            view.average_speed_value.text = Measure.of(bestAverageSpeed.maxSpeedInKilometersPerHours(), " Km/h", "")
+            update(view.item_average_speed, bestAverageSpeed)
+
             val bestSpeed = ActivityRepository.all().maxBy { it.maxSpeedInMetersPerSecond }!!
-            view.speed_value.text = Measure.of(bestSpeed.maxSpeedInKilometersPerHours(), "Km/h", "")
+            view.speed_value.text = Measure.of(bestSpeed.maxSpeedInKilometersPerHours(), " Km/h", "")
             update(view.item_speed, bestSpeed)
 
             val bestDuration = ActivityRepository.all().maxBy { it.durationInSeconds }!!
@@ -30,7 +34,7 @@ class ActivityRecordsFragment : Fragment() {
             update(view.item_duration, bestDuration)
 
             val bestDistance = ActivityRepository.all().maxBy { it.distanceInMeters }!!
-            view.distance_value.text = Measure.of(bestDistance.distanceInKilometers(), "Km", "")
+            view.distance_value.text = Measure.of(bestDistance.distanceInKilometers(), " Km", "")
             update(view.item_distance, bestDistance)
         }
 
@@ -49,16 +53,12 @@ class ActivityRecordsFragment : Fragment() {
         }
     }
 
-    fun update(activity1: View, activity: Activity) {
-        activity1.history_list_item_title_text.text = activity.title
-        activity1.history_list_item_icon.setImageResource(activity.sport.icon)
-        activity1.history_list_item_date_text.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm:ss"))
-        val hours = activity.durationInSeconds / 3600;
-        val minutes = (activity.durationInSeconds % 3600) / 60;
-        val seconds = activity.durationInSeconds % 60;
-        activity1.history_list_item_time_text.text = "${hours}h ${minutes}m ${seconds}s"
-        val div = activity.distanceInKilometers()
-        activity1.history_list_item_distance_text.text = String.format("%.2f", div) + "km"
-        activity1.history_list_item_pace_text.text = ""
+    fun update(view: View, activity: Activity) {
+        view.history_list_item_title_text.text = activity.title
+        view.history_list_item_icon.setImageResource(activity.sport.icon)
+        view.history_list_item_date_text.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm"))
+        view.history_list_item_time_text.text = Measure.timeFragments(activity.durationInSeconds)
+        view.history_list_item_distance_text.text = Measure.of(activity.distanceInKilometers(), "Km", "")
+        view.history_list_item_pace_text.text = ""
     }
 }

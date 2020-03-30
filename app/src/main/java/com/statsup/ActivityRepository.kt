@@ -53,6 +53,7 @@ object ActivityRepository {
                 put("durationInSeconds", it.durationInSeconds)
                 put("dateInMillis", it.dateInMillis)
                 put("title", it.title)
+                put("maxSpeedInMetersPerSecond", it.maxSpeedInMetersPerSecond)
             }
 
             DbHelper(context).writableDatabase.use { it.insert("activities", null, values) }
