@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.AsyncTask
 import com.statsup.strava.*
 
-
 class StravaActivities(
     private val context: Context,
     private val code: String,
@@ -48,6 +47,6 @@ class StravaActivities(
         if (title.isEmpty()) {
             title = it.type.name.capitalize()
         }
-        return Activity(it.id, it.type, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time, title)
+        return Activity(it.id, it.type, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time, title, it.maxSpeed.metersPerSecond.toDouble())
     }
 }

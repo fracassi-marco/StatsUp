@@ -33,7 +33,8 @@ object ActivityRepository {
                             cursor.getFloat(cursor.getColumnIndexOrThrow("distanceInMeters")),
                             cursor.getInt(cursor.getColumnIndexOrThrow("durationInSeconds")),
                             cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis")),
-                            cursor.getString(cursor.getColumnIndexOrThrow("title"))
+                            cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("maxSpeedInMetersPerSecond"))
                         )
                     )
                 }
