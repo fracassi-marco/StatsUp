@@ -26,7 +26,7 @@ class FrequencyFragment : Fragment() {
         val monthOverMonthChartTitle = view.month_over_month_title
 
         val subject = ActivityRepository.all()
-        val values = Distances(Activities(subject))
+        val values = Frequencies(Activities(subject))
         refreshBarCharts(values, view.view_pager)
         refreshDayOfWeekChart(values, view.day_of_week_cart)
         refreshMonthOverMonthChart(values, monthOverMonthChart, monthOverMonthChartTitle)
