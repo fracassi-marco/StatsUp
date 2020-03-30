@@ -48,10 +48,7 @@ class ActivityStatsFragment : Fragment() {
         return view
     }
 
-    private fun showActivitiesOrEmptyPage(
-        noItemLayout: ConstraintLayout,
-        viewPager: UnswappableViewPager
-    ) {
+    private fun showActivitiesOrEmptyPage(noItemLayout: View, viewPager: View) {
         if (ActivityRepository.anyActivities()) {
             noItemLayout.visibility = GONE
             viewPager.visibility = VISIBLE

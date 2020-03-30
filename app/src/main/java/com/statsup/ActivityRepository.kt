@@ -23,7 +23,7 @@ object ActivityRepository {
                 null,
                 null,
                 null,
-                "dateInMillis"
+                "dateInMillis DESC"
             ).use { cursor ->
                 while (cursor.moveToNext()) {
                     result.add(
@@ -44,15 +44,7 @@ object ActivityRepository {
         activities = result
     }
 
-    fun addIfNotExists(context: Context, newActivities: List<Activity>) {
-        val toAdd = newActivities.minus(activities)
-        if (toAdd.isNotEmpty()) {
-            saveAll(context, toAdd)
-            activities = activities.plus(toAdd)
-        }
-    }
-
-    private fun saveAll(context: Context, toAdd: List<Activity>) {
+    fun saveAll(context: Context, toAdd: List<Activity>) {
         toAdd.forEach {
             val values = ContentValues().apply {
                 put("id", it.id)
@@ -65,6 +57,7 @@ object ActivityRepository {
 
             DbHelper(context).writableDatabase.use { it.insert("activities", null, values) }
         }
+        activities = toAdd
     }
 
     fun anyActivities()= activities.isNotEmpty()

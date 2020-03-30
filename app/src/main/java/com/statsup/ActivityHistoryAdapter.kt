@@ -24,12 +24,8 @@ class ActivityHistoryAdapter(private val dataSet: List<Activity>) : RecyclerView
         holder.layout.history_list_item_title_text.text = activity.title
         holder.layout.history_list_item_icon.setImageResource(activity.sport.icon)
         holder.layout.history_list_item_date_text.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm:ss"))
-        val hours = activity.durationInSeconds / 3600;
-        val minutes = (activity.durationInSeconds % 3600) / 60;
-        val seconds = activity.durationInSeconds % 60;
-        holder.layout.history_list_item_time_text.text = "${hours}h ${minutes}m ${seconds}s"
-        val div = activity.distanceInKilometers()
-        holder.layout.history_list_item_distance_text.text = String.format("%.2f", div) + "km"
+        holder.layout.history_list_item_time_text.text = Measure.timeFragments(activity.durationInSeconds)
+        holder.layout.history_list_item_distance_text.text = Measure.of(activity.distanceInKilometers(), "Km", "")
         holder.layout.history_list_item_pace_text.text = ""
     }
 

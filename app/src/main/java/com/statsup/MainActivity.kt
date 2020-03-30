@@ -62,6 +62,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_stats -> {
                 openFragment(menuItem.title, ActivityStatsFragment())
             }
+            R.id.nav_records -> {
+                openFragment(menuItem.title, ActivityRecordsFragment())
+            }
             R.id.nav_import_from_strava -> {
                 startImportFromStrava()
             }

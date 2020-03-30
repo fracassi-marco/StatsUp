@@ -38,7 +38,8 @@ class StravaActivities(
     }
 
     override fun onPostExecute(activities: List<com.statsup.strava.Activity>) {
-        ActivityRepository.addIfNotExists(context, activities.map { asRun(it) })
+        ActivityRepository.clean(context)
+        ActivityRepository.saveAll(context, activities.map { asRun(it) })
         onComplete.invoke()
     }
 
