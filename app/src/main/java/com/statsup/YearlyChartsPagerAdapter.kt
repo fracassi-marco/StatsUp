@@ -44,7 +44,7 @@ class YearlyChartsPagerAdapter(
 
         val fullAverageOverviewItem = view.findViewById<View>(R.id.full_average_overview_item)
         fullAverageOverviewItem.findViewById<TextView>(R.id.left_value).text = asString(value.average())
-        fullAverageOverviewItem.findViewById<TextView>(R.id.left_text).text = "Media di sempre"
+        fullAverageOverviewItem.findViewById<TextView>(R.id.left_text).text = "Media mensile (da sempre)"
 
         YearlyChart(chart, color, labelText).refresh(value, position)
 
