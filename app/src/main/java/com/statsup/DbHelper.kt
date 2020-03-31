@@ -32,14 +32,7 @@ class DbHelper(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-<<<<<<< HEAD
-        val migrations = mapOf<Int, String>(
-=======
-        val migrations = mapOf(
-            1 to "ALTER TABLE activities ADD maxSpeedInMetersPerSecond REAL DEFAULT 0",
-            2 to "ALTER TABLE activities ADD maxSpeedInMetersPerSecond REAL DEFAULT 0"
->>>>>>> 7cb2937a4b6704f54275065b5094ddb4a37a94b2
-        )
+        val migrations = mapOf<Int, String>()
         oldVersion.until(newVersion).forEach { db.execSQL(migrations[it]) }
     }
 
@@ -49,11 +42,7 @@ class DbHelper(context: Context) :
     }
 
     companion object {
-<<<<<<< HEAD
         const val DATABASE_VERSION = 1
-=======
-        const val DATABASE_VERSION = 3
->>>>>>> 7cb2937a4b6704f54275065b5094ddb4a37a94b2
         const val DATABASE_NAME = "StatsUp.db"
     }
 }
