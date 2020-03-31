@@ -9,15 +9,7 @@ class DbHelper(context: Context) :
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""CREATE TABLE users (height INTEGER)""")
 
-        db.execSQL(
-            """CREATE TABLE activities (
-            id INTEGER PRIMARY KEY,
-            sportId INTEGER,
-            distanceInMeters REAL,
-            durationInSeconds INTEGER,
-            dateInMillis INTEGER,
-            title TEXT)"""
-        )
+        createActivitiesTable(db)
 
         db.execSQL(
             """CREATE TABLE weights (
@@ -26,21 +18,32 @@ class DbHelper(context: Context) :
         )
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        val migrations = mapOf(
-            1 to "ALTER TABLE activities ADD maxSpeedInMetersPerSecond REAL DEFAULT 0"
+    private fun createActivitiesTable(db: SQLiteDatabase) {
+        db.execSQL(
+            """CREATE TABLE activities (
+                id INTEGER PRIMARY KEY,
+                sportId INTEGER,
+                distanceInMeters REAL,
+                durationInSeconds INTEGER,
+                dateInMillis INTEGER,
+                title TEXT,
+                maxSpeedInMetersPerSecond REAL)"""
         )
-        for (i in oldVersion..newVersion) {
-            db.execSQL(migrations[i])
-        }
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        val migrations = mapOf<Int, String>(
+        )
+        oldVersion.until(newVersion).forEach { db.execSQL(migrations[it]) }
     }
 
     override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        onUpgrade(db, oldVersion, newVersion)
+        db.execSQL("""DROP TABLE activities""")
+        createActivitiesTable(db)
     }
 
     companion object {
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "StatsUp.db"
     }
 }
