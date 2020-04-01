@@ -48,6 +48,6 @@ class StravaActivities(
         if (title.isEmpty()) {
             title = it.type.name.capitalize()
         }
-        return Activity(it.id, it.type, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time, title, it.maxSpeed.metersPerSecond.toDouble())
+        return Activity(it.id, it.type, it.distance.meters, it.elapsedTime.seconds, it.startDateLocal.time, title, it.maxSpeed.metersPerSecond.toDouble(), it.totalElevationGain.meters.toDouble())
     }
 }

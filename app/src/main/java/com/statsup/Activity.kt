@@ -2,7 +2,7 @@ package com.statsup
 
 import org.joda.time.DateTime
 
-data class Activity(val id: Long, val sport: Sports, val distanceInMeters: Float, val durationInSeconds: Int, val dateInMillis: Long, val title: String, val maxSpeedInMetersPerSecond: Double) {
+data class Activity(val id: Long, val sport: Sports, val distanceInMeters: Float, val durationInSeconds: Int, val dateInMillis: Long, val title: String, val maxSpeedInMetersPerSecond: Double, val elevationInMeters: Double) {
 
     fun date() : DateTime {
         return DateTime(dateInMillis)

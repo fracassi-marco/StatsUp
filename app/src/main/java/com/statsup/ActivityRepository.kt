@@ -34,7 +34,8 @@ object ActivityRepository {
                             cursor.getInt(cursor.getColumnIndexOrThrow("durationInSeconds")),
                             cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis")),
                             cursor.getString(cursor.getColumnIndexOrThrow("title")),
-                            cursor.getDouble(cursor.getColumnIndexOrThrow("maxSpeedInMetersPerSecond"))
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("maxSpeedInMetersPerSecond")),
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("elevationInMeters"))
                         )
                     )
                 }
@@ -45,18 +46,21 @@ object ActivityRepository {
     }
 
     fun saveAll(context: Context, toAdd: List<Activity>) {
-        toAdd.forEach {
-            val values = ContentValues().apply {
-                put("id", it.id)
-                put("sportId", it.sport.id)
-                put("distanceInMeters", it.distanceInMeters)
-                put("durationInSeconds", it.durationInSeconds)
-                put("dateInMillis", it.dateInMillis)
-                put("title", it.title)
-                put("maxSpeedInMetersPerSecond", it.maxSpeedInMetersPerSecond)
-            }
+        DbHelper(context).writableDatabase.use { connection ->
+            toAdd.forEach {
+                val values = ContentValues().apply {
+                    put("id", it.id)
+                    put("sportId", it.sport.id)
+                    put("distanceInMeters", it.distanceInMeters)
+                    put("durationInSeconds", it.durationInSeconds)
+                    put("dateInMillis", it.dateInMillis)
+                    put("title", it.title)
+                    put("maxSpeedInMetersPerSecond", it.maxSpeedInMetersPerSecond)
+                    put("elevationInMeters", it.elevationInMeters)
+                }
 
-            DbHelper(context).writableDatabase.use { it.insert("activities", null, values) }
+                connection.insert("activities", null, values)
+            }
         }
         activities = toAdd
     }

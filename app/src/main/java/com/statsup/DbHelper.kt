@@ -27,12 +27,15 @@ class DbHelper(context: Context) :
                 durationInSeconds INTEGER,
                 dateInMillis INTEGER,
                 title TEXT,
-                maxSpeedInMetersPerSecond REAL)"""
+                maxSpeedInMetersPerSecond REAL,
+                elevationInMeters REAL)"""
         )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        val migrations = mapOf<Int, String>()
+        val migrations = mapOf(
+            1 to "ALTER TABLE activities ADD elevationInMeters REAL DEFAULT 0"
+        )
         oldVersion.until(newVersion).forEach { db.execSQL(migrations[it]) }
     }
 
@@ -42,7 +45,7 @@ class DbHelper(context: Context) :
     }
 
     companion object {
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
         const val DATABASE_NAME = "StatsUp.db"
     }
 }

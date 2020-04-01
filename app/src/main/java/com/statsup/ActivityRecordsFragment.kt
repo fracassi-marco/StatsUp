@@ -36,6 +36,10 @@ class ActivityRecordsFragment : Fragment() {
             val bestDistance = ActivityRepository.all().maxBy { it.distanceInMeters }!!
             view.distance_value.text = Measure.of(bestDistance.distanceInKilometers(), " Km", "")
             update(view.item_distance, bestDistance)
+
+            val bestElevation = ActivityRepository.all().maxBy { it.elevationInMeters }!!
+            view.elevation_value.text = Measure.of(bestElevation.elevationInMeters, "  m", "")
+            update(view.item_elevation, bestElevation)
         }
 
         showActivitiesOrEmptyPage(view.no_activities_layout, view.records)
