@@ -101,7 +101,6 @@ class WeightEditorView : AppCompatActivity() {
         val dateMillis = findViewById<TextView>(R.id.weight_editor_date_input).tag
         val value = findViewById<TextView>(R.id.weight_editor_value_input).tag
 
-
         WeightRepository.addIfNotExists(applicationContext, listOf(Weight(value.toString().toDouble(), dateMillis as Long)))
         supportFinishAfterTransition()
     }

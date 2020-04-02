@@ -13,17 +13,6 @@ import java.util.*
 
 class WeightInfoFragment : Fragment() {
 
-    private fun weightListener(
-        weightOverviewItem: View,
-        howLongOverviewItem: View
-    ) = object : Listener<List<Weight>> {
-        override fun update(subject: List<Weight>) {
-            val weights = subject.sortedBy { it.dateInMillis }
-
-            updateUi(weights, weightOverviewItem, howLongOverviewItem)
-        }
-    }
-
     private fun updateUi(
         weights: List<Weight>,
         weightOverviewItem: View,
@@ -33,12 +22,12 @@ class WeightInfoFragment : Fragment() {
         weightOverviewItem.left_value.text = weights.size.toString()
 
         howLongOverviewItem.left_text.text = "Prima pesata"
-        howLongOverviewItem.left_value.text = weights.first().date().toString("dd/MM/yyyy")
+        howLongOverviewItem.left_value.text = weights.last().date().toString("dd/MM/yyyy")
         howLongOverviewItem.left_value.textSize = 21f
         howLongOverviewItem.left_value.setTextColor(Color.BLACK)
 
         howLongOverviewItem.right_text.text = "Ultima pesata"
-        howLongOverviewItem.right_value.text = weights.last().date().toString("dd/MM/yyyy")
+        howLongOverviewItem.right_value.text = weights.first().date().toString("dd/MM/yyyy")
         howLongOverviewItem.right_value.textSize = 21f
         howLongOverviewItem.right_value.setTextColor(Color.BLACK)
 
@@ -51,7 +40,7 @@ class WeightInfoFragment : Fragment() {
         if(weights.isEmpty())
             return "0 anni 0 mesi"
 
-        val firstMeasure = GregorianCalendar().apply { time = weights.first().date().toDate() }
+        val firstMeasure = GregorianCalendar().apply { time = weights.last().date().toDate() }
         val today = GregorianCalendar().apply { time = Date() }
         val yearsInBetween = today.get(Calendar.YEAR) - firstMeasure.get(Calendar.YEAR)
         val monthsDiff = today.get(Calendar.MONTH) - firstMeasure.get(Calendar.MONTH)
@@ -66,14 +55,10 @@ class WeightInfoFragment : Fragment() {
         val weightOverviewItem  = view.weightOverviewItem
         val howLongOverviewItem = view.howLongOverviewItem
 
-        WeightRepository.listen("WeightInfoFragment", weightListener(weightOverviewItem, howLongOverviewItem))
+        val weights = WeightRepository.all()
+
+        updateUi(weights, weightOverviewItem, howLongOverviewItem)
 
         return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        WeightRepository.removeListener("WeightInfoFragment")
     }
 }

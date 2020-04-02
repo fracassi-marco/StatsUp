@@ -2,23 +2,22 @@ package com.statsup
 
 import android.content.Context
 import android.os.AsyncTask
-import com.opencsv.CSVParserBuilder
-import com.opencsv.CSVReaderBuilder
 import org.joda.time.format.DateTimeFormat
 import java.io.Reader
 
-class CsvWeights(private val context: Context, private val reader: Reader, private val onComplete: () -> Unit) :  AsyncTask<Void, Void, Void>() {
+class CsvWeights(
+    private val context: Context,
+    private val reader: Reader,
+    private val onComplete: () -> Unit
+) : AsyncTask<Void, Void, Void>() {
 
     override fun doInBackground(vararg ignore: Void): Void? {
-        val weights : List<Weight> = CSVReaderBuilder(reader)
-                .withCSVParser(CSVParserBuilder().withSeparator(';').build())
-                .build()
-                .readAll()
-                .filter { it.size > 1 }
-                .filter { isValid(it) }
-                .map {
-                    asWeight(it)
-                }
+        val weights = reader.readLines()
+            .map { it.split(";") }
+            .filter { it.size > 1 }
+            .filter { isValid(it) }
+            .map { asWeight(it) }
+
         WeightRepository.addIfNotExists(context, weights)
         return null
     }
@@ -27,7 +26,7 @@ class CsvWeights(private val context: Context, private val reader: Reader, priva
         onComplete.invoke()
     }
 
-    private fun isValid(record: Array<String>): Boolean {
+    private fun isValid(record: List<String>): Boolean {
         return try {
             parseDate(record)
             parseWeight(record)
@@ -37,9 +36,11 @@ class CsvWeights(private val context: Context, private val reader: Reader, priva
         }
     }
 
-    private fun asWeight(record: Array<String>): Weight = Weight(parseWeight(record), parseDate(record).millis)
+    private fun asWeight(record: List<String>): Weight =
+        Weight(parseWeight(record), parseDate(record).millis)
 
-    private fun parseDate(record: Array<String>) = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(record[0])
+    private fun parseDate(record: List<String>) =
+        DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(record.first())
 
-    private fun parseWeight(record: Array<String>) = record[1].toDouble()
+    private fun parseWeight(record: List<String>) = record.last().toDouble()
 }

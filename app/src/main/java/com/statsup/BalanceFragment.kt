@@ -1,6 +1,8 @@
 package com.statsup
 
 import android.graphics.Color
+import android.graphics.Color.BLACK
+import android.graphics.Color.RED
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -12,24 +14,6 @@ import lecho.lib.hellocharts.view.LineChartView
 import org.joda.time.DateTime
 
 class BalanceFragment : Fragment() {
-
-    private fun listener(
-        lineChart: LineChartView,
-        monthVariationOverviewItem: View,
-        yearVariationOverviewItem: View,
-        fullVariationOverviewItem: View,
-        minMaxOverviewItem: View
-    ) = object : Listener<List<Weight>> {
-        override fun update(subject: List<Weight>) {
-            if (subject.isEmpty()) {
-                return
-            }
-
-            val weights = subject.sortedBy { it.dateInMillis }
-            updateChart(weights, lineChart)
-            updateOverviews(weights, monthVariationOverviewItem, yearVariationOverviewItem, fullVariationOverviewItem, minMaxOverviewItem)
-        }
-    }
 
     private fun updateOverviews(
         weights: List<Weight>,
@@ -62,7 +46,7 @@ class BalanceFragment : Fragment() {
 
         minMaxOverviewItem.right_value.text =
             Measure.of(weights.maxBy { it.kilograms }!!.kilograms, "Kg", "")
-        minMaxOverviewItem.right_value.setTextColor(Color.BLACK)
+        minMaxOverviewItem.right_value.setTextColor(BLACK)
         minMaxOverviewItem.right_value.textSize = 21f
         minMaxOverviewItem.right_text.text = "Peso massimo"
     }
@@ -74,7 +58,7 @@ class BalanceFragment : Fragment() {
             view.left_value.text = Measure.of(finalValue - initialValue.kilograms, "Kg")
             view.right_value.text = Measure.of(percentage, "%")
             if (percentage > 0) {
-                view.right_value.setTextColor(Color.RED)
+                view.right_value.setTextColor(RED)
             }
         }
         else {
@@ -92,18 +76,14 @@ class BalanceFragment : Fragment() {
         val fullVariationOverviewItem = view.full_variation_overview_item
         val minMaxOverviewItem = view.min_max_overview_item
 
-        WeightRepository.listen("BalanceFragment", listener(lineChart, monthVariationOverviewItem, yearVariationOverviewItem, fullVariationOverviewItem, minMaxOverviewItem))
+        val weights = WeightRepository.all().sortedBy { it.dateInMillis }
+        updateChart(weights, lineChart)
+        updateOverviews(weights, monthVariationOverviewItem, yearVariationOverviewItem, fullVariationOverviewItem, minMaxOverviewItem)
 
         return view
     }
 
     private fun updateChart(weights: List<Weight>, lineChart: LineChartView) {
         WeightChart(lineChart).refresh(weights)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        WeightRepository.removeListener("BalanceFragment")
     }
 }

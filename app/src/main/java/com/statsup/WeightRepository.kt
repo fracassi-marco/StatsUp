@@ -2,15 +2,14 @@ package com.statsup
 
 import android.content.ContentValues
 import android.content.Context
+import org.joda.time.DateTime
 
 object WeightRepository {
-    private val listeners: MutableMap<String, Listener<List<Weight>>> = mutableMapOf()
-    private var weights: MutableList<Weight> = mutableListOf()
+    private var weights: List<Weight> = emptyList()
 
     fun clean(context: Context) {
         DbHelper(context).writableDatabase.use { it.delete("weights", null, null) }
-        weights = mutableListOf()
-        update()
+        weights = emptyList()
     }
 
     fun load(context: Context) {
@@ -31,33 +30,19 @@ object WeightRepository {
         weights = result
     }
 
-    fun listen(key: String, listener: Listener<List<Weight>>) {
-        listeners[key] = listener
-        listener.update(weights)
-    }
-
-    private fun update() {
-        listeners.values.forEach { it.update(weights) }
-    }
-
     fun addIfNotExists(context: Context, newActivities: List<Weight>) {
         val toAdd = newActivities.minus(weights)
-        if(toAdd.isNotEmpty()) {
+        if (toAdd.isNotEmpty()) {
             saveAll(context, toAdd)
-            weights = weights.plus(toAdd).toMutableList()
+            weights = weights.plus(toAdd).sortedByDescending { it.dateInMillis }
         }
-
-        update()
     }
 
     fun delete(context: Context, weight: Weight) {
-        weights.remove(weight)
-
         DbHelper(context).writableDatabase.use {
             it.delete("weights", "dateInMillis = ?", arrayOf(weight.dateInMillis.toString()))
         }
-
-        update()
+        weights = weights.minus(weight).sortedByDescending { it.dateInMillis }
     }
 
     private fun saveAll(context: Context, toAdd: List<Weight>) {
@@ -71,9 +56,13 @@ object WeightRepository {
         }
     }
 
-    fun removeListener(key: String) {
-        if(listeners.containsKey(key)){
-            listeners.remove(key)
-        }
+    fun any() = weights.isNotEmpty()
+
+    fun all(): List<Weight> = weights
+
+    fun latest(): Weight {
+        if (weights.isEmpty())
+            return Weight(50.0, DateTime().millis)
+        return all().first()
     }
 }

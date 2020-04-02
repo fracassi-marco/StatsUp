@@ -15,29 +15,10 @@ import mobi.gspd.segmentedbarview.SegmentedBarView
 
 class BmiFragment : Fragment() {
 
-    private var weights = emptyList<Weight>()
-    private var height: Int = 0
-
-    private fun userListener(
-        content: ConstraintLayout,
-        noItemsLayout: ConstraintLayout,
-        bmiChart: SegmentedBarView,
-        minMaxOverviewItem: View
-    ) = object : Listener<User> {
-        override fun update(subject: User) {
-            height = subject.height
-            setVisibleView(content, noItemsLayout)
-
-            if(height != 0 && weights.isNotEmpty()) {
-                updateBmiOverviews(minMaxOverviewItem)
-                updateBmiChart(bmiChart)
-            }
-        }
-    }
-
     private fun setVisibleView(
         content: ConstraintLayout,
-        noItemsLayout: ConstraintLayout
+        noItemsLayout: ConstraintLayout,
+        height: Int
     ) {
         if(height == 0) {
             content.visibility = View.GONE
@@ -48,23 +29,6 @@ class BmiFragment : Fragment() {
         }
     }
 
-    private fun weightListener(
-        content: ConstraintLayout,
-        noItemsLayout: ConstraintLayout,
-        bmiChart: SegmentedBarView,
-        minMaxOverviewItem: View
-    ) = object : Listener<List<Weight>> {
-        override fun update(subject: List<Weight>) {
-            weights = subject.sortedBy { it.dateInMillis }
-            setVisibleView(content, noItemsLayout)
-
-            if(height != 0 && weights.isNotEmpty()) {
-                updateBmiOverviews(minMaxOverviewItem)
-                updateBmiChart(bmiChart)
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.bmi_fragment, container, false)
         val bmiChart = view.bmiChart
@@ -72,22 +36,23 @@ class BmiFragment : Fragment() {
         val content = view.content
         val noItemsLayout = view.no_items_layout
 
-        setVisibleView(content, noItemsLayout)
+        val weights = WeightRepository.all()
+        val height = UserRepository.user.height
+        setVisibleView(content, noItemsLayout, height)
 
-        UserRepository.listen("BmiFragment", userListener(content, noItemsLayout, bmiChart, minMaxOverviewItem))
-        WeightRepository.listen("BmiFragment", weightListener(content, noItemsLayout, bmiChart, minMaxOverviewItem))
+        if(height != 0) {
+            updateBmiOverviews(minMaxOverviewItem, weights, height)
+            updateBmiChart(bmiChart, weights, height)
+        }
 
         return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        UserRepository.removeListener("BmiFragment")
-        WeightRepository.removeListener("BmiFragment")
-    }
-
-    private fun updateBmiOverviews(minMaxOverviewItem: View) {
+    private fun updateBmiOverviews(
+        minMaxOverviewItem: View,
+        weights: List<Weight>,
+        height: Int
+    ) {
         minMaxOverviewItem.left_value.text = Bmi.labelFor(weights.minBy { it.kilograms }!!, height)
         minMaxOverviewItem.left_value.textSize = 21f
         minMaxOverviewItem.left_text.text = getString(R.string.bmi_min)
@@ -102,7 +67,11 @@ class BmiFragment : Fragment() {
         minMaxOverviewItem.right_text.text = getString(R.string.bmi_max)
     }
 
-    private fun updateBmiChart(bmiChart: SegmentedBarView) {
+    private fun updateBmiChart(
+        bmiChart: SegmentedBarView,
+        weights: List<Weight>,
+        height: Int
+    ) {
         bmiChart.setSegments(listOf(
             Segment(0f, 15.99f, "< 16", getString(R.string.bmi_too_low), Color.parseColor("#2196f3")),
             Segment(16f, 18.49f, "16 - 18.5", getString(R.string.bmi_low), Color.parseColor("#21daf3")),

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE
 
 object UserRepository {
 
-    private var user = User()
+    var user = User()
     private val listeners: MutableMap<String, Listener<User>> = mutableMapOf()
 
     private fun update() {

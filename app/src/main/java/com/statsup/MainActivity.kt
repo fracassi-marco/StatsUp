@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val reader = BufferedReader(InputStreamReader(inputStream!!))
                 CsvWeights(applicationContext, reader){
                     hideProgressBar()
+                    openFragment(getString(R.string.menu_weight_history), WeightHistoryFragment())
                 }.execute()
             } catch (e: FileNotFoundException) {
                 println(e.message)
