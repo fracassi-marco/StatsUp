@@ -11,13 +11,9 @@ import com.statsup.R.string.settings_delete_activities_complete
 import com.statsup.R.string.settings_delete_weights_complete
 import kotlinx.android.synthetic.main.configurations_fragment.view.*
 
-class ConfigurationsFragment : Fragment() {
+class ConfigurationsFragment : NoMenuFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.configurations_fragment, container, false)
         val heightEditorValueInput = view.height_editor_value_input
 

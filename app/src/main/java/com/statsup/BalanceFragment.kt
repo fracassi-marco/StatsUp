@@ -68,7 +68,7 @@ class BalanceFragment : Fragment() {
         view.left_text.text = label
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.balance_fragment, container, false)
         val lineChart = view.line_chart
         val monthVariationOverviewItem = view.month_variation_overview_item

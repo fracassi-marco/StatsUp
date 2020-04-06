@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.no_items_layout.view.*
 import kotlinx.android.synthetic.main.weight_stats_fragment.view.*
 
-class WeightStatsFragment : Fragment() {
+class WeightStatsFragment : NoMenuFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.weight_stats_fragment, container, false)
         val viewPager = view.stats_view_pager.apply {
             adapter = WeightStatsPagerAdapter(childFragmentManager)

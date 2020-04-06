@@ -18,7 +18,7 @@ class ActivityStatsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
         val viewPager = view.stats_view_pager
         viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)

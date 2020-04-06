@@ -7,6 +7,24 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 
+abstract class NoMenuFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        setHasOptionsMenu(true)
+        return onCreate(inflater, container)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu!!.clear()
+    }
+
+    protected abstract fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View
+}
+
 abstract class ActivityFragment : Fragment() {
 
     override fun onCreateView(

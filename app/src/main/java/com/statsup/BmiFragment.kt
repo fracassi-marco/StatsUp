@@ -29,7 +29,7 @@ class BmiFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.bmi_fragment, container, false)
         val bmiChart = view.bmiChart
         val minMaxOverviewItem = view.min_max_overview_item
