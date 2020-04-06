@@ -1,59 +1,55 @@
 package com.statsup
 
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_history_list_item.view.*
-//import kotlinx.android.synthetic.main.activity_records_fragment.view.*
-//import kotlinx.android.synthetic.main.record_item.view.*
+import kotlinx.android.synthetic.main.activity_records_fragment.view.*
 import kotlinx.android.synthetic.main.no_activities_layout.view.*
+import kotlinx.android.synthetic.main.record_item.view.*
 import org.joda.time.format.DateTimeFormat
 
 class ActivityRecordsFragment : ActivityFragment() {
 
-    private var averageSpeed: ConstraintLayout?  = null
-    private var speed: ConstraintLayout? = null
-    private var duration: ConstraintLayout? = null
-    private var distance: ConstraintLayout? = null
-    private var elevation: ConstraintLayout? = null
+    private var averageSpeed: View?  = null
+    private var speed: View? = null
+    private var duration: View? = null
+    private var distance: View? = null
+    private var elevation: View? = null
 
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.activity_records_fragment, container, false)
-        averageSpeed = view.findViewById<ConstraintLayout>(R.id.average_speed).apply {
-            this.findViewById<ImageView>(R.id.image).contentDescription = resources.getString(R.string.records_average_speed)
-            this.findViewById<ImageView>(R.id.image).setImageResource(R.drawable.average_speed)
-            this.findViewById<TextView>(R.id.label).text = resources.getString(R.string.records_average_speed)
+        averageSpeed = view.average_speed.apply {
+            image.contentDescription = resources.getString(R.string.records_average_speed)
+            image.setImageResource(R.drawable.average_speed)
+            label.text = resources.getString(R.string.records_average_speed)
         }
-        speed = view.findViewById<ConstraintLayout>(R.id.speed).apply {
-            this.findViewById<ImageView>(R.id.image).contentDescription = resources.getString(R.string.records_speed)
-            this.findViewById<ImageView>(R.id.image).setImageResource(R.drawable.speed)
-            this.findViewById<TextView>(R.id.label).text = resources.getString(R.string.records_speed)
+        speed = view.speed.apply {
+            image.contentDescription = resources.getString(R.string.records_speed)
+            image.setImageResource(R.drawable.speed)
+            label.text = resources.getString(R.string.records_speed)
         }
-        duration = view.findViewById<ConstraintLayout>(R.id.duration).apply {
-            this.findViewById<ImageView>(R.id.image).contentDescription = resources.getString(R.string.records_duration)
-            this.findViewById<ImageView>(R.id.image).setImageResource(R.drawable.duration)
-            this.findViewById<TextView>(R.id.label).text = resources.getString(R.string.records_duration)
+        duration = view.duration.apply {
+            image.contentDescription = resources.getString(R.string.records_duration)
+            image.setImageResource(R.drawable.duration)
+            label.text = resources.getString(R.string.records_duration)
         }
-        distance = view.findViewById<ConstraintLayout>(R.id.distance).apply {
-            this.findViewById<ImageView>(R.id.image).contentDescription = resources.getString(R.string.records_distance)
-            this.findViewById<ImageView>(R.id.image).setImageResource(R.drawable.distance)
-            this.findViewById<TextView>(R.id.label).text = resources.getString(R.string.records_distance)
+        distance = view.distance.apply {
+            image.contentDescription = resources.getString(R.string.records_distance)
+            image.setImageResource(R.drawable.distance)
+            label.text = resources.getString(R.string.records_distance)
         }
-        elevation = view.findViewById<ConstraintLayout>(R.id.total_elevation).apply {
-            this.findViewById<ImageView>(R.id.image).contentDescription = resources.getString(R.string.records_elevation)
-            this.findViewById<ImageView>(R.id.image).setImageResource(R.drawable.elevation)
-            this.findViewById<TextView>(R.id.label).text = resources.getString(R.string.records_elevation)
+        elevation = view.total_elevation.apply {
+            image.contentDescription = resources.getString(R.string.records_elevation)
+            image.setImageResource(R.drawable.elevation)
+            label.text = resources.getString(R.string.records_elevation)
         }
 
         onActivityUpdate(ActivityRepository.all())
 
-        showActivitiesOrEmptyPage(view.no_activities_layout, view.findViewById(R.id.records))
+        showActivitiesOrEmptyPage(view.no_activities_layout, view.records)
 
         return view
     }
@@ -75,8 +71,8 @@ class ActivityRecordsFragment : ActivityFragment() {
 
             val durationActivity = activities.maxBy { it.durationInSeconds }!!
             val durationValue = durationActivity.durationInSeconds
-            duration!!.findViewById<TextView>(R.id.value).text = Measure.timeFragments(durationValue)
-            update(duration!!.findViewById<CardView>(R.id.activity), durationActivity)
+            duration!!.value.text = Measure.timeFragments(durationValue)
+            update(duration!!.activity, durationActivity)
 
             val distanceActivity = activities.maxBy { it.distanceInMeters }!!
             val distanceValue = distanceActivity.distanceInKilometers()
@@ -97,8 +93,8 @@ class ActivityRecordsFragment : ActivityFragment() {
         if (recordValue == 0.0) {
             record.visibility = GONE
         } else {
-            record.findViewById<TextView>(R.id.value).text = Measure.of(recordValue, unit, "")
-            update(record.findViewById<CardView>(R.id.activity), activity)
+            record.value.text = Measure.of(recordValue, unit, "")
+            update(record.activity, activity)
         }
     }
 
