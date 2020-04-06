@@ -25,7 +25,7 @@ class DistanceFragment : ActivityFragment() {
         viewpager = view.view_pager
         dayOfWeekChart = view.day_of_week_cart
 
-        onActivityUpdate(ActivityRepository.all())
+        onActivityUpdate(ActivityRepository.filterBySelectedSport())
 
         return view
     }

@@ -18,7 +18,7 @@ class ActivityHistoryFragment : ActivityFragment() {
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.activity_history_fragment, container, false)
 
-        historyAdapter = ActivityHistoryAdapter(ActivityRepository.all())
+        historyAdapter = ActivityHistoryAdapter(ActivityRepository.filterBySelectedSport())
         val recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)

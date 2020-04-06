@@ -18,7 +18,6 @@ abstract class ActivityFragment : Fragment() {
         return onCreate(inflater, container)
     }
 
-    private var lastPosition = 0
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -26,35 +25,25 @@ abstract class ActivityFragment : Fragment() {
         val spinner = menu!!.findItem(R.id.sport_filter).actionView as Spinner
 
         val sports = ActivityRepository.sports()
-        val items = listOf(resources.getString(R.string.all_sports)) + sports.map { resources.getString(it.title) }
         val adapter = ArrayAdapter(
             context!!,
             R.layout.spinner_dropdown_item,
-            items
+            sports.map { resources.getString(it.title) }
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
-        spinner.setSelection(lastPosition)
+        spinner.setSelection(ActivityRepository.selectedSportPosition())
 
-        spinner.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                onActivityUpdate(ActivityRepository.all())
+                ActivityRepository.changeSport(0) { activities ->
+                    onActivityUpdate(activities)
+                }
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                if(position == lastPosition)
-                    return
-
-                lastPosition = position
-                if (position == 0) {
-                    onActivityUpdate(ActivityRepository.all())
-                } else {
-                    onActivityUpdate(
-                        ActivityRepository.filterBy(
-                            sports[position - 1]
-                        )
-                    )
+                ActivityRepository.changeSport(position) { activities ->
+                    onActivityUpdate(activities)
                 }
             }
         }

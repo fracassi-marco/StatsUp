@@ -47,7 +47,7 @@ class ActivityRecordsFragment : ActivityFragment() {
             label.text = resources.getString(R.string.records_elevation)
         }
 
-        onActivityUpdate(ActivityRepository.all())
+        onActivityUpdate(ActivityRepository.filterBySelectedSport())
 
         showActivitiesOrEmptyPage(view.no_activities_layout, view.records)
 
@@ -108,7 +108,7 @@ class ActivityRecordsFragment : ActivityFragment() {
         }
     }
 
-    fun update(view: View, activity: Activity) {
+    private fun update(view: View, activity: Activity) {
         view.history_list_item_title_text.text = activity.title
         view.history_list_item_icon.setImageResource(activity.sport.icon)
         view.history_list_item_date_text.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm"))

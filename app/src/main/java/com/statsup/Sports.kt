@@ -1,7 +1,7 @@
 package com.statsup
 
 enum class Sports(val id: Long, val code: String, val title: Int, val icon: Int) {
-
+    All(0, "All", R.string.all_sports, R.drawable.workout),
     RUN(1, "Run", R.string.run_title_default, R.drawable.run),
     WALK(2, "Walk", R.string.walk_title_default, R.drawable.walk),
     WORKOUT(3, "Workout", R.string.workout_title_default, R.drawable.workout),

@@ -2,11 +2,13 @@ package com.statsup
 
 import android.content.ContentValues
 import android.content.Context
+import com.statsup.Sports.All
 
 
 object ActivityRepository {
 
     private var activities: List<Activity> = emptyList()
+    private var selectedSportPosition = 0
 
     fun clean(context: Context) {
         DbHelper(context).writableDatabase.use { it.delete("activities", null, null) }
@@ -67,11 +69,21 @@ object ActivityRepository {
 
     fun anyActivities()= activities.isNotEmpty()
 
-    fun all(): List<Activity> = activities
+    fun selectedSportPosition() = selectedSportPosition
 
-    fun sports(): List<Sports> = activities.map { it.sport }.distinct()
+    fun sports(): List<Sports> = listOf(All) + activities.map { it.sport }.distinct()
 
-    fun filterBy(sports: Sports): List<Activity> {
-        return all().filter { it.sport == sports }
+    fun filterBySelectedSport() =
+        if(selectedSportPosition == 0)
+            activities
+        else
+            activities.filter { it.sport == sports()[selectedSportPosition] }
+
+    fun changeSport(position: Int, callback: (List<Activity>) -> Unit) {
+        if(position == selectedSportPosition)
+            return
+
+        selectedSportPosition = position
+        callback(filterBySelectedSport())
     }
 }
