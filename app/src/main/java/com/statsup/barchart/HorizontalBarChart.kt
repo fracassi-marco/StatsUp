@@ -21,7 +21,6 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
     private var barHeight = 0
     private var labelSize = 0f
     private var valueSuffix = ""
-    private lateinit var linearParentLayout: LinearLayout
 
     init {
         val attributes = context.obtainStyledAttributes(attrs, HorizontalBarChart, 0, 0)
@@ -37,27 +36,34 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
         spacesBetweenBars = attributes.getDimensionPixelSize(HorizontalBarChart_spaces_between_bars, convertDpToPixel(5f, context))
         valueSuffix = attributes.getString(HorizontalBarChart_value_suffix) ?: ""
         attributes.recycle()
-        initLayout()
     }
 
-    private fun initLayout() {
-        linearParentLayout = LinearLayout(context)
+    private fun initLayout(): LinearLayout {
+        val linearParentLayout = LinearLayout(context)
         linearParentLayout.orientation = LinearLayout.VERTICAL
         linearParentLayout.layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         linearParentLayout.gravity = Gravity.START
-        this.addView(linearParentLayout)
+        return linearParentLayout
     }
 
     fun setData(maxBarValue: Int, bars: List<Bar>) {
+        removeAllViewsInLayout()
+        val linearParentLayout = initLayout()
+        addView(linearParentLayout)
         for (bar in bars) {
-            addBar(maxBarValue + 20, bar)
+            addBar(maxBarValue + 20, bar, linearParentLayout)
         }
     }
 
-    private fun createBar(maxBarValue: Int, dimension: Int, bar: Bar) {
+    private fun createBar(
+        maxBarValue: Int,
+        dimension: Int,
+        bar: Bar,
+        linearParentLayout: LinearLayout
+    ) {
         val view = LayoutInflater.from(context).inflate(R.layout.bar, linearParentLayout, false)
         view.linear_bar.setBackgroundColor(bar.color)
         view.text_view_bar_label.apply {
@@ -82,10 +88,14 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
             })
     }
 
-    private fun addBar(maxBarValue: Int, bar: Bar) {
+    private fun addBar(
+        maxBarValue: Int,
+        bar: Bar,
+        linearParentLayout: LinearLayout
+    ) {
         getDimension(linearParentLayout, object : DimensionReceivedCallback {
             override fun onDimensionReceived(dimension: Int) {
-                createBar(maxBarValue, dimension, bar)
+                createBar(maxBarValue, dimension, bar, linearParentLayout)
             }
         })
     }

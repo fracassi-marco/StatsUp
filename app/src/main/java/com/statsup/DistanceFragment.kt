@@ -1,8 +1,5 @@
 package com.statsup
 
-import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,46 +11,56 @@ import com.statsup.barchart.HorizontalBarChart
 import kotlinx.android.synthetic.main.distance_fragment.view.*
 import lecho.lib.hellocharts.view.LineChartView
 
-class DistanceFragment : Fragment() {
+class DistanceFragment : ActivityFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    private var dayOfWeekChart: HorizontalBarChart? = null
+    private var viewpager: DynamicHeightViewPager? = null
+    private var monthOverMonthChart: LineChartView? = null
+    private var monthOverMonthChartTitle: TextView? = null
+
+    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.distance_fragment, container, false)
-        val monthOverMonthChart = view.month_over_month_chart
-        val monthOverMonthChartTitle = view.month_over_month_title
+        monthOverMonthChart = view.month_over_month_chart
+        monthOverMonthChartTitle = view.month_over_month_title
+        viewpager = view.view_pager
+        dayOfWeekChart = view.day_of_week_cart
 
-        val subject = ActivityRepository.all()
-        val values = Distances(Activities(subject))
-        refreshBarCharts(values, view.view_pager)
-        refreshDayOfWeekChart(values, view.day_of_week_cart)
-        refreshMonthOverMonthChart(values, monthOverMonthChart, monthOverMonthChartTitle)
+        onActivityUpdate(ActivityRepository.all())
 
         return view
     }
 
-    private fun refreshMonthOverMonthChart(
-        values: Value,
-        monthOverMonthChart: LineChartView,
-        monthOverMonthTitle: TextView
-    ) {
-        MonthOverMonthChart(monthOverMonthChart, monthOverMonthTitle, DISTANCE.color).refresh(values)
+    private fun refreshMonthOverMonthChart(values: Value) {
+        MonthOverMonthChart(monthOverMonthChart!!, monthOverMonthChartTitle!!, DISTANCE.color).refresh(values)
     }
 
-    private fun refreshDayOfWeekChart(values: Value, dayOfWeekChart: HorizontalBarChart) {
+    private fun refreshDayOfWeekChart(values: Value) {
         val bars = values.groupByDay().map {
             Bar(percentage(it.value, values.total()), DISTANCE.color, it.key.label)
         }
 
-        dayOfWeekChart.setData(100, bars)
+        dayOfWeekChart!!.setData(100, bars)
     }
 
-    private fun refreshBarCharts(values: Value, viewpager: ViewPager) {
-        val adapter = YearlyChartsPagerAdapter(context!!, DISTANCE.color, "Chilometri percorsi ", values)
-        viewpager.adapter = adapter
-        viewpager.currentItem = adapter.count - 1
+    private fun refreshBarCharts(values: Value) {
+        val adapter = YearlyChartsPagerAdapter(context!!, DISTANCE.color, DISTANCE.unit, values)
+        viewpager!!.adapter = adapter
+        viewpager!!.currentItem = adapter.count - 1
+    }
+
+    override fun onActivityUpdate(activities: List<Activity>) {
+        val values = DISTANCE.valueProvider(Activities(activities))
+        refreshBarCharts(values)
+        refreshDayOfWeekChart(values)
+        refreshMonthOverMonthChart(values)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        dayOfWeekChart = null
+        viewpager = null
+        monthOverMonthChart = null
+        monthOverMonthChartTitle = null
     }
 }
 

@@ -8,6 +8,8 @@ import android.support.v4.view.GravityCompat.START
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
@@ -140,5 +142,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         progressbar.bringToFront()
         window.setFlags(FLAG_NOT_TOUCHABLE, FLAG_NOT_TOUCHABLE)
     }
-
 }

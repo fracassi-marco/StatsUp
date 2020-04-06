@@ -16,7 +16,7 @@ data class Activity(val id: Long, val sport: Sports, val distanceInMeters: Float
         return distanceInMeters / 1000.0
     }
 
-    fun averageSpeedInKmH() = distanceInKilometers() / durationInHours()
+    fun averageSpeedInKilometersPerHours() = distanceInKilometers() / durationInHours()
 
     fun maxSpeedInKilometersPerHours() = maxSpeedInMetersPerSecond * 3.6
 }

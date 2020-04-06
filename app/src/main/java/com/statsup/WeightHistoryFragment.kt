@@ -45,7 +45,7 @@ class WeightHistoryFragment : Fragment() {
     }
 
     private fun showContentOrEmptyPage(noItemView: View, contentView: View) {
-        if (ActivityRepository.anyActivities()) {
+        if (WeightRepository.any()) {
             noItemView.visibility = GONE
             contentView.visibility = VISIBLE
         } else {

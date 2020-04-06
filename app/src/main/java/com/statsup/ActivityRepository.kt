@@ -68,4 +68,10 @@ object ActivityRepository {
     fun anyActivities()= activities.isNotEmpty()
 
     fun all(): List<Activity> = activities
+
+    fun sports(): List<Sports> = activities.map { it.sport }.distinct()
+
+    fun filterBy(sports: Sports): List<Activity> {
+        return all().filter { it.sport == sports }
+    }
 }

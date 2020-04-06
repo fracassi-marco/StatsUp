@@ -1,7 +1,5 @@
 package com.statsup
 
-import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -11,20 +9,20 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_history_fragment.view.*
 import kotlinx.android.synthetic.main.no_activities_layout.view.*
 
-//https://stackoverflow.com/questions/30895580/recyclerview-no-adapter-attached-skipping-layout-for-recyclerview-in-fragmen
-class ActivityHistoryFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+//https://stackoverflow.com/questions/30895580/recyclerview-no-adapter-attached-skipping-layout-for-recyclerview-in-fragmen
+class ActivityHistoryFragment : ActivityFragment() {
+
+    private lateinit var historyAdapter: ActivityHistoryAdapter
+
+    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.activity_history_fragment, container, false)
 
+        historyAdapter = ActivityHistoryAdapter(ActivityRepository.all())
         val recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ActivityHistoryAdapter(ActivityRepository.all())
+        recyclerView.adapter = historyAdapter
         recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 
         view.no_activities_layout.import_button.setOnClickListener {
@@ -44,6 +42,10 @@ class ActivityHistoryFragment : Fragment() {
             noItemLayout.visibility = VISIBLE
             viewPager.visibility = GONE
         }
+    }
+
+    override fun onActivityUpdate(activities: List<Activity>) {
+        historyAdapter.update(activities)
     }
 }
 

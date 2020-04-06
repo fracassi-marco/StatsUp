@@ -42,7 +42,7 @@ class WeightStatsFragment : Fragment() {
     }
 
     private fun showActivitiesOrEmptyPage(noItemLayout: View, viewPager: View) {
-        if (ActivityRepository.anyActivities()) {
+        if (WeightRepository.any()) {
             noItemLayout.visibility = View.GONE
             viewPager.visibility = View.VISIBLE
         } else {
