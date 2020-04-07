@@ -57,7 +57,7 @@ class BmiFragment : Fragment() {
         minMaxOverviewItem.left_value.textSize = 21f
         minMaxOverviewItem.left_text.text = getString(R.string.bmi_min)
 
-        minMaxOverviewItem.center_value.text = Bmi.labelFor(weights.last(), height)
+        minMaxOverviewItem.center_value.text = Bmi.labelFor(weights.first(), height)
         minMaxOverviewItem.center_value.textSize = 26f
         minMaxOverviewItem.center_text.text = getString(R.string.bmi_current)
 
@@ -79,6 +79,6 @@ class BmiFragment : Fragment() {
             Segment(25f, 29.99f, "25 - 30", getString(R.string.bmi_high), Color.parseColor("#f4c836")),
             Segment(30f, 50f, "> 30", getString(R.string.bmi_too_high), Color.parseColor("#f44336"))
         ))
-        bmiChart.setValue(Bmi.valueFor(weights.last(), height).toFloat().round(2))
+        bmiChart.setValue(Bmi.valueFor(weights.first(), height).toFloat().round(2))
     }
 }
