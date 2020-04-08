@@ -3,10 +3,25 @@ package com.statsup
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
-
 import java.util.*
 
 class ActivitiesTest {
+
+
+    @Test
+    fun `group dy day`() {
+        val activities = Activities(
+            listOf(
+                on(2019, 6, 1),
+                on(2019, 6, 2),
+                on(2019, 6, 7)
+            ), GregorianCalendar(2019, 1, 1)
+        )
+
+        val days = activities.groupByDay { it.size.toDouble() }
+
+        assertThat(days.values.toList(), `is`(listOf(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)))
+    }
 
     @Test
     fun `average of one month`() {
@@ -19,11 +34,13 @@ class ActivitiesTest {
 
     @Test
     fun `average of two month`() {
-        val activities = Activities(listOf(
-            on(2019, 0, 1),
-            on(2019, 0, 1),
-            on(2019, 1, 1)
-        ), GregorianCalendar(2019, 1, 1))
+        val activities = Activities(
+            listOf(
+                on(2019, 0, 1),
+                on(2019, 0, 1),
+                on(2019, 1, 1)
+            ), GregorianCalendar(2019, 1, 1)
+        )
 
         val average = activities.average { it.size.toDouble() }
 
@@ -32,15 +49,17 @@ class ActivitiesTest {
 
     @Test
     fun `average of two years`() {
-        val activities = Activities(listOf(
-            on(2018, 7, 1),
-            on(2018, 8, 1),
-            on(2018, 9, 1),
-            on(2018, 10, 1),
-            on(2018, 11, 1),
-            on(2019, 0, 1),
-            on(2019, 1, 1)
-        ), GregorianCalendar(2019, 1, 1))
+        val activities = Activities(
+            listOf(
+                on(2018, 7, 1),
+                on(2018, 8, 1),
+                on(2018, 9, 1),
+                on(2018, 10, 1),
+                on(2018, 11, 1),
+                on(2019, 0, 1),
+                on(2019, 1, 1)
+            ), GregorianCalendar(2019, 1, 1)
+        )
 
         val average = activities.average { it.size.toDouble() }
 
@@ -49,11 +68,13 @@ class ActivitiesTest {
 
     @Test
     fun `average of current year`() {
-        val activities = Activities(listOf(
-            on(2018, 11, 1),
-            on(2019, 0, 1),
-            on(2019, 0, 1)
-        ), GregorianCalendar(2019, 1, 1))
+        val activities = Activities(
+            listOf(
+                on(2018, 11, 1),
+                on(2019, 0, 1),
+                on(2019, 0, 1)
+            ), GregorianCalendar(2019, 1, 1)
+        )
 
         val average = activities.averageOfYear(1) { it.size.toDouble() }
 
@@ -62,11 +83,13 @@ class ActivitiesTest {
 
     @Test
     fun `average of past year`() {
-        val activities = Activities(listOf(
-            on(2018, 11, 1),
-            on(2019, 0, 1),
-            on(2019, 0, 1)
-        ), GregorianCalendar(2019, 1, 1))
+        val activities = Activities(
+            listOf(
+                on(2018, 11, 1),
+                on(2019, 0, 1),
+                on(2019, 0, 1)
+            ), GregorianCalendar(2019, 1, 1)
+        )
 
         val average = activities.averageOfYear(0) { it.size.toDouble() }
 
@@ -74,5 +97,14 @@ class ActivitiesTest {
     }
 
     private fun on(year: Int, month: Int, day: Int) =
-        Activity(Sports.WORKOUT, 0f, 0, GregorianCalendar(year, month, day).time.time, "")
+        Activity(
+            1,
+            Sports.WORKOUT,
+            0f,
+            0,
+            GregorianCalendar(year, month, day).time.time,
+            "",
+            1.0,
+            1.0
+        )
 }

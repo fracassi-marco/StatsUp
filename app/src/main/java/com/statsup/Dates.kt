@@ -19,7 +19,7 @@ enum class Months(private val index: Int, val label: String) {
     }
 }
 
-enum class Days(private val index: Int, val label: String) {
+enum class Days(val index: Int, val label: String) {
     Monday(1, "Lun"),
     Tuesday(2, "Mar"),
     Wednesday(3, "Mer"),

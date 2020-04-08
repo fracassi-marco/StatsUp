@@ -46,13 +46,13 @@ class Activities(private val activities: List<Activity>, private val today: Cale
         return result
     }
 
-    fun average(value: (List<Activity>) -> Double) : Double {
+    fun average(value: (List<Activity>) -> Double): Double {
         val sum = byMonth()
             .sumByDouble { value.invoke(it) }
         return sum / numberOfMonths()
     }
 
-    fun averageOfYear(position: Int, value: (List<Activity>) -> Double) : Double {
+    fun averageOfYear(position: Int, value: (List<Activity>) -> Double): Double {
         val sum = ofYearInPosition(position)
             .values
             .sumByDouble { value.invoke(it) }
@@ -89,12 +89,12 @@ class Activities(private val activities: List<Activity>, private val today: Cale
         return cumulativeOfMonth(13 - currentMonth(), value)
     }
 
-    fun groupByDay(cane: (List<Activity>) -> Double): Map<Days, Double> {
-        return activities
-            .groupBy { it.date().dayOfWeek }
-            .map { Days.byIndex(it.key) to cane.invoke(it.value) }
-            .toMap()
-            .toSortedMap()
+    fun groupByDay(provider: (List<Activity>) -> Double): Map<Days, Double> {
+        val byDay = activities.groupBy { it.date().dayOfWeek }
+
+        return Days.values().map { day ->
+            day to provider.invoke(byDay.getOrElse(day.index) { emptyList() })
+        }.toMap()
     }
 
     private fun cumulativeOfMonth(index: Int, value: (List<Activity>) -> Double): List<Double> {
