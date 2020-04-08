@@ -5,8 +5,7 @@ import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_history_list_item.view.*
-import org.joda.time.format.DateTimeFormat
+import com.statsup.ActivityView.fill
 
 
 class ActivityHistoryAdapter(private var dataSet: List<Activity>) : RecyclerView.Adapter<ActivityHistoryAdapter.Holder>() {
@@ -20,14 +19,7 @@ class ActivityHistoryAdapter(private var dataSet: List<Activity>) : RecyclerView
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val activity = dataSet[position]
-
-        holder.layout.history_list_item_title_text.text = activity.title
-        holder.layout.history_list_item_icon.setImageResource(activity.sport.icon)
-        holder.layout.history_list_item_date_text.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm"))
-        holder.layout.history_list_item_time_text.text = Measure.timeFragments(activity.durationInSeconds)
-        holder.layout.history_list_item_distance_text.text = Measure.of(activity.distanceInKilometers(), "Km", "")
-        holder.layout.history_list_item_pace_text.text = ""
+        fill(holder.layout, dataSet[position])
     }
 
     fun update(newItems: List<Activity>) {

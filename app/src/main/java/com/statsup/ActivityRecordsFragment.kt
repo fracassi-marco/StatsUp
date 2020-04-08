@@ -5,11 +5,10 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_history_list_item.view.*
+import com.statsup.ActivityView.fill
 import kotlinx.android.synthetic.main.activity_records_fragment.view.*
 import kotlinx.android.synthetic.main.no_activities_layout.view.*
 import kotlinx.android.synthetic.main.record_item.view.*
-import org.joda.time.format.DateTimeFormat
 
 class ActivityRecordsFragment : ActivityFragment() {
 
@@ -72,7 +71,7 @@ class ActivityRecordsFragment : ActivityFragment() {
             val durationActivity = activities.maxBy { it.durationInSeconds }!!
             val durationValue = durationActivity.durationInSeconds
             duration!!.value.text = Measure.timeFragments(durationValue)
-            update(duration!!.activity, durationActivity)
+            fill(duration!!.activity, durationActivity)
 
             val distanceActivity = activities.maxBy { it.distanceInMeters }!!
             val distanceValue = distanceActivity.distanceInKilometers()
@@ -94,7 +93,7 @@ class ActivityRecordsFragment : ActivityFragment() {
             record.visibility = GONE
         } else {
             record.value.text = Measure.of(recordValue, unit, "")
-            update(record.activity, activity)
+            fill(record.activity, activity)
         }
     }
 
@@ -106,15 +105,6 @@ class ActivityRecordsFragment : ActivityFragment() {
             noItemLayout.visibility = VISIBLE
             viewPager.visibility = GONE
         }
-    }
-
-    private fun update(view: View, activity: Activity) {
-        view.history_list_item_title_text.text = activity.title
-        view.history_list_item_icon.setImageResource(activity.sport.icon)
-        view.history_list_item_date_text.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy\nHH:mm"))
-        view.history_list_item_time_text.text = Measure.timeFragments(activity.durationInSeconds)
-        view.history_list_item_distance_text.text = Measure.of(activity.distanceInKilometers(), "Km", "")
-        view.history_list_item_pace_text.text = ""
     }
 
     override fun onDestroyView() {

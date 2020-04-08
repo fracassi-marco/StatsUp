@@ -31,6 +31,7 @@ class WeightHistoryAdapter : RecyclerView.Adapter<WeightHistoryAdapter.Holder>()
                         layout.context,
                         dataSet[adapterPosition]
                     )
+                    update(WeightRepository.all())
                 }
                 .show()
         }
