@@ -35,11 +35,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/average_speed" />
 
             <include
-                    android:id="@+id/duration"
+                    android:id="@+id/pace"
                     layout="@layout/record_item"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/speed" />
+
+            <include
+                    android:id="@+id/duration"
+                    layout="@layout/record_item"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pace" />
 
             <include
                     android:id="@+id/distance"

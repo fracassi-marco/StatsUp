@@ -9,11 +9,13 @@ import com.statsup.ActivityView.fill
 import kotlinx.android.synthetic.main.activity_records_fragment.view.*
 import kotlinx.android.synthetic.main.no_activities_layout.view.*
 import kotlinx.android.synthetic.main.record_item.view.*
+import kotlin.Int.Companion.MAX_VALUE
 
 class ActivityRecordsFragment : ActivityFragment() {
 
     private var averageSpeed: View?  = null
     private var speed: View? = null
+    private var pace: View? = null
     private var duration: View? = null
     private var distance: View? = null
     private var elevation: View? = null
@@ -29,6 +31,11 @@ class ActivityRecordsFragment : ActivityFragment() {
             image.contentDescription = resources.getString(R.string.records_speed)
             image.setImageResource(R.drawable.speed)
             label.text = resources.getString(R.string.records_speed)
+        }
+        pace = view.pace.apply {
+            image.contentDescription = resources.getString(R.string.records_pace)
+            image.setImageResource(R.drawable.pace)
+            label.text = resources.getString(R.string.records_pace)
         }
         duration = view.duration.apply {
             image.contentDescription = resources.getString(R.string.records_duration)
@@ -56,6 +63,7 @@ class ActivityRecordsFragment : ActivityFragment() {
     override fun onActivityUpdate(activities: List<Activity>) {
         averageSpeed!!.visibility = VISIBLE
         speed!!.visibility = VISIBLE
+        pace!!.visibility = VISIBLE
         duration!!.visibility = VISIBLE
         distance!!.visibility = VISIBLE
         elevation!!.visibility = VISIBLE
@@ -68,10 +76,25 @@ class ActivityRecordsFragment : ActivityFragment() {
             val speedValue = speedActivity.maxSpeedInKilometersPerHours()
             update(speed!!, speedValue, speedActivity, " Km/h")
 
+            val paceActivity = activities.minBy { it.paceInSecondsPerKilometer() }!!
+            val paceValue = paceActivity.paceInSecondsPerKilometer()
+            if(paceValue == MAX_VALUE) {
+                pace!!.visibility = GONE
+            }
+            else {
+                pace!!.value.text = Measure.minutesAndSeconds(paceValue, "/Km")
+                fill(pace!!.activity, paceActivity)
+            }
+
             val durationActivity = activities.maxBy { it.durationInSeconds }!!
             val durationValue = durationActivity.durationInSeconds
-            duration!!.value.text = Measure.timeFragments(durationValue)
-            fill(duration!!.activity, durationActivity)
+            if(durationValue == 0) {
+                duration!!.visibility = GONE
+            }
+            else {
+                duration!!.value.text = Measure.timeFragments(durationValue)
+                fill(duration!!.activity, durationActivity)
+            }
 
             val distanceActivity = activities.maxBy { it.distanceInMeters }!!
             val distanceValue = distanceActivity.distanceInKilometers()
@@ -112,6 +135,7 @@ class ActivityRecordsFragment : ActivityFragment() {
 
         averageSpeed = null
         speed = null
+        pace = null
         duration = null
         distance = null
         elevation = null

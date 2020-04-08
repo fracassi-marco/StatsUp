@@ -1,6 +1,8 @@
 package com.statsup
 
 import java.util.*
+import java.util.Calendar.MONTH
+import java.util.Calendar.YEAR
 
 class Activities(private val activities: List<Activity>, private val today: Calendar) {
     constructor(activities: List<Activity>) : this(activities, GregorianCalendar())
@@ -118,8 +120,8 @@ class Activities(private val activities: List<Activity>, private val today: Cale
         return 12
     }
 
-    private fun actualYear() = today.get(Calendar.YEAR)
+    private fun actualYear() = today.get(YEAR)
 
-    private fun currentMonth() = today.get(Calendar.MONTH)
+    private fun currentMonth() = today.get(MONTH)
 
 }
