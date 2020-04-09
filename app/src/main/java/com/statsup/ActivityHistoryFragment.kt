@@ -3,9 +3,8 @@ package com.statsup
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
+import com.statsup.Content.showActivitiesOrEmptyPage
 import kotlinx.android.synthetic.main.activity_history_fragment.view.*
 import kotlinx.android.synthetic.main.no_activities_layout.view.*
 
@@ -29,19 +28,9 @@ class ActivityHistoryFragment : ActivityFragment() {
             (activity as MainActivity).startImportFromStrava()
         }
 
-        showContentOrEmptyPage(view.no_activities_layout, view.recycler_view)
+        showActivitiesOrEmptyPage(view.no_activities_layout, view.recycler_view)
 
         return view
-    }
-
-    private fun showContentOrEmptyPage(noItemLayout: View, viewPager: View) {
-        if (ActivityRepository.anyActivities()) {
-            noItemLayout.visibility = GONE
-            viewPager.visibility = VISIBLE
-        } else {
-            noItemLayout.visibility = VISIBLE
-            viewPager.visibility = GONE
-        }
     }
 
     override fun onActivityUpdate(activities: List<Activity>) {

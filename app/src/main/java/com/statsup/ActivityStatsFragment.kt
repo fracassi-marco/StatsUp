@@ -1,14 +1,12 @@
 package com.statsup
 
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
+import com.statsup.Content.showActivitiesOrEmptyPage
 import kotlinx.android.synthetic.main.activity_stats_fragment.view.*
 import kotlinx.android.synthetic.main.no_activities_layout.view.*
 
@@ -46,16 +44,6 @@ class ActivityStatsFragment : Fragment() {
         showActivitiesOrEmptyPage(view.no_activities_layout, viewPager)
 
         return view
-    }
-
-    private fun showActivitiesOrEmptyPage(noItemLayout: View, viewPager: View) {
-        if (ActivityRepository.anyActivities()) {
-            noItemLayout.visibility = GONE
-            viewPager.visibility = VISIBLE
-        } else {
-            noItemLayout.visibility = VISIBLE
-            viewPager.visibility = GONE
-        }
     }
 }
 

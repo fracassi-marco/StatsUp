@@ -6,6 +6,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.statsup.ActivityView.fill
+import com.statsup.Content.showActivitiesOrEmptyPage
 import kotlinx.android.synthetic.main.activity_records_fragment.view.*
 import kotlinx.android.synthetic.main.no_activities_layout.view.*
 import kotlinx.android.synthetic.main.record_item.view.*
@@ -117,16 +118,6 @@ class ActivityRecordsFragment : ActivityFragment() {
         } else {
             record.value.text = Measure.of(recordValue, unit, "", "- ")
             fill(record.activity, activity)
-        }
-    }
-
-    private fun showActivitiesOrEmptyPage(noItemLayout: View, viewPager: View) {
-        if (ActivityRepository.anyActivities()) {
-            noItemLayout.visibility = GONE
-            viewPager.visibility = VISIBLE
-        } else {
-            noItemLayout.visibility = VISIBLE
-            viewPager.visibility = GONE
         }
     }
 

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.statsup.Content.showWeightsOrEmptyPage
 import kotlinx.android.synthetic.main.no_items_layout.view.*
 import kotlinx.android.synthetic.main.weight_stats_fragment.view.*
 
@@ -36,19 +37,9 @@ class WeightStatsFragment : NoMenuFragment() {
             })
         }
 
-        showActivitiesOrEmptyPage(view.no_items_layout, viewPager)
+        showWeightsOrEmptyPage(view.no_items_layout, viewPager)
 
         return view
-    }
-
-    private fun showActivitiesOrEmptyPage(noItemLayout: View, viewPager: View) {
-        if (WeightRepository.any()) {
-            noItemLayout.visibility = View.GONE
-            viewPager.visibility = View.VISIBLE
-        } else {
-            noItemLayout.visibility = View.VISIBLE
-            viewPager.visibility = View.GONE
-        }
     }
 }
 

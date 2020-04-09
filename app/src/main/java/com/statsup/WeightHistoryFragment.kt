@@ -1,19 +1,15 @@
 package com.statsup
 
 import android.content.Intent
-import android.os.Bundle
 import android.support.constraint.ConstraintLayout
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
+import com.statsup.Content.showWeightsOrEmptyPage
 import kotlinx.android.synthetic.main.no_items_layout.view.*
 import kotlinx.android.synthetic.main.weight_history_fragment.view.*
-import org.joda.time.DateTime
 
 class WeightHistoryFragment : NoMenuFragment() {
     private var noItemsLayout: ConstraintLayout? = null
@@ -46,17 +42,7 @@ class WeightHistoryFragment : NoMenuFragment() {
             adapter.update(items)
         }
 
-        showContentOrEmptyPage(noItemsLayout!!, recyclerView!!)
-    }
-
-    private fun showContentOrEmptyPage(noItemView: View, contentView: View) {
-        if (WeightRepository.any()) {
-            noItemView.visibility = GONE
-            contentView.visibility = VISIBLE
-        } else {
-            noItemView.visibility = VISIBLE
-            contentView.visibility = GONE
-        }
+        showWeightsOrEmptyPage(noItemsLayout!!, recyclerView!!)
     }
 
     override fun onDestroyView() {
