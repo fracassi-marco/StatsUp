@@ -115,7 +115,7 @@ class ActivityRecordsFragment : ActivityFragment() {
         if (recordValue == 0.0) {
             record.visibility = GONE
         } else {
-            record.value.text = Measure.of(recordValue, unit, "")
+            record.value.text = Measure.of(recordValue, unit, "", "- ")
             fill(record.activity, activity)
         }
     }

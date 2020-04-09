@@ -11,52 +11,61 @@
             android:id="@+id/history_list_item_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="8dp"
             android:background="@android:color/white">
 
         <TextView
                 android:id="@+id/history_list_item_title_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="10dp"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:layout_constraintLeft_creator="1"
-                tools:layout_constraintTop_creator="1"
+                app:layout_constraintStart_toStartOf="parent"
                 tools:text="Walk - My favourite activity" />
+
+        <TextView
+                android:id="@+id/history_list_item_date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                app:layout_constraintBaseline_toBaselineOf="@id/history_list_item_title_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="04/10/2017 18:11:23" />
 
         <ImageView
                 android:id="@+id/history_list_item_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintTop_toBottomOf="@+id/history_list_item_title_text"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="@string/activity_sport"
                 tools:src="@drawable/run" />
 
         <ImageView
                 android:id="@+id/history_list_item_distance_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintTop_toBottomOf="@+id/history_list_item_title_text"
-                app:layout_constraintLeft_toRightOf="@+id/history_list_item_icon"
-                android:src="@drawable/outline_place_24" />
+                app:layout_constraintStart_toEndOf="@+id/history_list_item_icon"
+                android:src="@drawable/outline_place_24"
+                android:contentDescription="@string/activity_distance"/>
 
         <TextView
                 android:id="@+id/history_list_item_distance_text"
-                android:layout_width="wrap_content"
+                android:layout_width="@+id/history_list_item_time_text"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintLeft_toRightOf="@+id/history_list_item_distance_icon"
+                app:layout_constraintStart_toEndOf="@+id/history_list_item_distance_icon"
+                app:layout_constraintEnd_toEndOf="@+id/history_list_item_time_text"
                 app:layout_constraintTop_toTopOf="@+id/history_list_item_distance_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/history_list_item_distance_icon"
                 tools:text="2.34 km" />
@@ -65,59 +74,75 @@
                 android:id="@+id/history_list_item_duration_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintTop_toBottomOf="@+id/history_list_item_distance_icon"
-                app:layout_constraintLeft_toRightOf="@+id/history_list_item_icon"
-                android:src="@drawable/outline_timer_24" />
+                app:layout_constraintStart_toEndOf="@+id/history_list_item_icon"
+                android:src="@drawable/outline_timer_24"
+                android:contentDescription="@string/activity_duration"/>
 
         <TextView
                 android:id="@+id/history_list_item_time_text"
-                android:layout_width="wrap_content"
+                android:layout_width="@id/history_list_item_distance_text"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintLeft_toRightOf="@+id/history_list_item_duration_icon"
+                app:layout_constraintStart_toEndOf="@+id/history_list_item_duration_icon"
                 app:layout_constraintTop_toTopOf="@+id/history_list_item_duration_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/history_list_item_duration_icon"
                 tools:text="0h 21m 33s" />
-
-        <TextView
-                android:id="@+id/history_list_item_date_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="0dp"
-                android:textAlignment="textEnd"
-                app:layout_constraintBaseline_toBaselineOf="@id/history_list_item_distance_text"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="04/10/2017 18:11:23" />
 
         <ImageView
                 android:id="@+id/history_list_item_pace_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
                 android:adjustViewBounds="true"
-                app:layout_constraintTop_toBottomOf="@+id/history_list_item_date_text"
-                app:layout_constraintRight_toLeftOf="@+id/history_list_item_pace_text"
-                android:src="@drawable/outline_restore_24" />
+                app:layout_constraintTop_toBottomOf="@+id/history_list_item_title_text"
+                app:layout_constraintStart_toEndOf="@+id/history_list_item_distance_text"
+                android:src="@drawable/outline_restore_24"
+                android:contentDescription="@string/activity_pace"/>
 
         <TextView
                 android:id="@+id/history_list_item_pace_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="8dp"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintBaseline_toBaselineOf="@id/history_list_item_time_text"
-                app:layout_constraintRight_toRightOf="@+id/history_list_item_date_text"
+                app:layout_constraintTop_toTopOf="@id/history_list_item_pace_icon"
+                app:layout_constraintBottom_toBottomOf="@id/history_list_item_pace_icon"
+                app:layout_constraintStart_toEndOf="@+id/history_list_item_pace_icon"
+                app:layout_constraintEnd_toEndOf="@+id/history_list_item_elevation_text"
                 tools:text="7:40/m" />
+
+        <ImageView
+                android:id="@+id/history_list_item_elevation_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintTop_toBottomOf="@+id/history_list_item_pace_icon"
+                app:layout_constraintStart_toEndOf="@+id/history_list_item_time_text"
+                android:src="@drawable/outline_trending_up_24"
+                android:contentDescription="@string/activity_elevation" />
+
+        <TextView
+                android:id="@+id/history_list_item_elevation_text"
+                android:layout_width="@+id/history_list_item_pace_text"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="@id/history_list_item_elevation_icon"
+                app:layout_constraintBottom_toBottomOf="@id/history_list_item_elevation_icon"
+                app:layout_constraintStart_toEndOf="@+id/history_list_item_elevation_icon"
+                app:layout_constraintEnd_toEndOf="@+id/history_list_item_pace_text"
+                tools:text="280 m" />
 
     </android.support.constraint.ConstraintLayout>
 
