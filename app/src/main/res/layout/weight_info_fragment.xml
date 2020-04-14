@@ -17,7 +17,7 @@
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:paddingTop="8dp">
 
             <android.support.constraint.ConstraintLayout
                     android:id="@+id/overview"
@@ -25,8 +25,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/border"
                     android:layout_margin="5dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:translationY="-240dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
