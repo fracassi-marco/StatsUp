@@ -4,14 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.statsup.strava.StravaLoginActivity
+import com.statsup.strava.StravaLoginActivity.EXTRA_LOGIN_URL
+import com.statsup.strava.StravaLoginActivity.EXTRA_REDIRECT_URL
 
 class StravaLogin(private val context: Context, private val clientId: String) {
 
-
     fun makeIntent(): Intent {
         val intent = Intent(context, StravaLoginActivity::class.java)
-        intent.putExtra("StravaLoginActivity.EXTRA_LOGIN_URL", makeLoginURL())
-        intent.putExtra("StravaLoginActivity.EXTRA_REDIRECT_URL", "oauth://com-sportshub")
+        intent.putExtra(EXTRA_LOGIN_URL, makeLoginURL())
+        intent.putExtra(EXTRA_REDIRECT_URL, "oauth://com-sportshub")
         return intent
     }
 

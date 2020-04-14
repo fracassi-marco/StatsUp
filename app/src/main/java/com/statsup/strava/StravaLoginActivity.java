@@ -27,7 +27,7 @@ public class StravaLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_strava_login);
 
-        loginWebview = (WebView) findViewById(R.id.login_webview);
+        loginWebview = findViewById(R.id.login_webview);
 
         configureWebViewClient();
         loadLoginURL();

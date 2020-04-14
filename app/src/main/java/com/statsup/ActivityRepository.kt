@@ -86,4 +86,6 @@ object ActivityRepository {
         selectedSportPosition = position
         callback(filterBySelectedSport())
     }
+
+    fun byId(id: Long)= activities.single { it.id == id }
 }
