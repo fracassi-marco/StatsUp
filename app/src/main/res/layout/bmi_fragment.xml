@@ -19,8 +19,22 @@
                 android:layout_height="match_parent"
                 android:paddingTop="8dp">
 
+            <TextView
+                    android:id="@+id/bmi_oxford_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:text="@string/bmi_oxford_title"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
             <mobi.gspd.segmentedbarview.SegmentedBarView
-                    android:id="@+id/bmiChart"
+                    android:id="@+id/bmi_oxford_chart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
@@ -34,20 +48,72 @@
                     app:sbv_value_sign_round="8dp"
                     app:sbv_value_sign_width="44dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bmi_oxford_title"
             />
 
             <android.support.constraint.ConstraintLayout
-                    android:id="@+id/overview"
+                    android:id="@+id/bmi_oxford_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border"
                     android:layout_margin="5dp"
-                    app:layout_constraintTop_toBottomOf="@id/bmiChart"
+                    app:layout_constraintTop_toBottomOf="@id/bmi_oxford_chart"
                     app:layout_constraintStart_toStartOf="parent">
 
                 <include
-                        android:id="@+id/min_max_overview_item"
+                        android:id="@+id/bmi_oxford_min_max_overview_item"
+                        layout="@layout/overview_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="65dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="1.0"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <TextView
+                    android:id="@+id/bmi_classic_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:text="@string/bmi_classic_title"
+                    app:layout_constraintTop_toBottomOf="@+id/bmi_oxford_overview"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            <mobi.gspd.segmentedbarview.SegmentedBarView
+                    android:id="@+id/bmi_classic_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    app:sbv_empty_segment_text="No segments"
+                    app:sbv_segment_gap_width="4dp"
+                    app:sbv_segment_text_size="16sp"
+                    app:sbv_show_description_text="true"
+                    app:sbv_side_style="rounded"
+                    app:sbv_side_text_style="twoSided"
+                    app:sbv_value_sign_height="30dp"
+                    app:sbv_value_sign_round="8dp"
+                    app:sbv_value_sign_width="44dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bmi_classic_title"
+                    />
+
+            <android.support.constraint.ConstraintLayout
+                    android:id="@+id/bmi_classic_overview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:layout_margin="5dp"
+                    app:layout_constraintTop_toBottomOf="@id/bmi_classic_chart"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                <include
+                        android:id="@+id/bmi_classic_min_max_overview_item"
                         layout="@layout/overview_item"
                         android:layout_width="match_parent"
                         android:layout_height="65dp"

@@ -35,6 +35,8 @@
     <string name="height_unit_cm">Cm</string>
     <string name="height_editor_value_text">Altezza in centimetri</string>
 
+    <string name="bmi_oxford_title">Body Mass Index (Oxford)</string>
+    <string name="bmi_classic_title">Body Mass Index (Classico)</string>
     <string name="bmi_min">BMI minimo</string>
     <string name="bmi_max">BMI massimo</string>
     <string name="bmi_current">BMI attuale</string>

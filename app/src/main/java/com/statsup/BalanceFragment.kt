@@ -1,6 +1,5 @@
 package com.statsup
 
-import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.graphics.Color.RED
 import android.os.Bundle
@@ -74,7 +73,7 @@ class BalanceFragment : Fragment() {
         val monthVariationOverviewItem = view.month_variation_overview_item
         val yearVariationOverviewItem = view.year_variation_overview_item
         val fullVariationOverviewItem = view.full_variation_overview_item
-        val minMaxOverviewItem = view.min_max_overview_item
+        val minMaxOverviewItem = view.bmi_oxford_min_max_overview_item
 
         val weights = WeightRepository.all().sortedBy { it.dateInMillis }
         updateChart(weights, lineChart)

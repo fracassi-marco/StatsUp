@@ -72,10 +72,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/year_label"
-            app:layout_constraintBottom_toTopOf="@id/overview"/>
+            app:layout_constraintBottom_toTopOf="@id/bmi_oxford_overview"/>
 
     <android.support.constraint.ConstraintLayout
-            android:id="@+id/overview"
+            android:id="@+id/bmi_oxford_overview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border"

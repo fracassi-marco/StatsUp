@@ -21,7 +21,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.constraint.ConstraintLayout
-                android:id="@+id/overview"
+                android:id="@+id/bmi_oxford_overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toBottomOf="@id/line_chart">
 
             <include
-                    android:id="@+id/min_max_overview_item"
+                    android:id="@+id/bmi_oxford_min_max_overview_item"
                     layout="@layout/overview_item"
                     android:layout_width="match_parent"
                     android:layout_height="65dp"
@@ -48,7 +48,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/min_max_overview_item" />
+                    app:layout_constraintTop_toBottomOf="@+id/bmi_oxford_min_max_overview_item" />
 
             <include
                     android:id="@+id/month_variation_overview_item"
