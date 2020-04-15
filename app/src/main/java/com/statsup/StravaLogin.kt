@@ -3,9 +3,8 @@ package com.statsup
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.statsup.strava.StravaLoginActivity
-import com.statsup.strava.StravaLoginActivity.EXTRA_LOGIN_URL
-import com.statsup.strava.StravaLoginActivity.EXTRA_REDIRECT_URL
+import com.statsup.StravaLoginActivity.EXTRA_LOGIN_URL
+import com.statsup.StravaLoginActivity.EXTRA_REDIRECT_URL
 
 class StravaLogin(private val context: Context, private val clientId: String) {
 

@@ -8,12 +8,9 @@ import android.support.v4.view.GravityCompat.START
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-import com.statsup.strava.StravaLoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
 import java.io.FileNotFoundException
@@ -111,7 +108,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val code = data.getStringExtra(StravaLoginActivity.RESULT_CODE)
 
             showProgressBar()
-            StravaActivities(applicationContext, code, Confs(applicationContext)) {
+            StravaActivities(applicationContext, code) {
                 hideProgressBar()
                 openDefaultFragment()
             }.execute()

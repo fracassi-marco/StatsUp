@@ -1,4 +1,4 @@
-package com.statsup.strava;
+package com.statsup;
 
 import android.annotation.TargetApi;
 import android.content.Intent;

@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".strava.StravaLoginActivity"
+                android:name=".StravaLoginActivity"
                 android:label="@string/login_strava" />
         <activity
                 android:name=".WeightEditorView"
