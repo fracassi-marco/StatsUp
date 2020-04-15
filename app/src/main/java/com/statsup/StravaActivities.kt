@@ -1,49 +1,46 @@
 package com.statsup
 
 import android.content.Context
-import android.os.AsyncTask
 import com.eclipsesource.json.Json
 import com.eclipsesource.json.JsonValue
+import kotlinx.coroutines.CoroutineScope
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
-import topinambur.http
+import topinambur.async.httpAsync
 
 private const val STRAVA = "https://www.strava.com/api/v3"
 
 class StravaActivities(
     private val context: Context,
     private val code: String,
+    private val scope: CoroutineScope,
     private val onComplete: () -> Unit
-) : AsyncTask<Void, Void, List<Activity>>() {
-
-    override fun doInBackground(vararg ignore: Void): List<Activity> {
-        return download(1, token())
+) {
+    suspend fun download() {
+        val token = token()
+        val activities = download(1, token)
+        onPostExecute(activities)
     }
 
-    private fun token(): String {
+    private suspend fun token() : String{
         val config = Confs(context)
-        val response = "$STRAVA/oauth/token"
-            .http.post(
+        val response = "$STRAVA/oauth/token".httpAsync(scope).post(
                 data = mapOf(
                     "client_id" to config.stravaClientId(),
                     "client_secret" to config.stravaClientSecret(),
                     "code" to code
                 )
-            )
+            ).await()
 
         return Json.parse(response.body).asObject().get("access_token").asString()
     }
 
-    private fun download(
-        page: Int,
-        token: String
-    ): List<Activity> {
-        val response = "$STRAVA/athlete/activities".http.get(
+    private suspend fun download(page: Int, token: String) : List<Activity> {
+        val response = "$STRAVA/athlete/activities".httpAsync(scope).get(
             params = mapOf("page" to page.toString(), "per_page" to "100"),
             headers = mapOf("Accept" to "application/json", "Authorization" to "Bearer $token")
-        )
-
+        ).await()
         val activities = Json.parse(response.body).asArray().map {
             val item = it.asObject()
             Activity(
@@ -61,10 +58,11 @@ class StravaActivities(
         if (activities.size == 100) {
             return activities.plus(download(page + 1, token))
         }
+
         return activities
     }
 
-    override fun onPostExecute(activities: List<Activity>) {
+    private fun onPostExecute(activities: List<Activity>) {
         ActivityRepository.clean(context)
         ActivityRepository.saveAll(context, activities)
         onComplete.invoke()

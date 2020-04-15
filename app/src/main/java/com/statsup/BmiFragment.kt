@@ -1,6 +1,5 @@
 package com.statsup
 
-import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.graphics.Color.parseColor
 import android.os.Bundle

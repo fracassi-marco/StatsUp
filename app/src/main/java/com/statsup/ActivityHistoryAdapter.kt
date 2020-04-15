@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.statsup.ActivityView.fill
-import kotlinx.android.synthetic.main.activity_history_list_item.view.*
 
 
 class ActivityHistoryAdapter(private var dataSet: List<Activity>) : RecyclerView.Adapter<ActivityHistoryAdapter.Holder>() {

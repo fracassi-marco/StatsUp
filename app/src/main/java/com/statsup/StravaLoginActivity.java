@@ -11,8 +11,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.statsup.R;
-
 
 public class StravaLoginActivity extends AppCompatActivity {
 

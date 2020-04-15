@@ -12,6 +12,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
@@ -21,9 +25,11 @@ private const val WEIGHT_IMPORT_REQUEST_CODE = 1003
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private val job = Job()
+    private val scope = CoroutineScope(Dispatchers.Main + job)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
@@ -103,15 +109,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == STRAVA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             val code = data.getStringExtra(StravaLoginActivity.RESULT_CODE)
 
             showProgressBar()
-            StravaActivities(applicationContext, code) {
-                hideProgressBar()
-                openDefaultFragment()
-            }.execute()
+            scope.launch {
+                StravaActivities(applicationContext, code, this) {
+                    hideProgressBar()
+                    openDefaultFragment()
+                }.download()
+            }
         }
 
         else if (requestCode == WEIGHT_IMPORT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
@@ -138,5 +145,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         progressbar.visibility = View.VISIBLE
         progressbar.bringToFront()
         window.setFlags(FLAG_NOT_TOUCHABLE, FLAG_NOT_TOUCHABLE)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 }

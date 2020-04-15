@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.widget.TextView
 import lecho.lib.hellocharts.model.*
 import lecho.lib.hellocharts.view.LineChartView
-import org.joda.time.DateTime
 import java.util.*
 import java.util.Calendar.MONTH
 import java.util.Calendar.YEAR
