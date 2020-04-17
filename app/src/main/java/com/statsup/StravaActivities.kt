@@ -27,8 +27,8 @@ class StravaActivities(
         val config = Confs(context)
         val response = "$STRAVA/oauth/token".httpAsync(scope).post(
                 data = mapOf(
-                    "client_id" to config.stravaClientId(),
-                    "client_secret" to config.stravaClientSecret(),
+                    "client_id" to config.stravaClientId,
+                    "client_secret" to config.stravaClientSecret,
                     "code" to code
                 )
             ).await()
@@ -43,6 +43,7 @@ class StravaActivities(
         ).await()
         val activities = Json.parse(response.body).asArray().map {
             val item = it.asObject()
+            val map = item.get("map").asObject().get("summary_polyline")
             Activity(
                 item.get("id").asLong(),
                 Sports.byCode(item.get("type").asString()),
@@ -51,7 +52,8 @@ class StravaActivities(
                 item.get("start_date").asDate().millis,
                 item.get("name").asString(),
                 item.get("max_speed").asDouble(),
-                item.get("total_elevation_gain").asDouble()
+                item.get("total_elevation_gain").asDouble(),
+                if(map.isNull) null else map.asString()
             )
         }
 

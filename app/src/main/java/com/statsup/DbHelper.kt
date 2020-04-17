@@ -34,7 +34,8 @@ class DbHelper(context: Context) :
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         val migrations = mapOf(
-            1 to "ALTER TABLE activities ADD elevationInMeters REAL DEFAULT 0"
+            1 to "ALTER TABLE activities ADD elevationInMeters REAL DEFAULT 0",
+            2 to "ALTER TABLE activities ADD map TEXT DEFAULT NULL"
         )
         oldVersion.until(newVersion).forEach { db.execSQL(migrations[it]) }
     }
@@ -45,7 +46,7 @@ class DbHelper(context: Context) :
     }
 
     companion object {
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 3
         const val DATABASE_NAME = "StatsUp.db"
     }
 }

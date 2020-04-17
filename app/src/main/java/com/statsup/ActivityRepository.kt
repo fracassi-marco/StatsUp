@@ -37,7 +37,8 @@ object ActivityRepository {
                             cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis")),
                             cursor.getString(cursor.getColumnIndexOrThrow("title")),
                             cursor.getDouble(cursor.getColumnIndexOrThrow("maxSpeedInMetersPerSecond")),
-                            cursor.getDouble(cursor.getColumnIndexOrThrow("elevationInMeters"))
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("elevationInMeters")),
+                            cursor.getString(cursor.getColumnIndexOrThrow("map"))
                         )
                     )
                 }
@@ -59,6 +60,7 @@ object ActivityRepository {
                     put("title", it.title)
                     put("maxSpeedInMetersPerSecond", it.maxSpeedInMetersPerSecond)
                     put("elevationInMeters", it.elevationInMeters)
+                    put("map", it.map)
                 }
 
                 connection.insert("activities", null, values)

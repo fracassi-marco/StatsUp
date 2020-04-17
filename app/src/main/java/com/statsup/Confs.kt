@@ -19,11 +19,9 @@ class Confs(private val context: Context) {
         load(context)
     }
 
-    fun stravaClientId(): String {
-        return properties.getProperty("strava.clientId")
-    }
+    val stravaClientId = properties.getProperty("strava.clientId")!!
 
-    fun stravaClientSecret(): String {
-        return properties.getProperty("strava.clientSecret")
-    }
+    val stravaClientSecret = properties.getProperty("strava.clientSecret")!!
+
+    val mapsKey = properties.getProperty("google.maps.key")!!
 }

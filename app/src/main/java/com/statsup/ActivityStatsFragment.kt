@@ -38,7 +38,7 @@ class ActivityStatsFragment : Fragment() {
         }
 
         view.no_activities_layout.import_button.setOnClickListener {
-            (activity as MainActivity).startImportFromStrava()
+            (activity as MainActivity).startActivitiesImport()
         }
 
         showActivitiesOrEmptyPage(view.no_activities_layout, viewPager)

@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 openFragment(menuItem.title, ActivityRecordsFragment())
             }
             R.id.nav_import_from_strava -> {
-                startImportFromStrava()
+                startActivitiesImport()
             }
             R.id.nav_weight_stats -> {
                 openFragment(menuItem.title, WeightStatsFragment())
@@ -94,8 +94,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    fun startImportFromStrava() {
-        val intent = StravaLogin(applicationContext, Confs(applicationContext).stravaClientId())
+    fun startActivitiesImport() {
+        val intent = StravaLogin(applicationContext, Confs(applicationContext).stravaClientId)
             .makeIntent()
         startActivityForResult(intent, STRAVA_REQUEST_CODE)
     }

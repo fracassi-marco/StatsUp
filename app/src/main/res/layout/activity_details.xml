@@ -66,6 +66,17 @@
 
     </android.support.constraint.ConstraintLayout>
 
+    <ImageView
+            android:id="@+id/activity_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/activity_map"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
     <!-- DISTANCE BEGIN -->
 
     <ImageView
@@ -78,7 +89,7 @@
             android:src="@drawable/outline_place_24"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_map" />
 
     <TextView
             android:id="@+id/distance_label"
@@ -119,7 +130,7 @@
             android:src="@drawable/outline_restore_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_map" />
 
     <TextView
             android:id="@+id/pace_label"

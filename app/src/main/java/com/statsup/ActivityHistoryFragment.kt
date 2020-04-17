@@ -25,7 +25,7 @@ class ActivityHistoryFragment : ActivityFragment() {
         recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 
         view.no_activities_layout.import_button.setOnClickListener {
-            (activity as MainActivity).startImportFromStrava()
+            (activity as MainActivity).startActivitiesImport()
         }
 
         showActivitiesOrEmptyPage(view.no_activities_layout, view.recycler_view)

@@ -3,7 +3,7 @@ package com.statsup
 import org.joda.time.DateTime
 import kotlin.Int.Companion.MAX_VALUE
 
-data class Activity(val id: Long, val sport: Sports, val distanceInMeters: Float, val durationInSeconds: Int, val dateInMillis: Long, val title: String, val maxSpeedInMetersPerSecond: Double, val elevationInMeters: Double) {
+data class Activity(val id: Long, val sport: Sports, val distanceInMeters: Float, val durationInSeconds: Int, val dateInMillis: Long, val title: String, val maxSpeedInMetersPerSecond: Double, val elevationInMeters: Double, val map: String?) {
 
     fun date() : DateTime {
         return DateTime(dateInMillis)

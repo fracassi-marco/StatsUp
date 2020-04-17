@@ -11,7 +11,7 @@ object Content {
         } else {
             noItemLayout.visibility = View.VISIBLE
             noItemLayout.import_button.setOnClickListener {
-                (noItemLayout.context as MainActivity).startImportFromStrava()
+                (noItemLayout.context as MainActivity).startActivitiesImport()
             }
             content.visibility = View.GONE
         }
