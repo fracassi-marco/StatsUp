@@ -34,10 +34,13 @@ object ActivityRepository {
                             Sports.byId(cursor.getLong(cursor.getColumnIndexOrThrow("sportId"))),
                             cursor.getFloat(cursor.getColumnIndexOrThrow("distanceInMeters")),
                             cursor.getInt(cursor.getColumnIndexOrThrow("durationInSeconds")),
+                            cursor.getInt(cursor.getColumnIndexOrThrow("movingTimeInSeconds")),
                             cursor.getLong(cursor.getColumnIndexOrThrow("dateInMillis")),
                             cursor.getString(cursor.getColumnIndexOrThrow("title")),
                             cursor.getDouble(cursor.getColumnIndexOrThrow("maxSpeedInMetersPerSecond")),
                             cursor.getDouble(cursor.getColumnIndexOrThrow("elevationInMeters")),
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("elevHighInMeters")),
+                            cursor.getDouble(cursor.getColumnIndexOrThrow("elevLowInMeters")),
                             cursor.getString(cursor.getColumnIndexOrThrow("map"))
                         )
                     )
@@ -61,6 +64,9 @@ object ActivityRepository {
                     put("maxSpeedInMetersPerSecond", it.maxSpeedInMetersPerSecond)
                     put("elevationInMeters", it.elevationInMeters)
                     put("map", it.map)
+                    put("movingTimeInSeconds", it.movingTimeInSeconds)
+                    put("elevHighInMeters", it.elevHighInMeters)
+                    put("elevLowInMeters", it.elevLowInMeters)
                 }
 
                 connection.insert("activities", null, values)

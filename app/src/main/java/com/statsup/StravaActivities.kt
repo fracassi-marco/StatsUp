@@ -49,10 +49,13 @@ class StravaActivities(
                 Sports.byCode(item.get("type").asString()),
                 item.get("distance").asFloat(),
                 item.get("elapsed_time").asInt(),
+                item.get("moving_time").asInt(),
                 item.get("start_date").asDate().millis,
                 item.get("name").asString(),
                 item.get("max_speed").asDouble(),
                 item.get("total_elevation_gain").asDouble(),
+                if(item.get("elev_high") == null) 0.0 else item.get("elev_high").asDouble(),
+                if(item.get("elev_low") == null) 0.0 else item.get("elev_low").asDouble(),
                 if(map.isNull) null else map.asString()
             )
         }

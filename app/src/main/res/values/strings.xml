@@ -102,13 +102,18 @@
     <string name="records_duration">Attività più lunga</string>
     <string name="records_distance">Percorso più lungo</string>
     <string name="records_elevation">Dislivello massimo</string>
+    <string name="records_elevation_high">Altitudine Max</string>
 
     <string name="activity_map">Mappa</string>
     <string name="activity_sport">Sport</string>
     <string name="activity_average_speed">Velocità media</string>
     <string name="activity_max_speed">Velocità di punta</string>
     <string name="activity_pace">Ritmo</string>
+    <string name="activity_moving_pace">Ritmo in movimento</string>
     <string name="activity_duration">Durata</string>
+    <string name="activity_moving_time">Tempo in movimento</string>
     <string name="activity_distance">Distanza</string>
     <string name="activity_elevation">Dislivello</string>
+    <string name="activity_elevation_high">Altitudine Max</string>
+    <string name="activity_elevation_low">Altitudine Min</string>
 </resources>

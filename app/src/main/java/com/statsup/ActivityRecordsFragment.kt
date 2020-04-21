@@ -20,6 +20,7 @@ class ActivityRecordsFragment : ActivityFragment() {
     private var duration: View? = null
     private var distance: View? = null
     private var elevation: View? = null
+    private var elevationHigh: View? = null
 
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.activity_records_fragment, container, false)
@@ -53,6 +54,11 @@ class ActivityRecordsFragment : ActivityFragment() {
             image.setImageResource(R.drawable.elevation)
             label.text = resources.getString(R.string.records_elevation)
         }
+        elevationHigh = view.elevation_high.apply {
+            image.contentDescription = resources.getString(R.string.records_elevation_high)
+            image.setImageResource(R.drawable.elevation_high)
+            label.text = resources.getString(R.string.records_elevation_high)
+        }
 
         onActivityUpdate(ActivityRepository.filterBySelectedSport())
 
@@ -68,6 +74,7 @@ class ActivityRecordsFragment : ActivityFragment() {
         duration!!.visibility = VISIBLE
         distance!!.visibility = VISIBLE
         elevation!!.visibility = VISIBLE
+        elevationHigh!!.visibility = VISIBLE
         if (activities.isNotEmpty()) {
             val averageSpeedActivity = activities.maxBy { it.averageSpeedInKilometersPerHours() }!!
             val averageSpeedValue = averageSpeedActivity.averageSpeedInKilometersPerHours()
@@ -104,6 +111,10 @@ class ActivityRecordsFragment : ActivityFragment() {
             val elevationActivity = activities.maxBy { it.elevationInMeters }!!
             val elevationValue = elevationActivity.elevationInMeters
             update(elevation!!, elevationValue, elevationActivity, " m")
+
+            val elevationHighActivity = activities.maxBy { it.elevHighInMeters }!!
+            val elevationHighValue = elevationHighActivity.elevHighInMeters
+            update(elevationHigh!!, elevationHighValue, elevationHighActivity, " m")
         }
     }
 
@@ -130,5 +141,6 @@ class ActivityRecordsFragment : ActivityFragment() {
         duration = null
         distance = null
         elevation = null
+        elevationHigh = null
     }
 }

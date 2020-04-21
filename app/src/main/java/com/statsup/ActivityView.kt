@@ -1,5 +1,7 @@
 package com.statsup
 
+import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_history_list_item.view.*
 import org.joda.time.format.DateTimeFormat
@@ -13,5 +15,12 @@ object ActivityView {
         view.history_list_item_distance_text.text = Measure.of(activity.distanceInKilometers(), "Km", "", "- ")
         view.history_list_item_pace_text.text = Measure.minutesAndSeconds(activity.paceInSecondsPerKilometer(), "/Km")
         view.history_list_item_elevation_text.text = Measure.of(activity.elevationInMeters, "m", "", "- ")
+
+        view.setOnClickListener {
+            val intent = Intent(view.context, ActivityDetailsActivity::class.java)
+            intent.putExtra("id", activity.id)
+            val bundle = Bundle().apply { putLong("id", activity.id) }
+            view.context.startActivity(intent, bundle)
+        }
     }
 }

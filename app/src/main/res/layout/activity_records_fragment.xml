@@ -62,6 +62,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/distance" />
 
+            <include
+                    android:id="@+id/elevation_high"
+                    layout="@layout/record_item"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/total_elevation" />
+
         </LinearLayout>
 
         <include layout="@layout/no_activities_layout" />

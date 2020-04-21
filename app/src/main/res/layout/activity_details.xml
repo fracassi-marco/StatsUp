@@ -1,244 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="14dp">
-
-    <TextView
-            android:id="@+id/activity_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Morning run" />
-
-    <android.support.constraint.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+        android:fillViewport="true"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <android.support.constraint.ConstraintLayout
-            android:id="@+id/header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/activity_title">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="14dp">
 
-        <ImageView
-                android:id="@+id/sport_icon"
+        <TextView
+                android:id="@+id/activity_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/activity_sport"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/run" />
+                tools:text="Morning run" />
 
-        <TextView
-                android:id="@+id/sport_name"
+        <android.support.constraint.Guideline
+                android:id="@+id/guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/sport_icon"
-                app:layout_constraintTop_toTopOf="@+id/sport_icon"
-                tools:text="Run" />
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-                android:id="@+id/activity_date"
+        <android.support.constraint.ConstraintLayout
+                android:id="@+id/header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/sport_name"
-                app:layout_constraintTop_toBottomOf="@+id/sport_name"
-                tools:text="18/12/2019 21:14" />
+                android:layout_marginTop="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_title">
+
+            <ImageView
+                    android:id="@+id/sport_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/activity_sport"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/run" />
+
+            <TextView
+                    android:id="@+id/sport_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/sport_icon"
+                    app:layout_constraintTop_toTopOf="@+id/sport_icon"
+                    tools:text="Run" />
+
+            <TextView
+                    android:id="@+id/activity_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/sport_name"
+                    app:layout_constraintTop_toBottomOf="@+id/sport_name"
+                    tools:text="18/12/2019 21:14" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <ImageView
+                android:id="@+id/activity_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/activity_map"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <GridLayout
+                android:id="@+id/activity_details_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_map" />
 
     </android.support.constraint.ConstraintLayout>
-
-    <ImageView
-            android:id="@+id/activity_map"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/activity_map"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
-
-    <!-- DISTANCE BEGIN -->
-
-    <ImageView
-            android:id="@+id/distance_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/activity_distance"
-            android:src="@drawable/outline_place_24"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/activity_map" />
-
-    <TextView
-            android:id="@+id/distance_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/activity_distance"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/distance_icon"
-            app:layout_constraintStart_toStartOf="@+id/distance_icon"
-            app:layout_constraintTop_toBottomOf="@+id/distance_icon" />
-
-    <TextView
-            android:id="@+id/distance_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/activity_distance"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/distance_icon"
-            app:layout_constraintStart_toStartOf="@+id/distance_icon"
-            app:layout_constraintTop_toBottomOf="@+id/distance_label"
-            tools:text="18.45 Km" />
-
-    <!-- DISTANCE END -->
-
-    <!-- PACE BEGIN -->
-
-    <ImageView
-            android:id="@+id/pace_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/activity_pace"
-            android:src="@drawable/outline_restore_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/activity_map" />
-
-    <TextView
-            android:id="@+id/pace_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/activity_pace"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/pace_icon"
-            app:layout_constraintStart_toStartOf="@+id/pace_icon"
-            app:layout_constraintTop_toBottomOf="@+id/pace_icon" />
-
-    <TextView
-            android:id="@+id/pace_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/activity_pace"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/pace_icon"
-            app:layout_constraintStart_toStartOf="@+id/pace_icon"
-            app:layout_constraintTop_toBottomOf="@+id/pace_label"
-            tools:text="06:36/Km" />
-
-    <!-- PACE END -->
-
-    <!-- DURATION BEGIN -->
-
-    <ImageView
-            android:id="@+id/duration_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/activity_duration"
-            android:src="@drawable/outline_timer_24"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/distance_value" />
-
-    <TextView
-            android:id="@+id/duration_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/activity_duration"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/duration_icon"
-            app:layout_constraintStart_toStartOf="@+id/duration_icon"
-            app:layout_constraintTop_toBottomOf="@+id/duration_icon" />
-
-    <TextView
-            android:id="@+id/duration_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/activity_duration"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/duration_icon"
-            app:layout_constraintStart_toStartOf="@+id/duration_icon"
-            app:layout_constraintTop_toBottomOf="@+id/duration_label"
-            tools:text="1h 23m 12s" />
-
-    <!-- DURATION END -->
-
-    <!-- ELEVATION BEGIN -->
-
-    <ImageView
-            android:id="@+id/elevation_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/activity_elevation"
-            android:src="@drawable/outline_trending_up_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/pace_value" />
-
-    <TextView
-            android:id="@+id/elevation_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/activity_elevation"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/elevation_icon"
-            app:layout_constraintStart_toStartOf="@+id/elevation_icon"
-            app:layout_constraintTop_toBottomOf="@+id/elevation_icon" />
-
-    <TextView
-            android:id="@+id/elevation_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/activity_elevation"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/elevation_icon"
-            app:layout_constraintStart_toStartOf="@+id/elevation_icon"
-            app:layout_constraintTop_toBottomOf="@+id/elevation_label"
-            tools:text="06:36/Km" />
-
-    <!-- ELEVATION END -->
-
-</android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>

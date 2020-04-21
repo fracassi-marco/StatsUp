@@ -21,12 +21,6 @@ class ActivityHistoryAdapter(private var dataSet: List<Activity>) : RecyclerView
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val activity = dataSet[position]
         fill(holder.layout, activity)
-        holder.layout.setOnClickListener {
-            val intent = Intent(holder.layout.context, ActivityDetailsActivity::class.java)
-            intent.putExtra("id", activity.id)
-            val bundle = Bundle().apply { putLong("id", activity.id) }
-            holder.layout.context.startActivity(intent, bundle)
-        }
     }
 
     fun update(newItems: List<Activity>) {
