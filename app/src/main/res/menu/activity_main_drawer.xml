@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:showIn="navigation_view">
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:showIn="navigation_view">
 
     <item android:title="@string/menu_activities">
         <menu>
-        <item
-                android:id="@+id/nav_stats"
-                android:icon="@drawable/running"
-                android:title="@string/menu_stats"/>
-        <item
-                android:id="@+id/nav_history"
-                android:icon="@drawable/outline_view_list_24"
-                android:title="@string/menu_history"/>
-        <item
-                android:id="@+id/nav_records"
-                android:icon="@drawable/award"
-                android:title="@string/menu_records"/>
-        <item
-                android:id="@+id/nav_import_from_strava"
-                android:icon="@drawable/outline_cloud_download_24"
-                android:title="@string/menu_import_from_strava"/>
+            <item
+                    android:id="@+id/nav_monthly_stats"
+                    android:icon="@drawable/running"
+                    android:title="@string/menu_monthly_stats" />
+            <item
+                    android:id="@+id/nav_annual_stats"
+                    android:icon="@drawable/running"
+                    android:title="@string/menu_annual_stats" />
+            <item
+                    android:id="@+id/nav_history"
+                    android:icon="@drawable/outline_view_list_24"
+                    android:title="@string/menu_history" />
+            <item
+                    android:id="@+id/nav_records"
+                    android:icon="@drawable/award"
+                    android:title="@string/menu_records" />
+            <item
+                    android:id="@+id/nav_import_from_strava"
+                    android:icon="@drawable/outline_cloud_download_24"
+                    android:title="@string/menu_import_from_strava" />
         </menu>
     </item>
 
@@ -29,15 +33,15 @@
             <item
                     android:id="@+id/nav_weight_stats"
                     android:icon="@drawable/weight_scale"
-                    android:title="@string/menu_weight_stats"/>
+                    android:title="@string/menu_weight_stats" />
             <item
                     android:id="@+id/nav_weight_history"
                     android:icon="@drawable/outline_view_list_24"
-                    android:title="@string/menu_weight_history"/>
+                    android:title="@string/menu_weight_history" />
             <item
                     android:id="@+id/nav_weight_import"
                     android:icon="@drawable/outline_cloud_download_24"
-                    android:title="@string/menu_weight_import"/>
+                    android:title="@string/menu_weight_import" />
         </menu>
     </item>
 
@@ -46,7 +50,7 @@
             <item
                     android:id="@+id/nav_configurations"
                     android:icon="@drawable/ic_menu_manage"
-                    android:title="@string/menu_configurations"/>
+                    android:title="@string/menu_configurations" />
         </menu>
     </item>
 

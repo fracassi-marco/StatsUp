@@ -19,8 +19,8 @@ class Frequencies(private val activities: Activities) : Value {
 
     override fun years(): List<Int> = activities.years()
 
-    override fun groupByDay(): Map<Days, Double> {
-        return activities.groupByDay(provider)
+    override fun groupByDayOfWeek(): Map<DayOfWeek, Double> {
+        return activities.groupByDayOfWeek(provider)
     }
 
     override fun max(): Double {
@@ -36,6 +36,10 @@ class Frequencies(private val activities: Activities) : Value {
     }
 
     override fun total() = activities.total(provider)
+
+    override fun filter(year: Int, month: Int): Value {
+        return Frequencies(activities.filter(year, month))
+    }
 
     override fun totalOfYear(position: Int): Double {
         return activities.totalOfYear(position, provider)

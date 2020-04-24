@@ -7,7 +7,8 @@
     <string name="sidebar_image_desc">Profile image</string>
 
     <string name="menu_activities">Attività</string>
-    <string name="menu_stats">Statistiche</string>
+    <string name="menu_annual_stats">Statistiche annuali</string>
+    <string name="menu_monthly_stats">Statistiche mensili</string>
     <string name="menu_history">Elenco</string>
     <string name="menu_records">Record</string>
     <string name="menu_import_from_strava">Import da Strava</string>
@@ -89,7 +90,7 @@
     <string name="import_button">Importale da Strava</string>
     <string name="empty_weight">Aggiungi o importa le tue pesate!!</string>
 
-    <string name="day_of_week_title">Distribuzione per giorno (da sempre)</string>
+    <string name="day_of_week_title">Distribuzione per giorno</string>
 
     <string name="settings_delete_activities">Cancella attività in locale</string>
     <string name="settings_delete_activities_complete">Attività cancellate</string>
@@ -116,4 +117,7 @@
     <string name="activity_elevation">Dislivello</string>
     <string name="activity_elevation_high">Altitudine Max</string>
     <string name="activity_elevation_low">Altitudine Min</string>
+
+    <string name="total">Totale</string>
+    <string name="average">Media</string>
 </resources>

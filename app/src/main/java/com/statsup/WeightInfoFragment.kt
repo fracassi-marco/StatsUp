@@ -29,7 +29,6 @@ class WeightInfoFragment : Fragment() {
         howLongOverviewItem.right_text.text = "Ultima pesata"
         howLongOverviewItem.right_value.text = weights.first().date().toString("dd/MM/yyyy")
         howLongOverviewItem.right_value.textSize = 21f
-        howLongOverviewItem.right_value.setTextColor(Color.BLACK)
 
         howLongOverviewItem.center_text.text = "Da"
         howLongOverviewItem.center_value.textSize = 16f

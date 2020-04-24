@@ -1,16 +1,18 @@
 package com.statsup
 
 import android.graphics.Color.rgb
-import android.support.v4.app.Fragment
 
-enum class ActivityTabs(val position: Int, val label: String, val color: Int, val fragment: Fragment, val unit: String,  val valueProvider: (Activities) -> Value) {
-    FREQUENCY(0, "Frequenza", rgb(76, 175, 80), FrequencyFragment(), "Numero di allenamenti ", { Frequencies(it) }),
-    DURATION(1, "Durata", rgb(33, 150, 243), DurationFragment(), "Ore di allenamento ", { Durations(it) }),
-    DISTANCE(2, "Distanza", rgb(244, 67, 54), DistanceFragment(), "Chilometri percorsi ", { Distances(it) });
+
+enum class Stats(val title: String, val unit: String, val color: Int, val provider: (List<Activity>) -> Double) {
+    FREQUENCY("Frequenza", "Numero di allenamenti", rgb(76, 175, 80), { it.size.toDouble() }),
+    DURATION("Durata", "Ore di allenamento", rgb(33, 150, 243), { it.sumByDouble { activity -> activity.durationInHours() }}),
+    DISTANCE("Distanza", "Chilometri percorsi", rgb(244, 67, 54), { it.sumByDouble { activity -> activity.distanceInKilometers() } });
 
     companion object {
-        fun at(position: Int): ActivityTabs {
-            return values().single { it.position == position }
+        fun at(position: Int) = when(position) {
+            0 -> FREQUENCY
+            1 -> DURATION
+            else -> DISTANCE
         }
     }
 }

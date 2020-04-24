@@ -1,5 +1,6 @@
 package com.statsup
 
+import com.statsup.Sports.RUN
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
@@ -18,7 +19,7 @@ class ActivitiesTest {
             ), GregorianCalendar(2019, 1, 1)
         )
 
-        val days = activities.groupByDay { it.size.toDouble() }
+        val days = activities.groupByDayOfWeek { it.size.toDouble() }
 
         assertThat(days.values.toList(), `is`(listOf(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)))
     }
@@ -96,15 +97,8 @@ class ActivitiesTest {
         assertThat(average, `is`(1.0 / 12))
     }
 
-    private fun on(year: Int, month: Int, day: Int) =
-        Activity(
-            1,
-            Sports.WORKOUT,
-            0f,
-            0,
-            GregorianCalendar(year, month, day).time.time,
-            "",
-            1.0,
-            1.0
-        )
+    private fun on(year: Int, month: Int, day: Int): Activity {
+        val dateInMillis = GregorianCalendar(year, month, day).time.time
+        return Activity(1, RUN, 0f, 0, 0, dateInMillis, "", 1.0, 1.0, 0.0,0.0, "")
+    }
 }

@@ -4,15 +4,15 @@ import kotlin.Double.Companion.POSITIVE_INFINITY
 import kotlin.Int.Companion.MAX_VALUE
 
 object Measure {
-    fun of(value: Double, label: String, positiveSign: String = "+", zeroSign: String = "0.00"): String {
+    fun of(value: Double, unit: String, positiveSign: String = "+", zeroSign: String = "0.00"): String {
         if(value == 0.0 || value == POSITIVE_INFINITY) {
-            return "$zeroSign$label"
+            return "$zeroSign$unit"
         }
         var result = ""
         if(value > 0) {
             result = positiveSign
         }
-        return result + String.format("%.2f", value) + label
+        return result + String.format("%.2f", value) + unit
     }
 
     fun timeFragments(seconds: Int): String {

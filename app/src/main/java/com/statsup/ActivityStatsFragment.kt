@@ -19,11 +19,12 @@ class ActivityStatsFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
         val viewPager = view.stats_view_pager
-        viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
+        val period = arguments!!.get("period") as String
+        viewPager.adapter = ActivityStatsPagerAdapter(period, childFragmentManager)
 
         view.stats_tab_layout.also {
             it.setupWithViewPager(viewPager)
-            it.setSelectedTabIndicatorColor(ActivityTabs.at(0).color)
+            it.setSelectedTabIndicatorColor(Stats.at(0).color)
             it.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(p0: TabLayout.Tab) {
                 }
@@ -32,7 +33,7 @@ class ActivityStatsFragment : Fragment() {
                 }
 
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    it.setSelectedTabIndicatorColor(ActivityTabs.at(tab.position).color)
+                    it.setSelectedTabIndicatorColor(Stats.at(tab.position).color)
                 }
             })
         }
@@ -46,4 +47,5 @@ class ActivityStatsFragment : Fragment() {
         return view
     }
 }
+
 

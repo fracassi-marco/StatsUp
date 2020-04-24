@@ -79,7 +79,6 @@ class BmiFragment : Fragment() {
         minMaxOverviewItem.center_text.text = getString(R.string.bmi_current)
 
         minMaxOverviewItem.right_value.text = max
-        minMaxOverviewItem.right_value.setTextColor(BLACK)
         minMaxOverviewItem.right_value.textSize = 21f
         minMaxOverviewItem.right_text.text = getString(R.string.bmi_max)
     }

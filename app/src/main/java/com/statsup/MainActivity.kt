@@ -48,7 +48,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun openDefaultFragment() {
-        openFragment(getString(R.string.menu_stats), ActivityStatsFragment())
+        val period = "monthly"
+        val fragment = activityStatsFragment(period)
+        openFragment(getString(R.string.menu_monthly_stats), fragment)
     }
 
     override fun onBackPressed() {
@@ -64,8 +66,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_history -> {
                 openFragment(menuItem.title, ActivityHistoryFragment())
             }
-            R.id.nav_stats -> {
-                openFragment(menuItem.title, ActivityStatsFragment())
+            R.id.nav_annual_stats -> {
+                val fragment = activityStatsFragment("annual")
+                openFragment(menuItem.title, fragment)
+            }
+            R.id.nav_monthly_stats -> {
+                openDefaultFragment()
             }
             R.id.nav_records -> {
                 openFragment(menuItem.title, ActivityRecordsFragment())
@@ -92,6 +98,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawer(START)
         return true
+    }
+
+    private fun activityStatsFragment(period: String): ActivityStatsFragment {
+        val fragment = ActivityStatsFragment().apply {
+            arguments =
+                Bundle().apply {
+                    putString("period", period)
+                }
+        }
+        return fragment
     }
 
     fun startActivitiesImport() {

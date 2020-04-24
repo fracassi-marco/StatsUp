@@ -1,7 +1,6 @@
 package com.statsup
 
-import android.graphics.Color.BLACK
-import android.graphics.Color.RED
+import android.graphics.Color.*
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -45,7 +44,6 @@ class BalanceFragment : Fragment() {
 
         minMaxOverviewItem.right_value.text =
             Measure.of(weights.maxBy { it.kilograms }!!.kilograms, "Kg", "")
-        minMaxOverviewItem.right_value.setTextColor(BLACK)
         minMaxOverviewItem.right_value.textSize = 21f
         minMaxOverviewItem.right_text.text = "Peso massimo"
     }
@@ -56,9 +54,7 @@ class BalanceFragment : Fragment() {
             val percentage = (finalValue / initialValue.kilograms * 100) - 100
             view.left_value.text = Measure.of(finalValue - initialValue.kilograms, "Kg")
             view.right_value.text = Measure.of(percentage, "%")
-            if (percentage > 0) {
-                view.right_value.setTextColor(RED)
-            }
+            view.right_value.setTextColor(if(percentage > 0) RED else GREEN)
         }
         else {
             view.left_value.text = "-"

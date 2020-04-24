@@ -12,7 +12,16 @@ class Activities(private val activities: List<Activity>, private val today: Cale
         return byMonth(activities.filter { it.date().year().get() == year })
     }
 
+    fun monthInPosition(position: Int) = months()[position]
+
     fun yearInPosition(position: Int) = years()[position]
+
+    private fun months(): List<Month> {
+        return activities
+            .map { Month(it.date().year, it.date().monthOfYear) }
+            .distinct()
+            .sortedWith(compareBy({ it.year }, { it.monthOfYear }))
+    }
 
     fun years(): List<Int> {
         return activities
@@ -91,12 +100,19 @@ class Activities(private val activities: List<Activity>, private val today: Cale
         return cumulativeOfMonth(13 - currentMonth(), value)
     }
 
-    fun groupByDay(provider: (List<Activity>) -> Double): Map<Days, Double> {
+    fun groupByDayOfWeek(provider: (List<Activity>) -> Double): Map<DayOfWeek, Double> {
         val byDay = activities.groupBy { it.date().dayOfWeek }
 
-        return Days.values().map { day ->
+        return DayOfWeek.values().map { day ->
             day to provider.invoke(byDay.getOrElse(day.index) { emptyList() })
         }.toMap()
+    }
+
+    fun filter(year: Int, month: Int): Activities {
+        return Activities(
+            activities.filter { it.date().year == year }
+            .filter { it.date().monthOfYear == month }
+        )
     }
 
     private fun cumulativeOfMonth(index: Int, value: (List<Activity>) -> Double): List<Double> {
@@ -123,5 +139,4 @@ class Activities(private val activities: List<Activity>, private val today: Cale
     private fun actualYear() = today.get(YEAR)
 
     private fun currentMonth() = today.get(MONTH)
-
 }
