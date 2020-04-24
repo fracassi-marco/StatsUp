@@ -1,104 +1,103 @@
 package com.statsup
 
 import com.statsup.Sports.RUN
-import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.assertThat
+import org.assertj.core.api.Assertions.assertThat
+import org.joda.time.DateTime
 import org.junit.Test
 import java.util.*
 
 class ActivitiesTest {
 
-
     @Test
-    fun `group dy day`() {
-        val activities = Activities(
-            listOf(
-                on(2019, 6, 1),
-                on(2019, 6, 2),
-                on(2019, 6, 7)
-            ), GregorianCalendar(2019, 1, 1)
-        )
+    fun `first month`() {
+        val activities = listOf(on(2020, 2), on(2020, 1))
 
-        val days = activities.groupByDayOfWeek { it.size.toDouble() }
+        val selectedActivities = Activities(activities) { _ -> 1.0 }.filterByMonth(0)
+        val month = selectedActivities.month()
 
-        assertThat(days.values.toList(), `is`(listOf(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)))
+        assertThat(month).isEqualTo(Month(2020, 1))
+        assertThat(selectedActivities.isFirstMonth()).isEqualTo(true)
+        assertThat(selectedActivities.isCurrentMonth()).isEqualTo(false)
     }
 
     @Test
-    fun `average of one month`() {
-        val activities = Activities(listOf(on(2019, 0, 1)), GregorianCalendar(2019, 0, 1))
+    fun `any month`() {
+        val activities = listOf(on(2020, 12), on(2019, 1))
 
-        val average = activities.average { it.size.toDouble() }
+        val selectedActivities = Activities(activities) { 1.0 }.filterByMonth(1)
+        val month = selectedActivities.month()
 
-        assertThat(average, `is`(1.0 / 1))
+        assertThat(month).isEqualTo(Month(2019, 2))
+        assertThat(selectedActivities.isFirstMonth()).isEqualTo(false)
+        assertThat(selectedActivities.isCurrentMonth()).isEqualTo(false)
     }
 
     @Test
-    fun `average of two month`() {
-        val activities = Activities(
-            listOf(
-                on(2019, 0, 1),
-                on(2019, 0, 1),
-                on(2019, 1, 1)
-            ), GregorianCalendar(2019, 1, 1)
-        )
+    fun `current month`() {
+        val now =  DateTime()
+        val oneMonthAgo = now.minusMonths(1)
+        val activities = listOf(on(now.year, now.monthOfYear), on(oneMonthAgo.year, oneMonthAgo.monthOfYear))
 
-        val average = activities.average { it.size.toDouble() }
+        val selectedActivities = Activities(activities) { 1.0 }.filterByMonth(1)
+        val month = selectedActivities.month()
 
-        assertThat(average, `is`(3.0 / 2))
+        assertThat(month).isEqualTo(Month(now.year, now.monthOfYear))
+        assertThat(selectedActivities.isFirstMonth()).isEqualTo(false)
+        assertThat(selectedActivities.isCurrentMonth()).isEqualTo(true)
     }
 
     @Test
-    fun `average of two years`() {
-        val activities = Activities(
-            listOf(
-                on(2018, 7, 1),
-                on(2018, 8, 1),
-                on(2018, 9, 1),
-                on(2018, 10, 1),
-                on(2018, 11, 1),
-                on(2019, 0, 1),
-                on(2019, 1, 1)
-            ), GregorianCalendar(2019, 1, 1)
-        )
+    fun `absolute total`() {
+        val activities = listOf(on(2020, 2), on(2020, 1))
 
-        val average = activities.average { it.size.toDouble() }
+        val selectedActivities = Activities(activities) { list -> list.size.toDouble() }
 
-        assertThat(average, `is`(7.0 / 14))
+        assertThat(selectedActivities.total()).isEqualTo(2.0)
     }
 
     @Test
-    fun `average of current year`() {
-        val activities = Activities(
-            listOf(
-                on(2018, 11, 1),
-                on(2019, 0, 1),
-                on(2019, 0, 1)
-            ), GregorianCalendar(2019, 1, 1)
-        )
+    fun `monthly total`() {
+        val activities = listOf(on(2020, 2), on(2020, 1), on(2020, 1))
 
-        val average = activities.averageOfYear(1) { it.size.toDouble() }
+        val selectedActivities = Activities(activities) { list -> list.size.toDouble() }.filterByMonth(0)
 
-        assertThat(average, `is`(2.0 / 2))
+        assertThat(selectedActivities.total()).isEqualTo(2.0)
     }
 
     @Test
-    fun `average of past year`() {
-        val activities = Activities(
-            listOf(
-                on(2018, 11, 1),
-                on(2019, 0, 1),
-                on(2019, 0, 1)
-            ), GregorianCalendar(2019, 1, 1)
-        )
+    fun `monthly average`() {
+        val activities = listOf(on(2020, 2), on(2020, 2), on(2020, 1))
 
-        val average = activities.averageOfYear(0) { it.size.toDouble() }
+        val selectedActivities = Activities(activities) { list -> list.size.toDouble() }.filterByMonth(1)
 
-        assertThat(average, `is`(1.0 / 12))
+        assertThat(selectedActivities.average()).isEqualTo(2.0 / 29)
     }
 
-    private fun on(year: Int, month: Int, day: Int): Activity {
-        val dateInMillis = GregorianCalendar(year, month, day).time.time
+    @Test
+    fun `group by day contains all days of month`() {
+        val activities = listOf(on(2020, 2, 1), on(2020, 2, 1))
+
+        val selectedActivities = Activities(activities) { list -> list.size.toDouble() }.filterByMonth(0)
+
+        assertThat(selectedActivities.byDay().first()).isEqualTo(2.0)
+        assertThat(selectedActivities.byDay().count { it == 0.0 }).isEqualTo(28)
+    }
+
+    @Test
+    fun `cumulative by day`() {
+        val activities = listOf(on(2020, 2, 1), on(2020, 2, 1), on(2020, 2, 2))
+
+        val selectedActivities = Activities(activities) { list -> list.size.toDouble() }.filterByMonth(0)
+
+        val result = selectedActivities.cumulativeByDay()
+        assertThat(result[0]).isEqualTo(2.0)
+        assertThat(result[1]).isEqualTo(3.0)
+        assertThat(result[2]).isEqualTo(3.0)
+        assertThat(result[30]).isEqualTo(3.0)
+    }
+
+    private fun on(year: Int, month: Int, day: Int = 1): Activity {
+        val dateInMillis = GregorianCalendar(year, month - 1, day).time.time
         return Activity(1, RUN, 0f, 0, 0, dateInMillis, "", 1.0, 1.0, 0.0,0.0, "")
     }
 }

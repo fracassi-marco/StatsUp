@@ -17,7 +17,7 @@ class AnnualChartsPagerAdapter(
     activities: List<Activity>
 ) : PagerAdapter() {
 
-    private val activities2 = Activities2(activities, stats.provider)
+    private val activities2 = Activities(activities, stats.provider)
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = LayoutInflater.from(context).inflate(R.layout.chart_pager_item, container, false)
@@ -49,11 +49,11 @@ class AnnualChartsPagerAdapter(
         return view
     }
 
-    private fun updateTrendChart(view: View, selectedActivities: Activities2) {
+    private fun updateTrendChart(view: View, selectedActivities: Activities) {
         AnnualChart(view.trend_chart, stats.color, stats.unit).refresh(selectedActivities)
     }
 
-    private fun updateVsChart(view: View, activities: Activities2) {
+    private fun updateVsChart(view: View, activities: Activities) {
         if (!activities.isFirstYear()) {
             YearOverYearChart(view.vs_chart, view.vs_chart_title, stats.color).refresh(activities)
         } else {
@@ -61,7 +61,7 @@ class AnnualChartsPagerAdapter(
         }
     }
 
-    private fun updateDayOfWeekChart(values: View, activities: Activities2) {
+    private fun updateDayOfWeekChart(values: View, activities: Activities) {
         val bars = activities.byDayOfWeek().map {
             Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
         }
@@ -83,7 +83,7 @@ class MonthlyChartsPagerAdapter(
 ) :
     PagerAdapter() {
 
-    private val activities2 = Activities2(activities, stats.provider)
+    private val activities2 = Activities(activities, stats.provider)
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = LayoutInflater.from(context).inflate(R.layout.chart_pager_item, container, false)
@@ -115,11 +115,11 @@ class MonthlyChartsPagerAdapter(
         return view
     }
 
-    private fun updateTrendChart(view: View, selectedActivities: Activities2) {
+    private fun updateTrendChart(view: View, selectedActivities: Activities) {
         MonthlyChart(view.trend_chart, stats.color, stats.unit).refresh(selectedActivities)
     }
 
-    private fun updateVsChart(view: View, activities: Activities2) {
+    private fun updateVsChart(view: View, activities: Activities) {
         if (!activities.isFirstMonth()) {
             MonthOverMonthChart(view.vs_chart, view.vs_chart_title, stats.color).refresh(activities)
         } else {
@@ -127,7 +127,7 @@ class MonthlyChartsPagerAdapter(
         }
     }
 
-    private fun updateDayOfWeekChart(values: View, activities: Activities2) {
+    private fun updateDayOfWeekChart(values: View, activities: Activities) {
         val bars = activities.byDayOfWeek().map {
             Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
         }

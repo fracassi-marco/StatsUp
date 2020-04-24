@@ -1,142 +1,175 @@
 package com.statsup
 
-import java.util.*
-import java.util.Calendar.MONTH
-import java.util.Calendar.YEAR
+import org.joda.time.DateTime
 
-class Activities(private val activities: List<Activity>, private val today: Calendar) {
-    constructor(activities: List<Activity>) : this(activities, GregorianCalendar())
 
-    private fun ofYearInPosition(position: Int): Map<Month, List<Activity>> {
-        val year = yearInPosition(position)
-        return byMonth(activities.filter { it.date().year().get() == year })
+class Activities(
+    private val activities: List<Activity>,
+    private val provider: (List<Activity>) -> Double
+) {
+    private var monthPosition = -1
+    private var yearPosition = -1
+
+    fun filterByMonth(position: Int): Activities {
+        monthPosition = position
+        return this
     }
 
-    fun monthInPosition(position: Int) = months()[position]
-
-    fun yearInPosition(position: Int) = years()[position]
-
-    private fun months(): List<Month> {
-        return activities
-            .map { Month(it.date().year, it.date().monthOfYear) }
-            .distinct()
-            .sortedWith(compareBy({ it.year }, { it.monthOfYear }))
+    fun filterByYear(position: Int): Activities {
+        yearPosition = position
+        return this
     }
 
-    fun years(): List<Int> {
-        return activities
-            .map { it.date().year().get() }
-            .distinct()
-            .sorted()
+    // 0 vecchio
+    // N nuovo
+    fun month(): Month {
+        return months()[monthPosition]
     }
 
-    private fun byMonth(): List<List<Activity>> {
-        return byMonth(activities).values.toList()
+    // 0 vecchio
+    // N nuovo
+    fun year(): Year {
+        return years()[yearPosition]
     }
 
-    private fun byMonth(activities: List<Activity>): Map<Month, List<Activity>> {
-        if (activities.isEmpty()) {
-            return emptyMap()
+    fun months(): List<Month> {
+        val now = DateTime()
+        val currentMonth = Month(now.year, now.monthOfYear)
+        val firstMonth = Month(activities.last().date().year, activities.last().date().monthOfYear)
+        val months = mutableListOf<Month>()
+        var month = firstMonth
+        while (month.isBeforeOrEqual(currentMonth)) {
+            months.add(month)
+            month = month.next()
+        }
+        return months
+    }
+
+    fun years(): List<Year> {
+        val now = DateTime()
+        val currentYear = Year(now.year)
+        val firstMonth = Year(activities.last().date().year)
+        val years = mutableListOf<Year>()
+        var year = firstMonth
+        while (year.isBeforeOrEqual(currentYear)) {
+            years.add(year)
+            year = year.next()
+        }
+        return years
+    }
+
+    fun isFirstMonth() = monthPosition == 0
+
+    fun isFirstYear() = yearPosition == 0
+
+    fun isCurrentMonth() = monthPosition == months().size - 1
+
+    fun isCurrentYear() = yearPosition == years().size - 1
+
+    fun total() = provider.invoke(selected())
+
+    private fun selected(): List<Activity> {
+        if (monthPosition != -1) {
+            return ofMonth(months()[monthPosition])
         }
 
-        val ordered = activities.sortedBy { it.dateInMillis }
-
-        val result = mutableMapOf<Month, List<Activity>>()
-        val oldest = ordered.first().date()
-        val newest = ordered.last().date()
-
-        for (year in oldest.year..newest.year) {
-            for (month in 1..12) {
-                val filter = ordered.filter {
-                    it.date().year == year && it.date().monthOfYear == month
-                }
-                result[Month(year, month)] = filter
-            }
+        if (yearPosition != -1) {
+            return ofYear(years()[yearPosition])
         }
 
-        return result
+        return activities
     }
 
-    fun average(value: (List<Activity>) -> Double): Double {
-        val sum = byMonth()
-            .sumByDouble { value.invoke(it) }
-        return sum / numberOfMonths()
+    private fun ofMonth(month: Month): List<Activity> {
+        return activities.filter {
+            it.date().year == month.year && it.date().monthOfYear == month.monthOfYear
+        }
     }
 
-    fun averageOfYear(position: Int, value: (List<Activity>) -> Double): Double {
-        val sum = ofYearInPosition(position)
-            .values
-            .sumByDouble { value.invoke(it) }
-        return sum / numberOfMonths(position)
+    private fun ofYear(year: Year): List<Activity> {
+        return activities.filter {
+            it.date().year == year.year
+        }
     }
 
-    fun totalOfYear(position: Int, value: (List<Activity>) -> Double): Double {
-        return ofYearInPosition(position)
-            .values
-            .sumByDouble { value.invoke(it) }
+    fun average(): Double {
+        if (monthPosition != -1)
+            return total() / month().numberOfDays()
+        if (yearPosition != -1)
+            return total() / year().numberOfMonths()
+
+        return total() / months().size
     }
 
-    fun total(value: (List<Activity>) -> Double): Double {
-        return value.invoke(activities)
+    fun byDay(): List<Double> {
+        return activitiesByDay().map(provider)
     }
 
-    fun ofYear(position: Int, value: (List<Activity>) -> Double): List<Double> {
-        return ofYearInPosition(position)
-            .values
-            .map { value.invoke(it) }
+    fun byMonth(): List<Double> {
+        return activitiesByMonth().map(provider)
     }
 
-    fun max(value: (List<Activity>) -> Double): Double {
-        return byMonth()
-            .map { value.invoke(it) }
-            .max()!!
+    private fun activitiesByDay(): List<List<Activity>> {
+        val byDay = selected().groupBy { it.date().dayOfMonth }
+        return (1..month().maxNumberOfDays()).map {
+            byDay[it] ?: emptyList()
+        }
     }
 
-    fun cumulativeOfCurrentMont(value: (List<Activity>) -> Double): List<Double> {
-        return cumulativeOfMonth(12 - currentMonth(), value)
+    private fun activitiesByMonth(): List<List<Activity>> {
+        val byMonth = selected().groupBy { it.date().monthOfYear }
+        return (1..year().maxNumberOfMonths()).map {
+            byMonth[it] ?: emptyList()
+        }
     }
 
-    fun cumulativeOfPreviousMont(value: (List<Activity>) -> Double): List<Double> {
-        return cumulativeOfMonth(13 - currentMonth(), value)
+    fun maxByDay(): Double {
+        return months()
+            .map { month ->
+                ofMonth(month).groupBy { it.date().dayOfMonth }.values.map { provider(it) }.max()
+                    ?: 0.0
+            }.max() ?: 0.0
     }
 
-    fun groupByDayOfWeek(provider: (List<Activity>) -> Double): Map<DayOfWeek, Double> {
-        val byDay = activities.groupBy { it.date().dayOfWeek }
-
-        return DayOfWeek.values().map { day ->
-            day to provider.invoke(byDay.getOrElse(day.index) { emptyList() })
-        }.toMap()
+    fun maxByMonth(): Double {
+        return years()
+            .map { year ->
+                ofYear(year).groupBy { it.date().monthOfYear() }.values.map { provider(it) }.max()
+                    ?: 0.0
+            }.max() ?: 0.0
     }
 
-    fun filter(year: Int, month: Int): Activities {
-        return Activities(
-            activities.filter { it.date().year == year }
-            .filter { it.date().monthOfYear == month }
-        )
-    }
+    fun addMonths(amount: Int) =Activities(activities, provider).filterByMonth(monthPosition + amount)
 
-    private fun cumulativeOfMonth(index: Int, value: (List<Activity>) -> Double): List<Double> {
-        val byMonth = byMonth()
-        val currentMonthActivities = byMonth[byMonth.size - index]
+    fun addYears(amount: Int) = Activities(activities, provider).filterByYear(yearPosition + amount)
+
+    fun cumulativeByDay(): List<Double> {
+        val byDay = byDay()
         var currentMonthTotal = 0.0
-        return (1..31).map { i ->
-            currentMonthTotal += value.invoke(currentMonthActivities.filter { it.date().dayOfMonth == i })
+        return (0..30).map { i ->
+            if (i < byDay.size)
+                currentMonthTotal += byDay[i]
+
             currentMonthTotal
         }
     }
 
-    private fun numberOfMonths(): Int {
-        return byMonth().size - (11 - currentMonth())
-    }
+    fun cumulativeByMonth(): List<Double> {
+        val byMonth = byMonth()
+        var total = 0.0
+        return (0..11).map { i ->
+            if (i < byMonth.size)
+                total += byMonth[i]
 
-    private fun numberOfMonths(position: Int): Int {
-        if (yearInPosition(position) == actualYear()) {
-            return currentMonth() + 1
+            total
         }
-        return 12
     }
 
-    private fun actualYear() = today.get(YEAR)
+    fun byDayOfWeek(): Map<DayOfWeek, Double> {
+        val byDay = selected().groupBy { it.date().dayOfWeek }
 
-    private fun currentMonth() = today.get(MONTH)
+        return DayOfWeek.values().map { day ->
+            day to provider(byDay.getOrElse(day.index) { emptyList() })
+        }.toMap()
+    }
 }
