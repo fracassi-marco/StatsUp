@@ -11,18 +11,20 @@ import com.statsup.barchart.Bar
 import kotlinx.android.synthetic.main.chart_pager_item.view.*
 import kotlinx.android.synthetic.main.overview_item.view.*
 
-class AnnualChartsPagerAdapter(
-    private val context: Context,
-    private val stats: Stats,
-    activities: List<Activity>
-) : PagerAdapter() {
+class AnnualChartsPagerAdapter(private val context: Context) : ActivityPagerAdapter() {
 
-    private val activities2 = Activities(activities, stats.provider)
+    private lateinit var stats: Stats
+    private lateinit var activities: Activities
+
+    override fun update(stats: Stats, activities: List<Activity>) {
+        this.stats = stats
+        this.activities =  Activities(activities, stats.provider)
+    }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = LayoutInflater.from(context).inflate(R.layout.chart_pager_item, container, false)
 
-        val selectedActivities = activities2.filterByYear(position)
+        val selectedActivities = activities.filterByYear(position)
         val year = selectedActivities.year()
         view.title.text = year.asString()
         view.previous_label.text =
@@ -73,22 +75,29 @@ class AnnualChartsPagerAdapter(
 
     override fun isViewFromObject(view: View, instance: Any) = view == instance
 
-    override fun getCount() = activities2.years().size
+    override fun getCount() = activities.years().size
 }
 
 class MonthlyChartsPagerAdapter(
-    private val context: Context,
-    private val stats: Stats,
-    activities: List<Activity>
-) :
-    PagerAdapter() {
+    private val context: Context
+) : ActivityPagerAdapter() {
 
-    private val activities2 = Activities(activities, stats.provider)
+    private lateinit var stats: Stats
+    private lateinit var activities: Activities
+
+    override fun update(stats: Stats, activities: List<Activity>) {
+        this.stats = stats
+        this.activities =  Activities(activities, stats.provider)
+    }
+
+    override fun getItemPosition(obj: Any): Int {
+        return POSITION_NONE
+    }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = LayoutInflater.from(context).inflate(R.layout.chart_pager_item, container, false)
 
-        val selectedActivities = activities2.filterByMonth(position)
+        val selectedActivities = activities.filterByMonth(position)
         val month = selectedActivities.month()
         view.title.text = month.asString()
         view.previous_label.text =
@@ -139,5 +148,9 @@ class MonthlyChartsPagerAdapter(
 
     override fun isViewFromObject(view: View, instance: Any) = view == instance
 
-    override fun getCount() = activities2.months().size
+    override fun getCount() = activities.months().size
+}
+
+abstract class ActivityPagerAdapter : PagerAdapter(){
+    abstract fun update(stats: Stats, activities: List<Activity>)
 }

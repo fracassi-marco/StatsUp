@@ -6,13 +6,9 @@
     <item android:title="@string/menu_activities">
         <menu>
             <item
-                    android:id="@+id/nav_monthly_stats"
+                    android:id="@+id/nav_stats"
                     android:icon="@drawable/running"
-                    android:title="@string/menu_monthly_stats" />
-            <item
-                    android:id="@+id/nav_annual_stats"
-                    android:icon="@drawable/running"
-                    android:title="@string/menu_annual_stats" />
+                    android:title="@string/menu_stats" />
             <item
                     android:id="@+id/nav_history"
                     android:icon="@drawable/outline_view_list_24"

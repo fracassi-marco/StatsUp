@@ -19,8 +19,7 @@ class ActivityStatsFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
         val viewPager = view.stats_view_pager
-        val period = arguments!!.get("period") as String
-        viewPager.adapter = ActivityStatsPagerAdapter(period, childFragmentManager)
+        viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
 
         view.stats_tab_layout.also {
             it.setupWithViewPager(viewPager)

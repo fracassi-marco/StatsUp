@@ -7,8 +7,7 @@
     <string name="sidebar_image_desc">Profile image</string>
 
     <string name="menu_activities">Attività</string>
-    <string name="menu_annual_stats">Statistiche annuali</string>
-    <string name="menu_monthly_stats">Statistiche mensili</string>
+    <string name="menu_stats">Statistiche</string>
     <string name="menu_history">Elenco</string>
     <string name="menu_records">Record</string>
     <string name="menu_import_from_strava">Import da Strava</string>

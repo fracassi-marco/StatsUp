@@ -6,13 +6,12 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 
 
-class ActivityStatsPagerAdapter(private val period: String, fragmentManager: FragmentManager?) : FragmentPagerAdapter(fragmentManager) {
+class ActivityStatsPagerAdapter(fragmentManager: FragmentManager?) : FragmentPagerAdapter(fragmentManager) {
 
     override fun getItem(position: Int): Fragment {
         return StatsFragment().apply { arguments =
             Bundle().apply {
                 putSerializable("stats", Stats.at(position))
-                putSerializable("period", period)
             }
         }
     }

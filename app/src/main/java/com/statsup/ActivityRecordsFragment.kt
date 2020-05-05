@@ -60,14 +60,14 @@ class ActivityRecordsFragment : ActivityFragment() {
             label.text = resources.getString(R.string.records_elevation_high)
         }
 
-        onActivityUpdate(ActivityRepository.filterBySelectedSport())
+        onSportUpdate()
 
         showActivitiesOrEmptyPage(view.no_activities_layout, view.records)
 
         return view
     }
 
-    override fun onActivityUpdate(activities: List<Activity>) {
+    override fun onSportUpdate() {
         averageSpeed!!.visibility = VISIBLE
         speed!!.visibility = VISIBLE
         pace!!.visibility = VISIBLE
@@ -75,6 +75,8 @@ class ActivityRecordsFragment : ActivityFragment() {
         distance!!.visibility = VISIBLE
         elevation!!.visibility = VISIBLE
         elevationHigh!!.visibility = VISIBLE
+
+        val activities = ActivityRepository.filterBySelectedSport()
         if (activities.isNotEmpty()) {
             val averageSpeedActivity = activities.maxBy { it.averageSpeedInKilometersPerHours() }!!
             val averageSpeedValue = averageSpeedActivity.averageSpeedInKilometersPerHours()

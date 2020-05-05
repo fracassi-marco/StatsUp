@@ -54,19 +54,52 @@ abstract class ActivityFragment : Fragment() {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                ActivityRepository.changeSport(0) { activities ->
-                    onActivityUpdate(activities)
-                }
+                ActivityRepository.changeSport(0)
+                onSportUpdate()
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                ActivityRepository.changeSport(position) { activities ->
-                    onActivityUpdate(activities)
-                }
+                ActivityRepository.changeSport(position)
+                onSportUpdate()
             }
         }
     }
 
     protected abstract fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View
-    protected abstract fun onActivityUpdate(activities: List<Activity>)
+    protected abstract fun onSportUpdate()
+}
+
+abstract class PeriodActivityFragment : ActivityFragment() {
+
+    protected abstract fun onPeriodUpdate()
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater!!.inflate(R.menu.period_filter, menu)
+        val spinner = menu!!.findItem(R.id.period_filter).actionView as Spinner
+
+        val adapter = ArrayAdapter(
+            context!!,
+            R.layout.spinner_dropdown_item,
+            listOf("Mese", "Anno", "Sempre")
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.setSelection(0)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                if (Period.change(0)) {
+                    onPeriodUpdate()
+                }
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                if (Period.change(position)) {
+                    onPeriodUpdate()
+                }
+            }
+        }
+    }
 }

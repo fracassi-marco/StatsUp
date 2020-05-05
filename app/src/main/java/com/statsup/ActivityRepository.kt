@@ -87,12 +87,8 @@ object ActivityRepository {
         else
             activities.filter { it.sport == sports()[selectedSportPosition] }
 
-    fun changeSport(position: Int, callback: (List<Activity>) -> Unit) {
-        if(position == selectedSportPosition)
-            return
-
+    fun changeSport(position: Int) {
         selectedSportPosition = position
-        callback(filterBySelectedSport())
     }
 
     fun byId(id: Long)= activities.single { it.id == id }

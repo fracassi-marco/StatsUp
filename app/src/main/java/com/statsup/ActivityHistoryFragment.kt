@@ -33,8 +33,8 @@ class ActivityHistoryFragment : ActivityFragment() {
         return view
     }
 
-    override fun onActivityUpdate(activities: List<Activity>) {
-        historyAdapter.update(activities)
+    override fun onSportUpdate() {
+        historyAdapter.update(ActivityRepository.filterBySelectedSport())
     }
 }
 
