@@ -1,7 +1,7 @@
 package com.statsup
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -17,9 +17,9 @@ abstract class NoMenuFragment : Fragment() {
         return onCreate(inflater, container)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        menu!!.clear()
+        menu.clear()
     }
 
     protected abstract fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View
@@ -36,11 +36,11 @@ abstract class ActivityFragment : Fragment() {
         return onCreate(inflater, container)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater!!.inflate(R.menu.sport_filter, menu)
-        val spinner = menu!!.findItem(R.id.sport_filter).actionView as Spinner
+        inflater.inflate(R.menu.sport_filter, menu)
+        val spinner = menu.findItem(R.id.sport_filter).actionView as Spinner
 
         val sports = ActivityRepository.sports()
         val adapter = ArrayAdapter(
@@ -73,11 +73,11 @@ abstract class ActivityFragment : Fragment() {
 
 abstract class PeriodActivityFragment : ActivityFragment() {
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater!!.inflate(R.menu.period_filter, menu)
-        val spinner = menu!!.findItem(R.id.period_filter).actionView as Spinner
+        inflater.inflate(R.menu.period_filter, menu)
+        val spinner = menu.findItem(R.id.period_filter).actionView as Spinner
 
         val adapter = ArrayAdapter(
             context!!,

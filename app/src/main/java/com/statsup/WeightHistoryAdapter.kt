@@ -3,9 +3,9 @@ package com.statsup
 import android.app.AlertDialog
 import android.graphics.Color.GREEN
 import android.graphics.Color.RED
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

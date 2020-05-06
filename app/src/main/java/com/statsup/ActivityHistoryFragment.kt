@@ -1,6 +1,6 @@
 package com.statsup
 
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +20,8 @@ class ActivityHistoryFragment : ActivityFragment() {
         historyAdapter = ActivityHistoryAdapter(ActivityRepository.filterBySelectedSport())
         val recyclerView = view.recycler_view
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager =
+            LinearLayoutManager(context)
         recyclerView.adapter = historyAdapter
         recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 

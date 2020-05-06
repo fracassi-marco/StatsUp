@@ -1,9 +1,9 @@
 package com.statsup
 
 import android.content.Intent
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +21,8 @@ class WeightHistoryFragment : NoMenuFragment() {
 
         recyclerView = view.recycler_view
         recyclerView!!.setHasFixedSize(true)
-        recyclerView!!.layoutManager = LinearLayoutManager(context)
+        recyclerView!!.layoutManager =
+            LinearLayoutManager(context)
         recyclerView!!.adapter = adapter
         recyclerView!!.addItemDecoration(VerticalDividerItemDecoration(40))
         noItemsLayout = view.no_items_layout

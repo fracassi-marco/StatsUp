@@ -2,9 +2,9 @@ package com.statsup
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.statsup.ActivityView.fill

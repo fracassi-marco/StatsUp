@@ -1,7 +1,7 @@
 package com.statsup
 
 import android.graphics.Color
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 enum class WeightTabs(val position: Int, val label: String, val color: Int, val fragment: Fragment) {
     BALANCE(0, "Peso", Color.rgb(76, 175, 80), BalanceFragment()),

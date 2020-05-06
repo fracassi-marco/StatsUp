@@ -3,8 +3,8 @@ package com.statsup
 import android.graphics.Color.BLACK
 import android.graphics.Color.parseColor
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.v4.app.Fragment
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

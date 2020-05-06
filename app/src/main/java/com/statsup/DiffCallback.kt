@@ -1,6 +1,6 @@
 package com.statsup
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 
 class DiffCallback<T>(private val newList: List<T>, private val oldList: List<T>) : DiffUtil.Callback() {
 
