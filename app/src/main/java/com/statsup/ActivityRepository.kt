@@ -87,8 +87,11 @@ object ActivityRepository {
         else
             activities.filter { it.sport == sports()[selectedSportPosition] }
 
-    fun changeSport(position: Int) {
+    fun changeSport(position: Int): Boolean {
+        val isChanged = selectedSportPosition != position
         selectedSportPosition = position
+
+        return isChanged
     }
 
     fun byId(id: Long)= activities.single { it.id == id }

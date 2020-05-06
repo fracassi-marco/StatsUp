@@ -114,3 +114,59 @@ class AnnualChart(
         chart.isViewportCalculationEnabled = false
     }
 }
+
+class EverChart(
+    private val chart: ColumnChartView,
+    private val barColor: Int,
+    private val label: String
+) {
+
+    init {
+        chart.isInteractive = false
+    }
+
+    fun refresh(value: Activities) {
+        val byYear = value.byYear()
+        if (byYear.isEmpty()) {
+            chart.columnChartData = ColumnChartData(emptyList())
+        } else {
+            chart.columnChartData = data(byYear)
+
+            setMinAndMax(value)
+        }
+        chart.invalidate()
+    }
+
+    private fun data(values: Map<Int, Double>): ColumnChartData {
+        val columns = values.map {
+            Column(listOf(SubcolumnValue(it.value.toFloat(), barColor))).apply {
+                this.setHasLabels(true)
+            }
+        }
+
+        return ColumnChartData(columns).apply {
+            axisXBottom = Axis(labels(values)).apply {
+                textColor = BLACK
+                name = label
+            }
+            isValueLabelBackgroundEnabled = false
+            setValueLabelsTextColor(BLACK)
+        }
+    }
+
+    private fun labels(values: Map<Int, Double>): List<AxisValue> {
+        var i = 0f
+        return values.map { index ->
+            AxisValue(i++).also { it.setLabel(index.key.toString()) }
+        }
+    }
+
+    private fun setMinAndMax(value: Activities) {
+        chart.maximumViewport.apply {
+            bottom = 0f
+            top = value.maxByYear().toFloat()
+        }
+        chart.currentViewport = chart.maximumViewport
+        chart.isViewportCalculationEnabled = false
+    }
+}

@@ -60,14 +60,14 @@ class ActivityRecordsFragment : ActivityFragment() {
             label.text = resources.getString(R.string.records_elevation_high)
         }
 
-        onSportUpdate()
+        onFilterChange()
 
         showActivitiesOrEmptyPage(view.no_activities_layout, view.records)
 
         return view
     }
 
-    override fun onSportUpdate() {
+    override fun onFilterChange() {
         averageSpeed!!.visibility = VISIBLE
         speed!!.visibility = VISIBLE
         pace!!.visibility = VISIBLE

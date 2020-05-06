@@ -119,4 +119,8 @@
 
     <string name="total">Totale</string>
     <string name="average">Media</string>
+
+    <string name="period_monthly">Mese</string>
+    <string name="period_annual">Anno</string>
+    <string name="period_ever">Sempre</string>
 </resources>

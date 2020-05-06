@@ -1,6 +1,7 @@
 package com.statsup
 
-import android.graphics.Color.*
+import android.graphics.Color.GREEN
+import android.graphics.Color.RED
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import kotlinx.android.synthetic.main.balance_fragment.view.*
 import kotlinx.android.synthetic.main.overview_item.view.*
 import lecho.lib.hellocharts.view.LineChartView
 import org.joda.time.DateTime
+
 
 class BalanceFragment : Fragment() {
 

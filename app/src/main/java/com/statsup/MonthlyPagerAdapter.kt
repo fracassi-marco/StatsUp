@@ -78,6 +78,65 @@ class AnnualChartsPagerAdapter(private val context: Context) : ActivityPagerAdap
     override fun getCount() = activities.years().size
 }
 
+class EverChartsPagerAdapter(private val context: Context) : ActivityPagerAdapter() {
+
+    private lateinit var stats: Stats
+    private lateinit var activities: Activities
+
+    override fun update(stats: Stats, activities: List<Activity>) {
+        this.stats = stats
+        this.activities =  Activities(activities, stats.provider)
+    }
+
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val view = LayoutInflater.from(context).inflate(R.layout.chart_pager_item, container, false)
+
+        val selectedActivities = activities
+        view.title.text = container.resources.getString(R.string.period_ever)
+        view.previous_label.visibility = GONE
+        view.previous_image.visibility = GONE
+        view.next_label.visibility = GONE
+        view.next_image.visibility = GONE
+
+        view.overview_item.apply {
+            left_value.text = Measure.of(selectedActivities.total(), "", "")
+            left_text.text = resources.getString(R.string.total)
+            right_value.text = Measure.of(selectedActivities.average(), "", "")
+            right_text.text = resources.getString(R.string.average)
+        }
+
+        updateTrendChart(view, selectedActivities)
+        updateVsChart(view)
+        updateDayOfWeekChart(view, selectedActivities)
+
+        container.addView(view)
+
+        return view
+    }
+
+    private fun updateTrendChart(view: View, selectedActivities: Activities) {
+        EverChart(view.trend_chart, stats.color, stats.unit).refresh(selectedActivities)
+    }
+
+    private fun updateVsChart(view: View) {
+        view.vs_chart.visibility = GONE
+    }
+
+    private fun updateDayOfWeekChart(values: View, activities: Activities) {
+        val bars = activities.byDayOfWeek().map {
+            Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
+        }
+
+        values.day_of_week_cart.setData(100, bars)
+    }
+
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {}
+
+    override fun isViewFromObject(view: View, instance: Any) = view == instance
+
+    override fun getCount() = 1
+}
+
 class MonthlyChartsPagerAdapter(
     private val context: Context
 ) : ActivityPagerAdapter() {

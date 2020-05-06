@@ -54,24 +54,24 @@ abstract class ActivityFragment : Fragment() {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                ActivityRepository.changeSport(0)
-                onSportUpdate()
+                if(ActivityRepository.changeSport(0)) {
+                    onFilterChange()
+                }
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                ActivityRepository.changeSport(position)
-                onSportUpdate()
+                if(ActivityRepository.changeSport(position)) {
+                    onFilterChange()
+                }
             }
         }
     }
 
     protected abstract fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View
-    protected abstract fun onSportUpdate()
+    protected abstract fun onFilterChange()
 }
 
 abstract class PeriodActivityFragment : ActivityFragment() {
-
-    protected abstract fun onPeriodUpdate()
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -82,7 +82,7 @@ abstract class PeriodActivityFragment : ActivityFragment() {
         val adapter = ArrayAdapter(
             context!!,
             R.layout.spinner_dropdown_item,
-            listOf("Mese", "Anno", "Sempre")
+            Period.values().map { resources.getString(it.label) }
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -90,14 +90,14 @@ abstract class PeriodActivityFragment : ActivityFragment() {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                if (Period.change(0)) {
-                    onPeriodUpdate()
+                if (PeriodFilter.change(0)) {
+                    onFilterChange()
                 }
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                if (Period.change(position)) {
-                    onPeriodUpdate()
+                if (PeriodFilter.change(position)) {
+                    onFilterChange()
                 }
             }
         }
