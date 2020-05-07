@@ -1,72 +1,59 @@
 package com.statsup
 
 import android.graphics.Color
+import android.graphics.Color.BLACK
 import lecho.lib.hellocharts.model.*
+import lecho.lib.hellocharts.model.ValueShape.CIRCLE
 import lecho.lib.hellocharts.view.LineChartView
+import org.joda.time.Days
 
 class WeightChart(private val lineChart: LineChartView) {
     fun refresh(weights: List<Weight>) {
         lineChart.lineChartData = generateData(weights)
         lineChart.currentViewport = Viewport(
-            lineChart.maximumViewport.right - 90,
+            lineChart.maximumViewport.right - 365,
             lineChart.maximumViewport.top,
             lineChart.maximumViewport.right,
             lineChart.maximumViewport.bottom
-        );
-        lineChart.isViewportCalculationEnabled = false;
+        )
+        lineChart.isViewportCalculationEnabled = false
     }
 
     private fun generateData(weights: List<Weight>): LineChartData {
-        val line = Line(values(weights)).also {
-            it.shape = ValueShape.CIRCLE
-            it.pointRadius = 4
-            it.setHasLabels(false)
-            it.setHasLabelsOnlyForSelected(true)
-            it.setHasLines(true)
-            it.setHasPoints(true)
-            it.color = Color.rgb(255, 185, 97)
+        val values = mutableListOf<PointValue>()
+        val labels = mutableListOf<AxisValue>()
+
+        val zero = weights.first().date()
+        weights.forEach { weight ->
+            val point = Days.daysBetween(zero, weight.date()).days.toFloat()
+            values.add(PointValue(point, weight.kilograms.toFloat()).apply {
+                setLabel("${weight.kilograms}Kg - ${weight.date().toString("dd/MM/yyyy")}")
+            })
+            labels.add(AxisValue(point).apply {
+                setLabel(weight.date().toString("    MM/yy"))
+            })
         }
 
-        return LineChartData(listOf(line)).also {
-            it.axisXBottom = Axis(axisXLabels(weights)).also {
-                it.setHasTiltedLabels(true)
-                it.name = "Peso [Kg]"
-                it.textColor = Color.BLACK
-            }
-            it.axisYLeft = Axis().also {
-                it.setHasLines(true)
-                it.textColor = Color.BLACK
-            }
-            it.setValueLabelsTextColor(Color.BLACK)
+        val line = Line(values).apply {
+            shape = CIRCLE
+            pointRadius = 4
+            setHasLabelsOnlyForSelected(true)
+            setHasLines(true)
+            setHasPoints(true)
+            color = Color.rgb(255, 185, 97)
         }
-    }
 
-    private fun values(orderedWeights: List<Weight>): List<PointValue> {
-        val zero = orderedWeights.first().dateInMillis
-        return orderedWeights.map { weight ->
-            val point = daysBetween(zero, weight.dateInMillis)
-            PointValue(point, weight.kilograms.toFloat()).also {
-                it.setLabel("${weight.kilograms}Kg - ${weight.date().toString("dd/MM/yyyy")}")
+        return LineChartData(listOf(line)).apply {
+            axisXBottom = Axis(labels).apply {
+                setHasTiltedLabels(true)
+                setHasLines(true)
+                textColor = BLACK
             }
-        }
-    }
-
-    private fun axisXLabels(orderedWeights: List<Weight>): List<AxisValue> {
-        val zero = orderedWeights.first().dateInMillis
-        return orderedWeights.map { weight ->
-            val point = daysBetween(zero, weight.dateInMillis)
-            AxisValue(point).also {
-                val date =
-                    "${weight.date().dayOfMonth}/${weight.date().monthOfYear}/${weight.date().year.toString().substring(
-                        2
-                    )}"
-                it.setLabel(date)
+            axisYLeft = Axis().apply {
+                setHasLines(true)
+                textColor = BLACK
             }
+            setValueLabelsTextColor(BLACK)
         }
-    }
-
-    private fun daysBetween(from: Long, to: Long): Float {
-        val deltaMillis = to - from
-        return (deltaMillis / 86400000).toFloat()
     }
 }
