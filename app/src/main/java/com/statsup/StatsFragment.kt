@@ -9,15 +9,23 @@ class StatsFragment : PeriodActivityFragment() {
 
     private var viewpager: DynamicHeightViewPager? = null
     private lateinit var stats: Stats
+    private lateinit var latestPeriodPosition: Period
 
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.stats_fragment, container, false)
         stats = arguments!!.get("stats") as Stats
         viewpager = view.view_pager
 
+        latestPeriodPosition = PeriodFilter.current
         onFilterChange()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        onFilterChange()
     }
 
     override fun onFilterChange() {

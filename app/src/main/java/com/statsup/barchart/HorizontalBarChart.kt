@@ -77,7 +77,7 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
         val view = LayoutInflater.from(context).inflate(R.layout.bar, linearParentLayout, false)
         view.linear_bar.setBackgroundColor(bar.color)
         view.text_view_bar_label.apply {
-            text = bar.label.padStart(maxLabelSize, ' ')
+            text = bar.label.padEnd(maxLabelSize, ' ')
             textSize = labelSize
             setTextColor(labelColor)
         }

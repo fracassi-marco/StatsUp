@@ -86,7 +86,7 @@ abstract class PeriodActivityFragment : ActivityFragment() {
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
-        spinner.setSelection(0)
+        spinner.setSelection(PeriodFilter.current.ordinal)
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {

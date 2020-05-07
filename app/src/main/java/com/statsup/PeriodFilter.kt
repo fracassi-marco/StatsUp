@@ -10,11 +10,11 @@ enum class Period(val label: Int) {
 }
 
 object PeriodFilter {
-    private var current = MONTHLY
+    var current = MONTHLY
 
     fun change(position: Int): Boolean {
-        val isChanged = current != Period.values()[position]
-        current = Period.values()[position]
+        val isChanged = current != values()[position]
+        current = values()[position]
 
         return isChanged
     }
