@@ -31,6 +31,10 @@
     <string name="all_empty_field"> - </string>
     <string name="weight_editor_date_text">Data</string>
 
+    <string name="weight_min">Peso minimo</string>
+    <string name="weight_current">Peso attuale</string>
+    <string name="weight_max">Peso massimo</string>
+
     <string name="integer_dialog_height">Altezza</string>
     <string name="height_unit_cm">Cm</string>
     <string name="height_editor_value_text">Altezza in centimetri</string>

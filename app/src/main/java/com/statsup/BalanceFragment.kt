@@ -38,16 +38,16 @@ class BalanceFragment : Fragment() {
         minMaxOverviewItem.left_value.text =
             Measure.of(weights.minBy { it.kilograms }!!.kilograms, "Kg", "")
         minMaxOverviewItem.left_value.textSize = 21f
-        minMaxOverviewItem.left_text.text = "Peso minimo"
+        minMaxOverviewItem.left_text.setText(R.string.weight_min)
 
         minMaxOverviewItem.center_value.text = Measure.of(weights.last().kilograms, "Kg", "")
         minMaxOverviewItem.center_value.textSize = 26f
-        minMaxOverviewItem.center_text.text = "Peso attuale"
+        minMaxOverviewItem.center_text.setText(R.string.weight_current)
 
         minMaxOverviewItem.right_value.text =
             Measure.of(weights.maxBy { it.kilograms }!!.kilograms, "Kg", "")
         minMaxOverviewItem.right_value.textSize = 21f
-        minMaxOverviewItem.right_text.text = "Peso massimo"
+        minMaxOverviewItem.right_text.setText(R.string.weight_max)
     }
 
     private fun updateOverview(weights: List<Weight>, fromDate: DateTime, finalValue: Double, view: View, label: String) {
