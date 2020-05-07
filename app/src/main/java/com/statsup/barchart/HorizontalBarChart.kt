@@ -29,11 +29,15 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
             convertDpToPixel(20f, context)
         )
         labelSize = convertPixelsToDp(
-            attributes.getDimensionPixelSize(HorizontalBarChart_label_size, convertDpToPixel(15f, context)
+            attributes.getDimensionPixelSize(
+                HorizontalBarChart_label_size, convertDpToPixel(15f, context)
             ).toFloat(), context
         )
         labelColor = attributes.getColor(HorizontalBarChart_label_color, BLACK)
-        spacesBetweenBars = attributes.getDimensionPixelSize(HorizontalBarChart_spaces_between_bars, convertDpToPixel(5f, context))
+        spacesBetweenBars = attributes.getDimensionPixelSize(
+            HorizontalBarChart_spaces_between_bars,
+            convertDpToPixel(5f, context)
+        )
         valueSuffix = attributes.getString(HorizontalBarChart_value_suffix) ?: ""
         attributes.recycle()
     }
@@ -53,8 +57,13 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
         removeAllViewsInLayout()
         val linearParentLayout = initLayout()
         addView(linearParentLayout)
+        val maxLabelSize = bars.map { it.label.length }.max()
         for (bar in bars) {
-            addBar(maxBarValue + 20, bar, linearParentLayout)
+            getDimension(linearParentLayout, object : DimensionReceivedCallback {
+                override fun onDimensionReceived(dimension: Int) {
+                    createBar(maxBarValue + 20, dimension, bar, linearParentLayout, maxLabelSize ?: 0)
+                }
+            })
         }
     }
 
@@ -62,16 +71,17 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
         maxBarValue: Int,
         dimension: Int,
         bar: Bar,
-        linearParentLayout: LinearLayout
+        linearParentLayout: LinearLayout,
+        maxLabelSize: Int
     ) {
         val view = LayoutInflater.from(context).inflate(R.layout.bar, linearParentLayout, false)
         view.linear_bar.setBackgroundColor(bar.color)
         view.text_view_bar_label.apply {
-            text = bar.label
+            text = bar.label.padStart(maxLabelSize, ' ')
             textSize = labelSize
             setTextColor(labelColor)
         }
-        view.text_view_raters.text =  "${bar.value}${valueSuffix}"
+        view.text_view_raters.text = "${bar.value}${valueSuffix}"
         view.linear_bar.layoutParams.width = dimension * bar.value / maxBarValue
         view.layoutParams.height = barHeight
         (view.layoutParams as MarginLayoutParams).bottomMargin = spacesBetweenBars
@@ -86,18 +96,6 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
                     listener.onDimensionReceived(view.width)
                 }
             })
-    }
-
-    private fun addBar(
-        maxBarValue: Int,
-        bar: Bar,
-        linearParentLayout: LinearLayout
-    ) {
-        getDimension(linearParentLayout, object : DimensionReceivedCallback {
-            override fun onDimensionReceived(dimension: Int) {
-                createBar(maxBarValue, dimension, bar, linearParentLayout)
-            }
-        })
     }
 
     private interface DimensionReceivedCallback {

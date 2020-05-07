@@ -94,6 +94,7 @@
     <string name="empty_weight">Aggiungi o importa le tue pesate!!</string>
 
     <string name="day_of_week_title">Distribuzione per giorno</string>
+    <string name="sport_breakdown_chart_title">Distribuzione per sport</string>
 
     <string name="settings_delete_activities">Cancella attività in locale</string>
     <string name="settings_delete_activities_complete">Attività cancellate</string>

@@ -189,4 +189,12 @@ class Activities(
             day to provider(byDay.getOrElse(day.index) { emptyList() })
         }.toMap()
     }
+
+    fun bySport(): Map<Sports, Double> {
+        val bySport = selected().groupBy { it.sport }
+
+        return bySport.map { day ->
+            day.key to provider(day.value)
+        }.toMap()
+    }
 }

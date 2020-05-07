@@ -45,6 +45,7 @@ class AnnualChartsPagerAdapter(private val context: Context) : ActivityPagerAdap
         updateTrendChart(view, selectedActivities)
         updateVsChart(view, selectedActivities)
         updateDayOfWeekChart(view, selectedActivities)
+        updateSportBreakdownChart(view, selectedActivities)
 
         container.addView(view)
 
@@ -68,7 +69,15 @@ class AnnualChartsPagerAdapter(private val context: Context) : ActivityPagerAdap
             Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
         }
 
-        values.day_of_week_cart.setData(100, bars)
+        values.day_of_week_chart.setData(100, bars)
+    }
+
+    private fun updateSportBreakdownChart(values: View, activities: Activities) {
+        val bars = activities.bySport().map {
+            Bar(percentage(it.value, activities.total()), stats.color, values.resources.getString(it.key.title))
+        }
+
+        values.sport_breakdown_chart.setData(100, bars)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {}
@@ -108,6 +117,7 @@ class EverChartsPagerAdapter(private val context: Context) : ActivityPagerAdapte
         updateTrendChart(view, selectedActivities)
         updateVsChart(view)
         updateDayOfWeekChart(view, selectedActivities)
+        updateSportBreakdownChart(view, selectedActivities)
 
         container.addView(view)
 
@@ -127,7 +137,15 @@ class EverChartsPagerAdapter(private val context: Context) : ActivityPagerAdapte
             Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
         }
 
-        values.day_of_week_cart.setData(100, bars)
+        values.day_of_week_chart.setData(100, bars)
+    }
+
+    private fun updateSportBreakdownChart(values: View, activities: Activities) {
+        val bars = activities.bySport().map {
+            Bar(percentage(it.value, activities.total()), stats.color, values.resources.getString(it.key.title))
+        }
+
+        values.sport_breakdown_chart.setData(100, bars)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {}
@@ -177,6 +195,7 @@ class MonthlyChartsPagerAdapter(
         updateTrendChart(view, selectedActivities)
         updateVsChart(view, selectedActivities)
         updateDayOfWeekChart(view, selectedActivities)
+        updateSportBreakdownChart(view, selectedActivities)
 
         container.addView(view)
 
@@ -200,7 +219,15 @@ class MonthlyChartsPagerAdapter(
             Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
         }
 
-        values.day_of_week_cart.setData(100, bars)
+        values.day_of_week_chart.setData(100, bars)
+    }
+
+    private fun updateSportBreakdownChart(values: View, activities: Activities) {
+        val bars = activities.bySport().map {
+            Bar(percentage(it.value, activities.total()), stats.color, values.resources.getString(it.key.title))
+        }
+
+        values.sport_breakdown_chart.setData(100, bars)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {}
