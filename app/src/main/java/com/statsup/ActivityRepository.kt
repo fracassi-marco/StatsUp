@@ -8,7 +8,7 @@ import com.statsup.Sports.All
 object ActivityRepository {
 
     private var activities: List<Activity> = emptyList()
-    private var selectedSportPosition = 0
+    var selectedSportPosition = 0
 
     fun clean(context: Context) {
         DbHelper(context).writableDatabase.use { it.delete("activities", null, null) }

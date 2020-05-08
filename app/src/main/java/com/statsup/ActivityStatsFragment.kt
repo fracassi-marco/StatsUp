@@ -20,6 +20,7 @@ class ActivityStatsFragment : Fragment() {
         val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
         val viewPager = view.stats_view_pager
         viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
+        viewPager.offscreenPageLimit = 3
 
         view.stats_tab_layout.also {
             it.setupWithViewPager(viewPager)
