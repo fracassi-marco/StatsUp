@@ -40,7 +40,7 @@ class CsvWeights(
         Weight(parseWeight(record), parseDate(record).millis)
 
     private fun parseDate(record: List<String>) =
-        DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(record.first())
+        DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(record[0])
 
-    private fun parseWeight(record: List<String>) = record.last().toDouble()
+    private fun parseWeight(record: List<String>) = record[1].toDouble()
 }

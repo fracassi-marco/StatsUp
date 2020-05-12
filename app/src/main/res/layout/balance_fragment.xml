@@ -21,14 +21,47 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+        <com.warkiz.widget.IndicatorStayLayout
+                android:id="@+id/seek_bar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/line_chart">
+
+            <com.warkiz.widget.IndicatorSeekBar
+                    android:id="@+id/seek_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isb_indicator_color="@color/Green"
+                    app:isb_indicator_text_color="@android:color/black"
+                    app:isb_indicator_text_size="18sp"
+                    app:isb_seek_smoothly="false"
+                    app:isb_show_indicator="rectangle"
+                    app:isb_show_tick_marks_type="none"
+                    app:isb_show_tick_texts="true"
+                    app:isb_thumb_color="@color/Orange"
+                    app:isb_thumb_size="20dp"
+                    app:isb_tick_texts_color="@android:color/black"
+                    app:isb_tick_texts_size="28sp"
+                    app:isb_ticks_count="2"
+                    app:isb_track_background_color="@color/Grey"
+                    app:isb_track_background_size="2dp"
+                    app:isb_track_progress_color="@color/Green"
+                    app:isb_track_progress_size="4dp"
+
+                    app:isb_user_seekable="false" />
+        </com.warkiz.widget.IndicatorStayLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bmi_oxford_overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginHorizontal="5dp"
                 android:background="@drawable/border"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line_chart">
+                app:layout_constraintTop_toBottomOf="@id/seek_bar_layout">
 
             <include
                     android:id="@+id/bmi_oxford_min_max_overview_item"
@@ -104,6 +137,28 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <View
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/Grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/full_variation_overview_item" />
+
+            <include
+                    android:id="@+id/travia_weight_overview_item"
+                    layout="@layout/overview_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

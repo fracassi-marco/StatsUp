@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.stats_fragment.view.*
 
 class StatsFragment : PeriodActivityFragment() {
 
-    private var viewpager: DynamicHeightViewPager? = null
+    private var viewPager: DynamicHeightViewPager? = null
     private lateinit var stats: Stats
     private var latestPeriod = -1
     private var latestSport = -1
@@ -15,7 +15,7 @@ class StatsFragment : PeriodActivityFragment() {
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         val view = inflater.inflate(R.layout.stats_fragment, container, false)
         stats = arguments!!.get("stats") as Stats
-        viewpager = view.view_pager
+        viewPager = view.view_pager
 
         onResume()
 
@@ -36,14 +36,13 @@ class StatsFragment : PeriodActivityFragment() {
         val pagerAdapter = PeriodFilter.pagerAdapter(context!!).apply {
             update(stats, activities)
         }
-        viewpager!!.adapter = pagerAdapter
-        viewpager!!.currentItem = pagerAdapter.count - 1
-
+        viewPager!!.adapter = pagerAdapter
+        viewPager!!.currentItem = pagerAdapter.count - 1
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewpager = null
+        viewPager = null
     }
 }
 

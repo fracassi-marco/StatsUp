@@ -34,6 +34,8 @@
     <string name="weight_min">Peso minimo</string>
     <string name="weight_current">Peso attuale</string>
     <string name="weight_max">Peso massimo</string>
+    <string name="weight_travia">Peso ideale</string>
+    <string name="weight_travia_delta">Scarto</string>
 
     <string name="integer_dialog_height">Altezza</string>
     <string name="height_unit_cm">Cm</string>
