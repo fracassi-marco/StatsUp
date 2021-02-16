@@ -3,7 +3,7 @@ package com.statsup
 import android.content.Context
 import java.util.*
 
-class Confs(private val context: Context) {
+class Confs(context: Context) {
 
     companion object {
         val properties = Properties()

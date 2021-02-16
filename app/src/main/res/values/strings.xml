@@ -14,7 +14,8 @@
     <string name="menu_weight">Peso</string>
     <string name="menu_weight_stats">Andamento</string>
     <string name="menu_weight_history">Pesate</string>
-    <string name="menu_weight_import">Import da CSV</string>
+    <string name="menu_weight_import">Importa da CSV</string>
+    <string name="menu_weight_fit_export">Esporta su Fit</string>
     <string name="menu_other">Altro</string>
     <string name="menu_configurations">Configurazioni</string>
 
@@ -36,6 +37,7 @@
     <string name="weight_max">Peso massimo</string>
     <string name="weight_travia">Peso ideale</string>
     <string name="weight_travia_delta">Scarto</string>
+    <string name="weight_marker">%s %s</string>
 
     <string name="integer_dialog_height">Altezza</string>
     <string name="height_unit_cm">Cm</string>
@@ -97,6 +99,11 @@
 
     <string name="day_of_week_title">Distribuzione per giorno</string>
     <string name="sport_breakdown_chart_title">Distribuzione per sport</string>
+    <string name="last_three_months_chart_title">Ultimi 3 mesi</string>
+    <string name="monthly_chart_title">Media mensile</string>
+
+    <string name="weights_fit_export_ok">Pesate esportate correttamente</string>
+    <string name="weights_fit_export_ko">Errore nell\'esportare le pesate</string>
 
     <string name="settings_delete_activities">Cancella attività in locale</string>
     <string name="settings_delete_activities_complete">Attività cancellate</string>

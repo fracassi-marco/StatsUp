@@ -129,8 +129,8 @@ class Activities(
 
     private fun activitiesByYear(): Map<Int, List<Activity>> {
         val byYear = selected().groupBy { it.date().year }
-        val minYear = byYear.minBy { it.key }!!.key
-        val maxYear = byYear.maxBy { it.key }!!.key
+        val minYear = byYear.minByOrNull { it.key }!!.key
+        val maxYear = byYear.maxByOrNull { it.key }!!.key
         return (minYear..maxYear).map {
             it to (byYear[it] ?: emptyList())
         }.toMap().toSortedMap()
@@ -139,21 +139,21 @@ class Activities(
     fun maxByDay(): Double {
         return months()
             .map { month ->
-                ofMonth(month).groupBy { it.date().dayOfMonth }.values.map { provider(it) }.max()
+                ofMonth(month).groupBy { it.date().dayOfMonth }.values.map { provider(it) }.maxOrNull()
                     ?: 0.0
-            }.max() ?: 0.0
+            }.maxOrNull() ?: 0.0
     }
 
     fun maxByMonth(): Double {
         return years()
             .map { year ->
-                ofYear(year).groupBy { it.date().monthOfYear() }.values.map { provider(it) }.max()
+                ofYear(year).groupBy { it.date().monthOfYear() }.values.map { provider(it) }.maxOrNull()
                     ?: 0.0
-            }.max() ?: 0.0
+            }.maxOrNull() ?: 0.0
     }
 
     fun maxByYear(): Double {
-        return activitiesByYear().map { provider(it.value) }.max() ?: 0.0
+        return activitiesByYear().map { provider(it.value) }.maxOrNull() ?: 0.0
     }
 
     fun addMonths(amount: Int) =Activities(activities, provider).filterByMonth(monthPosition + amount)

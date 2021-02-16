@@ -1,11 +1,11 @@
 package com.statsup
 
 import android.content.Context
-import androidx.viewpager.widget.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
+import androidx.viewpager.widget.PagerAdapter
 import com.statsup.Variation.percentage
 import com.statsup.barchart.Bar
 import kotlinx.android.synthetic.main.chart_pager_item.view.*
@@ -155,9 +155,7 @@ class EverChartsPagerAdapter(private val context: Context) : ActivityPagerAdapte
     override fun getCount() = 1
 }
 
-class MonthlyChartsPagerAdapter(
-    private val context: Context
-) : ActivityPagerAdapter() {
+class MonthlyChartsPagerAdapter(private val context: Context) : ActivityPagerAdapter() {
 
     private lateinit var stats: Stats
     private lateinit var activities: Activities

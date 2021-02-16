@@ -38,6 +38,10 @@
                     android:id="@+id/nav_weight_import"
                     android:icon="@drawable/outline_cloud_download_24"
                     android:title="@string/menu_weight_import" />
+            <item
+                android:id="@+id/nav_weight_fit_export"
+                android:icon="@drawable/google_fit"
+                android:title="@string/menu_weight_fit_export" />
         </menu>
     </item>
 

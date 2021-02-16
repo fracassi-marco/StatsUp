@@ -12,14 +12,51 @@
             android:layout_height="match_parent"
             android:paddingTop="8dp">
 
-        <lecho.lib.hellocharts.view.LineChartView
-                android:id="@+id/line_chart"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:layout_marginHorizontal="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/last_three_months_chart_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/black"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:text="@string/last_three_months_chart_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/last_three_months_chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginHorizontal="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/last_three_months_chart_title"/>
+
+        <TextView
+            android:id="@+id/monthly_chart_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/black"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:text="@string/monthly_chart_title"
+            app:layout_constraintTop_toBottomOf="@+id/last_three_months_chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/monthly_chart"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:layout_marginHorizontal="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/monthly_chart_title"/>
 
         <com.warkiz.widget.IndicatorStayLayout
                 android:id="@+id/seek_bar_layout"
@@ -27,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line_chart">
+                app:layout_constraintTop_toBottomOf="@+id/monthly_chart">
 
             <com.warkiz.widget.IndicatorSeekBar
                     android:id="@+id/seek_bar"

@@ -57,7 +57,7 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
         removeAllViewsInLayout()
         val linearParentLayout = initLayout()
         addView(linearParentLayout)
-        val maxLabelSize = bars.map { it.label.length }.max() ?: 0
+        val maxLabelSize = bars.map { it.label.length }.maxOrNull() ?: 0
         for (bar in bars) {
             getDimension(linearParentLayout, object : DimensionReceivedCallback {
                 override fun onDimensionReceived(dimension: Int) {

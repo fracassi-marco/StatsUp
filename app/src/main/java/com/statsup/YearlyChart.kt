@@ -117,8 +117,7 @@ class AnnualChart(
 
 class EverChart(
     private val chart: ColumnChartView,
-    private val barColor: Int,
-    private val label: String
+    private val barColor: Int, private val label: String
 ) {
 
     init {

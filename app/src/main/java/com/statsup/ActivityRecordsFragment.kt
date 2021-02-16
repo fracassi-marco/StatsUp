@@ -78,15 +78,15 @@ class ActivityRecordsFragment : ActivityFragment() {
 
         val activities = ActivityRepository.filterBySelectedSport()
         if (activities.isNotEmpty()) {
-            val averageSpeedActivity = activities.maxBy { it.averageSpeedInKilometersPerHours() }!!
+            val averageSpeedActivity = activities.maxByOrNull { it.averageSpeedInKilometersPerHours() }!!
             val averageSpeedValue = averageSpeedActivity.averageSpeedInKilometersPerHours()
             update(averageSpeed!!, averageSpeedValue, averageSpeedActivity, " Km/h")
 
-            val speedActivity = activities.maxBy { it.maxSpeedInMetersPerSecond }!!
+            val speedActivity = activities.maxByOrNull { it.maxSpeedInMetersPerSecond }!!
             val speedValue = speedActivity.maxSpeedInKilometersPerHours()
             update(speed!!, speedValue, speedActivity, " Km/h")
 
-            val paceActivity = activities.minBy { it.paceInSecondsPerKilometer() }!!
+            val paceActivity = activities.minByOrNull { it.paceInSecondsPerKilometer() }!!
             val paceValue = paceActivity.paceInSecondsPerKilometer()
             if(paceValue == MAX_VALUE) {
                 pace!!.visibility = GONE
@@ -96,7 +96,7 @@ class ActivityRecordsFragment : ActivityFragment() {
                 fill(pace!!.activity, paceActivity)
             }
 
-            val durationActivity = activities.maxBy { it.durationInSeconds }!!
+            val durationActivity = activities.maxByOrNull { it.durationInSeconds }!!
             val durationValue = durationActivity.durationInSeconds
             if(durationValue == 0) {
                 duration!!.visibility = GONE
@@ -106,15 +106,15 @@ class ActivityRecordsFragment : ActivityFragment() {
                 fill(duration!!.activity, durationActivity)
             }
 
-            val distanceActivity = activities.maxBy { it.distanceInMeters }!!
+            val distanceActivity = activities.maxByOrNull { it.distanceInMeters }!!
             val distanceValue = distanceActivity.distanceInKilometers()
             update(distance!!, distanceValue, distanceActivity, " Km")
 
-            val elevationActivity = activities.maxBy { it.elevationInMeters }!!
+            val elevationActivity = activities.maxByOrNull { it.elevationInMeters }!!
             val elevationValue = elevationActivity.elevationInMeters
             update(elevation!!, elevationValue, elevationActivity, " m")
 
-            val elevationHighActivity = activities.maxBy { it.elevHighInMeters }!!
+            val elevationHighActivity = activities.maxByOrNull { it.elevHighInMeters }!!
             val elevationHighValue = elevationHighActivity.elevHighInMeters
             update(elevationHigh!!, elevationHighValue, elevationHighActivity, " m")
         }

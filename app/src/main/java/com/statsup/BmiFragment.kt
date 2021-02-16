@@ -1,13 +1,12 @@
 package com.statsup
 
-import android.graphics.Color.BLACK
 import android.graphics.Color.parseColor
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.bmi_fragment.view.*
 import kotlinx.android.synthetic.main.no_items_layout.view.*
 import kotlinx.android.synthetic.main.overview_item.view.*
@@ -42,9 +41,9 @@ class BmiFragment : Fragment() {
         setVisibleView(view.content, view.no_items_layout, height)
 
         if (height != 0) {
-            val minWeight = weights.minBy { it.kilograms }!!
+            val minWeight = weights.minByOrNull { it.kilograms }!!
             val currentWeight = weights.first()
-            val maxWeight = weights.maxBy { it.kilograms }!!
+            val maxWeight = weights.maxByOrNull { it.kilograms }!!
 
             updateOverviews(
                 view.bmi_oxford_min_max_overview_item,
