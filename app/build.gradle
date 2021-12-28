@@ -8,9 +8,13 @@ android {
         applicationId "com.statsup"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 15000
-        versionName "1.5.0"
+        versionCode 16000
+        versionName "1.6.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        manifestPlaceholders = [googleMapApiKey: properties.getProperty('google.map.key')]
     }
     buildTypes {
         release {
@@ -31,7 +35,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation "com.github.lecho:hellocharts-android:v1.5.8"
+    implementation "com.github.lecho:hellocharts-library:1.5.8@aar"
     implementation 'mobi.gspd:segmentedbarview:1.1.6@aar'
     implementation "joda-time:joda-time:2.10.2"
     implementation 'com.github.DaikonWeb:topinambur-async:1.2.6'
@@ -40,8 +44,10 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.google.android.gms:play-services-fitness:19.0.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-maps:18.0.1'
+    implementation 'com.google.maps.android:android-maps-utils:2.3.0'
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation 'net.wuerl.kotlin:assertj-core-kotlin:0.2.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

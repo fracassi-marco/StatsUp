@@ -73,16 +73,14 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-                android:id="@+id/activity_map"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/activity_map"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/header" />
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:id="@+id/map"
+            tools:context=".MapsActivity"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header"/>
 
         <GridLayout
                 android:id="@+id/activity_details_a"
@@ -91,7 +89,7 @@
                 android:columnCount="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_map" />
+                app:layout_constraintTop_toBottomOf="@+id/map" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
