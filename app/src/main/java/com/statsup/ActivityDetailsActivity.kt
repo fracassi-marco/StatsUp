@@ -122,21 +122,24 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        val f: SupportMapFragment =
+            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         if (activity.map == null) {
-            val f: SupportMapFragment =
-                supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
             f.view!!.visibility = GONE
             return
         }
 
+        f.view!!.isClickable = false
+        googleMap.uiSettings.isMapToolbarEnabled = false
         val list = PolyUtil.decode(activity.map!!)
-        googleMap.addPolyline(
-            PolylineOptions()
-                .width(5.toFloat())
-                .color(Color.BLUE)
-                .geodesic(true)
-                .addAll(list)
-        )
+        googleMap
+            .addPolyline(
+                PolylineOptions()
+                    .width(5.toFloat())
+                    .color(Color.BLUE)
+                    .geodesic(true)
+                    .addAll(list)
+            )
 
         val builder: LatLngBounds.Builder = LatLngBounds.Builder()
         list.forEach {
