@@ -1,7 +1,7 @@
 package com.statsup
 
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.Color.*
 import android.os.Bundle
 import android.view.View
 import android.widget.GridLayout
@@ -12,9 +12,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.maps.android.PolyUtil
 import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.activity_details_item.view.*
 import org.joda.time.format.DateTimeFormat
@@ -130,17 +129,11 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
+        val trip = Trip(activity.map!!)
         googleMap.uiSettings.isMapToolbarEnabled = false
-        val list = PolyUtil.decode(activity.map!!)
-        googleMap
-            .addPolyline(
-                PolylineOptions()
-                    .width(5.toFloat())
-                    .color(Color.BLUE)
-                    .geodesic(true)
-                    .addAll(list)
-            )
-
+        googleMap.addCircle(CircleOptions().center(trip.begin()).fillColor(GREEN).strokeColor(GREEN).radius(20.0))
+        googleMap.addCircle(CircleOptions().center(trip.end()).fillColor(RED).strokeColor(RED).radius(20.0))
+        googleMap.addPolyline(PolylineOptions().width(5f).color(BLUE).geodesic(true).addAll(trip.steps()))
         googleMap.setOnMapClickListener {
             val intent = Intent(this, MapActivity::class.java).apply {
                 putExtra("id", activity.id)
@@ -148,13 +141,8 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }
 
-        val builder: LatLngBounds.Builder = LatLngBounds.Builder()
-        list.forEach {
-            builder.include(it)
-        }
-
         googleMap.setOnMapLoadedCallback {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 10))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(trip.boundaries(), 30))
         }
     }
 }

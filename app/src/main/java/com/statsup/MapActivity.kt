@@ -1,15 +1,14 @@
 package com.statsup
 
-import android.graphics.Color
+import android.graphics.Color.*
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.maps.android.PolyUtil
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -29,23 +28,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        val list = PolyUtil.decode(activity.map!!)
-        googleMap
-            .addPolyline(
-                PolylineOptions()
-                    .width(7.toFloat())
-                    .color(Color.BLUE)
-                    .geodesic(true)
-                    .addAll(list)
-            )
-
-        val builder: LatLngBounds.Builder = LatLngBounds.Builder()
-        list.forEach {
-            builder.include(it)
-        }
+        val trip = Trip(activity.map!!)
+        googleMap.addCircle(CircleOptions().center(trip.begin()).fillColor(GREEN).strokeColor(GREEN).radius(20.0))
+        googleMap.addCircle(CircleOptions().center(trip.end()).fillColor(RED).strokeColor(RED).radius(20.0))
+        googleMap.addPolyline(PolylineOptions().width(7f).color(BLUE).geodesic(true).addAll(trip.steps()))
 
         googleMap.setOnMapLoadedCallback {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 20))
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(trip.boundaries(), 30))
         }
     }
 

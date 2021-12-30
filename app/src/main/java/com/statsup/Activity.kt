@@ -39,4 +39,5 @@ data class Activity(
 
     fun movingPaceInSecondsPerKilometer(): Int =
         if (distanceInMeters == 0f) MAX_VALUE else (movingTimeInSeconds / distanceInKilometers()).toInt()
+
 }
