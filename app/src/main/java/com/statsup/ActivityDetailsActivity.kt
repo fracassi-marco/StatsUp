@@ -1,5 +1,6 @@
 package com.statsup
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -122,14 +123,13 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        val f: SupportMapFragment =
-            supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         if (activity.map == null) {
-            f.view!!.visibility = GONE
+            val fragment: SupportMapFragment =
+                supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+            fragment.view!!.visibility = GONE
             return
         }
 
-        f.view!!.isClickable = false
         googleMap.uiSettings.isMapToolbarEnabled = false
         val list = PolyUtil.decode(activity.map!!)
         googleMap
@@ -141,11 +141,20 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .addAll(list)
             )
 
+        googleMap.setOnMapClickListener {
+            val intent = Intent(this, MapActivity::class.java).apply {
+                putExtra("id", activity.id)
+            }
+            startActivity(intent)
+        }
+
         val builder: LatLngBounds.Builder = LatLngBounds.Builder()
         list.forEach {
             builder.include(it)
         }
 
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50))
+        googleMap.setOnMapLoadedCallback {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 10))
+        }
     }
 }
