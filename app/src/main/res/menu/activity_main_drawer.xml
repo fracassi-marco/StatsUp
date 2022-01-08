@@ -18,6 +18,10 @@
                     android:icon="@drawable/award"
                     android:title="@string/menu_records" />
             <item
+                android:id="@+id/nav_map"
+                android:icon="@drawable/outline_language_24"
+                android:title="@string/menu_map" />
+            <item
                     android:id="@+id/nav_import_from_strava"
                     android:icon="@drawable/outline_cloud_download_24"
                     android:title="@string/menu_import_from_strava" />

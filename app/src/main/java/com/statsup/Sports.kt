@@ -43,12 +43,12 @@ enum class Sports(val id: Long, val code: String, val title: Int, val icon: Int)
     companion object {
         @JvmStatic
         fun icon(sport: String): Int {
-            return valueOf(sport.toUpperCase()).icon
+            return valueOf(sport.uppercase()).icon
         }
 
         @JvmStatic
         fun title(sport: String): Int {
-            return valueOf(sport.toUpperCase()).title
+            return valueOf(sport.uppercase()).title
         }
 
         @JvmStatic

@@ -72,7 +72,7 @@ class WeightEditorView : AppCompatActivity() {
         }
 
         result = result.replace(".", "")
-        result = result.substring(0, 1).toUpperCase() + result.substring(1)
+        result = result.substring(0, 1).uppercase() + result.substring(1)
 
         return result
     }

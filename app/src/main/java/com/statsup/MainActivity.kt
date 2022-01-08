@@ -80,6 +80,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_records -> {
                 openFragment(menuItem.title, ActivityRecordsFragment())
             }
+            R.id.nav_map -> {
+                startActivity(Intent(this, AllTimesMapActivity::class.java))
+            }
             R.id.nav_import_from_strava -> {
                 startActivitiesImport()
             }

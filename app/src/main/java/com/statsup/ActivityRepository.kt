@@ -95,4 +95,6 @@ object ActivityRepository {
     }
 
     fun byId(id: Long)= activities.single { it.id == id }
+
+    fun all() = activities
 }

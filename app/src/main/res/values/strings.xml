@@ -10,6 +10,7 @@
     <string name="menu_stats">Statistiche</string>
     <string name="menu_history">Elenco</string>
     <string name="menu_records">Record</string>
+    <string name="menu_map">Mappa</string>
     <string name="menu_import_from_strava">Import da Strava</string>
     <string name="menu_weight">Peso</string>
     <string name="menu_weight_stats">Andamento</string>
