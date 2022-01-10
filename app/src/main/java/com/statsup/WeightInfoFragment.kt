@@ -2,37 +2,35 @@ package com.statsup
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.overview_item.view.*
-import kotlinx.android.synthetic.main.weight_info_fragment.view.*
+import androidx.fragment.app.Fragment
+import com.statsup.databinding.WeightInfoFragmentBinding
 import java.util.*
 
 
 class WeightInfoFragment : Fragment() {
 
-    private fun updateUi(
-        weights: List<Weight>,
-        weightOverviewItem: View,
-        howLongOverviewItem: View
-    ) {
-        weightOverviewItem.left_text.text = "Numero di pesate"
-        weightOverviewItem.left_value.text = weights.size.toString()
+    private var _binding: WeightInfoFragmentBinding? = null
+    private val binding get() = _binding!!
 
-        howLongOverviewItem.left_text.text = "Prima pesata"
-        howLongOverviewItem.left_value.text = weights.last().date().toString("dd/MM/yyyy")
-        howLongOverviewItem.left_value.textSize = 21f
-        howLongOverviewItem.left_value.setTextColor(Color.BLACK)
+    private fun updateUi(weights: List<Weight>) {
+        binding.weightOverviewItem.leftText.text = "Numero di pesate"
+        binding.weightOverviewItem.leftValue.text = weights.size.toString()
 
-        howLongOverviewItem.right_text.text = "Ultima pesata"
-        howLongOverviewItem.right_value.text = weights.first().date().toString("dd/MM/yyyy")
-        howLongOverviewItem.right_value.textSize = 21f
+        binding.howLongOverviewItem.leftText.text = "Prima pesata"
+        binding.howLongOverviewItem.leftValue.text = weights.last().date().toString("dd/MM/yyyy")
+        binding.howLongOverviewItem.leftValue.textSize = 21f
+        binding.howLongOverviewItem.leftValue.setTextColor(Color.BLACK)
 
-        howLongOverviewItem.center_text.text = "Da"
-        howLongOverviewItem.center_value.textSize = 16f
-        howLongOverviewItem.center_value.text = since(weights)
+        binding.howLongOverviewItem.rightText.text = "Ultima pesata"
+        binding.howLongOverviewItem.rightValue.text = weights.first().date().toString("dd/MM/yyyy")
+        binding.howLongOverviewItem.rightValue.textSize = 21f
+
+        binding.howLongOverviewItem.centerText.text = "Da"
+        binding.howLongOverviewItem.centerValue.textSize = 16f
+        binding.howLongOverviewItem.centerValue.text = since(weights)
     }
 
     private fun since(weights: List<Weight>): String {
@@ -50,14 +48,15 @@ class WeightInfoFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.weight_info_fragment, container, false)
-        val weightOverviewItem  = view.weightOverviewItem
-        val howLongOverviewItem = view.howLongOverviewItem
+        _binding = WeightInfoFragmentBinding.inflate(inflater, container, false)
 
-        val weights = WeightRepository.all()
+        updateUi(WeightRepository.all())
 
-        updateUi(weights, weightOverviewItem, howLongOverviewItem)
+        return binding.root
+    }
 
-        return view
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

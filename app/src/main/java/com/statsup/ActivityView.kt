@@ -2,25 +2,24 @@ package com.statsup
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import kotlinx.android.synthetic.main.activity_history_list_item.view.*
+import com.statsup.databinding.ActivityHistoryListItemBinding
 import org.joda.time.format.DateTimeFormat
 
 object ActivityView {
-    fun fill(view: View, activity: Activity) {
-        view.history_list_item_title_text.text = view.resources.getString(activity.sport.title) + " - " + activity.title
-        view.history_list_item_icon.setImageResource(activity.sport.icon)
-        view.history_list_item_date_text.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm"))
-        view.history_list_item_time_text.text = Measure.timeFragments(activity.durationInSeconds)
-        view.history_list_item_distance_text.text = Measure.of(activity.distanceInKilometers(), "Km", "", "- ")
-        view.history_list_item_pace_text.text = Measure.minutesAndSeconds(activity.paceInSecondsPerKilometer(), "/Km")
-        view.history_list_item_elevation_text.text = Measure.of(activity.elevationInMeters, "m", "", "- ")
+    fun fill(binding: ActivityHistoryListItemBinding, activity: Activity) {
+        binding.historyListItemTitleText.text = binding.root.resources.getString(activity.sport.title) + " - " + activity.title
+        binding.historyListItemIcon.setImageResource(activity.sport.icon)
+        binding.historyListItemDateText.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm"))
+        binding.historyListItemTimeText.text = Measure.timeFragments(activity.durationInSeconds)
+        binding.historyListItemDistanceText.text = Measure.of(activity.distanceInKilometers(), "Km", "", "- ")
+        binding.historyListItemPaceText.text = Measure.minutesAndSeconds(activity.paceInSecondsPerKilometer(), "/Km")
+        binding.historyListItemElevationText.text = Measure.of(activity.elevationInMeters, "m", "", "- ")
 
-        view.setOnClickListener {
-            val intent = Intent(view.context, ActivityDetailsActivity::class.java)
+        binding.root.setOnClickListener {
+            val intent = Intent(binding.root.context, ActivityDetailsActivity::class.java)
             intent.putExtra("id", activity.id)
             val bundle = Bundle().apply { putLong("id", activity.id) }
-            view.context.startActivity(intent, bundle)
+            binding.root.context.startActivity(intent, bundle)
         }
     }
 }

@@ -71,7 +71,9 @@
 
         </LinearLayout>
 
-        <include layout="@layout/no_activities_layout" />
+        <include
+            android:id="@+id/no_activities_layout"
+            layout="@layout/no_activities_layout" />
 
     </LinearLayout>
 

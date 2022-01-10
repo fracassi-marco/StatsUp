@@ -3,23 +3,23 @@ package com.statsup
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.stats_fragment.view.*
+import com.statsup.databinding.StatsFragmentBinding
 
 class StatsFragment : PeriodActivityFragment() {
 
-    private var viewPager: DynamicHeightViewPager? = null
     private lateinit var stats: Stats
     private var latestPeriod = -1
     private var latestSport = -1
+    private var _binding: StatsFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
-        val view = inflater.inflate(R.layout.stats_fragment, container, false)
+        _binding = StatsFragmentBinding.inflate(inflater, container, false)
         stats = arguments!!.get("stats") as Stats
-        viewPager = view.view_pager
 
         onResume()
 
-        return view
+        return binding.root
     }
 
     override fun onResume() {
@@ -36,13 +36,13 @@ class StatsFragment : PeriodActivityFragment() {
         val pagerAdapter = PeriodFilter.pagerAdapter(context!!).apply {
             update(stats, activities)
         }
-        viewPager!!.adapter = pagerAdapter
-        viewPager!!.currentItem = pagerAdapter.count - 1
+        binding.viewPager.adapter = pagerAdapter
+        binding.viewPager.currentItem = pagerAdapter.count - 1
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewPager = null
+        _binding = null
     }
 }
 

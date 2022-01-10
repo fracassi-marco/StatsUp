@@ -7,32 +7,34 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import com.statsup.R.string.settings_delete_activities_complete
 import com.statsup.R.string.settings_delete_weights_complete
-import kotlinx.android.synthetic.main.configurations_fragment.view.*
+import com.statsup.databinding.ConfigurationsFragmentBinding
 
 class ConfigurationsFragment : NoMenuFragment() {
 
-    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
-        val view = inflater.inflate(R.layout.configurations_fragment, container, false)
-        val heightEditorValueInput = view.height_editor_value_input
+    private var _binding: ConfigurationsFragmentBinding? = null
+    private val binding get() = _binding!!
 
-        view.delete_activities_button.setOnClickListener {
+    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
+        _binding = ConfigurationsFragmentBinding.inflate(inflater, container, false)
+
+        binding.deleteActivitiesButton.setOnClickListener {
             ActivityRepository.clean(context!!)
             Toast.makeText(context!!, settings_delete_activities_complete, LENGTH_SHORT).show()
         }
 
-        view.delete_weights_button.setOnClickListener {
+        binding.deleteWeightsButton.setOnClickListener {
             WeightRepository.clean(context!!)
             Toast.makeText(context!!, settings_delete_weights_complete, LENGTH_SHORT).show()
         }
 
         UserRepository.listen("ConfigurationsFragment", object : Listener<User> {
             override fun update(subject: User) {
-                view.height_editor_value.setOnClickListener { showHeightDialog(subject) }
-                heightEditorValueInput.text = heightOrDefault(subject)
+                binding.heightEditorValue.setOnClickListener { showHeightDialog(subject) }
+                binding.heightEditorValueInput.text = heightOrDefault(subject)
             }
         })
 
-        return view
+        return binding.root
     }
 
     private fun heightOrDefault(user: User) =
@@ -55,7 +57,7 @@ class ConfigurationsFragment : NoMenuFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        _binding = null
         UserRepository.removeListener("ConfigurationsFragment")
     }
 }

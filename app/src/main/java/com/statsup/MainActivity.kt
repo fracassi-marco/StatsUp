@@ -15,7 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.*
+import com.statsup.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,23 +33,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         val toggle = ActionBarDrawerToggle(
             this,
-            drawer_layout,
-            toolbar,
+            binding.drawerLayout,
+            binding.toolbar,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
-        drawer_layout.addDrawerListener(toggle)
+        binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener(this)
+        binding.navView.setNavigationItemSelectedListener(this)
 
         ActivityRepository.load(applicationContext)
         UserRepository.load(applicationContext)
@@ -62,8 +64,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(START)) {
-            drawer_layout.closeDrawer(START)
+        if (binding.drawerLayout.isDrawerOpen(START)) {
+            binding.drawerLayout.closeDrawer(START)
         } else {
             super.onBackPressed()
         }
@@ -81,7 +83,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 openFragment(menuItem.title, ActivityRecordsFragment())
             }
             R.id.nav_map -> {
-                startActivity(Intent(this, AllTimesMapActivity::class.java))
+                openFragment(menuItem.title, AllTimesMapFragment())
             }
             R.id.nav_import_from_strava -> {
                 startActivitiesImport()
@@ -169,13 +171,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun hideProgressBar() {
-        progressbar.visibility = View.GONE
+        binding.progressbar.visibility = View.GONE
         window.clearFlags(FLAG_NOT_TOUCHABLE)
     }
 
     private fun showProgressBar() {
-        progressbar.visibility = View.VISIBLE
-        progressbar.bringToFront()
+        binding.progressbar.visibility = View.VISIBLE
+        binding.progressbar.bringToFront()
         window.setFlags(FLAG_NOT_TOUCHABLE, FLAG_NOT_TOUCHABLE)
     }
 

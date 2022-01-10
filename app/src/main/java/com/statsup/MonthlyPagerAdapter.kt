@@ -1,6 +1,7 @@
 package com.statsup
 
 import android.content.Context
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
@@ -8,8 +9,7 @@ import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
 import com.statsup.Variation.percentage
 import com.statsup.barchart.Bar
-import kotlinx.android.synthetic.main.chart_pager_item.view.*
-import kotlinx.android.synthetic.main.overview_item.view.*
+import com.statsup.databinding.ChartPagerItemBinding
 
 class AnnualChartsPagerAdapter(private val context: Context) : ActivityPagerAdapter() {
 
@@ -22,62 +22,67 @@ class AnnualChartsPagerAdapter(private val context: Context) : ActivityPagerAdap
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val view = LayoutInflater.from(context).inflate(R.layout.chart_pager_item, container, false)
+        val binding = ChartPagerItemBinding.inflate(LayoutInflater.from(context), container, false)
 
         val selectedActivities = activities.filterByYear(position)
         val year = selectedActivities.year()
-        view.title.text = year.asString()
-        view.previous_label.text =
+        binding.title.text = year.asString()
+        binding.previousLabel.text =
             if (selectedActivities.isFirstYear()) "" else year.previous().asString()
-        view.previous_image.visibility =
+        binding.previousImage.visibility =
             if (selectedActivities.isFirstYear()) INVISIBLE else VISIBLE
-        view.next_label.text =
+        binding.nextLabel.text =
             if (selectedActivities.isCurrentYear()) "" else year.next().asString()
-        view.next_image.visibility = if (selectedActivities.isCurrentYear()) INVISIBLE else VISIBLE
+        binding.nextImage.visibility = if (selectedActivities.isCurrentYear()) INVISIBLE else VISIBLE
 
-        view.overview_item.apply {
-            left_value.text = Measure.of(selectedActivities.total(), "", "")
-            left_text.text = resources.getString(R.string.total)
-            right_value.text = Measure.of(selectedActivities.average(), "", "")
-            right_text.text = resources.getString(R.string.average)
+        binding.overviewItem.apply {
+            container.resources
+            leftValue.text = Measure.of(selectedActivities.total(), "", "")
+            leftText.text = container.resources.getString(R.string.total)
+            rightValue.text = Measure.of(selectedActivities.average(), "", "")
+            rightText.text = container.resources.getString(R.string.average)
         }
 
-        updateTrendChart(view, selectedActivities)
-        updateVsChart(view, selectedActivities)
-        updateDayOfWeekChart(view, selectedActivities)
-        updateSportBreakdownChart(view, selectedActivities)
+        updateTrendChart(binding, selectedActivities)
+        updateVsChart(binding, selectedActivities)
+        updateDayOfWeekChart(binding, selectedActivities)
+        updateSportBreakdownChart(binding, selectedActivities, context.resources)
 
-        container.addView(view)
+        container.addView(binding.root)
 
-        return view
+        return binding.root
     }
 
-    private fun updateTrendChart(view: View, selectedActivities: Activities) {
-        AnnualChart(view.trend_chart, stats.color, stats.unit).refresh(selectedActivities)
+    private fun updateTrendChart(view: ChartPagerItemBinding, selectedActivities: Activities) {
+        AnnualChart(view.trendChart, stats.color, stats.unit).refresh(selectedActivities)
     }
 
-    private fun updateVsChart(view: View, activities: Activities) {
+    private fun updateVsChart(view: ChartPagerItemBinding, activities: Activities) {
         if (!activities.isFirstYear()) {
-            YearOverYearChart(view.vs_chart, view.vs_chart_title, stats.color).refresh(activities)
+            YearOverYearChart(view.vsChart, view.vsChartTitle, stats.color).refresh(activities)
         } else {
-            view.vs_chart.visibility = GONE
+            view.vsChart.visibility = GONE
         }
     }
 
-    private fun updateDayOfWeekChart(values: View, activities: Activities) {
+    private fun updateDayOfWeekChart(values: ChartPagerItemBinding, activities: Activities) {
         val bars = activities.byDayOfWeek().map {
             Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
         }
 
-        values.day_of_week_chart.setData(100, bars)
+        values.dayOfWeekChart.setData(100, bars)
     }
 
-    private fun updateSportBreakdownChart(values: View, activities: Activities) {
+    private fun updateSportBreakdownChart(
+        values: ChartPagerItemBinding,
+        activities: Activities,
+        resources: Resources
+    ) {
         val bars = activities.bySport().map {
-            Bar(percentage(it.value, activities.total()), stats.color, values.resources.getString(it.key.title))
+            Bar(percentage(it.value, activities.total()), stats.color, resources.getString(it.key.title))
         }
 
-        values.sport_breakdown_chart.setData(100, bars)
+        values.sportBreakdownChart.setData(100, bars)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {}
@@ -98,54 +103,58 @@ class EverChartsPagerAdapter(private val context: Context) : ActivityPagerAdapte
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val view = LayoutInflater.from(context).inflate(R.layout.chart_pager_item, container, false)
+        val binding = ChartPagerItemBinding.inflate(LayoutInflater.from(context), container, false)
 
         val selectedActivities = activities
-        view.title.text = container.resources.getString(R.string.period_ever)
-        view.previous_label.visibility = GONE
-        view.previous_image.visibility = GONE
-        view.next_label.visibility = GONE
-        view.next_image.visibility = GONE
+        binding.title.text = container.resources.getString(R.string.period_ever)
+        binding.previousLabel.visibility = GONE
+        binding.previousImage.visibility = GONE
+        binding.nextLabel.visibility = GONE
+        binding.nextImage.visibility = GONE
 
-        view.overview_item.apply {
-            left_value.text = Measure.of(selectedActivities.total(), "", "")
-            left_text.text = resources.getString(R.string.total)
-            right_value.text = Measure.of(selectedActivities.average(), "", "")
-            right_text.text = resources.getString(R.string.average)
+        binding.overviewItem.apply {
+            leftValue.text = Measure.of(selectedActivities.total(), "", "")
+            leftText.text = container.resources.getString(R.string.total)
+            rightValue.text = Measure.of(selectedActivities.average(), "", "")
+            rightText.text = container.resources.getString(R.string.average)
         }
 
-        updateTrendChart(view, selectedActivities)
-        updateVsChart(view)
-        updateDayOfWeekChart(view, selectedActivities)
-        updateSportBreakdownChart(view, selectedActivities)
+        updateTrendChart(binding, selectedActivities)
+        updateVsChart(binding)
+        updateDayOfWeekChart(binding, selectedActivities)
+        updateSportBreakdownChart(binding, selectedActivities, container.resources)
 
-        container.addView(view)
+        container.addView(binding.root)
 
-        return view
+        return binding.root
     }
 
-    private fun updateTrendChart(view: View, selectedActivities: Activities) {
-        EverChart(view.trend_chart, stats.color, stats.unit).refresh(selectedActivities)
+    private fun updateTrendChart(view: ChartPagerItemBinding, selectedActivities: Activities) {
+        EverChart(view.trendChart, stats.color, stats.unit).refresh(selectedActivities)
     }
 
-    private fun updateVsChart(view: View) {
-        view.vs_chart.visibility = GONE
+    private fun updateVsChart(view: ChartPagerItemBinding) {
+        view.vsChart.visibility = GONE
     }
 
-    private fun updateDayOfWeekChart(values: View, activities: Activities) {
+    private fun updateDayOfWeekChart(values: ChartPagerItemBinding, activities: Activities) {
         val bars = activities.byDayOfWeek().map {
             Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
         }
 
-        values.day_of_week_chart.setData(100, bars)
+        values.dayOfWeekChart.setData(100, bars)
     }
 
-    private fun updateSportBreakdownChart(values: View, activities: Activities) {
+    private fun updateSportBreakdownChart(
+        values: ChartPagerItemBinding,
+        activities: Activities,
+        resources: Resources
+    ) {
         val bars = activities.bySport().map {
-            Bar(percentage(it.value, activities.total()), stats.color, values.resources.getString(it.key.title))
+            Bar(percentage(it.value, activities.total()), stats.color, resources.getString(it.key.title))
         }
 
-        values.sport_breakdown_chart.setData(100, bars)
+        values.sportBreakdownChart.setData(100, bars)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {}
@@ -170,62 +179,66 @@ class MonthlyChartsPagerAdapter(private val context: Context) : ActivityPagerAda
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val view = LayoutInflater.from(context).inflate(R.layout.chart_pager_item, container, false)
+        val binding = ChartPagerItemBinding.inflate(LayoutInflater.from(context), container, false)
 
         val selectedActivities = activities.filterByMonth(position)
         val month = selectedActivities.month()
-        view.title.text = month.asString()
-        view.previous_label.text =
+        binding.title.text = month.asString()
+        binding.previousLabel.text =
             if (selectedActivities.isFirstMonth()) "" else month.previous().asString()
-        view.previous_image.visibility =
+        binding.previousImage.visibility =
             if (selectedActivities.isFirstMonth()) INVISIBLE else VISIBLE
-        view.next_label.text =
+        binding.nextLabel.text =
             if (selectedActivities.isCurrentMonth()) "" else month.next().asString()
-        view.next_image.visibility = if (selectedActivities.isCurrentMonth()) INVISIBLE else VISIBLE
+        binding.nextImage.visibility = if (selectedActivities.isCurrentMonth()) INVISIBLE else VISIBLE
 
-        view.overview_item.apply {
-            left_value.text = Measure.of(selectedActivities.total(), "", "")
-            left_text.text = resources.getString(R.string.total)
-            right_value.text = Measure.of(selectedActivities.average(), "", "")
-            right_text.text = resources.getString(R.string.average)
+        binding.overviewItem.apply {
+            leftValue.text = Measure.of(selectedActivities.total(), "", "")
+            leftText.text = container.resources.getString(R.string.total)
+            rightValue.text = Measure.of(selectedActivities.average(), "", "")
+            rightText.text = container.resources.getString(R.string.average)
         }
 
-        updateTrendChart(view, selectedActivities)
-        updateVsChart(view, selectedActivities)
-        updateDayOfWeekChart(view, selectedActivities)
-        updateSportBreakdownChart(view, selectedActivities)
+        updateTrendChart(binding, selectedActivities)
+        updateVsChart(binding, selectedActivities)
+        updateDayOfWeekChart(binding, selectedActivities)
+        updateSportBreakdownChart(binding, selectedActivities, container.resources)
 
-        container.addView(view)
+        container.addView(binding.root)
 
-        return view
+        return binding.root
     }
 
-    private fun updateTrendChart(view: View, selectedActivities: Activities) {
-        MonthlyChart(view.trend_chart, stats.color, stats.unit).refresh(selectedActivities)
+    private fun updateTrendChart(view: ChartPagerItemBinding, selectedActivities: Activities) {
+        MonthlyChart(view.trendChart, stats.color, stats.unit).refresh(selectedActivities)
     }
 
-    private fun updateVsChart(view: View, activities: Activities) {
+    private fun updateVsChart(view: ChartPagerItemBinding, activities: Activities) {
         if (!activities.isFirstMonth()) {
-            MonthOverMonthChart(view.vs_chart, view.vs_chart_title, stats.color).refresh(activities)
+            MonthOverMonthChart(view.vsChart, view.vsChartTitle, stats.color).refresh(activities)
         } else {
-            view.vs_chart.visibility = GONE
+            view.vsChart.visibility = GONE
         }
     }
 
-    private fun updateDayOfWeekChart(values: View, activities: Activities) {
+    private fun updateDayOfWeekChart(values: ChartPagerItemBinding, activities: Activities) {
         val bars = activities.byDayOfWeek().map {
             Bar(percentage(it.value, activities.total()), stats.color, it.key.label)
         }
 
-        values.day_of_week_chart.setData(100, bars)
+        values.dayOfWeekChart.setData(100, bars)
     }
 
-    private fun updateSportBreakdownChart(values: View, activities: Activities) {
+    private fun updateSportBreakdownChart(
+        values: ChartPagerItemBinding,
+        activities: Activities,
+        resources: Resources
+    ) {
         val bars = activities.bySport().map {
-            Bar(percentage(it.value, activities.total()), stats.color, values.resources.getString(it.key.title))
+            Bar(percentage(it.value, activities.total()), stats.color, resources.getString(it.key.title))
         }
 
-        values.sport_breakdown_chart.setData(100, bars)
+        values.sportBreakdownChart.setData(100, bars)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {}

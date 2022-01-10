@@ -6,18 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.statsup.Content.showWeightsOrEmptyPage
-import kotlinx.android.synthetic.main.no_items_layout.view.*
-import kotlinx.android.synthetic.main.weight_stats_fragment.view.*
+import com.statsup.databinding.WeightStatsFragmentBinding
 
 class WeightStatsFragment : NoMenuFragment() {
 
+    private var _binding: WeightStatsFragmentBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
-        val view = inflater.inflate(R.layout.weight_stats_fragment, container, false)
-        val viewPager = view.stats_view_pager.apply {
+        _binding = WeightStatsFragmentBinding.inflate(inflater, container, false)
+        val viewPager = binding.statsViewPager.apply {
             adapter = WeightStatsPagerAdapter(childFragmentManager)
         }
 
-        view.stats_tab_layout.also {
+        binding.statsTabLayout.also {
             it.setupWithViewPager(viewPager)
             it.setSelectedTabIndicatorColor(WeightTabs.at(0).color)
             it.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -35,9 +37,9 @@ class WeightStatsFragment : NoMenuFragment() {
             })
         }
 
-        showWeightsOrEmptyPage(view.no_items_layout, viewPager)
+        showWeightsOrEmptyPage(binding.noItemsLayout.root, viewPager)
 
-        return view
+        return binding.root
     }
 }
 

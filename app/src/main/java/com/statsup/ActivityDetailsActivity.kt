@@ -3,7 +3,6 @@ package com.statsup
 import android.content.Intent
 import android.graphics.Color.*
 import android.os.Bundle
-import android.view.View
 import android.widget.GridLayout
 import android.widget.GridLayout.GONE
 import android.widget.GridLayout.UNDEFINED
@@ -14,18 +13,20 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import kotlinx.android.synthetic.main.activity_details.*
-import kotlinx.android.synthetic.main.activity_details_item.view.*
+import com.statsup.databinding.ActivityDetailsBinding
+import com.statsup.databinding.ActivityDetailsItemBinding
 import org.joda.time.format.DateTimeFormat
 
 
 class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var activity: Activity
+    private lateinit var binding: ActivityDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details)
+        binding = ActivityDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         activity = ActivityRepository.byId(intent.getLongExtra("id", -1))
@@ -34,86 +35,87 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        activity_title.text = activity.title
-        sport_icon.setImageResource(activity.sport.icon)
-        sport_name.setText(activity.sport.title)
-        activity_date.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm"))
+        binding.activityTitle.text = activity.title
+        binding.sportIcon.setImageResource(activity.sport.icon)
+        binding.sportName.setText(activity.sport.title)
+        binding.activityDate.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm"))
 
         if (activity.durationInSeconds > 0) {
-            activity_details_a.addView(item().apply {
-                item_icon.setImageResource(R.drawable.outline_timer_24)
-                item_label.setText(R.string.activity_duration)
-                item_value.text = Measure.timeFragments(activity.durationInSeconds)
-            })
+            item().apply {
+                itemIcon.setImageResource(R.drawable.outline_timer_24)
+                itemLabel.setText(R.string.activity_duration)
+                itemValue.text = Measure.timeFragments(activity.durationInSeconds)
+            }
         }
 
         if (activity.movingTimeInSeconds > 0) {
-            activity_details_a.addView(item().apply {
-                item_icon.setImageResource(R.drawable.moving_time)
-                item_label.setText(R.string.activity_moving_time)
-                item_value.text = Measure.timeFragments(activity.movingTimeInSeconds)
-            })
+            item().apply {
+                itemIcon.setImageResource(R.drawable.moving_time)
+                itemLabel.setText(R.string.activity_moving_time)
+                itemValue.text = Measure.timeFragments(activity.movingTimeInSeconds)
+            }
         }
 
         if (activity.paceInSecondsPerKilometer() != Int.MAX_VALUE) {
-            activity_details_a.addView(item().apply {
-                item_icon.setImageResource(R.drawable.outline_restore_24)
-                item_label.setText(R.string.activity_pace)
-                item_value.text =
+            item().apply {
+                itemIcon.setImageResource(R.drawable.outline_restore_24)
+                itemLabel.setText(R.string.activity_pace)
+                itemValue.text =
                     Measure.minutesAndSeconds(activity.paceInSecondsPerKilometer(), "/Km")
-            })
+            }
         }
 
         if (activity.movingPaceInSecondsPerKilometer() != Int.MAX_VALUE) {
-            activity_details_a.addView(item().apply {
-                item_icon.setImageResource(R.drawable.moving_pace)
-                item_label.setText(R.string.activity_moving_pace)
-                item_value.text =
+            item().apply {
+                itemIcon.setImageResource(R.drawable.moving_pace)
+                itemLabel.setText(R.string.activity_moving_pace)
+                itemValue.text =
                     Measure.minutesAndSeconds(activity.movingPaceInSecondsPerKilometer(), "/Km")
-            })
+            }
         }
 
         if (activity.distanceInMeters > 0) {
-            activity_details_a.addView(item().apply {
-                item_icon.setImageResource(R.drawable.outline_place_24)
-                item_label.setText(R.string.activity_distance)
-                item_value.text = Measure.of(activity.distanceInKilometers(), "Km", "", "- ")
-            })
+            item().apply {
+                itemIcon.setImageResource(R.drawable.outline_place_24)
+                itemLabel.setText(R.string.activity_distance)
+                itemValue.text = Measure.of(activity.distanceInKilometers(), "Km", "", "- ")
+            }
         }
 
         if (activity.elevationInMeters > 0) {
-            activity_details_a.addView(item().apply {
-                item_icon.setImageResource(R.drawable.outline_trending_up_24)
-                item_label.setText(R.string.activity_elevation)
-                item_value.text = Measure.of(activity.elevationInMeters, "m", "", "- ")
-            })
+            item().apply {
+                itemIcon.setImageResource(R.drawable.outline_trending_up_24)
+                itemLabel.setText(R.string.activity_elevation)
+                itemValue.text = Measure.of(activity.elevationInMeters, "m", "", "- ")
+            }
         }
 
         if (activity.elevHighInMeters > 0) {
-            activity_details_a.addView(item().apply {
-                item_icon.setImageResource(R.drawable.elevation_high)
-                item_label.setText(R.string.activity_elevation_high)
-                item_value.text = Measure.of(activity.elevHighInMeters, "m", "", "- ")
-            })
+            item().apply {
+                itemIcon.setImageResource(R.drawable.elevation_high)
+                itemLabel.setText(R.string.activity_elevation_high)
+                itemValue.text = Measure.of(activity.elevHighInMeters, "m", "", "- ")
+            }
         }
 
         if (activity.elevLowInMeters > 0) {
-            activity_details_a.addView(item().apply {
-                item_icon.setImageResource(R.drawable.elevation_low)
-                item_label.setText(R.string.activity_elevation_low)
-                item_value.text = Measure.of(activity.elevLowInMeters, "m", "", "- ")
-            })
+            item().apply {
+                itemIcon.setImageResource(R.drawable.elevation_low)
+                itemLabel.setText(R.string.activity_elevation_low)
+                itemValue.text = Measure.of(activity.elevLowInMeters, "m", "", "- ")
+            }
         }
     }
 
-    private fun item(): View {
-        return layoutInflater.inflate(R.layout.activity_details_item, activity_details_a, false)
-            .apply {
+    private fun item(): ActivityDetailsItemBinding {
+        val inflate = ActivityDetailsItemBinding.inflate(layoutInflater, binding.activityDetailsA, true)
+        inflate.root.apply {
                 layoutParams = GridLayout.LayoutParams(
                     GridLayout.spec(UNDEFINED, 1f),
                     GridLayout.spec(UNDEFINED, 1f)
                 )
             }
+        return inflate
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -3,10 +3,8 @@ package com.statsup
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.view.View
 import android.widget.NumberPicker
-import android.widget.TextView
-import kotlinx.android.synthetic.main.decimal_dialog.view.*
+import com.statsup.databinding.DecimalDialogBinding
 
 class DecimalDialog(
     private val label: String,
@@ -15,33 +13,28 @@ class DecimalDialog(
     private val listener: (wholeNum: Int, fractionalNum: Int) -> Unit
 ) {
     fun makeDialog(activity: Activity): AlertDialog {
-        val view = activity.layoutInflater.inflate(R.layout.decimal_dialog, null)
+        val binding = DecimalDialogBinding.inflate(activity.layoutInflater)
 
         val doubleAsString = actualValue.toString()
         val indexOfDecimal = doubleAsString.indexOf(".")
 
-        val pickerInteger = view.picker_integer.apply {
+        val pickerInteger = binding.pickerInteger.apply {
             maxValue = 199
             value = doubleAsString.substring(0, indexOfDecimal).toInt()
         }
-        val pickerDecimal = view.picker_decimal.apply {
+        val pickerDecimal = binding.pickerDecimal.apply {
             maxValue = 9
             value = doubleAsString.substring(indexOfDecimal + 1).toInt()
         }
 
-        initUnitText(view)
+        binding.unitText.text = unit
 
         return AlertDialog.Builder(activity)
-            .setView(view)
+            .setView(binding.root)
             .setTitle(label)
             .setNegativeButton(R.string.negative_button) { dialog, _ -> onNegativeClick(dialog) }
             .setPositiveButton(R.string.positive_button) { dialog, _ -> onPositiveClick(dialog, pickerInteger, pickerDecimal) }
             .create()
-    }
-
-    private fun initUnitText(view: View) {
-        val unitText = view.findViewById<TextView>(R.id.unit_text)
-        unitText.text = unit
     }
 
     private fun onNegativeClick(dialog: DialogInterface) {

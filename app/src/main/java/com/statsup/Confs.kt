@@ -22,6 +22,4 @@ class Confs(context: Context) {
     val stravaClientId = properties.getProperty("strava.clientId")!!
 
     val stravaClientSecret = properties.getProperty("strava.clientSecret")!!
-
-    val mapsKey = properties.getProperty("google.maps.key")!!
 }

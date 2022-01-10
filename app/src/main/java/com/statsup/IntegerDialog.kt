@@ -2,11 +2,9 @@ package com.statsup
 
 import android.app.AlertDialog
 import android.content.DialogInterface
-import androidx.fragment.app.FragmentActivity
-import android.view.View
 import android.widget.NumberPicker
-import android.widget.TextView
-import kotlinx.android.synthetic.main.decimal_dialog.view.*
+import androidx.fragment.app.FragmentActivity
+import com.statsup.databinding.IntegerDialogBinding
 
 class IntegerDialog(
     private val label: String,
@@ -15,26 +13,21 @@ class IntegerDialog(
     private val listener: (number: Int) -> Unit
 ) {
     fun makeDialog(activity: FragmentActivity): AlertDialog {
-        val view = activity.layoutInflater.inflate(R.layout.integer_dialog, null)
-        val pickerInteger = view.picker_integer.apply {
+        val binding = IntegerDialogBinding.inflate(activity.layoutInflater)
+        val pickerInteger = binding.pickerInteger.apply {
             minValue = 100
             maxValue = 299
             value = actualValue
         }
 
-        initUnitText(view)
+        binding.unitText.text = unit
 
         return AlertDialog.Builder(activity)
-            .setView(view)
+            .setView(binding.root)
             .setTitle(label)
             .setNegativeButton(R.string.negative_button) { dialog, _ -> onNegativeClick(dialog) }
             .setPositiveButton(R.string.positive_button) { dialog, _ -> onPositiveClick(dialog, pickerInteger) }
             .create()
-    }
-
-    private fun initUnitText(view: View) {
-        val unitText = view.findViewById<TextView>(R.id.unit_text)
-        unitText.text = unit
     }
 
     private fun onNegativeClick(dialog: DialogInterface) {

@@ -1,41 +1,44 @@
 package com.statsup
 
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.statsup.Content.showActivitiesOrEmptyPage
-import kotlinx.android.synthetic.main.activity_history_fragment.view.*
-import kotlinx.android.synthetic.main.no_activities_layout.view.*
-
+import com.statsup.databinding.ActivityHistoryFragmentBinding
 
 //https://stackoverflow.com/questions/30895580/recyclerview-no-adapter-attached-skipping-layout-for-recyclerview-in-fragmen
 class ActivityHistoryFragment : ActivityFragment() {
 
+    private var _binding: ActivityHistoryFragmentBinding? = null
+    private val binding get() = _binding!!
     private lateinit var historyAdapter: ActivityHistoryAdapter
 
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
-        val view = inflater.inflate(R.layout.activity_history_fragment, container, false)
+        _binding = ActivityHistoryFragmentBinding.inflate(inflater, container, false)
 
         historyAdapter = ActivityHistoryAdapter(ActivityRepository.filterBySelectedSport())
-        val recyclerView = view.recycler_view
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager =
-            LinearLayoutManager(context)
-        recyclerView.adapter = historyAdapter
-        recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = historyAdapter
+        binding.recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 
-        view.no_activities_layout.import_button.setOnClickListener {
-            (activity as MainActivity).startActivitiesImport()
-        }
+//        binding.noActivitiesLayout.importButton.setOnClickListener {
+//            (activity as MainActivity).startActivitiesImport()
+//        }
 
-        showActivitiesOrEmptyPage(view.no_activities_layout, view.recycler_view)
+        showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.recyclerView)
 
-        return view
+        return binding.root
     }
 
     override fun onFilterChange() {
         historyAdapter.update(ActivityRepository.filterBySelectedSport())
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 

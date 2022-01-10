@@ -9,22 +9,18 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.charts.LineChart
-import kotlinx.android.synthetic.main.balance_fragment.view.*
-import kotlinx.android.synthetic.main.overview_item.view.*
+import com.statsup.databinding.BalanceFragmentBinding
+import com.statsup.databinding.OverviewItemBinding
 import org.joda.time.DateTime
 import kotlin.math.absoluteValue
 
 
 class BalanceFragment : Fragment() {
 
-    private fun updateOverviews(
-        weights: List<Weight>,
-        monthVariationOverviewItem: View,
-        yearVariationOverviewItem: View,
-        fullVariationOverviewItem: View,
-        minMaxOverviewItem: View,
-        traviaWeight: View
-    ) {
+    private var _binding: BalanceFragmentBinding? = null
+    private val binding get() = _binding!!
+
+    private fun updateOverviews(weights: List<Weight>) {
         val today = DateTime()
         val finalValue = weights.last().kilograms
 
@@ -32,83 +28,80 @@ class BalanceFragment : Fragment() {
             weights,
             today.minusMonths(1),
             finalValue,
-            monthVariationOverviewItem,
+            binding.monthVariationOverviewItem,
             "Variazione ultimi 30 giorni"
         )
         updateOverview(
             weights,
             today.minusYears(1),
             finalValue,
-            yearVariationOverviewItem,
+            binding.yearVariationOverviewItem,
             "Variazione ultimo anno"
         )
         updateOverview(
             weights,
             weights.first().date(),
             finalValue,
-            fullVariationOverviewItem,
+            binding.fullVariationOverviewItem,
             "Variazione totale"
         )
-        updateMinMaxOverview(weights, minMaxOverviewItem)
-        updateIdealWeightOverview(weights, traviaWeight)
+        updateMinMaxOverview(weights)
+        updateIdealWeightOverview(weights)
     }
 
-    private fun updateIdealWeightOverview(weights: List<Weight>, view: View) {
+    private fun updateIdealWeightOverview(weights: List<Weight>) {
+        val view = binding.traviaWeightOverviewItem
         val height = UserRepository.user.height
         if (height == 0) {
-            view.visibility = GONE
+            view.root.visibility = GONE
             return
         }
 
         val travia = (1.012 * height) - 107.5
-        view.left_value.text = Measure.of(travia, "Kg", "")
-        view.left_text.setText(R.string.weight_travia)
+        view.leftValue.text = Measure.of(travia, "Kg", "")
+        view.leftText.setText(R.string.weight_travia)
 
         val delta = weights.last().kilograms - travia
-        view.right_value.text = Measure.of(delta, "Kg")
-        view.right_text.setText(R.string.weight_travia_delta)
-        view.right_value.setTextColor(if (delta.absoluteValue > 5) RED else GREEN)
-        view.right_value.textSize = 21f
+        view.rightValue.text = Measure.of(delta, "Kg")
+        view.rightText.setText(R.string.weight_travia_delta)
+        view.rightValue.setTextColor(if (delta.absoluteValue > 5) RED else GREEN)
+        view.rightValue.textSize = 21f
     }
 
-    private fun updateMinMaxOverview(
-        weights: List<Weight>,
-        minMaxOverviewItem: View
-    ) {
-        minMaxOverviewItem.left_value.text =
-            Measure.of(weights.minByOrNull { it.kilograms }!!.kilograms, "Kg", "")
-        minMaxOverviewItem.left_value.textSize = 21f
-        minMaxOverviewItem.left_text.setText(R.string.weight_min)
+    private fun updateMinMaxOverview(weights: List<Weight>) {
+        val view = binding.bmiOxfordMinMaxOverviewItem
+        view.leftValue.text = Measure.of(weights.minByOrNull { it.kilograms }!!.kilograms, "Kg", "")
+        view.leftValue.textSize = 21f
+        view.leftText.setText(R.string.weight_min)
 
-        minMaxOverviewItem.center_value.text = Measure.of(weights.last().kilograms, "Kg", "")
-        minMaxOverviewItem.center_value.textSize = 26f
-        minMaxOverviewItem.center_text.setText(R.string.weight_current)
+        view.centerValue.text = Measure.of(weights.last().kilograms, "Kg", "")
+        view.centerValue.textSize = 26f
+        view.centerText.setText(R.string.weight_current)
 
-        minMaxOverviewItem.right_value.text =
-            Measure.of(weights.maxByOrNull { it.kilograms }!!.kilograms, "Kg", "")
-        minMaxOverviewItem.right_value.textSize = 21f
-        minMaxOverviewItem.right_text.setText(R.string.weight_max)
+        view.rightValue.text = Measure.of(weights.maxByOrNull { it.kilograms }!!.kilograms, "Kg", "")
+        view.rightValue.textSize = 21f
+        view.rightText.setText(R.string.weight_max)
     }
 
     private fun updateOverview(
         weights: List<Weight>,
         fromDate: DateTime,
         finalValue: Double,
-        view: View,
+        view: OverviewItemBinding,
         label: String
     ) {
         val initialValue = weights.lastOrNull { it.date() <= fromDate }
         if (initialValue != null) {
             val percentage = (finalValue / initialValue.kilograms * 100) - 100
-            view.left_value.text = Measure.of(finalValue - initialValue.kilograms, "Kg")
-            view.right_value.text = Measure.of(percentage, "%")
-            view.right_value.setTextColor(if (percentage > 0) RED else GREEN)
+            view.leftValue.text = Measure.of(finalValue - initialValue.kilograms, "Kg")
+            view.rightValue.text = Measure.of(percentage, "%")
+            view.rightValue.setTextColor(if (percentage > 0) RED else GREEN)
         } else {
-            view.left_value.text = "-"
-            view.right_value.text = "-"
+            view.leftValue.text = "-"
+            view.rightValue.text = "-"
         }
-        view.right_value.textSize = 21f
-        view.left_text.text = label
+        view.rightValue.textSize = 21f
+        view.leftText.text = label
     }
 
     override fun onCreateView(
@@ -116,47 +109,40 @@ class BalanceFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.balance_fragment, container, false)
-        val monthVariationOverviewItem = view.month_variation_overview_item
-        val yearVariationOverviewItem = view.year_variation_overview_item
-        val fullVariationOverviewItem = view.full_variation_overview_item
-        val minMaxOverviewItem = view.bmi_oxford_min_max_overview_item
-        val traviaOverviewItem = view.travia_weight_overview_item
+        _binding = BalanceFragmentBinding.inflate(inflater, container, false)
 
         val weights = WeightRepository.all().sortedBy { it.dateInMillis }
-        updateLastThreeMonthsChart(weights, view.last_three_months_chart)
-        updateMonthlyChart(weights, view.monthly_chart)
-        updateOverviews(
-            weights,
-            monthVariationOverviewItem,
-            yearVariationOverviewItem,
-            fullVariationOverviewItem,
-            minMaxOverviewItem,
-            traviaOverviewItem
-        )
-        updateSeekBar(view, weights)
+        updateLastThreeMonthsChart(weights, binding.lastThreeMonthsChart)
+        updateMonthlyChart(weights, binding.monthlyChart)
+        updateOverviews(weights)
+        updateSeekBar(weights)
 
-        return view
+        return binding.root
     }
 
-    private fun updateSeekBar(view: View, weights: List<Weight>) {
+    private fun updateSeekBar(weights: List<Weight>) {
         val max = weights.maxByOrNull { it.kilograms }!!.kilograms.toFloat()
         val min = weights.minByOrNull { it.kilograms }!!.kilograms.toFloat()
-        view.seek_bar.max = max
-        view.seek_bar.min = min
-        view.seek_bar.setProgress(weights.last().kilograms.toFloat())
+        binding.seekBar.max = max
+        binding.seekBar.min = min
+        binding.seekBar.setProgress(weights.last().kilograms.toFloat())
     }
 
     private fun updateLastThreeMonthsChart(weights: List<Weight>, graph: LineChart) {
         val threeMonthsAgo = Month().previous().previous().previous()
         val lastThreeMonthsWeights = weights.filter { Month(it.date()).isAfterOrEqual(threeMonthsAgo) }
-        BalanceChart(graph).withXFormatter(DayAxisValueFormatter(lastThreeMonthsWeights.first().dateInMillis)).refresh(lastThreeMonthsWeights)
+        BalanceChart(graph, DayAxisValueFormatter(lastThreeMonthsWeights.first().dateInMillis)).refresh(lastThreeMonthsWeights)
     }
 
     private fun updateMonthlyChart(weights: List<Weight>, graph: LineChart) {
         val byMonthAverage = weights
             .groupBy { Month(it.date()) }
             .map { group -> Weight(group.value.map { it.kilograms }.average(), group.key.firstDay().millis) }
-        BalanceChart(graph).withXFormatter(MonthAxisValueFormatter(byMonthAverage.first().dateInMillis)).refresh(byMonthAverage)
+        BalanceChart(graph, MonthAxisValueFormatter(byMonthAverage.first().dateInMillis)).refresh(byMonthAverage)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

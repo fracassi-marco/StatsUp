@@ -1,29 +1,30 @@
 package com.statsup
 
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayout
 import com.statsup.Content.showActivitiesOrEmptyPage
-import kotlinx.android.synthetic.main.activity_stats_fragment.view.*
-import kotlinx.android.synthetic.main.no_activities_layout.view.*
+import com.statsup.databinding.ActivityStatsFragmentBinding
 
 class ActivityStatsFragment : Fragment() {
+
+    private var _binding: ActivityStatsFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.activity_stats_fragment, container, false)
-        val viewPager = view.stats_view_pager
-        viewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
-        viewPager.offscreenPageLimit = 3
+        _binding = ActivityStatsFragmentBinding.inflate(inflater, container, false)
+        binding.statsViewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
+        binding.statsViewPager.offscreenPageLimit = 3
 
-        view.stats_tab_layout.also {
-            it.setupWithViewPager(viewPager)
+        binding.statsTabLayout.also {
+            it.setupWithViewPager(binding.statsViewPager)
             it.setSelectedTabIndicatorColor(Stats.at(0).color)
             it.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(p0: TabLayout.Tab) {
@@ -38,13 +39,18 @@ class ActivityStatsFragment : Fragment() {
             })
         }
 
-        view.no_activities_layout.import_button.setOnClickListener {
-            (activity as MainActivity).startActivitiesImport()
-        }
+//        binding.noActivitiesLayout.importButton.setOnClickListener {
+//            (activity as MainActivity).startActivitiesImport()
+//        }
 
-        showActivitiesOrEmptyPage(view.no_activities_layout, viewPager)
+        showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.statsViewPager)
 
-        return view
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 

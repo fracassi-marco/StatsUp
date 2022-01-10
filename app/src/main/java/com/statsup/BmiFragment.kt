@@ -7,13 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.bmi_fragment.view.*
-import kotlinx.android.synthetic.main.no_items_layout.view.*
-import kotlinx.android.synthetic.main.overview_item.view.*
+import com.statsup.databinding.BmiFragmentBinding
+import com.statsup.databinding.OverviewItemBinding
 import mobi.gspd.segmentedbarview.Segment
 import mobi.gspd.segmentedbarview.SegmentedBarView
 
 class BmiFragment : Fragment() {
+
+    private var _binding: BmiFragmentBinding? = null
+    private val binding get() = _binding!!
 
     private fun setVisibleView(
         content: ConstraintLayout,
@@ -34,11 +36,12 @@ class BmiFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.bmi_fragment, container, false)
+        _binding = BmiFragmentBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         val weights = WeightRepository.all()
         val height = UserRepository.user.height
-        setVisibleView(view.content, view.no_items_layout, height)
+        setVisibleView(binding.content, binding.noItemsLayout.root, height)
 
         if (height != 0) {
             val minWeight = weights.minByOrNull { it.kilograms }!!
@@ -46,40 +49,40 @@ class BmiFragment : Fragment() {
             val maxWeight = weights.maxByOrNull { it.kilograms }!!
 
             updateOverviews(
-                view.bmi_oxford_min_max_overview_item,
+                binding.bmiOxfordMinMaxOverviewItem,
                 Bmi.labelForOxford(minWeight, height),
                 Bmi.labelForOxford(currentWeight, height),
                 Bmi.labelForOxford(maxWeight, height)
             )
-            updateChart(view.bmi_oxford_chart, Bmi.oxford(currentWeight, height))
+            updateChart(binding.bmiOxfordChart, Bmi.oxford(currentWeight, height))
 
             updateOverviews(
-                view.bmi_classic_min_max_overview_item,
+                binding.bmiClassicMinMaxOverviewItem,
                 Bmi.labelForClassic(minWeight, height),
                 Bmi.labelForClassic(currentWeight, height),
                 Bmi.labelForClassic(maxWeight, height)
             )
-            updateChart(view.bmi_classic_chart, Bmi.classic(currentWeight, height))
+            updateChart(binding.bmiClassicChart, Bmi.classic(currentWeight, height))
         }
 
         return view
     }
 
     private fun updateOverviews(
-        minMaxOverviewItem: View,
+        minMaxOverviewItem: OverviewItemBinding,
         min: String, current: String, max: String
     ) {
-        minMaxOverviewItem.left_value.text = min
-        minMaxOverviewItem.left_value.textSize = 21f
-        minMaxOverviewItem.left_text.text = getString(R.string.bmi_min)
+        minMaxOverviewItem.leftValue.text = min
+        minMaxOverviewItem.leftValue.textSize = 21f
+        minMaxOverviewItem.leftText.text = getString(R.string.bmi_min)
 
-        minMaxOverviewItem.center_value.text = current
-        minMaxOverviewItem.center_value.textSize = 26f
-        minMaxOverviewItem.center_text.text = getString(R.string.bmi_current)
+        minMaxOverviewItem.centerValue.text = current
+        minMaxOverviewItem.centerValue.textSize = 26f
+        minMaxOverviewItem.centerText.text = getString(R.string.bmi_current)
 
-        minMaxOverviewItem.right_value.text = max
-        minMaxOverviewItem.right_value.textSize = 21f
-        minMaxOverviewItem.right_text.text = getString(R.string.bmi_max)
+        minMaxOverviewItem.rightValue.text = max
+        minMaxOverviewItem.rightValue.textSize = 21f
+        minMaxOverviewItem.rightText.text = getString(R.string.bmi_max)
     }
 
     private fun updateChart(
@@ -96,5 +99,10 @@ class BmiFragment : Fragment() {
             )
         )
         bmiChart.setValue(bmi.toFloat().round(2))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

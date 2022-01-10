@@ -11,9 +11,9 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import com.statsup.R
 import com.statsup.R.styleable.*
-import kotlinx.android.synthetic.main.bar.view.*
+import com.statsup.databinding.BarBinding
+
 
 class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx, attrs) {
     private var spacesBetweenBars = 0
@@ -74,18 +74,18 @@ class HorizontalBarChart(mCtx: Context, attrs: AttributeSet) : FrameLayout(mCtx,
         linearParentLayout: LinearLayout,
         maxLabelSize: Int
     ) {
-        val view = LayoutInflater.from(context).inflate(R.layout.bar, linearParentLayout, false)
-        view.linear_bar.setBackgroundColor(bar.color)
-        view.text_view_bar_label.apply {
+        val binding = BarBinding.inflate(LayoutInflater.from(context), linearParentLayout, false)
+        binding.linearBar.setBackgroundColor(bar.color)
+        binding.textViewBarLabel.apply {
             text = bar.label.padEnd(maxLabelSize, ' ')
             textSize = labelSize
             setTextColor(labelColor)
         }
-        view.text_view_raters.text = "${bar.value}${valueSuffix}"
-        view.linear_bar.layoutParams.width = dimension * bar.value / maxBarValue
-        view.layoutParams.height = barHeight
-        (view.layoutParams as MarginLayoutParams).bottomMargin = spacesBetweenBars
-        linearParentLayout.addView(view)
+        binding.textViewRaters.text = "${bar.value}${valueSuffix}"
+        binding.linearBar.layoutParams.width = dimension * bar.value / maxBarValue
+        binding.root.layoutParams.height = barHeight
+        (binding.root.layoutParams as MarginLayoutParams).bottomMargin = spacesBetweenBars
+        linearParentLayout.addView(binding.root)
     }
 
     private fun getDimension(view: View, listener: DimensionReceivedCallback) {

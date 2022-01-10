@@ -1,26 +1,24 @@
 package com.statsup
 
-import android.content.Intent
-import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.statsup.ActivityView.fill
+import com.statsup.databinding.ActivityHistoryListItemBinding
 
 
 class ActivityHistoryAdapter(private var dataSet: List<Activity>) : RecyclerView.Adapter<ActivityHistoryAdapter.Holder>() {
-    class Holder(val layout: CardView) : RecyclerView.ViewHolder(layout)
+    class Holder(val binding: ActivityHistoryListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val item = LayoutInflater.from(parent.context).inflate(R.layout.activity_history_list_item, parent, false) as CardView
+        val item = ActivityHistoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return Holder(item)
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val activity = dataSet[position]
-        fill(holder.layout, activity)
+        fill(holder.binding, activity)
     }
 
     fun update(newItems: List<Activity>) {

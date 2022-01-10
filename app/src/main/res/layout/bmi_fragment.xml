@@ -126,6 +126,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include layout="@layout/no_items_layout"
+                 android:id="@+id/no_items_layout"
                  app:layout_constraintTop_toTopOf="parent"
                  app:layout_constraintBottom_toBottomOf="parent"
                  app:layout_constraintLeft_toLeftOf="parent"

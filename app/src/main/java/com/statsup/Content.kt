@@ -1,17 +1,17 @@
 package com.statsup
 
 import android.view.View
-import kotlinx.android.synthetic.main.no_activities_layout.view.*
+import com.statsup.databinding.NoActivitiesLayoutBinding
 
 object Content {
-    fun showActivitiesOrEmptyPage(noItemLayout: View, content: View) {
+    fun showActivitiesOrEmptyPage(noItemLayout: NoActivitiesLayoutBinding, content: View) {
         if (ActivityRepository.anyActivities()) {
-            noItemLayout.visibility = View.GONE
+            noItemLayout.root.visibility = View.GONE
             content.visibility = View.VISIBLE
         } else {
-            noItemLayout.visibility = View.VISIBLE
-            noItemLayout.import_button.setOnClickListener {
-                (noItemLayout.context as MainActivity).startActivitiesImport()
+            noItemLayout.root.visibility = View.VISIBLE
+            noItemLayout.importButton.setOnClickListener {
+                (noItemLayout.root.context as MainActivity).startActivitiesImport()
             }
             content.visibility = View.GONE
         }

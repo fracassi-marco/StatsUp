@@ -6,28 +6,29 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
-import kotlinx.android.synthetic.main.weight_editor_view.*
+import com.statsup.databinding.WeightEditorViewBinding
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
 class WeightEditorView : AppCompatActivity() {
 
+    private lateinit var binding: WeightEditorViewBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.weight_editor_view)
+        binding = WeightEditorViewBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val latestKilograms = intent.getDoubleExtra("latestKilograms", 50.0)
 
-        findViewById<RelativeLayout>(R.id.weight_editor_value).setOnClickListener { showWeightDialog(latestKilograms) }
+        binding.weightEditorValue.setOnClickListener { showWeightDialog(latestKilograms) }
 
-        findViewById<RelativeLayout>(R.id.weight_editor_date).setOnClickListener { showDatePickerDialog() }
+        binding.weightEditorDate.setOnClickListener { showDatePickerDialog() }
 
         setKilogramsValue(latestKilograms.toString())
         setDateValue(DateTime())
 
-        animateViewsEntrance(R.id.weight_editor_content_main)
+        animateViewsEntrance(binding.weightEditorContentMain)
     }
 
     private fun showWeightDialog(value: Double) {
@@ -45,8 +46,8 @@ class WeightEditorView : AppCompatActivity() {
     }
 
     private fun setKilogramsValue(value: String) {
-        weight_editor_value_input.text = applicationContext.getString(R.string.weight_editor_value_label, value)
-        weight_editor_value_input.tag = value
+        binding.weightEditorValueInput.text = applicationContext.getString(R.string.weight_editor_value_label, value)
+        binding.weightEditorValueInput.tag = value
     }
 
     private fun showDatePickerDialog() {
@@ -57,8 +58,8 @@ class WeightEditorView : AppCompatActivity() {
     }
 
     private fun setDateValue(dateTime: DateTime) {
-        weight_editor_date_input.text = datetimeToString(dateTime)
-        weight_editor_date_input.tag = dateTime.millis
+        binding.weightEditorDateInput.text = datetimeToString(dateTime)
+        binding.weightEditorDateInput.tag = dateTime.millis
     }
 
     private fun datetimeToString(dateTime: DateTime): String {
@@ -77,10 +78,9 @@ class WeightEditorView : AppCompatActivity() {
         return result
     }
 
-    private fun animateViewsEntrance(view: Int) {
-        val linearLayout = findViewById<LinearLayout>(view)
-        for (i in 0 until linearLayout.childCount) {
-            val child = linearLayout.getChildAt(i)
+    private fun animateViewsEntrance(view: LinearLayout) {
+        for (i in 0 until view.childCount) {
+            val child = view.getChildAt(i)
             child.animate()
                 .setDuration(750)
                 .alpha(1.0f)
@@ -98,8 +98,8 @@ class WeightEditorView : AppCompatActivity() {
     }
 
     private fun onSaveButtonPressed() {
-        val dateMillis = findViewById<TextView>(R.id.weight_editor_date_input).tag
-        val value = findViewById<TextView>(R.id.weight_editor_value_input).tag
+        val dateMillis = binding.weightEditorDateInput.tag
+        val value = binding.weightEditorValueInput.tag
 
         WeightRepository.addIfNotExists(applicationContext, listOf(Weight(value.toString().toDouble(), dateMillis as Long)))
         supportFinishAfterTransition()

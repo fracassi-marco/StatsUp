@@ -12,14 +12,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import org.joda.time.DateTime
 import java.util.*
 
-class BalanceChart(private val chart: LineChart) {
-
-    private var xFormatter : ValueFormatter = DefaultAxisValueFormatter(1)
-
-    fun withXFormatter(value: ValueFormatter): BalanceChart {
-        xFormatter = value
-        return this
-    }
+class BalanceChart(private val chart: LineChart, private val xFormatter: ValueFormatter) {
 
     fun refresh(weights: List<Weight>) {
         if (weights.isEmpty()) {
