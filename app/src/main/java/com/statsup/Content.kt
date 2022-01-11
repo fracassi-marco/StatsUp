@@ -2,6 +2,7 @@ package com.statsup
 
 import android.view.View
 import com.statsup.databinding.NoActivitiesLayoutBinding
+import com.statsup.databinding.NoItemsLayoutBinding
 
 object Content {
     fun showActivitiesOrEmptyPage(noItemLayout: NoActivitiesLayoutBinding, content: View) {
@@ -17,12 +18,12 @@ object Content {
         }
     }
 
-    fun showWeightsOrEmptyPage(noItemLayout: View, viewPager: View) {
+    fun showWeightsOrEmptyPage(noItemLayout: NoItemsLayoutBinding, viewPager: View) {
         if (WeightRepository.any()) {
-            noItemLayout.visibility = View.GONE
+            noItemLayout.root.visibility = View.GONE
             viewPager.visibility = View.VISIBLE
         } else {
-            noItemLayout.visibility = View.VISIBLE
+            noItemLayout.root.visibility = View.VISIBLE
             viewPager.visibility = View.GONE
         }
     }

@@ -20,9 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.io.BufferedReader
 import java.io.FileNotFoundException
-import java.io.InputStreamReader
 
 
 const val STRAVA_REQUEST_CODE = 1001
@@ -145,23 +143,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     openDefaultFragment()
                 }.download()
             }
-        }
-
-        else if (requestCode == WEIGHT_IMPORT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+        } else if (requestCode == WEIGHT_IMPORT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             showProgressBar()
             try {
                 val inputStream = contentResolver.openInputStream(data.data!!)
-                val reader = BufferedReader(InputStreamReader(inputStream!!))
-                CsvWeights(applicationContext, reader){
+                CsvWeights(inputStream!!).read(scope, applicationContext) {
                     hideProgressBar()
                     openFragment(getString(R.string.menu_weight_history), WeightHistoryFragment())
-                }.execute()
+                }
             } catch (e: FileNotFoundException) {
                 println(e.message)
             }
-        }
-
-        else if(requestCode == GOOGLE_FIT_PERMISSIONS  && resultCode == RESULT_OK && data != null) {
+        } else if (requestCode == GOOGLE_FIT_PERMISSIONS && resultCode == RESULT_OK && data != null) {
             accessGoogleFif()
         }
     }

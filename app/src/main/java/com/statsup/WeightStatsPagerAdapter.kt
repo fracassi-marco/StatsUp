@@ -1,20 +1,11 @@
 package com.statsup
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class WeightStatsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class WeightStatsPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItem(position: Int): Fragment {
-        return WeightTabs.fragment(position)
-    }
+    override fun getItemCount() = WeightTabs.values().count()
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return WeightTabs.at(position).label
-    }
-
-    override fun getCount(): Int {
-        return WeightTabs.values().count()
-    }
+    override fun createFragment(position: Int) = WeightTabs.fragment(position)
 }

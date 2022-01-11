@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.statsup"
         minSdkVersion 24
-        targetSdkVersion 30
-        versionCode 17000
-        versionName "1.7.0"
+        targetSdkVersion 31
+        versionCode 17001
+        versionName "1.7.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         Properties properties = new Properties()
@@ -35,7 +35,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation "com.github.lecho:hellocharts-library:1.5.8@aar"

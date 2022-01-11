@@ -1,29 +1,27 @@
 package com.statsup
 
 import android.content.Context
-import android.os.AsyncTask
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.joda.time.format.DateTimeFormat
-import java.io.Reader
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
 
-class CsvWeights(
-    private val context: Context,
-    private val reader: Reader,
-    private val onComplete: () -> Unit
-) : AsyncTask<Void, Void, Void>() {
+class CsvWeights(private val inputStream: InputStream) {
+    fun read(scope: CoroutineScope, context: Context, callback: () -> Unit) {
+        scope.launch {
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            val weights = reader.readLines()
+                .map { it.split(";") }
+                .filter { it.size > 1 }
+                .filter { isValid(it) }
+                .map { asWeight(it) }
 
-    override fun doInBackground(vararg ignore: Void): Void? {
-        val weights = reader.readLines()
-            .map { it.split(";") }
-            .filter { it.size > 1 }
-            .filter { isValid(it) }
-            .map { asWeight(it) }
+            WeightRepository.addIfNotExists(context, weights)
 
-        WeightRepository.addIfNotExists(context, weights)
-        return null
-    }
-
-    override fun onPostExecute(result: Void?) {
-        onComplete.invoke()
+            callback()
+        }
     }
 
     private fun isValid(record: List<String>): Boolean {

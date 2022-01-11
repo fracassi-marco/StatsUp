@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.statsup.Content.showActivitiesOrEmptyPage
 import com.statsup.databinding.ActivityStatsFragmentBinding
 
@@ -20,11 +21,15 @@ class ActivityStatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = ActivityStatsFragmentBinding.inflate(inflater, container, false)
-        binding.statsViewPager.adapter = ActivityStatsPagerAdapter(childFragmentManager)
+        binding.statsViewPager.adapter = ActivityStatsPagerAdapter(this)
         binding.statsViewPager.offscreenPageLimit = 3
 
+        TabLayoutMediator(binding.statsTabLayout, binding.statsViewPager) { tab, position ->
+            tab.text = Stats.at(position).title
+
+        }.attach()
+
         binding.statsTabLayout.also {
-            it.setupWithViewPager(binding.statsViewPager)
             it.setSelectedTabIndicatorColor(Stats.at(0).color)
             it.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(p0: TabLayout.Tab) {
@@ -38,10 +43,6 @@ class ActivityStatsFragment : Fragment() {
                 }
             })
         }
-
-//        binding.noActivitiesLayout.importButton.setOnClickListener {
-//            (activity as MainActivity).startActivitiesImport()
-//        }
 
         showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.statsViewPager)
 

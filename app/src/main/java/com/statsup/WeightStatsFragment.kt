@@ -1,10 +1,11 @@
 package com.statsup
 
 import android.graphics.Color
-import com.google.android.material.tabs.TabLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.statsup.Content.showWeightsOrEmptyPage
 import com.statsup.databinding.WeightStatsFragmentBinding
 
@@ -15,12 +16,13 @@ class WeightStatsFragment : NoMenuFragment() {
 
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         _binding = WeightStatsFragmentBinding.inflate(inflater, container, false)
-        val viewPager = binding.statsViewPager.apply {
-            adapter = WeightStatsPagerAdapter(childFragmentManager)
-        }
+        binding.statsViewPager.adapter = WeightStatsPagerAdapter(this)
+
+        TabLayoutMediator(binding.statsTabLayout, binding.statsViewPager) { tab, position ->
+            tab.text = WeightTabs.at(position).label
+        }.attach()
 
         binding.statsTabLayout.also {
-            it.setupWithViewPager(viewPager)
             it.setSelectedTabIndicatorColor(WeightTabs.at(0).color)
             it.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(p0: TabLayout.Tab) {
@@ -37,7 +39,7 @@ class WeightStatsFragment : NoMenuFragment() {
             })
         }
 
-        showWeightsOrEmptyPage(binding.noItemsLayout.root, viewPager)
+        showWeightsOrEmptyPage(binding.noItemsLayout, binding.statsViewPager)
 
         return binding.root
     }

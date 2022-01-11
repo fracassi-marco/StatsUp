@@ -40,7 +40,7 @@ class WeightHistoryFragment : NoMenuFragment() {
             adapter.update(items)
         }
 
-        showWeightsOrEmptyPage(binding.noItemsLayout.root, binding.recyclerView)
+        showWeightsOrEmptyPage(binding.noItemsLayout, binding.recyclerView)
     }
 
     override fun onDestroyView() {
