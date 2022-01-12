@@ -127,15 +127,15 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (activity.map == null) {
             val fragment: SupportMapFragment =
                 supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            fragment.view!!.visibility = GONE
+            fragment.requireView().visibility = GONE
             return
         }
 
         val trip = Trip(activity.map!!)
         googleMap.uiSettings.isMapToolbarEnabled = false
-        googleMap.addCircle(CircleOptions().center(trip.begin()).fillColor(GREEN).strokeColor(GREEN).radius(20.0))
-        googleMap.addCircle(CircleOptions().center(trip.end()).fillColor(RED).strokeColor(RED).radius(20.0))
-        googleMap.addPolyline(PolylineOptions().width(5f).color(BLUE).geodesic(true).addAll(trip.steps()))
+        googleMap.addPolyline(PolylineOptions().width(8f).color(BLUE).geodesic(true).addAll(trip.steps()))
+        googleMap.addCircle(CircleOptions().center(trip.begin()).fillColor(GREEN).strokeColor(GREEN).radius(12.0))
+        googleMap.addCircle(CircleOptions().center(trip.end()).fillColor(RED).strokeColor(RED).radius(12.0))
         googleMap.setOnMapClickListener {
             val intent = Intent(this, MapActivity::class.java).apply {
                 putExtra("id", activity.id)

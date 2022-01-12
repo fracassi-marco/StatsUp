@@ -73,12 +73,12 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:id="@+id/map"
             tools:context=".MapsActivity"
-            class="com.google.android.gms.maps.SupportMapFragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header"
             app:liteMode="true"/>

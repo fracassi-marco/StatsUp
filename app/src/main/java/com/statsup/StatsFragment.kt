@@ -15,7 +15,7 @@ class StatsFragment : PeriodActivityFragment() {
 
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         _binding = StatsFragmentBinding.inflate(inflater, container, false)
-        stats = arguments!!.get("stats") as Stats
+        stats = requireArguments().get("stats") as Stats
 
         onResume()
 
@@ -33,7 +33,7 @@ class StatsFragment : PeriodActivityFragment() {
         latestPeriod = PeriodFilter.current.ordinal
         latestSport = ActivityRepository.selectedSportPosition
         val activities = ActivityRepository.filterBySelectedSport()
-        val pagerAdapter = PeriodFilter.pagerAdapter(context!!).apply {
+        val pagerAdapter = PeriodFilter.pagerAdapter(requireContext()).apply {
             update(stats, activities)
         }
         binding.viewPager.adapter = pagerAdapter

@@ -16,11 +16,10 @@ import com.statsup.databinding.MapActivityBinding
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var activity: Activity
-    private lateinit var binding: MapActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = MapActivityBinding.inflate(layoutInflater)
+        val binding = MapActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -34,9 +33,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         val trip = Trip(activity.map!!)
-        googleMap.addCircle(CircleOptions().center(trip.begin()).fillColor(GREEN).strokeColor(GREEN).radius(20.0))
-        googleMap.addCircle(CircleOptions().center(trip.end()).fillColor(RED).strokeColor(RED).radius(20.0))
-        googleMap.addPolyline(PolylineOptions().width(7f).color(BLUE).geodesic(true).addAll(trip.steps()))
+        googleMap.addPolyline(PolylineOptions().width(8f).color(BLUE).geodesic(true).addAll(trip.steps()))
+        googleMap.addCircle(CircleOptions().center(trip.begin()).fillColor(GREEN).strokeColor(GREEN).radius(12.0))
+        googleMap.addCircle(CircleOptions().center(trip.end()).fillColor(RED).strokeColor(RED).radius(12.0))
 
         googleMap.setOnMapLoadedCallback {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(trip.boundaries(), 30))

@@ -44,7 +44,7 @@ abstract class ActivityFragment : Fragment() {
 
         val sports = ActivityRepository.sports()
         val adapter = ArrayAdapter(
-            context!!,
+            requireContext(),
             R.layout.spinner_dropdown_item,
             sports.map { resources.getString(it.title) }
         )
@@ -80,7 +80,7 @@ abstract class PeriodActivityFragment : ActivityFragment() {
         val spinner = menu.findItem(R.id.period_filter).actionView as Spinner
 
         val adapter = ArrayAdapter(
-            context!!,
+            requireContext(),
             R.layout.spinner_dropdown_item,
             Period.values().map { resources.getString(it.label) }
         )

@@ -8,8 +8,8 @@ android {
         applicationId "com.statsup"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 17001
-        versionName "1.7.1"
+        versionCode 17002
+        versionName "1.7.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         Properties properties = new Properties()

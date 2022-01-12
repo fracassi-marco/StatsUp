@@ -31,7 +31,7 @@ object WeightRepository {
     }
 
     fun addIfNotExists(context: Context, newWeights: List<Weight>) {
-        val toAdd = newWeights.minus(weights)
+        val toAdd = newWeights.minus(weights.toSet())
         if (toAdd.isNotEmpty()) {
             saveAll(context, toAdd)
             weights = weights.plus(toAdd).sortedByDescending { it.dateInMillis }

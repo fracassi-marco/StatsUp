@@ -18,13 +18,13 @@ class ConfigurationsFragment : NoMenuFragment() {
         _binding = ConfigurationsFragmentBinding.inflate(inflater, container, false)
 
         binding.deleteActivitiesButton.setOnClickListener {
-            ActivityRepository.clean(context!!)
-            Toast.makeText(context!!, settings_delete_activities_complete, LENGTH_SHORT).show()
+            ActivityRepository.clean(requireContext())
+            Toast.makeText(requireContext(), settings_delete_activities_complete, LENGTH_SHORT).show()
         }
 
         binding.deleteWeightsButton.setOnClickListener {
-            WeightRepository.clean(context!!)
-            Toast.makeText(context!!, settings_delete_weights_complete, LENGTH_SHORT).show()
+            WeightRepository.clean(requireContext())
+            Toast.makeText(requireContext(), settings_delete_weights_complete, LENGTH_SHORT).show()
         }
 
         UserRepository.listen("ConfigurationsFragment", object : Listener<User> {
@@ -42,17 +42,17 @@ class ConfigurationsFragment : NoMenuFragment() {
 
     private fun showHeightDialog(user: User) {
         IntegerDialog(
-            context!!.getString(R.string.integer_dialog_height),
-            context!!.getString(R.string.height_unit_cm),
+            requireContext().getString(R.string.integer_dialog_height),
+            requireContext().getString(R.string.height_unit_cm),
             user.height
         ) { number -> onValueDialogPositiveButton(number, user) }
-            .makeDialog(activity!!)
+            .makeDialog(requireActivity())
             .show()
     }
 
     private fun onValueDialogPositiveButton(number: Int, user: User) {
         user.height = number
-        UserRepository.update(context!!, user)
+        UserRepository.update(requireContext(), user)
     }
 
     override fun onDestroyView() {

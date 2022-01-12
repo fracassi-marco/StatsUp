@@ -1,10 +1,15 @@
 package com.statsup
 
 import android.content.Intent
+import android.content.Intent.ACTION_OPEN_DOCUMENT
+import android.content.Intent.CATEGORY_OPENABLE
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat.START
@@ -13,7 +18,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension
 import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.FitnessOptions.ACCESS_WRITE
+import com.google.android.gms.fitness.data.DataType.TYPE_WEIGHT
 import com.google.android.material.navigation.NavigationView
 import com.statsup.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -23,8 +29,8 @@ import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 
 
-const val STRAVA_REQUEST_CODE = 1001
-private const val WEIGHT_IMPORT_REQUEST_CODE = 1003
+private const val STRAVA_LOGIN_CODE = 1001
+private const val WEIGHT_IMPORT_CODE = 1003
 private const val GOOGLE_FIT_PERMISSIONS = 1005
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +38,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
     private lateinit var binding: ActivityMainBinding
+    private lateinit var weightImport: ActivityResultLauncher<Intent>
+    private lateinit var stravaLogin: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +63,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         UserRepository.load(applicationContext)
         WeightRepository.load(applicationContext)
         openDefaultFragment()
+
+        weightImport = registerForActivityResult(StartActivityForResult()) { onResult(WEIGHT_IMPORT_CODE, it) }
+        stravaLogin = registerForActivityResult(StartActivityForResult()) { onResult(STRAVA_LOGIN_CODE, it) }
     }
 
     private fun openDefaultFragment() {
@@ -93,14 +104,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 openFragment(menuItem.title, WeightHistoryFragment())
             }
             R.id.nav_weight_import -> {
-                val openWeightCsvIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                openWeightCsvIntent.addCategory(Intent.CATEGORY_OPENABLE)
-                openWeightCsvIntent.type = "*/*"
-                startActivityForResult(openWeightCsvIntent, WEIGHT_IMPORT_REQUEST_CODE)
+                weightImport.launch(Intent(ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(CATEGORY_OPENABLE)
+                    type = "*/*"
+                })
             }
             R.id.nav_weight_fit_export -> {
                 val options: GoogleSignInOptionsExtension = FitnessOptions.builder()
-                    .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_WRITE)
+                    .addDataType(TYPE_WEIGHT, ACCESS_WRITE)
                     .build()
                 val account = GoogleSignIn.getAccountForExtension(applicationContext, options)
                 if (!GoogleSignIn.hasPermissions(account, options)) {
@@ -119,9 +130,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun startActivitiesImport() {
-        val intent = StravaLogin(applicationContext, Confs(applicationContext).stravaClientId)
-            .makeIntent()
-        startActivityForResult(intent, STRAVA_REQUEST_CODE)
+        val intent = StravaLogin(applicationContext, Confs(applicationContext).stravaClientId).makeIntent()
+        stravaLogin.launch(intent)
     }
 
     private fun openFragment(title: CharSequence?, fragment: Fragment) {
@@ -131,10 +141,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == STRAVA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            val code = data.getStringExtra(StravaLoginActivity.RESULT_CODE)
+    private fun onResult(requestCode: Int, result: ActivityResult) {
+        if (requestCode == STRAVA_LOGIN_CODE && result.resultCode == RESULT_OK && result.data != null) {
+            val code = result.data!!.getStringExtra(StravaLoginActivity.RESULT_CODE)
 
             showProgressBar()
             scope.launch {
@@ -143,9 +152,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     openDefaultFragment()
                 }.download()
             }
-        } else if (requestCode == WEIGHT_IMPORT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+        } else if (requestCode == WEIGHT_IMPORT_CODE && result.resultCode == RESULT_OK && result.data != null) {
             showProgressBar()
             try {
+                val data: Intent = result.data!!
                 val inputStream = contentResolver.openInputStream(data.data!!)
                 CsvWeights(inputStream!!).read(scope, applicationContext) {
                     hideProgressBar()
@@ -154,7 +164,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } catch (e: FileNotFoundException) {
                 println(e.message)
             }
-        } else if (requestCode == GOOGLE_FIT_PERMISSIONS && resultCode == RESULT_OK && data != null) {
+        } else if (requestCode == GOOGLE_FIT_PERMISSIONS && result.resultCode == RESULT_OK) {
             accessGoogleFif()
         }
     }

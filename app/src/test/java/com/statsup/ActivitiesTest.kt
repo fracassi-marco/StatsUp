@@ -12,7 +12,7 @@ class ActivitiesTest {
     fun `first month`() {
         val activities = listOf(on(2020, 2), on(2020, 1))
 
-        val selectedActivities = Activities(activities) { _ -> 1.0 }.filterByMonth(0)
+        val selectedActivities = Activities(activities) { 1.0 }.filterByMonth(0)
         val month = selectedActivities.month()
 
         assertThat(month).isEqualTo(Month(2020, 1))

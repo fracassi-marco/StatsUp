@@ -1,6 +1,5 @@
 package com.statsup
 
-import android.graphics.Color.BLUE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +20,11 @@ class AllTimesMapFragment : Fragment(), OnMapReadyCallback {
     private var _binding: MapActivityBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = MapActivityBinding.inflate(inflater, container, false)
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -38,11 +41,12 @@ class AllTimesMapFragment : Fragment(), OnMapReadyCallback {
             .filter { activity -> activity.map != null }
             .forEach { activity ->
                 val trip = Trip(activity.map!!)
-                googleMap.addPolyline(PolylineOptions().width(7f).color(BLUE).geodesic(true).addAll(trip.steps()))
-                trip.steps().forEach {
-                    boundBuilder.include(it)
-                }
-        }
+                val color = RandomColors().get()
+                googleMap.addPolyline(
+                    PolylineOptions().width(8f).color(color).geodesic(true).addAll(trip.steps())
+                )
+                trip.steps().forEach { boundBuilder.include(it) }
+            }
 
         googleMap.setOnMapLoadedCallback {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundBuilder.build(), 30))

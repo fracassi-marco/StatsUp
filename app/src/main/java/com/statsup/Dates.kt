@@ -27,10 +27,4 @@ enum class DayOfWeek(val index: Int, val label: String) {
     Friday(5, "Ven"),
     Saturday(6, "Sab"),
     Sunday(7, "Dom");
-
-    companion object {
-        fun labelOf(index: Int) = byIndex(index).label
-
-        fun byIndex(index: Int) = values().single { it.index == index }
-    }
 }
