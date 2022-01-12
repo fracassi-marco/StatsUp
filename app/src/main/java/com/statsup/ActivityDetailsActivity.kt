@@ -133,6 +133,7 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val trip = Trip(activity.map!!)
         googleMap.uiSettings.isMapToolbarEnabled = false
+        googleMap.uiSettings.isScrollGesturesEnabled = false
         googleMap.addPolyline(PolylineOptions().width(8f).color(BLUE).geodesic(true).addAll(trip.steps()))
         googleMap.addCircle(CircleOptions().center(trip.begin()).fillColor(GREEN).strokeColor(GREEN).radius(12.0))
         googleMap.addCircle(CircleOptions().center(trip.end()).fillColor(RED).strokeColor(RED).radius(12.0))
