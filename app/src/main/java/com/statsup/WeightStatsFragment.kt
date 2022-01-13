@@ -17,6 +17,7 @@ class WeightStatsFragment : NoMenuFragment() {
     override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         _binding = WeightStatsFragmentBinding.inflate(inflater, container, false)
         binding.statsViewPager.adapter = WeightStatsPagerAdapter(this)
+        binding.statsViewPager.isUserInputEnabled = false
 
         TabLayoutMediator(binding.statsTabLayout, binding.statsViewPager) { tab, position ->
             tab.text = WeightTabs.at(position).label

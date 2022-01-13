@@ -23,6 +23,7 @@ class ActivityStatsFragment : Fragment() {
         _binding = ActivityStatsFragmentBinding.inflate(inflater, container, false)
         binding.statsViewPager.adapter = ActivityStatsPagerAdapter(this)
         binding.statsViewPager.offscreenPageLimit = 3
+        binding.statsViewPager.isUserInputEnabled = false
 
         TabLayoutMediator(binding.statsTabLayout, binding.statsViewPager) { tab, position ->
             tab.text = Stats.at(position).title
