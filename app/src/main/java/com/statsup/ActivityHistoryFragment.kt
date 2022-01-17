@@ -23,10 +23,6 @@ class ActivityHistoryFragment : ActivityFragment() {
         binding.recyclerView.adapter = historyAdapter
         binding.recyclerView.addItemDecoration(VerticalDividerItemDecoration(40))
 
-//        binding.noActivitiesLayout.importButton.setOnClickListener {
-//            (activity as MainActivity).startActivitiesImport()
-//        }
-
         showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.recyclerView)
 
         return binding.root

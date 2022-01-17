@@ -31,14 +31,13 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         activity = ActivityRepository.byId(intent.getLongExtra("id", -1))
 
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        (supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(this)
 
         binding.activityTitle.text = activity.title
         binding.sportIcon.setImageResource(activity.sport.icon)
         binding.sportName.setText(activity.sport.title)
-        binding.activityDate.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm"))
+        binding.activityDate.text =
+            activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm"))
 
         if (activity.durationInSeconds > 0) {
             item().apply {
@@ -134,6 +133,10 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         val trip = Trip(activity.map!!)
         googleMap.uiSettings.isMapToolbarEnabled = false
         googleMap.uiSettings.isScrollGesturesEnabled = false
+        googleMap.uiSettings.isScrollGesturesEnabledDuringRotateOrZoom = false
+        googleMap.uiSettings.isZoomControlsEnabled = false
+        googleMap.uiSettings.isZoomGesturesEnabled = false
+        googleMap.uiSettings.isRotateGesturesEnabled = false
         googleMap.addPolyline(PolylineOptions().width(8f).color(BLUE).geodesic(true).addAll(trip.steps()))
         googleMap.addCircle(CircleOptions().center(trip.begin()).fillColor(GREEN).strokeColor(GREEN).radius(12.0))
         googleMap.addCircle(CircleOptions().center(trip.end()).fillColor(RED).strokeColor(RED).radius(12.0))
