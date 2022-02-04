@@ -18,4 +18,10 @@
     <color name="Red">#FF5722</color>
     <color name="Blue">#2196F3</color>
     <color name="DarkOrange">#FF5722</color>
+
+    <color name="sbv_value_sign_background">#7492E2</color>
+    <color name="sbv_empty_segment_background">#858585</color>
+    <color name="sbv_value_sign_text">#fff</color>
+    <color name="sbv_segment_text">#fff</color>
+    <color name="sbv_description_text">#444</color>
 </resources>

@@ -7,4 +7,38 @@
         <attr name="spaces_between_bars" format="dimension" />
         <attr name="value_suffix" format="string" />
     </declare-styleable>
+    <declare-styleable name="SegmentedBarView">
+        <attr name="sbv_show_description_text" format="boolean" />
+        <attr name="sbv_show_segment_text" format="boolean" />
+
+        <attr name="sbv_empty_segment_text" format="string" />
+        <attr name="sbv_value_segment_text" format="string" />
+
+        <attr name="sbv_value_sign_background" format="color" />
+        <attr name="sbv_empty_segment_background" format="color" />
+
+        <attr name="sbv_description_text_size" format="dimension" />
+        <attr name="sbv_value_text_size" format="dimension" />
+        <attr name="sbv_segment_text_size" format="dimension" />
+
+        <attr name="sbv_bar_height" format="dimension" />
+        <attr name="sbv_value_sign_height" format="dimension" />
+        <attr name="sbv_value_sign_width" format="dimension" />
+        <attr name="sbv_arrow_height" format="dimension" />
+        <attr name="sbv_arrow_width" format="dimension" />
+        <attr name="sbv_description_box_height" format="dimension" />
+
+        <attr name="sbv_segment_gap_width" format="dimension" />
+        <attr name="sbv_value_sign_round" format="dimension" />
+
+        <attr name="sbv_side_style" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="rounded" value="1" />
+            <enum name="angle" value="2" />
+        </attr>
+        <attr name="sbv_side_text_style" format="enum">
+            <enum name="oneSided" value="0" />
+            <enum name="twoSided" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

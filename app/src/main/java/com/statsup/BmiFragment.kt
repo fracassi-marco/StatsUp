@@ -9,8 +9,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.statsup.databinding.BmiFragmentBinding
 import com.statsup.databinding.OverviewItemBinding
-import mobi.gspd.segmentedbarview.Segment
-import mobi.gspd.segmentedbarview.SegmentedBarView
+import com.statsup.segmentedbar.Segment
+import com.statsup.segmentedbar.SegmentedBarView
 
 class BmiFragment : Fragment() {
 

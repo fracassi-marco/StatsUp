@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="8dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="8dp">
 
         <TextView
             android:id="@+id/last_three_months_chart_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/last_three_months_chart_title"
             android:textColor="@android:color/black"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:text="@string/last_three_months_chart_title"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/last_three_months_chart"
@@ -33,21 +33,21 @@
             android:layout_marginHorizontal="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/last_three_months_chart_title"/>
+            app:layout_constraintTop_toBottomOf="@+id/last_three_months_chart_title" />
 
         <TextView
             android:id="@+id/monthly_chart_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/monthly_chart_title"
             android:textColor="@android:color/black"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:text="@string/monthly_chart_title"
-            app:layout_constraintTop_toBottomOf="@+id/last_three_months_chart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/last_three_months_chart" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/monthly_chart"
@@ -56,146 +56,136 @@
             android:layout_marginHorizontal="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/monthly_chart_title"/>
+            app:layout_constraintTop_toBottomOf="@+id/monthly_chart_title" />
 
-        <com.warkiz.widget.IndicatorStayLayout
-                android:id="@+id/seek_bar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/monthly_chart">
-
-            <com.warkiz.widget.IndicatorSeekBar
-                    android:id="@+id/seek_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:isb_indicator_color="@color/Green"
-                    app:isb_indicator_text_color="@android:color/black"
-                    app:isb_indicator_text_size="18sp"
-                    app:isb_seek_smoothly="false"
-                    app:isb_show_indicator="rectangle"
-                    app:isb_show_tick_marks_type="none"
-                    app:isb_show_tick_texts="true"
-                    app:isb_thumb_color="@color/Orange"
-                    app:isb_thumb_size="20dp"
-                    app:isb_tick_texts_color="@android:color/black"
-                    app:isb_tick_texts_size="28sp"
-                    app:isb_ticks_count="2"
-                    app:isb_track_background_color="@color/Grey"
-                    app:isb_track_background_size="2dp"
-                    app:isb_track_progress_color="@color/Green"
-                    app:isb_track_progress_size="4dp"
-
-                    app:isb_user_seekable="false" />
-        </com.warkiz.widget.IndicatorStayLayout>
+        <com.jaygoo.widget.RangeSeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:paddingHorizontal="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/monthly_chart"
+            app:rsb_gravity="bottom"
+            app:rsb_indicator_height="wrap_content"
+            app:rsb_indicator_padding_bottom="10dp"
+            app:rsb_indicator_padding_left="15dp"
+            app:rsb_indicator_padding_right="15dp"
+            app:rsb_indicator_padding_top="10dp"
+            app:rsb_indicator_radius="5dp"
+            app:rsb_indicator_show_mode="alwaysShow"
+            app:rsb_indicator_text_size="14sp"
+            app:rsb_indicator_width="60dp"
+            app:rsb_mode="single"
+            app:rsb_tick_mark_text_size="14sp"
+            app:rsb_tick_mark_text_color="@android:color/black"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bmi_oxford_overview"
+            android:id="@+id/bmi_oxford_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/border"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seek_bar">
+
+            <include
+                android:id="@+id/bmi_oxford_min_max_overview_item"
+                layout="@layout/overview_item"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/border"
+                android:layout_height="65dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/seek_bar_layout">
-
-            <include
-                    android:id="@+id/bmi_oxford_min_max_overview_item"
-                    layout="@layout/overview_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
-                    android:id="@+id/divider0"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/Grey"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bmi_oxford_min_max_overview_item" />
+                android:id="@+id/divider0"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/Grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bmi_oxford_min_max_overview_item" />
 
             <include
-                    android:id="@+id/month_variation_overview_item"
-                    layout="@layout/overview_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider0" />
+                android:id="@+id/month_variation_overview_item"
+                layout="@layout/overview_item"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider0" />
 
             <View
-                    android:id="@+id/divider1"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/Grey"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/month_variation_overview_item" />
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/Grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/month_variation_overview_item" />
 
             <include
-                    android:id="@+id/year_variation_overview_item"
-                    layout="@layout/overview_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider1" />
+                android:id="@+id/year_variation_overview_item"
+                layout="@layout/overview_item"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
             <View
-                    android:id="@+id/divider2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/Grey"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/year_variation_overview_item" />
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/Grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/year_variation_overview_item" />
 
             <include
-                    android:id="@+id/full_variation_overview_item"
-                    layout="@layout/overview_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                android:id="@+id/full_variation_overview_item"
+                layout="@layout/overview_item"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <View
-                    android:id="@+id/divider3"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/Grey"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/full_variation_overview_item" />
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/Grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/full_variation_overview_item" />
 
             <include
-                    android:id="@+id/travia_weight_overview_item"
-                    layout="@layout/overview_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
+                android:id="@+id/travia_weight_overview_item"
+                layout="@layout/overview_item"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

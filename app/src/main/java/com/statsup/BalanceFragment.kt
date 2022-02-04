@@ -123,9 +123,12 @@ class BalanceFragment : Fragment() {
     private fun updateSeekBar(weights: List<Weight>) {
         val max = weights.maxByOrNull { it.kilograms }!!.kilograms.toFloat()
         val min = weights.minByOrNull { it.kilograms }!!.kilograms.toFloat()
-        binding.seekBar.max = max
-        binding.seekBar.min = min
+        binding.seekBar.setIndicatorTextDecimalFormat("0.00")
+        binding.seekBar.setIndicatorText(weights.last().kilograms.toString())
+        binding.seekBar.tickMarkTextArray = arrayOf(min.toString(), max.toString())
+        binding.seekBar.setRange(min, max)
         binding.seekBar.setProgress(weights.last().kilograms.toFloat())
+        binding.seekBar.isEnabled = false
     }
 
     private fun updateLastThreeMonthsChart(weights: List<Weight>, graph: LineChart) {
