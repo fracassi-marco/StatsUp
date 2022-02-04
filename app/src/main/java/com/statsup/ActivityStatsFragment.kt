@@ -1,25 +1,21 @@
 package com.statsup
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.statsup.Content.showActivitiesOrEmptyPage
 import com.statsup.databinding.ActivityStatsFragmentBinding
 
-class ActivityStatsFragment : Fragment() {
+class ActivityStatsFragment : PeriodActivityFragment() {
 
     private var _binding: ActivityStatsFragmentBinding? = null
     private val binding get() = _binding!!
+    private var latestPeriod = -1
+    private var latestSport = -1
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
         _binding = ActivityStatsFragmentBinding.inflate(inflater, container, false)
         binding.statsViewPager.adapter = ActivityStatsPagerAdapter(this)
         binding.statsViewPager.offscreenPageLimit = 3
@@ -27,7 +23,6 @@ class ActivityStatsFragment : Fragment() {
 
         TabLayoutMediator(binding.statsTabLayout, binding.statsViewPager) { tab, position ->
             tab.text = Stats.at(position).title
-
         }.attach()
 
         binding.statsTabLayout.also {
@@ -48,6 +43,12 @@ class ActivityStatsFragment : Fragment() {
         showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.statsViewPager)
 
         return binding.root
+    }
+
+    override fun onFilterChange() {
+        latestPeriod = PeriodFilter.current.ordinal
+        latestSport = ActivityRepository.selectedSportPosition
+        binding.statsViewPager.adapter!!.notifyItemChanged(binding.statsViewPager.currentItem)
     }
 
     override fun onDestroyView() {

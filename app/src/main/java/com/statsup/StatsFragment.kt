@@ -1,43 +1,36 @@
 package com.statsup
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.statsup.databinding.StatsFragmentBinding
 
-class StatsFragment : PeriodActivityFragment() {
+class StatsFragment : Fragment() {
 
     private lateinit var stats: Stats
-    private var latestPeriod = -1
-    private var latestSport = -1
     private var _binding: StatsFragmentBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = StatsFragmentBinding.inflate(inflater, container, false)
         stats = requireArguments().get("stats") as Stats
 
-        onResume()
+        onFilterChange()
 
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (latestPeriod != PeriodFilter.current.ordinal || latestSport != ActivityRepository.selectedSportPosition) {
-            onFilterChange()
+    fun onFilterChange() {
+        if(context != null) {
+            val pagerAdapter = PeriodFilter.pagerAdapter(requireContext()).apply {
+                val activities = ActivityRepository.filterBySelectedSport()
+                update(stats, activities)
+            }
+            binding.viewPager.adapter = pagerAdapter
+            binding.viewPager.currentItem = pagerAdapter.count - 1
         }
-    }
-
-    override fun onFilterChange() {
-        latestPeriod = PeriodFilter.current.ordinal
-        latestSport = ActivityRepository.selectedSportPosition
-        val activities = ActivityRepository.filterBySelectedSport()
-        val pagerAdapter = PeriodFilter.pagerAdapter(requireContext()).apply {
-            update(stats, activities)
-        }
-        binding.viewPager.adapter = pagerAdapter
-        binding.viewPager.currentItem = pagerAdapter.count - 1
     }
 
     override fun onDestroyView() {
