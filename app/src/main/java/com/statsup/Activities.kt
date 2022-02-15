@@ -163,7 +163,8 @@ class Activities(
     fun cumulativeByDay(): List<Double> {
         val byDay = byDay()
         var currentMonthTotal = 0.0
-        return (0..30).map { i ->
+
+        return (0 until month().numberOfDays()).map { i ->
             if (i < byDay.size)
                 currentMonthTotal += byDay[i]
 
@@ -174,7 +175,7 @@ class Activities(
     fun cumulativeByMonth(): List<Double> {
         val byMonth = byMonth()
         var total = 0.0
-        return (0..11).map { i ->
+        return (0 until year().numberOfMonths()).map { i ->
             if (i < byMonth.size)
                 total += byMonth[i]
 
