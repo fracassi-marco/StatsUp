@@ -21,6 +21,7 @@
     <string name="menu_configurations">Configurazioni</string>
 
     <string name="login_strava">Login Strava</string>
+    <string name="update_strava">Update</string>
 
     <string name="negative_button">Annulla</string>
     <string name="positive_button">Conferma</string>

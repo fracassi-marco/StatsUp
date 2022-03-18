@@ -7,12 +7,12 @@ import com.statsup.Sports.All
 
 object ActivityRepository {
 
-    private var activities: List<Activity> = emptyList()
+    private var activities: MutableList<Activity> = mutableListOf()
     var selectedSportPosition = 0
 
     fun clean(context: Context) {
         DbHelper(context).writableDatabase.use { it.delete("activities", null, null) }
-        activities = emptyList()
+        activities = mutableListOf()
     }
 
     fun load(context: Context) {
@@ -72,7 +72,7 @@ object ActivityRepository {
                 connection.insert("activities", null, values)
             }
         }
-        activities = toAdd
+        activities.addAll(toAdd)
     }
 
     fun anyActivities()= activities.isNotEmpty()

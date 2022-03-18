@@ -37,8 +37,12 @@ class StravaActivities(
     }
 
     private suspend fun download(page: Int, token: String) : List<Activity> {
+        val params = mutableMapOf("page" to page.toString(), "per_page" to "100")
+        if(ActivityRepository.all().isNotEmpty()) {
+            params["after"] = (ActivityRepository.all().maxByOrNull { it.dateInMillis }!!.dateInMillis / 1000).toString()
+        }
         val response = "$STRAVA/athlete/activities".httpAsync(scope).get(
-            params = mapOf("page" to page.toString(), "per_page" to "100"),
+            params = params,
             headers = mapOf("Accept" to "application/json", "Authorization" to "Bearer $token")
         ).await()
         val activities = Json.parse(response.body).asArray().map {
@@ -68,7 +72,6 @@ class StravaActivities(
     }
 
     private fun onPostExecute(activities: List<Activity>) {
-        ActivityRepository.clean(context)
         ActivityRepository.saveAll(context, activities)
         onComplete.invoke()
     }
