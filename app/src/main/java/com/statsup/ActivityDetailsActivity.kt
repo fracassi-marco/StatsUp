@@ -43,7 +43,7 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
             item().apply {
                 itemIcon.setImageResource(R.drawable.outline_timer_24)
                 itemLabel.setText(R.string.activity_duration)
-                itemValue.text = Measure.timeFragments(activity.durationInSeconds)
+                itemValue.text = Measure.hms(activity.durationInSeconds)
             }
         }
 
@@ -51,7 +51,7 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
             item().apply {
                 itemIcon.setImageResource(R.drawable.moving_time)
                 itemLabel.setText(R.string.activity_moving_time)
-                itemValue.text = Measure.timeFragments(activity.movingTimeInSeconds)
+                itemValue.text = Measure.hms(activity.movingTimeInSeconds)
             }
         }
 

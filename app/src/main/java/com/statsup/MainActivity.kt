@@ -82,6 +82,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
+            R.id.nav_stats_dashboard -> {
+                openFragment(menuItem.title, ActivityDashboardFragment())
+            }
             R.id.nav_history -> {
                 openFragment(menuItem.title, ActivityHistoryFragment())
             }

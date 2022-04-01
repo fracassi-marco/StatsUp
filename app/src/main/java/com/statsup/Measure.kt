@@ -15,7 +15,7 @@ object Measure {
         return result + String.format("%.2f", value) + unit
     }
 
-    fun timeFragments(seconds: Int): String {
+    fun hms(seconds: Int): String {
         val hoursFragment = seconds / 3600
         val minutesFragment = (seconds % 3600) / 60
         val secondsFragment = seconds % 60
@@ -23,6 +23,15 @@ object Measure {
             return "${hoursFragment}h ${minutesFragment}m ${secondsFragment}s"
 
         return "${minutesFragment}m ${secondsFragment}s"
+    }
+
+    fun hm(seconds: Int): String {
+        val hoursFragment = seconds / 3600
+        val minutesFragment = (seconds % 3600) / 60
+        if(hoursFragment > 0)
+            return "${hoursFragment}h ${minutesFragment}m"
+
+        return "${minutesFragment}m"
     }
 
     fun minutesAndSeconds(seconds: Int, label: String): String {
@@ -33,6 +42,8 @@ object Measure {
         val secondsFragment = pad(seconds % 60)
         return "${minutesFragment}:${secondsFragment}$label"
     }
+
+    fun frequency(value: Double) = "#${value.toInt()}"
 
     private fun pad(value: Int) = value.toString().padStart(2, '0')
 }

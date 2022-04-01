@@ -106,7 +106,7 @@ class ActivityRecordsFragment : ActivityFragment() {
                 duration!!.root.visibility = GONE
             }
             else {
-                duration!!.value.text = Measure.timeFragments(durationValue)
+                duration!!.value.text = Measure.hms(durationValue)
                 fill(duration!!.activity, durationActivity)
             }
 

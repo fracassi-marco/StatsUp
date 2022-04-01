@@ -10,7 +10,7 @@ object ActivityView {
         binding.historyListItemTitleText.text = binding.root.resources.getString(activity.sport.title) + " - " + activity.title
         binding.historyListItemIcon.setImageResource(activity.sport.icon)
         binding.historyListItemDateText.text = activity.date().toString(DateTimeFormat.forPattern("dd/MM/yyyy HH:mm"))
-        binding.historyListItemTimeText.text = Measure.timeFragments(activity.durationInSeconds)
+        binding.historyListItemTimeText.text = Measure.hms(activity.durationInSeconds)
         binding.historyListItemDistanceText.text = Measure.of(activity.distanceInKilometers(), "Km", "", "- ")
         binding.historyListItemPaceText.text = Measure.minutesAndSeconds(activity.paceInSecondsPerKilometer(), "/Km")
         binding.historyListItemElevationText.text = Measure.of(activity.elevationInMeters, "m", "", "- ")

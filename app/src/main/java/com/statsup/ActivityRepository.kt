@@ -98,4 +98,6 @@ object ActivityRepository {
     fun byId(id: Long)= activities.single { it.id == id }
 
     fun all() = activities
+
+    fun ofMonth(month: Month) = activities.filter { Month(it.date()) == month }
 }
