@@ -73,6 +73,7 @@ object ActivityRepository {
             }
         }
         activities.addAll(toAdd)
+        activities.sortByDescending { it.dateInMillis }
     }
 
     fun anyActivities()= activities.isNotEmpty()
