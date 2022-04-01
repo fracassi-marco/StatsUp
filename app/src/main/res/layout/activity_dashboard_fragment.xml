@@ -7,88 +7,127 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:background="@drawable/_green_card"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="12dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/label1"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/_green_card"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/label1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/frequency"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/frequency_value"
+                app:layout_constraintStart_toStartOf="@+id/frequency_value"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/label2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/duration"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/duration_value"
+                app:layout_constraintStart_toStartOf="@+id/duration_value"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/label3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/distance"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/distance_value"
+                app:layout_constraintStart_toStartOf="@+id/distance_value"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/frequency_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toStartOf="@+id/duration_value"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/label1" />
+
+            <TextView
+                android:id="@+id/duration_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toStartOf="@+id/distance_value"
+                app:layout_constraintStart_toEndOf="@+id/frequency_value"
+                app:layout_constraintTop_toBottomOf="@+id/label2" />
+
+            <TextView
+                android:id="@+id/distance_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/duration_value"
+                app:layout_constraintTop_toBottomOf="@+id/label3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/circles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/value1"
-            app:layout_constraintEnd_toEndOf="@+id/value1"
-            android:text="@string/frequency" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/summary">
 
-        <TextView
-            android:id="@+id/label2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/value2"
-            app:layout_constraintEnd_toEndOf="@+id/value2"
-            android:text="@string/duration" />
+            <com.hookedonplay.decoviewlib.DecoView
+                android:id="@+id/arc"
+                android:layout_width="wrap_content"
+                android:layout_height="360dp"
+                android:layout_marginHorizontal="64dp"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
-            android:id="@+id/label3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/value3"
-            app:layout_constraintEnd_toEndOf="@+id/value3"
-            android:text="@string/distance" />
-
-        <TextView
-            android:id="@+id/value1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="22sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@+id/label1"
-            app:layout_constraintEnd_toStartOf="@+id/value2"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/value2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="22sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@+id/label2"
-            app:layout_constraintEnd_toStartOf="@+id/value3"
-            app:layout_constraintStart_toEndOf="@+id/value1" />
-
-        <TextView
-            android:id="@+id/value3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="22sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@+id/label3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/value2" />
+            <TextView
+                android:id="@+id/percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="40sp"
+                app:layout_constraintBottom_toBottomOf="@id/arc"
+                app:layout_constraintEnd_toEndOf="@+id/arc"
+                app:layout_constraintStart_toStartOf="@+id/arc"
+                app:layout_constraintTop_toTopOf="@id/arc" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
         android:id="@+id/no_activities_layout"
         layout="@layout/no_activities_layout"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

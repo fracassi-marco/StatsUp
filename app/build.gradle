@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.maps.android:android-maps-utils:2.3.0'
+    implementation 'com.github.bmarrdev:android-DecoView-charting:v1.2'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'net.wuerl.kotlin:assertj-core-kotlin:0.2.1'
