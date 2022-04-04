@@ -19,6 +19,12 @@
     <color name="Blue">#2196F3</color>
     <color name="DarkOrange">#FF5722</color>
 
+    <color name="main">#FC5200</color>
+    <color name="frequency">#4CAF50</color>
+    <color name="duration">#2196F3</color>
+    <color name="distance">#F44336</color>
+    <color name="stamina">#F44336</color>
+
     <color name="sbv_value_sign_background">#7492E2</color>
     <color name="sbv_empty_segment_background">#858585</color>
     <color name="sbv_value_sign_text">#fff</color>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,6 +9,19 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="34sp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Febbraio"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/summary"
@@ -18,7 +32,7 @@
             android:background="@drawable/_green_card"
             android:padding="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/month" >
 
             <TextView
                 android:id="@+id/label1"
@@ -65,7 +79,8 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toStartOf="@+id/duration_value"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/label1" />
+                app:layout_constraintTop_toBottomOf="@+id/label1"
+                tools:text="#12" />
 
             <TextView
                 android:id="@+id/duration_value"
@@ -76,7 +91,8 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toStartOf="@+id/distance_value"
                 app:layout_constraintStart_toEndOf="@+id/frequency_value"
-                app:layout_constraintTop_toBottomOf="@+id/label2" />
+                app:layout_constraintTop_toBottomOf="@+id/label2"
+                tools:text="3h 24m" />
 
             <TextView
                 android:id="@+id/distance_value"
@@ -87,7 +103,8 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/duration_value"
-                app:layout_constraintTop_toBottomOf="@+id/label3" />
+                app:layout_constraintTop_toBottomOf="@+id/label3"
+                tools:text="5,76Km" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -95,31 +112,54 @@
             android:id="@+id/circles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/summary">
 
             <com.hookedonplay.decoviewlib.DecoView
                 android:id="@+id/arc"
                 android:layout_width="wrap_content"
-                android:layout_height="360dp"
-                android:layout_marginHorizontal="64dp"
-                android:layout_marginTop="32dp"
+                android:layout_height="280dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/percent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/labels"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textColor="@android:color/black"
-                android:textSize="40sp"
                 app:layout_constraintBottom_toBottomOf="@id/arc"
                 app:layout_constraintEnd_toEndOf="@+id/arc"
                 app:layout_constraintStart_toStartOf="@+id/arc"
-                app:layout_constraintTop_toTopOf="@id/arc" />
+                app:layout_constraintTop_toTopOf="@id/arc" >
+
+                <TextView
+                    android:id="@+id/percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="40sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="59%" />
+
+                <TextView
+                    android:id="@+id/percent_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/percent"
+                    tools:text="Progressi" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

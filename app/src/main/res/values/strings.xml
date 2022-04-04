@@ -116,6 +116,7 @@
     <string name="frequency">Frequenza</string>
     <string name="duration">Durata</string>
     <string name="distance">Distanza</string>
+    <string name="stamina">Progressi</string>
 
     <string name="records_average_speed">Velocità media pià alta</string>
     <string name="records_speed">Velocità di punta</string>
