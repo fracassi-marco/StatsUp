@@ -61,6 +61,59 @@ class MonthOverMonthChart(private val chart: LineChartView, private val title: T
     }
 }
 
+class VsChart(private val chart: LineChartView, private val title: TextView, private val color: Int) {
+
+    fun refresh(currentValues: List<Double>, previousValues: List<Double>, currentLabel: String, previousLabel:  String) {
+        title.text = "$currentLabel vs. $previousLabel"
+        val currentLine = line(currentValues, color).apply {
+            strokeWidth = 5
+        }
+
+        val previousLine = line(previousValues, Color.rgb(218, 218, 218))
+
+        val maxValue = max(previousValues.last(), currentValues.last())
+        chart.lineChartData = LineChartData(listOf(currentLine, previousLine)).apply {
+            axisXBottom = Axis(labels(1..31)).apply {
+                textColor = Color.BLACK
+
+            }
+            axisYLeft = Axis(labels(0..maxValue.toInt())).apply {
+                textColor = Color.BLACK
+            }
+            isValueLabelBackgroundEnabled = false
+            setValueLabelsTextColor(Color.BLACK)
+
+        }
+        chart.maximumViewport.apply {
+            bottom = 0f
+            left = 1f
+            right = 31f
+            top = maxValue.toFloat()
+
+        }
+        chart.currentViewport = chart.maximumViewport
+        chart.isViewportCalculationEnabled = false
+        chart.isInteractive = false
+        chart.invalidate()
+    }
+
+    private fun line(values: List<Double>, aColor: Int): Line {
+        val previous = values.mapIndexed { index, item ->
+            PointValue(index + 1f, item.toFloat())
+        }
+        val previousLine = Line(previous).apply {
+            color = aColor
+            setHasLabels(false)
+            setHasPoints(false)
+        }
+        return previousLine
+    }
+
+    private fun labels(range: IntRange): List<AxisValue> {
+        return range.map { AxisValue(it.toFloat()).apply { setLabel(it.toString()) } }
+    }
+}
+
 class YearOverYearChart(private val chart: LineChartView, private val title: TextView, private val color: Int) {
 
     fun refresh(current: Activities) {

@@ -29,12 +29,17 @@ class ActivityDashboardFragment : Fragment() {
         _binding = ActivityDashboardFragmentBinding.inflate(inflater, container, false)
         setHasOptionsMenu(false)
 
-        val currentActivities = ActivityRepository.ofMonth(Month())
+        val curMonth = Month()
+        val prevMonth = curMonth.previous()
+
+        binding.month.text = curMonth.asString()
+
+        val currentActivities = ActivityRepository.ofMonth(curMonth)
         binding.frequencyValue.text = Measure.frequency(Stats.FREQUENCY.provider(currentActivities))
         binding.durationValue.text = Measure.hm(currentActivities.sumOf { activity -> activity.durationInSeconds })
         binding.distanceValue.text = Measure.of(Stats.DISTANCE.provider(currentActivities), "Km", "", "- ")
 
-        val previousActivities = ActivityRepository.ofMonth(Month().previous())
+        val previousActivities = ActivityRepository.ofMonth(prevMonth)
         val frequency = percentage(Stats.FREQUENCY.provider(currentActivities), Stats.FREQUENCY.provider(previousActivities)).toDouble()
         val duration = percentage(currentActivities.sumOf { a -> a.durationInSeconds }, previousActivities.sumOf { a -> a.durationInSeconds })
         val distance = percentage(Stats.DISTANCE.provider(currentActivities), Stats.DISTANCE.provider(previousActivities))
@@ -60,6 +65,12 @@ class ActivityDashboardFragment : Fragment() {
             binding.percentLabel.text = getString(resources.getIdentifier(next, "string", requireContext().packageName))
             binding.percentLabel.setTextColor(requireContext().getColor(resources.getIdentifier(next, "color", requireContext().packageName)))
         }
+
+
+        VsChart(binding.vsChart, binding.vsChartTitle, requireContext().getColor(R.color.distance)).refresh(
+            currentActivities.cumulativeByDay(curMonth, Stats.DISTANCE.provider),
+            previousActivities.cumulativeByDay(prevMonth, Stats.DISTANCE.provider),
+            curMonth.asString(), prevMonth.asString())
 
         showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.content)
 
