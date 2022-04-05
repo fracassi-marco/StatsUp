@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion 31
@@ -8,8 +7,8 @@ android {
         applicationId "com.statsup"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 19003
-        versionName "1.9.3"
+        versionCode 19004
+        versionName "1.9.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         Properties properties = new Properties()
