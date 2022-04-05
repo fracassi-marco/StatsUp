@@ -20,14 +20,10 @@ class Activities(
         return this
     }
 
-    // 0 vecchio
-    // N nuovo
     fun month(): Month {
         return months()[monthPosition]
     }
 
-    // 0 vecchio
-    // N nuovo
     fun year(): Year {
         return years()[yearPosition]
     }

@@ -17,17 +17,6 @@
         android:layout_height="0dp"
         android:layout_below="@+id/stats_tab_layout"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/update_activities"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:src="@drawable/refresh"
-        android:contentDescription="@string/update_strava"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"/>
-
     <include
         android:id="@+id/no_activities_layout"
         layout="@layout/no_activities_layout"

@@ -1,33 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#FC5200</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-
+    <color name="colorAccent">#F44336</color>
     <color name="LightGrey">#eeeeee</color>
-    <color name="Grey">#9E9E9E</color>
-    <color name="DarkGrey">#616161</color>
     <color name="White">#FFFFFF</color>
-    <color name="Iron">#CCCCCC</color>
-    <color name="Purple">#9C27B0</color>
-    <color name="DarkPink">#880E4F</color>
-    <color name="Orange">#FF9800</color>
-    <color name="SelectedColor">#e0e0e0</color>
-    <color name="actionMode">#D32F2F</color>
-    <color name="Green">#4CAF50</color>
-    <color name="Red">#FF5722</color>
-    <color name="Blue">#2196F3</color>
-    <color name="DarkOrange">#FF5722</color>
-
-    <color name="main">#FC5200</color>
     <color name="frequency">#4CAF50</color>
     <color name="duration">#2196F3</color>
-    <color name="distance">#F44336</color>
+    <color name="distance">#FF9800</color>
     <color name="stamina">#F44336</color>
-
-    <color name="sbv_value_sign_background">#7492E2</color>
-    <color name="sbv_empty_segment_background">#858585</color>
-    <color name="sbv_value_sign_text">#fff</color>
-    <color name="sbv_segment_text">#fff</color>
-    <color name="sbv_description_text">#444</color>
 </resources>

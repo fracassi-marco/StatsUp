@@ -34,8 +34,6 @@ data class Month(val year: Int = DateTime().year, val monthOfYear: Int = DateTim
 
     fun asString() = "${Months.labelOf(monthOfYear)} $year"
 
-    fun asString(day: Int) = "$day ${Months.labelOf(monthOfYear)}"
-
     fun previous(): Month {
         val previous = calendar().apply { add(MONTH, -1) }
         return build(previous)
@@ -59,10 +57,6 @@ data class Month(val year: Int = DateTime().year, val monthOfYear: Int = DateTim
         return false
     }
 
-    fun isAfterOrEqual(other: Month): Boolean {
-        return other.isBeforeOrEqual(this)
-    }
-
     fun numberOfDays(): Int {
         if(DateTime().year == year && DateTime().monthOfYear == monthOfYear) {
             return DateTime().dayOfMonth
@@ -72,8 +66,6 @@ data class Month(val year: Int = DateTime().year, val monthOfYear: Int = DateTim
     }
 
     fun maxNumberOfDays() = calendar().getActualMaximum(DAY_OF_MONTH)
-
-    fun firstDay() : DateTime = DateTime(year, monthOfYear, 1, 0, 0)
 
     private fun calendar() = GregorianCalendar(year, monthOfYear - 1, 1)
 }

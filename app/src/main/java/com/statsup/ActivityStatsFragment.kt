@@ -40,10 +40,6 @@ class ActivityStatsFragment : PeriodActivityFragment() {
             })
         }
 
-        binding.updateActivities.setOnClickListener {
-            (binding.root.context as MainActivity).startActivitiesImport()
-        }
-
         showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.statsViewPager)
 
         return binding.root
