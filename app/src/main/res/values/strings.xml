@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">StatsUp</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="sidebar_image_desc">Profile image</string>
+    <string name="navigation_drawer_open">Apri</string>
+    <string name="navigation_drawer_close">Chiudi</string>
 
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_activities">Attività</string>
@@ -13,49 +10,9 @@
     <string name="menu_records">Record</string>
     <string name="menu_map">Mappa</string>
     <string name="menu_import_from_strava">Import da Strava</string>
-    <string name="menu_weight">Peso</string>
-    <string name="menu_weight_stats">Andamento</string>
-    <string name="menu_weight_history">Pesate</string>
-    <string name="menu_weight_import">Importa da CSV</string>
-    <string name="menu_weight_fit_export">Esporta su Fit</string>
-    <string name="menu_other">Altro</string>
-    <string name="menu_configurations">Configurazioni</string>
 
     <string name="login_strava">Login Strava</string>
     <string name="update_strava">Update</string>
-
-    <string name="negative_button">Annulla</string>
-    <string name="positive_button">Conferma</string>
-
-    <string name="decimal_dialog_weight">Peso</string>
-    <string name="weight_unit_kg">Kg</string>
-    <string name="weight_editor_value_label">%s Kg</string>
-    <string name="editor_activity_view_title">Aggiungi</string>
-    <string name="weight_editor_value_text">Peso</string>
-    <string name="all_empty_field"> - </string>
-    <string name="weight_editor_date_text">Data</string>
-
-    <string name="weight_min">Peso minimo</string>
-    <string name="weight_current">Peso attuale</string>
-    <string name="weight_max">Peso massimo</string>
-    <string name="weight_travia">Peso ideale</string>
-    <string name="weight_travia_delta">Scarto</string>
-    <string name="weight_marker">%s %s</string>
-
-    <string name="integer_dialog_height">Altezza</string>
-    <string name="height_unit_cm">Cm</string>
-    <string name="height_editor_value_text">Altezza in centimetri</string>
-
-    <string name="bmi_oxford_title">Body Mass Index (Oxford)</string>
-    <string name="bmi_classic_title">Body Mass Index (Classico)</string>
-    <string name="bmi_min">BMI minimo</string>
-    <string name="bmi_max">BMI massimo</string>
-    <string name="bmi_current">BMI attuale</string>
-    <string name="bmi_too_low">Esile</string>
-    <string name="bmi_low">Sottopeso</string>
-    <string name="bmi_normal">Normopeso</string>
-    <string name="bmi_high">Sovrappeso</string>
-    <string name="bmi_too_high">Obeso</string>
 
     <string name="sports_all">Tutti gli sport</string>
     <string name="sports_run">Run</string>
@@ -98,20 +55,14 @@
 
     <string name="empty_activities">Non hai ancora attività!!</string>
     <string name="import_button">Importale da Strava</string>
-    <string name="empty_weight">Aggiungi o importa le tue pesate!!</string>
 
     <string name="day_of_week_title">Distribuzione per giorno</string>
     <string name="sport_breakdown_chart_title">Distribuzione per sport</string>
     <string name="last_three_months_chart_title">Ultimi 3 mesi</string>
     <string name="monthly_chart_title">Media mensile</string>
 
-    <string name="weights_fit_export_ok">Pesate esportate correttamente</string>
-    <string name="weights_fit_export_ko">Errore nell\'esportare le pesate</string>
-
     <string name="settings_delete_activities">Cancella attività in locale</string>
     <string name="settings_delete_activities_complete">Attività cancellate</string>
-    <string name="settings_delete_weights">Cancella pesate</string>
-    <string name="settings_delete_weights_complete">Pesate cancellate</string>
 
     <string name="frequency">Frequenza</string>
     <string name="duration">Durata</string>

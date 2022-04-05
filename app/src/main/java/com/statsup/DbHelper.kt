@@ -7,15 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 class DbHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("""CREATE TABLE users (height INTEGER)""")
-
         createActivitiesTable(db)
-
-        db.execSQL(
-            """CREATE TABLE weights (
-            dateInMillis INTEGER PRIMARY KEY,
-            kilograms INTEGER)"""
-        )
     }
 
     private fun createActivitiesTable(db: SQLiteDatabase) {
@@ -44,6 +36,10 @@ class DbHelper(context: Context) :
                 "ALTER TABLE activities ADD movingTimeInSeconds INTEGER DEFAULT 0",
                 "ALTER TABLE activities ADD elevHighInMeters REAL DEFAULT 0",
                 "ALTER TABLE activities ADD elevLowInMeters REAL DEFAULT 0"
+            ),
+            4 to listOf(
+                "DROP TABLE IF EXISTS weights",
+                "DROP TABLE IF EXISTS users"
             )
         )
         oldVersion.until(newVersion).forEach {

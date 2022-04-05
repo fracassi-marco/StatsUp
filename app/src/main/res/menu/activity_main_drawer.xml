@@ -32,34 +32,4 @@
         </menu>
     </item>
 
-    <item android:title="@string/menu_weight">
-        <menu>
-            <item
-                    android:id="@+id/nav_weight_stats"
-                    android:icon="@drawable/weight_scale"
-                    android:title="@string/menu_weight_stats" />
-            <item
-                    android:id="@+id/nav_weight_history"
-                    android:icon="@drawable/outline_view_list_24"
-                    android:title="@string/menu_weight_history" />
-            <item
-                    android:id="@+id/nav_weight_import"
-                    android:icon="@drawable/outline_cloud_download_24"
-                    android:title="@string/menu_weight_import" />
-            <item
-                android:id="@+id/nav_weight_fit_export"
-                android:icon="@drawable/google_fit"
-                android:title="@string/menu_weight_fit_export" />
-        </menu>
-    </item>
-
-    <item android:title="@string/menu_other">
-        <menu>
-            <item
-                    android:id="@+id/nav_configurations"
-                    android:icon="@drawable/ic_menu_manage"
-                    android:title="@string/menu_configurations" />
-        </menu>
-    </item>
-
 </menu>

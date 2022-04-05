@@ -3,7 +3,6 @@
     package="com.statsup"
     android:installLocation="auto">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
@@ -23,7 +22,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,9 +37,6 @@
         <activity
             android:name=".StravaLoginActivity"
             android:label="@string/login_strava" />
-        <activity
-            android:name=".WeightEditorView"
-            android:parentActivityName=".MainActivity" />
         <activity android:name=".MapActivity" />
     </application>
 

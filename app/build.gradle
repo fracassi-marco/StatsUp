@@ -42,10 +42,6 @@ dependencies {
     implementation "joda-time:joda-time:2.10.3"
     implementation 'com.github.DaikonWeb:topinambur-async:1.2.6'
     implementation 'com.eclipsesource.minimal-json:minimal-json:0.9.5'
-    implementation 'com.github.Jay-Goo:RangeSeekBar:v3.0.0'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.google.android.gms:play-services-fitness:21.0.1'
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.maps.android:android-maps-utils:2.3.0'
     implementation 'com.github.bmarrdev:android-DecoView-charting:v1.2'
