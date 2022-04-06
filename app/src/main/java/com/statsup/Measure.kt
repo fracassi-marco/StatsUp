@@ -2,8 +2,11 @@ package com.statsup
 
 import kotlin.Double.Companion.POSITIVE_INFINITY
 import kotlin.Int.Companion.MAX_VALUE
+import kotlin.math.roundToInt
 
 object Measure {
+    fun km(value: Double) = of(value, "Km", "")
+
     fun of(value: Double, unit: String, positiveSign: String = "+", zeroSign: String = "0.00"): String {
         if(value == 0.0 || value == POSITIVE_INFINITY) {
             return "$zeroSign$unit"
@@ -25,9 +28,10 @@ object Measure {
         return "${minutesFragment}m ${secondsFragment}s"
     }
 
-    fun hm(seconds: Int): String {
-        val hoursFragment = seconds / 3600
-        val minutesFragment = (seconds % 3600) / 60
+    fun hm(seconds: Double): String {
+        val roundedSeconds = seconds.roundToInt()
+        val hoursFragment = roundedSeconds / 3600
+        val minutesFragment = (roundedSeconds % 3600) / 60
         if(hoursFragment > 0)
             return "${hoursFragment}h ${minutesFragment}m"
 
@@ -43,7 +47,7 @@ object Measure {
         return "${minutesFragment}:${secondsFragment}$label"
     }
 
-    fun frequency(value: Double) = "#${value.toInt()}"
+    fun times(value: Double) = value.roundToInt().toString()
 
     private fun pad(value: Int) = value.toString().padStart(2, '0')
 }

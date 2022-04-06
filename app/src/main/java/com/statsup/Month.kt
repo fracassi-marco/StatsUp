@@ -34,8 +34,8 @@ data class Month(val year: Int = DateTime().year, val monthOfYear: Int = DateTim
 
     fun asString() = "${Months.labelOf(monthOfYear)} $year"
 
-    fun previous(): Month {
-        val previous = calendar().apply { add(MONTH, -1) }
+    fun previous(amount: Int = 1): Month {
+        val previous = calendar().apply { add(MONTH, -amount) }
         return build(previous)
     }
 
