@@ -54,6 +54,7 @@
 
     <string name="empty_activities">Non hai ancora attività!!</string>
     <string name="import_button">Importale da Strava</string>
+    <string name="filter">Filtra</string>
 
     <string name="day_of_week_title">Distribuzione per giorno</string>
     <string name="sport_breakdown_chart_title">Distribuzione per sport</string>

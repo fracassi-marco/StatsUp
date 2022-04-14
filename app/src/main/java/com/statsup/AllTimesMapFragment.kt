@@ -1,8 +1,10 @@
 package com.statsup
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -13,12 +15,12 @@ import com.statsup.Content.showActivitiesOrEmptyPage
 import com.statsup.databinding.MapActivityBinding
 
 
-class AllTimesMapFragment : NoMenuFragment(), OnMapReadyCallback {
+class AllTimesMapFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: MapActivityBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MapActivityBinding.inflate(inflater, container, false)
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment

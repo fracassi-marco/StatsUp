@@ -22,13 +22,8 @@ class ActivityDashboardFragment : Fragment() {
     private val binding get() = _binding!!
     private val labels: Queue<String> = LinkedList(listOf("stamina", "frequency", "duration", "distance"))
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = ActivityDashboardFragmentBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(false)
 
         val curMonth = Month()
         val prevMonth = curMonth.previous()

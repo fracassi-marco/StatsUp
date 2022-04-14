@@ -1,17 +1,19 @@
 package com.statsup
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.statsup.ActivityView.fill
 import com.statsup.Content.showActivitiesOrEmptyPage
 import com.statsup.databinding.ActivityRecordsFragmentBinding
 import com.statsup.databinding.RecordItemBinding
 import kotlin.Int.Companion.MAX_VALUE
 
-class ActivityRecordsFragment : ActivityFragment() {
+class ActivityRecordsFragment : Fragment() {
 
     private var averageSpeed: RecordItemBinding?  = null
     private var speed: RecordItemBinding? = null
@@ -23,12 +25,9 @@ class ActivityRecordsFragment : ActivityFragment() {
     private var _binding: ActivityRecordsFragmentBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(inflater: LayoutInflater, container: ViewGroup?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = ActivityRecordsFragmentBinding.inflate(inflater, container, false)
-        val view = binding.root
-        binding.averageSpeed
-        val averageSpeed1: RecordItemBinding = binding.averageSpeed
-        averageSpeed = averageSpeed1.apply {
+        averageSpeed = binding.averageSpeed.apply {
             image.contentDescription = resources.getString(R.string.records_average_speed)
             image.setImageResource(R.drawable.average_speed)
             label.text = resources.getString(R.string.records_average_speed)
@@ -68,10 +67,10 @@ class ActivityRecordsFragment : ActivityFragment() {
 
         showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.records)
 
-        return view
+        return binding.root
     }
 
-    override fun onFilterChange() {
+    private fun onFilterChange() {
         averageSpeed!!.root.visibility = VISIBLE
         speed!!.root.visibility = VISIBLE
         pace!!.root.visibility = VISIBLE
