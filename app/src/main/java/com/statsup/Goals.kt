@@ -4,55 +4,35 @@ import com.statsup.Measure.hm
 import com.statsup.Measure.km
 import com.statsup.Measure.times
 import com.statsup.Variation.percentage
-import kotlin.math.roundToInt
 
 class Goals(private val activities:  List<Activity>, private val curMonth: Month) {
 
-    fun frequencyRatio(): Float {
-        val current = totalOfMonth(curMonth, Stats.FREQUENCY.provider).roundToInt()
-        val averageOfPast3Months = averageOfPastMonths(3, Stats.FREQUENCY.provider).roundToInt()
-        return percentage(current, averageOfPast3Months).toFloat()
-    }
+    private val currentFrequency = totalOfMonth(curMonth, Stats.FREQUENCY.provider)
+    private val currentDuration = totalOfMonth(curMonth, Stats.DURATION.provider)
+    private val currentDistance = totalOfMonth(curMonth, Stats.DISTANCE.provider)
+    private val past3MonthsAverageFrequency = averageOfPastMonths(3, Stats.FREQUENCY.provider)
+    private val past3MonthsAverageDuration = averageOfPastMonths(3, Stats.DURATION.provider)
+    private val past3MonthsAverageDistance = averageOfPastMonths(3, Stats.DISTANCE.provider)
 
-    fun durationRatio(): Float {
-        val current = totalOfMonth(curMonth, Stats.DURATION.provider)
-        val averageOfPast3Months = averageOfPastMonths(3, Stats.DURATION.provider)
-        return percentage(current, averageOfPast3Months).toFloat()
-    }
+    fun frequencyRatio() = percentage(currentFrequency, past3MonthsAverageFrequency).toFloat()
 
-    fun distanceRatio(): Float {
-        val current = totalOfMonth(curMonth, Stats.DISTANCE.provider)
-        val averageOfPast3Months = averageOfPastMonths(3, Stats.DISTANCE.provider)
-        return percentage(current, averageOfPast3Months).toFloat()
-    }
+    fun durationRatio() = percentage(currentDuration, past3MonthsAverageDuration).toFloat()
 
-    fun staminaRatio(): Float {
-        return ((frequencyRatio() * 2f) + durationRatio() + (distanceRatio() * 0.5f)) / 3.5f
-    }
+    fun distanceRatio() = percentage(currentDistance, past3MonthsAverageDistance).toFloat()
 
-    fun frequencyProgress(): String {
-        return times(totalOfMonth(curMonth, Stats.FREQUENCY.provider)) + "/" + times(averageOfPastMonths(3, Stats.FREQUENCY.provider))
-    }
+    fun staminaRatio() = ((frequencyRatio() * 2f) + durationRatio() + (distanceRatio() * 0.5f)) / 3.5f
 
-    fun durationProgress(): String {
-        return hm(totalOfMonth(curMonth, Stats.DURATION.provider) * 3600) + "/" + hm(averageOfPastMonths(3, Stats.DURATION.provider) * 3600)
-    }
+    fun frequencyProgress() = currentFrequency() + "/" + times(past3MonthsAverageFrequency)
 
-    fun distanceProgress(): String {
-        return km(totalOfMonth(curMonth, Stats.DISTANCE.provider)) + "/" + km(averageOfPastMonths(3, Stats.DISTANCE.provider))
-    }
+    fun durationProgress() = currentDuration() + "/" + hm(past3MonthsAverageDuration * 3600)
 
-    fun currentFrequency(): String {
-        return times(totalOfMonth(curMonth, Stats.FREQUENCY.provider))
-    }
+    fun distanceProgress() = currentDistance() + "/" + km(past3MonthsAverageDistance)
 
-    fun currentDuration(): String {
-        return hm(totalOfMonth(curMonth, Stats.DURATION.provider) * 3600)
-    }
+    fun currentFrequency() = times(currentFrequency)
 
-    fun currentDistance(): String {
-        return km(totalOfMonth(curMonth, Stats.DISTANCE.provider))
-    }
+    fun currentDuration() = hm(currentDuration * 3600)
+
+    fun currentDistance() = km(currentDistance)
 
     private fun totalOfMonth(month: Month, provider: (List<Activity>) -> Double) = provider(ofMonth(month))
 

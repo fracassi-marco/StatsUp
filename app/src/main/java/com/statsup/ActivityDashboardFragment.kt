@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.hookedonplay.decoviewlib.events.DecoEvent
 import com.statsup.Content.showActivitiesOrEmptyPage
+import com.statsup.Variation.percentage
 import com.statsup.databinding.ActivityDashboardFragmentBinding
 import java.util.*
 
@@ -35,10 +36,10 @@ class ActivityDashboardFragment : Fragment() {
         binding.durationValue.text = goals.currentDuration()
         binding.distanceValue.text = goals.currentDistance()
 
-        addCircle(0f, color(R.color.stamina), goals.staminaRatio(), 64f)
-        addCircle(74f, color(R.color.frequency), goals.frequencyRatio(), 32f)
-        addCircle(116f, color(R.color.duration), goals.durationRatio(), 32f)
-        addCircle(158f, color(R.color.distance), goals.distanceRatio(), 32f)
+        addCircle(0f, color(R.color.stamina), goals.staminaRatio(), 64f, curMonth)
+        addCircle(74f, color(R.color.frequency), goals.frequencyRatio(), 32f, curMonth)
+        addCircle(116f, color(R.color.duration), goals.durationRatio(), 32f, curMonth)
+        addCircle(158f, color(R.color.distance), goals.distanceRatio(), 32f, curMonth)
 
         binding.arc.setOnClickListener {
             val next = labels.remove()
@@ -94,12 +95,21 @@ class ActivityDashboardFragment : Fragment() {
 
     private fun color(color: Int) = requireContext().getColor(color)
 
-    private fun addCircle(inset: Float, color: Int, value: Float, width: Float): SeriesItem {
+    private fun addCircle(inset: Float, color: Int, value: Float, width: Float, curMonth: Month) {
         binding.arc.addSeries(
             SeriesItem.Builder(Color.argb(255, 218, 218, 218))
                 .setRange(0f, 100f, 100f)
                 .setInset(PointF(inset, inset))
                 .setLineWidth(width)
+                .build()
+        )
+
+        val expectedValue = percentage(curMonth.numberOfDays(), curMonth.maxNumberOfDays()).toFloat()
+        binding.arc.addSeries(
+            SeriesItem.Builder(color)
+                .setRange(0f, 100f, expectedValue)
+                .setInset(PointF(inset, inset))
+                .setLineWidth(width/2)
                 .build()
         )
 
@@ -111,8 +121,6 @@ class ActivityDashboardFragment : Fragment() {
 
         val seriesIndex = binding.arc.addSeries(series)
 
-        binding.arc.addEvent(DecoEvent.Builder(value).setIndex(seriesIndex).setDelay((inset.toLong() * 10) + 50).build())
-
-        return series
+        binding.arc.addEvent(DecoEvent.Builder(value).setIndex(seriesIndex).setDelay((inset.toLong() * 10) + 60).build())
     }
 }
