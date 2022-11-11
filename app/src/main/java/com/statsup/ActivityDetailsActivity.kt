@@ -4,9 +4,9 @@ import android.content.Intent
 import android.graphics.Color.*
 import android.os.Bundle
 import android.widget.GridLayout
-import android.widget.GridLayout.GONE
-import android.widget.GridLayout.UNDEFINED
+import android.widget.GridLayout.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -109,9 +109,9 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun item(): ActivityDetailsItemBinding {
         val inflate = ActivityDetailsItemBinding.inflate(layoutInflater, binding.activityDetailsA, true)
         inflate.root.apply {
-                layoutParams = GridLayout.LayoutParams(
-                    GridLayout.spec(UNDEFINED, 1f),
-                    GridLayout.spec(UNDEFINED, 1f)
+                layoutParams = LayoutParams(
+                    spec(UNDEFINED, 1f),
+                    spec(UNDEFINED, 1f)
                 )
             }
         return inflate
@@ -123,10 +123,8 @@ class ActivityDetailsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        if (activity.map == null) {
-            val fragment: SupportMapFragment =
-                supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            fragment.requireView().visibility = GONE
+        if (activity.map.isNullOrBlank()) {
+            binding.map.visibility = GONE
             return
         }
 
