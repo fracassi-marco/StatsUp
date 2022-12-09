@@ -13,8 +13,10 @@ import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.hookedonplay.decoviewlib.events.DecoEvent
 import com.statsup.Content.showActivitiesOrEmptyPage
 import com.statsup.Variation.percentage
+import com.statsup.calendar.CompactCalendarView
 import com.statsup.databinding.ActivityDashboardFragmentBinding
 import java.util.*
+import java.util.Calendar.MONDAY
 
 
 class ActivityDashboardFragment : Fragment() {
@@ -88,9 +90,18 @@ class ActivityDashboardFragment : Fragment() {
             previousActivities.cumulativeByDay(prevMonth, Stats.DISTANCE.provider),
             curMonth.asString(), prevMonth.asString())
 
+        fillCalendar(binding.calendar, currentActivities)
+
         showActivitiesOrEmptyPage(binding.noActivitiesLayout, binding.content)
 
         return binding.root
+    }
+
+    private fun fillCalendar(
+        calendar: CompactCalendarView,
+        currentActivities: List<Activity>
+    ) {
+        calendar.addEvents(currentActivities)
     }
 
     private fun color(color: Int) = requireContext().getColor(color)

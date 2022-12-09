@@ -205,6 +205,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/vs_chart_title" />
 
+            <com.statsup.calendar.CompactCalendarView
+                android:id="@+id/calendar"
+                android:layout_width="match_parent"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vs_chart" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
