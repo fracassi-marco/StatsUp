@@ -14,7 +14,7 @@ class ActivityStatsPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragm
     override fun createFragment(position: Int): Fragment {
         val fragment = StatsFragment().apply {
             arguments = Bundle().apply {
-                putSerializable("stats", Stats.at(position))
+                putString("stats", Stats.at(position).name)
             }
         }
         items.add(fragment)

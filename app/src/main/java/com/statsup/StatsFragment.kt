@@ -15,7 +15,7 @@ class StatsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = StatsFragmentBinding.inflate(inflater, container, false)
-        stats = requireArguments().get("stats") as Stats
+        stats = Stats.valueOf(requireArguments().getString("stats")!!)
 
         onFilterChange()
 
