@@ -7,13 +7,15 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.statsup.ui.viewmodel.SettingsViewModel
 
 private val DarkColorScheme = darkColorScheme(
     primary = LightPrimary,
     secondary = PurpleGrey80,
     tertiary = Pink80,
-    background = LightBackground,
+    background = DarkBackground,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -21,7 +23,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40,
     background = LightBackground,
-
+    surfaceTint = Color(0xFFF5E1D8)
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -35,12 +37,17 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun StatsUpTheme(
+    settingsViewModel: SettingsViewModel,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colorScheme = when(settingsViewModel.theme) {
+        1 -> LightColorScheme
+        2 -> DarkColorScheme
+        else -> when {
+            darkTheme -> DarkColorScheme
+            else -> LightColorScheme
+        }
     }
 
     MaterialTheme(

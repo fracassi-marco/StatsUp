@@ -12,15 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.outlined.List
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
@@ -28,7 +22,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -36,7 +29,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -50,8 +42,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.theme.StatsUpTheme
+import com.statsup.ui.viewmodel.SettingsViewModel
+import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +54,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            StatsUpTheme {
+            val settingsViewModel by lazy { SettingsViewModel(SharedPreferencesSettingRepository(applicationContext)) }
+            StatsUpTheme(settingsViewModel) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
@@ -70,8 +66,8 @@ class MainActivity : ComponentActivity() {
                         NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
                             composable(Screens.Dashboard.route) { Greeting("aaaaa") }
                             composable(Screens.History.route) { Greeting("bbbbb") }
-                            composable(Screens.GlobalMap.route) { Greeting("ccccc") }
                             composable(Screens.Profile.route) { Greeting("ddddd") }
+                            composable(Screens.Settings.route) { SettingsScreen(settingsViewModel) }
                         }
                     }
                 }
@@ -138,7 +134,7 @@ enum class Screens(val route: String, val icon: ImageVector) {
     History("history", Icons.AutoMirrored.Outlined.List),
     Separator("", Icons.Filled.Edit),
     Profile("profile", Icons.Outlined.DateRange),
-    GlobalMap("global_map", Icons.Outlined.Settings)
+    Settings("settings", Icons.Outlined.Settings)
 }
 
 @Composable
