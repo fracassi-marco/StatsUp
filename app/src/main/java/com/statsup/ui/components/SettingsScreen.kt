@@ -52,7 +52,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                 .padding(it)
                 .padding(32.dp, 16.dp)
         ) {
-            Title(name = R.string.settings_screen_goals)
+            Title(text = stringResource(R.string.settings_screen_goals))
             SettingsClickableComponent(
                 icon = Icons.Outlined.AccountBox,
                 iconDesc = R.string.settings_screen_goals_monthly,
@@ -60,7 +60,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                 value = "${viewModel.monthlyGoal} ${stringResource(id = R.string.km)}",
                 onClick = { viewModel.showMonthlyGoal() }
             )
-            Title(name = R.string.settings_screen_app, marginTop = 22.dp)
+            Title(text = stringResource(R.string.settings_screen_app), marginTop = 22.dp)
             SettingsClickableComponent(
                 icon = Icons.Outlined.AccountBox,
                 iconDesc = R.string.settings_screen_theme,

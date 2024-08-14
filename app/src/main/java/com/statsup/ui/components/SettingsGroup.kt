@@ -39,8 +39,8 @@ fun SettingsGroup(
 }
 
 @Composable
-fun Title(@StringRes name: Int, marginTop: Dp = 0.dp) {
-    Text(stringResource(id = name),
+fun Title(text: String, marginTop: Dp = 0.dp) {
+    Text(text = text,
         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
         modifier = Modifier.padding(0.dp, marginTop, 0.dp, 6.dp)
     )

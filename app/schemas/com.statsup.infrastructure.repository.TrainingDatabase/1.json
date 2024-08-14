@@ -1,0 +1,390 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "78bd6b3dd3e3392f7a80c8cc73ec1899",
+    "entities": [
+      {
+        "tableName": "Training",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `resourceState` INTEGER, `name` TEXT NOT NULL, `distance` REAL NOT NULL, `movingTime` INTEGER NOT NULL, `elapsedTime` INTEGER NOT NULL, `totalElevationGain` REAL NOT NULL, `type` TEXT, `sportType` TEXT, `workoutType` TEXT, `startDate` TEXT NOT NULL, `startDateLocal` TEXT, `timezone` TEXT, `utcOffset` REAL, `locationCity` TEXT, `locationState` TEXT, `locationCountry` TEXT, `achievementCount` INTEGER, `kudosCount` INTEGER, `commentCount` INTEGER, `athleteCount` INTEGER, `photoCount` INTEGER, `map` TEXT, `trainer` INTEGER, `commute` INTEGER, `manual` INTEGER, `private` INTEGER, `visibility` TEXT, `flagged` INTEGER, `gearId` TEXT, `averageSpeed` REAL, `maxSpeed` REAL NOT NULL, `averageCadence` REAL NOT NULL, `averageWatts` REAL NOT NULL, `maxWatts` INTEGER, `weightedAverageWatts` INTEGER NOT NULL, `kilojoules` REAL NOT NULL, `deviceWatts` INTEGER NOT NULL, `hasHeartrate` INTEGER, `averageHeartrate` REAL, `maxHeartrate` REAL NOT NULL, `heartrateOptOut` INTEGER, `displayHideHeartrateOption` INTEGER, `elevHigh` REAL NOT NULL, `elevLow` REAL NOT NULL, `uploadId` INTEGER NOT NULL, `uploadIdStr` TEXT, `externalId` TEXT, `fromAcceptedTag` INTEGER, `prCount` INTEGER, `totalPhotoCount` INTEGER, `hasKudoed` INTEGER, `sufferScore` REAL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "resourceState",
+            "columnName": "resourceState",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distance",
+            "columnName": "distance",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "movingTime",
+            "columnName": "movingTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "elapsedTime",
+            "columnName": "elapsedTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalElevationGain",
+            "columnName": "totalElevationGain",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sportType",
+            "columnName": "sportType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "workoutType",
+            "columnName": "workoutType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "startDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDateLocal",
+            "columnName": "startDateLocal",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timezone",
+            "columnName": "timezone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "utcOffset",
+            "columnName": "utcOffset",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationCity",
+            "columnName": "locationCity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationState",
+            "columnName": "locationState",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationCountry",
+            "columnName": "locationCountry",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "achievementCount",
+            "columnName": "achievementCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "kudosCount",
+            "columnName": "kudosCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "commentCount",
+            "columnName": "commentCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "athleteCount",
+            "columnName": "athleteCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "photoCount",
+            "columnName": "photoCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "map",
+            "columnName": "map",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "trainer",
+            "columnName": "trainer",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "commute",
+            "columnName": "commute",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "manual",
+            "columnName": "manual",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "private",
+            "columnName": "private",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "visibility",
+            "columnName": "visibility",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "flagged",
+            "columnName": "flagged",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "gearId",
+            "columnName": "gearId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "averageSpeed",
+            "columnName": "averageSpeed",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "maxSpeed",
+            "columnName": "maxSpeed",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "averageCadence",
+            "columnName": "averageCadence",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "averageWatts",
+            "columnName": "averageWatts",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxWatts",
+            "columnName": "maxWatts",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "weightedAverageWatts",
+            "columnName": "weightedAverageWatts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kilojoules",
+            "columnName": "kilojoules",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceWatts",
+            "columnName": "deviceWatts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasHeartrate",
+            "columnName": "hasHeartrate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "averageHeartrate",
+            "columnName": "averageHeartrate",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "maxHeartrate",
+            "columnName": "maxHeartrate",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "heartrateOptOut",
+            "columnName": "heartrateOptOut",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "displayHideHeartrateOption",
+            "columnName": "displayHideHeartrateOption",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "elevHigh",
+            "columnName": "elevHigh",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "elevLow",
+            "columnName": "elevLow",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uploadId",
+            "columnName": "uploadId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uploadIdStr",
+            "columnName": "uploadIdStr",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "externalId",
+            "columnName": "externalId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fromAcceptedTag",
+            "columnName": "fromAcceptedTag",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prCount",
+            "columnName": "prCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "totalPhotoCount",
+            "columnName": "totalPhotoCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hasKudoed",
+            "columnName": "hasKudoed",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sufferScore",
+            "columnName": "sufferScore",
+            "affinity": "REAL",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Athlete",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `username` TEXT NOT NULL, `resourceState` INTEGER, `profileMedium` TEXT, `profile` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "resourceState",
+            "columnName": "resourceState",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "profileMedium",
+            "columnName": "profileMedium",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "profile",
+            "columnName": "profile",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '78bd6b3dd3e3392f7a80c8cc73ec1899')"
+    ]
+  }
+}

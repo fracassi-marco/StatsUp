@@ -12,4 +12,7 @@
 
     <string name="icon_arrow_forward">Open</string>
     <string name="km">KM</string>
+    <string name="distance">Distance</string>
+    <string name="elevation_gain">Elevation</string>
+    <string name="duration">Duration</string>
 </resources>
