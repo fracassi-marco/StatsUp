@@ -15,4 +15,5 @@
     <string name="distance">Distance</string>
     <string name="elevation_gain">Elevation</string>
     <string name="duration">Duration</string>
+    <string name="imported">%1$d activities have been imported</string>
 </resources>

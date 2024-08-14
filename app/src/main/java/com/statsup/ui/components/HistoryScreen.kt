@@ -122,14 +122,14 @@ fun TrainingListItem(training: Training) {
                 Polyline(points = trip.steps(), width = 8f, color = Color.Blue, geodesic = true)
             }
         } else {
-            /*Image(
+            Image(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp),
                 painter = painterResource(id = R.drawable.bg),
                 contentDescription = "background",
                 contentScale = ContentScale.FillWidth
-            )*/
+            )
         }
     }
 }
