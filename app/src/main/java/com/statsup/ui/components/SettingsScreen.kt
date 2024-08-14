@@ -8,7 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBox
+import androidx.compose.material.icons.outlined.EmojiEvents
+import androidx.compose.material.icons.outlined.Style
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -50,11 +51,11 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(it)
-                .padding(32.dp, 16.dp)
+                .padding(20.dp, 16.dp)
         ) {
             Title(text = stringResource(R.string.settings_screen_goals))
             SettingsClickableComponent(
-                icon = Icons.Outlined.AccountBox,
+                icon = Icons.Outlined.EmojiEvents,
                 iconDesc = R.string.settings_screen_goals_monthly,
                 name = R.string.settings_screen_goals_monthly,
                 value = "${viewModel.monthlyGoal} ${stringResource(id = R.string.km)}",
@@ -62,7 +63,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
             )
             Title(text = stringResource(R.string.settings_screen_app), marginTop = 22.dp)
             SettingsClickableComponent(
-                icon = Icons.Outlined.AccountBox,
+                icon = Icons.Outlined.Style,
                 iconDesc = R.string.settings_screen_theme,
                 name = R.string.settings_screen_theme,
                 value = viewModel.themeLabel(),

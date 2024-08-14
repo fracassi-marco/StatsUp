@@ -28,10 +28,12 @@ import com.statsup.infrastructure.StravaTrainingApi
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
 import com.statsup.ui.components.BottomMenuBar
+import com.statsup.ui.components.DashboardScreen
 import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
 import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.theme.StatsUpTheme
+import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.ui.viewmodel.HistoryViewModel
 import com.statsup.ui.viewmodel.MainViewModel
 import com.statsup.ui.viewmodel.SettingsViewModel
@@ -46,11 +48,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         val authService = AuthorizationService(this)
         setContent {
-            val navController = rememberNavController()
+            val settingRepository = SharedPreferencesSettingRepository(applicationContext)
             val updateActivitiesUseCase = UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi())
+            val navController = rememberNavController()
             val mainViewModel = remember { MainViewModel(updateActivitiesUseCase, authService) }
-            val settingsViewModel = remember { SettingsViewModel(SharedPreferencesSettingRepository(applicationContext)) }
+            val settingsViewModel = remember { SettingsViewModel(settingRepository) }
             val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
+            val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
@@ -67,7 +71,7 @@ class MainActivity : ComponentActivity() {
                         snackbarHost = { SnackbarHost(snackBarHostState) },
                     ) { innerPadding ->
                         NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
-                            composable(Screens.Dashboard.route) { Text(text = "Dashboard") }
+                            composable(Screens.Dashboard.route) { DashboardScreen(dashboardViewModel) }
                             composable(Screens.History.route) { HistoryScreen(historyViewModel) }
                             composable(Screens.Stats.route) { Text(text = "Stats") }
                             composable(Screens.Settings.route) { SettingsScreen(settingsViewModel) }
