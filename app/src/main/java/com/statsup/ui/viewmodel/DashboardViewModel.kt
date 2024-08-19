@@ -6,9 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.domain.Training
+import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import kotlinx.coroutines.launch
+import java.time.Year
 import java.time.ZonedDateTime
 
 class DashboardViewModel(
@@ -16,8 +18,7 @@ class DashboardViewModel(
     private val settingRepository: SettingRepository
 ) : ViewModel() {
 
-    var trainings: List<Training> by mutableStateOf(emptyList())
-        private set
+    private var trainings: List<Training> by mutableStateOf(emptyList())
 
     init {
         viewModelScope.launch {
@@ -32,25 +33,25 @@ class DashboardViewModel(
     }
 
     fun totalDistance(): Double {
-        return totalOfMonth(ZonedDateTime.now()) { it.sumOf { training -> training.distanceInKilometers() } }
+        return Trainings(trainings) { it.sumOf { training -> training.distanceInKilometers() } }.overMonth()
     }
 
     fun totalFrequency(): Double {
-        return totalOfMonth(ZonedDateTime.now()) { it.count().toDouble() }
+        return Trainings(trainings) { it.count().toDouble() }.overMonth()
     }
 
     fun totalDuration(): Double {
-        return totalOfMonth(ZonedDateTime.now()) { it.sumOf { training -> training.durationInHours() } }
+        return Trainings(trainings) { it.sumOf { training -> training.durationInHours() } }.overMonth()
+    }
+
+    fun cumulativeDuration(): Map<Int, Double> {
+        return Trainings(trainings) { it.sumOf { training -> training.durationInHours() } }.cumulativeDays(
+            Year.from(ZonedDateTime.now()),
+            ZonedDateTime.now().month
+        )
     }
 
     fun maxElevation(): Double {
-        return if(ofMonth(ZonedDateTime.now()).isEmpty())
-            0.0
-        else
-            return ofMonth(ZonedDateTime.now()).maxOf { it.totalElevationGain }
+        return Trainings(trainings){ if(it.isEmpty()) 0.0 else it.maxOf { training -> training.totalElevationGain } }.overMonth()
     }
-
-    private fun totalOfMonth(date: ZonedDateTime, provider: (List<Training>) -> Double) = provider(ofMonth(date))
-
-    private fun ofMonth(date: ZonedDateTime) = trainings.filter { it.date.month == date.month && it.date.year == date.year }
 }

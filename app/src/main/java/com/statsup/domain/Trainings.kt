@@ -1,8 +1,6 @@
 package com.statsup.domain
 
 import java.time.Month
-import java.time.Month.DECEMBER
-import java.time.Month.JANUARY
 import java.time.Year
 import java.time.ZonedDateTime
 import java.time.ZonedDateTime.now
@@ -11,6 +9,10 @@ class Trainings(
     private val trainings: List<Training>,
     private val now: ZonedDateTime = now(),
     private val provider: (List<Training>) -> Double) {
+
+    fun overMonth() = provider(ofMonth())
+
+    private fun ofMonth() = trainings.filter { it.date.month == now.month && it.date.year == now.year }
 
     /*fun byYear(): Map<Year, Double> {
         val minYear = trainings.minBy { it.date }.date.year

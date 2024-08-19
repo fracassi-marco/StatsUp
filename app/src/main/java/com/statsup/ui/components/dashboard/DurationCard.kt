@@ -16,8 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.statsup.R
-import com.statsup.domain.Training
-import com.statsup.domain.Trainings
 import com.statsup.ui.components.SecondaryCard
 import com.statsup.ui.components.Title
 import com.statsup.ui.components.chart.NoXAxisDrawer
@@ -30,8 +28,6 @@ import io.jetchart.line.renderer.line.GradientLineShader
 import io.jetchart.line.renderer.line.SolidLineDrawer
 import io.jetchart.line.renderer.point.NoPointDrawer
 import io.jetchart.line.renderer.yaxis.LineYAxisWithValueDrawer
-import java.time.Year
-import java.time.ZonedDateTime
 import java.util.Locale
 
 @Composable
@@ -40,16 +36,23 @@ fun DurationCard(viewModel: DashboardViewModel, modifier: Modifier) {
         bottom = {
             LineChart(
                 lines = listOf(
-                    Line(points = points(viewModel.trainings), lineDrawer = SolidLineDrawer(thickness = 1.dp, color = MaterialTheme.colorScheme.primary))
+                    Line(
+                        points = viewModel.cumulativeDuration().map { Point(it.value.toFloat(), "") },
+                        lineDrawer = SolidLineDrawer(thickness = 1.dp, color = MaterialTheme.colorScheme.primary)
+                    )
                 ),
                 modifier = Modifier
                     .padding(10.dp, 0.dp, 0.dp, 10.dp)
                     .fillMaxWidth()
-                    .height(100.dp),
+                    .height(80.dp),
                 animation = fadeInAnimation(3000),
                 pointDrawer = NoPointDrawer,
                 xAxisDrawer = NoXAxisDrawer(),
-                yAxisDrawer = LineYAxisWithValueDrawer(labelValueFormatter = { value -> "%.0f".format(value) }, axisLineThickness = 0.dp, axisLineColor = Transparent),
+                yAxisDrawer = LineYAxisWithValueDrawer(
+                    labelValueFormatter = { value -> "%.0f".format(value) },
+                    axisLineThickness = 0.dp,
+                    axisLineColor = Transparent
+                ),
                 horizontalOffsetPercentage = 1f,
                 lineShader = GradientLineShader(listOf(MaterialTheme.colorScheme.primary, Transparent))
             )
@@ -72,6 +75,3 @@ fun DurationCard(viewModel: DashboardViewModel, modifier: Modifier) {
         }
     }
 }
-
-@Composable
-private fun points(count: List<Training>) = Trainings(count) { it.count().toDouble() }.cumulativeDays(Year.from(ZonedDateTime.now()), ZonedDateTime.now().month).map { Point(it.value.toFloat(), "") }

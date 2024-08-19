@@ -16,7 +16,7 @@
     <string name="trainings">Trainings</string>
     <string name="distance">Distance</string>
     <string name="elevation_gain">Elevation</string>
-    <string name="max_elevation_gain">Max elevation</string>
+    <string name="max_elevation_gain">Max elev.</string>
     <string name="duration">Duration</string>
     <string name="imported">%1$d activities have been imported</string>
 </resources>

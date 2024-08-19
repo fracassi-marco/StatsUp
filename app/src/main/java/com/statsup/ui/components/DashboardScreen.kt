@@ -5,13 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.unit.dp
 import com.statsup.ui.components.dashboard.DurationCard
 import com.statsup.ui.components.dashboard.MaxElevationGainCard
@@ -27,7 +24,7 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
             modifier = Modifier.padding(0.dp, 10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.weight(1f).height(IntrinsicSize.Min)) {
                 TrainingCard(viewModel, Modifier)
                 Spacer(modifier = Modifier.height(10.dp))
                 MaxElevationGainCard(viewModel)
