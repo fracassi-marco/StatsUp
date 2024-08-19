@@ -1,9 +1,9 @@
 package com.statsup.ui.viewmodel
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import androidx.activity.ComponentActivity.RESULT_OK
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

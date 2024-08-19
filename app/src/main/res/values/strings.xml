@@ -10,10 +10,13 @@
     <string name="settings_screen_theme">Theme</string>
     <string name="settings_screen_set_theme">Set theme</string>
 
-    <string name="icon_arrow_forward">Open</string>
-    <string name="km">KM</string>
+    <string name="km">Km</string>
+    <string name="m">m</string>
+    <string name="h">Hr</string>
+    <string name="trainings">Trainings</string>
     <string name="distance">Distance</string>
     <string name="elevation_gain">Elevation</string>
+    <string name="max_elevation_gain">Max elevation</string>
     <string name="duration">Duration</string>
     <string name="imported">%1$d activities have been imported</string>
 </resources>

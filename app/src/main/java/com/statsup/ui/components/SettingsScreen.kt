@@ -56,7 +56,6 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
             Title(text = stringResource(R.string.settings_screen_goals))
             SettingsClickableComponent(
                 icon = Icons.Outlined.EmojiEvents,
-                iconDesc = R.string.settings_screen_goals_monthly,
                 name = R.string.settings_screen_goals_monthly,
                 value = "${viewModel.monthlyGoal} ${stringResource(id = R.string.km)}",
                 onClick = { viewModel.showMonthlyGoal() }
@@ -64,7 +63,6 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
             Title(text = stringResource(R.string.settings_screen_app), marginTop = 22.dp)
             SettingsClickableComponent(
                 icon = Icons.Outlined.Style,
-                iconDesc = R.string.settings_screen_theme,
                 name = R.string.settings_screen_theme,
                 value = viewModel.themeLabel(),
                 onClick = { viewModel.showTheme() }

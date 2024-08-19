@@ -35,6 +35,21 @@ class DashboardViewModel(
         return totalOfMonth(ZonedDateTime.now()) { it.sumOf { training -> training.distanceInKilometers() } }
     }
 
+    fun totalFrequency(): Double {
+        return totalOfMonth(ZonedDateTime.now()) { it.count().toDouble() }
+    }
+
+    fun totalDuration(): Double {
+        return totalOfMonth(ZonedDateTime.now()) { it.sumOf { training -> training.durationInHours() } }
+    }
+
+    fun maxElevation(): Double {
+        return if(ofMonth(ZonedDateTime.now()).isEmpty())
+            0.0
+        else
+            return ofMonth(ZonedDateTime.now()).maxOf { it.totalElevationGain }
+    }
+
     private fun totalOfMonth(date: ZonedDateTime, provider: (List<Training>) -> Double) = provider(ofMonth(date))
 
     private fun ofMonth(date: ZonedDateTime) = trainings.filter { it.date.month == date.month && it.date.year == date.year }

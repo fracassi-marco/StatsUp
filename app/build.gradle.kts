@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -84,21 +85,20 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.numberpicker)
-    implementation("com.github.daikonweb:topinambur:1.9.0")
+    implementation(libs.topinambur)
+    implementation(libs.jetchart)
     // Room
-    implementation("androidx.room:room-runtime:2.5.2")
-    ksp("androidx.room:room-compiler:2.5.2")
-    implementation("androidx.room:room-ktx:2.5.2")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
     // Maps
-    implementation("com.google.maps.android:maps-compose:2.14.0")
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-    implementation("com.google.maps.android:android-maps-utils:3.5.2")
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.android.maps.utils)
     // OAuth
-    implementation("net.openid:appauth:0.11.1")
+    implementation(libs.appauth)
     // Xml manipulation
-    implementation("com.fasterxml.jackson.core:jackson-core:2.15.1")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.1")
-
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.module.kotlin)
 }

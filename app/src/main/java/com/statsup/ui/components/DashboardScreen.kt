@@ -1,57 +1,39 @@
 package com.statsup.ui.components
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.EmojiEvents
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.unit.dp
-import com.statsup.R
-import com.statsup.ui.theme.SecondaryText
+import com.statsup.ui.components.dashboard.DurationCard
+import com.statsup.ui.components.dashboard.MaxElevationGainCard
+import com.statsup.ui.components.dashboard.MonthlyDistanceGoalCard
+import com.statsup.ui.components.dashboard.TrainingCard
 import com.statsup.ui.viewmodel.DashboardViewModel
-import java.util.Locale
 
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
-    Box(modifier = Modifier.padding(20.dp)) {
-        PrimaryCard() {
-            Icon(
-                imageVector = Icons.Outlined.EmojiEvents,
-                contentDescription = stringResource(R.string.settings_screen_goals_monthly),
-                modifier = Modifier.size(32.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(
-                modifier = Modifier.padding(16.dp).fillMaxWidth(0.8f)
-            ) {
-                Text(
-                    text = stringResource(R.string.settings_screen_goals_monthly),
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Start,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Title(
-                    text = "${String.format(Locale.getDefault(), "%.0f", viewModel.totalDistance())} ${stringResource(R.string.km)}",
-                )
-                LinearProgressIndicator(
-                    progress = { viewModel.distancePercentage() },
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = SecondaryText
-                )
+    Column(modifier = Modifier.padding(20.dp)) {
+        MonthlyDistanceGoalCard(viewModel)
+        Row(
+            modifier = Modifier.padding(0.dp, 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                TrainingCard(viewModel, Modifier)
+                Spacer(modifier = Modifier.height(10.dp))
+                MaxElevationGainCard(viewModel)
             }
+            DurationCard(viewModel, Modifier.weight(1f))
         }
     }
 }
+

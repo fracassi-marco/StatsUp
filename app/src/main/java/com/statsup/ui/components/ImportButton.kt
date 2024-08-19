@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Autorenew
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -32,7 +32,7 @@ fun ImportButton(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
                 mainViewModel.startLoading()
             },
         ) {
-            Icon(Icons.Filled.Add, "Localized description")
+            Icon(Icons.Outlined.Autorenew, null, modifier = Modifier.size(44.dp))
         }
     }
 }
