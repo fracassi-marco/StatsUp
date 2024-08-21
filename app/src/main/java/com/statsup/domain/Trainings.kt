@@ -36,13 +36,13 @@ class Trainings(
         }
     }*/
 
-    fun byDay(year: Year, month: Month): LinkedHashMap<Int, Double> {
+    fun byDay(): LinkedHashMap<Int, Double> {
         val ofMonth = trainings
-            .filter { t -> t.date.year == year.value }
-            .filter { t -> t.date.month == month }
+            .filter { t -> t.date.year == now.year }
+            .filter { t -> t.date.month == now.month }
 
         val result = LinkedHashMap<Int, Double>()
-        (1..month.maxLength()).forEach {
+        (1..now.month.maxLength()).forEach {
             val ts = ofMonth.filter { t -> t.date.dayOfMonth == it }
             result[it] = provider(ts)
         }
@@ -60,10 +60,10 @@ class Trainings(
         return result
     }*/
 
-    fun cumulativeDays(year: Year, month: Month): LinkedHashMap<Int, Double> {
+    fun cumulativeDays(): LinkedHashMap<Int, Double> {
         val result = LinkedHashMap<Int, Double>()
-        val byDay: Map<Int, Double> = byDay(year, month)
-        val max = if(year.isCurrent() && month.isCurrent()) now.dayOfMonth else 31
+        val byDay: Map<Int, Double> = byDay()
+        val max = if(Year.of(now.year).isCurrent() && now.month.isCurrent()) now.dayOfMonth else 31
         (1..max).forEach {
             result[it] = byDay.filter { bm -> bm.key <= it }.values.sum()
         }

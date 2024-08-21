@@ -10,7 +10,6 @@ import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import kotlinx.coroutines.launch
-import java.time.Year
 import java.time.ZonedDateTime
 
 class DashboardViewModel(
@@ -19,6 +18,7 @@ class DashboardViewModel(
 ) : ViewModel() {
 
     private var trainings: List<Training> by mutableStateOf(emptyList())
+    private val distance: (List<Training>) -> Double = { it.sumOf { training -> training.distanceInKilometers() } }
 
     init {
         viewModelScope.launch {
@@ -33,7 +33,7 @@ class DashboardViewModel(
     }
 
     fun totalDistance(): Double {
-        return Trainings(trainings) { it.sumOf { training -> training.distanceInKilometers() } }.overMonth()
+        return Trainings(trainings, provider = distance).overMonth()
     }
 
     fun totalFrequency(): Double {
@@ -45,13 +45,28 @@ class DashboardViewModel(
     }
 
     fun cumulativeDuration(): Map<Int, Double> {
-        return Trainings(trainings) { it.sumOf { training -> training.durationInHours() } }.cumulativeDays(
-            Year.from(ZonedDateTime.now()),
-            ZonedDateTime.now().month
-        )
+        return Trainings(trainings) { it.sumOf { training -> training.durationInHours() } }.cumulativeDays()
     }
 
-    fun maxElevation(): Double {
+    fun cumulativeDistance(): Map<Int, Double> {
+        return Trainings(trainings, provider = distance).cumulativeDays()
+    }
+
+    fun pastCumulativeDistance(): Map<Int, Double> {
+        return Trainings(trainings, provider = distance, now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
+    }
+
+    fun maxElevationGain(): Double {
         return Trainings(trainings){ if(it.isEmpty()) 0.0 else it.maxOf { training -> training.totalElevationGain } }.overMonth()
     }
+
+    fun maxAltitude(): Double {
+        return Trainings(trainings){ if(it.isEmpty()) 0.0 else it.maxOf { training -> training.elevHigh } }.overMonth()
+    }
+
+    fun maxHeartRate(): Double {
+        return Trainings(trainings){ if(it.isEmpty()) 0.0 else it.maxOf { training -> training.maxHeartrate } }.overMonth()
+    }
+
+    fun monthlyDistanceGoal() = settingRepository.loadMonthlyGoal().toFloat()
 }

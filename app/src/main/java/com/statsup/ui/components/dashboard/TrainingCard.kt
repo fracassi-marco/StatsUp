@@ -21,13 +21,9 @@ import com.statsup.ui.viewmodel.DashboardViewModel
 import java.util.Locale
 
 @Composable
-fun TrainingCard(viewModel: DashboardViewModel, modifier: Modifier) {
-    SecondaryCard(modifier = modifier, icon = Icons.AutoMirrored.Outlined.DirectionsRun) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(0.8f)
-        ) {
+fun TrainingCard(viewModel: DashboardViewModel) {
+    SecondaryCard(icon = Icons.AutoMirrored.Outlined.DirectionsRun) {
+        Column {
             Text(
                 text = stringResource(R.string.trainings),
                 style = MaterialTheme.typography.bodySmall,
