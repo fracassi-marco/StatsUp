@@ -1,6 +1,8 @@
 package com.statsup.domain
 
 import java.time.Month
+import java.time.Month.JANUARY
+import java.time.Month.DECEMBER
 import java.time.Year
 import java.time.ZonedDateTime
 import java.time.ZonedDateTime.now
@@ -24,7 +26,7 @@ class Trainings(
         }
     }*/
 
-    /*fun byMonth(year: Year): Map<Month, Double> {
+    fun byMonth(year: Year): Map<Month, Double> {
         val ofYear = trainings.filter { t -> t.date.year == year.value }
 
         val minMonth = JANUARY.value
@@ -34,13 +36,10 @@ class Trainings(
             val ts = ofYear.filter { t -> t.date.month == it }
             provider(ts)
         }
-    }*/
+    }
 
     fun byDay(): LinkedHashMap<Int, Double> {
-        val ofMonth = trainings
-            .filter { t -> t.date.year == now.year }
-            .filter { t -> t.date.month == now.month }
-
+        val ofMonth = ofMonth()
         val result = LinkedHashMap<Int, Double>()
         (1..now.month.maxLength()).forEach {
             val ts = ofMonth.filter { t -> t.date.dayOfMonth == it }
@@ -50,20 +49,21 @@ class Trainings(
         return result
     }
 
-    /*fun cumulativeMonths(year: Year): LinkedHashMap<Month, Double> {
+    fun cumulativeMonths(): LinkedHashMap<Month, Double> {
         val result = LinkedHashMap<Month, Double>()
+        val year = Year.of(now.year)
         val byMonth: Map<Month, Double> = byMonth(year)
-        val max = if(year.isCurrent()) now.month.value else 12
+        val max = 12 //if(year.isCurrent()) now.month.value else 12
         (1..max).forEach {
             result[Month.of(it)] = byMonth.filter { bm -> bm.key.value <= it }.values.sum()
         }
         return result
-    }*/
+    }
 
     fun cumulativeDays(): LinkedHashMap<Int, Double> {
         val result = LinkedHashMap<Int, Double>()
         val byDay: Map<Int, Double> = byDay()
-        val max = if(Year.of(now.year).isCurrent() && now.month.isCurrent()) now.dayOfMonth else 31
+        val max = 31 //if(Year.of(now.year).isCurrent() && now.month.isCurrent()) now.dayOfMonth else 31
         (1..max).forEach {
             result[it] = byDay.filter { bm -> bm.key <= it }.values.sum()
         }

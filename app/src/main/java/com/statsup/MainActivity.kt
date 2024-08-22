@@ -15,12 +15,10 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -34,11 +32,13 @@ import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
 import com.statsup.ui.components.LoadingBox
 import com.statsup.ui.components.SettingsScreen
+import com.statsup.ui.components.StatsScreen
 import com.statsup.ui.theme.StatsUpTheme
 import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.ui.viewmodel.HistoryViewModel
 import com.statsup.ui.viewmodel.MainViewModel
 import com.statsup.ui.viewmodel.SettingsViewModel
+import com.statsup.ui.viewmodel.StatsViewModel
 import net.openid.appauth.AuthorizationService
 
 class MainActivity : ComponentActivity() {
@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
             val settingsViewModel = remember { SettingsViewModel(settingRepository) }
             val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository) }
+            val statsViewModel = remember { StatsViewModel(db.trainingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
@@ -76,7 +77,7 @@ class MainActivity : ComponentActivity() {
                             NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
                                 composable(Screens.Dashboard.route) { DashboardScreen(dashboardViewModel) }
                                 composable(Screens.History.route) { HistoryScreen(historyViewModel) }
-                                composable(Screens.Stats.route) { Text(text = "Stats") }
+                                composable(Screens.Stats.route) { StatsScreen(statsViewModel) }
                                 composable(Screens.Settings.route) { SettingsScreen(settingsViewModel) }
                             }
                         }
