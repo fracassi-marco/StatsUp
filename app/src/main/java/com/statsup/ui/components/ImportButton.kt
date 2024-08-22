@@ -29,7 +29,6 @@ fun ImportButton(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
             modifier = Modifier.align(Alignment.Center).size(70.dp).offset(y = 70.dp),
             onClick = {
                 launcher.launch(mainViewModel.startImport())
-                mainViewModel.startLoading()
             },
         ) {
             Icon(Icons.Outlined.Autorenew, null, modifier = Modifier.size(44.dp))

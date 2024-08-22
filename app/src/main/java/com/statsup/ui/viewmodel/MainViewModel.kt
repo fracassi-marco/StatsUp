@@ -32,7 +32,7 @@ class MainViewModel(
     val loading: State<Boolean> = _loading
     val newTrainingsCounter = MutableSharedFlow<Int>()
 
-    fun updateActivities(token: String) {
+    private fun updateActivities(token: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val trainings = updateActivitiesUseCase(token)
@@ -42,11 +42,11 @@ class MainViewModel(
         }
     }
 
-    fun startLoading() {
+    private fun startLoading() {
         _loading.value = true
     }
 
-    fun stopLoading() {
+    private fun stopLoading() {
         _loading.value = false
     }
 
@@ -75,6 +75,7 @@ class MainViewModel(
     }
 
     fun startImport(): Intent {
+        startLoading()
         val redirectUri = Uri.parse("oauth://com-sportshub")
         val authorizeUri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
         val tokenUri = Uri.parse("https://www.strava.com/api/v3/oauth/token")

@@ -12,7 +12,7 @@ class Trainings(
 
     fun overMonth() = provider(ofMonth())
 
-    private fun ofMonth() = trainings.filter { it.date.month == now.month && it.date.year == now.year }
+    fun ofMonth() = trainings.filter { it.date.month == now.month && it.date.year == now.year }
 
     /*fun byYear(): Map<Year, Double> {
         val minYear = trainings.minBy { it.date }.date.year

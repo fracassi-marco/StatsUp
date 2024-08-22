@@ -15,6 +15,7 @@ import com.statsup.ui.components.dashboard.MaxAltitudeCard
 import com.statsup.ui.components.dashboard.MaxElevationGainCard
 import com.statsup.ui.components.dashboard.MaxHeartRateCard
 import com.statsup.ui.components.dashboard.MonthlyDistanceGoalCard
+import com.statsup.ui.components.dashboard.TopTrainingTypes
 import com.statsup.ui.components.dashboard.TrainingCard
 import com.statsup.ui.viewmodel.DashboardViewModel
 
@@ -39,9 +40,11 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
                 MaxAltitudeCard(viewModel)
             }
         }
-        Column(modifier = Modifier.padding(0.dp, 40.dp, 0.dp, 0.dp)) {
+        Column(modifier = Modifier.padding(top = 40.dp)) {
             DistanceMonthOverMonthChart(viewModel)
+        }
+        Column(modifier = Modifier.padding(top = 40.dp)) {
+            TopTrainingTypes(viewModel)
         }
     }
 }
-

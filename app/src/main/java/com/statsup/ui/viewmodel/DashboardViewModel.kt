@@ -57,16 +57,20 @@ class DashboardViewModel(
     }
 
     fun maxElevationGain(): Double {
-        return Trainings(trainings){ if(it.isEmpty()) 0.0 else it.maxOf { training -> training.totalElevationGain } }.overMonth()
+        return Trainings(trainings) { if (it.isEmpty()) 0.0 else it.maxOf { training -> training.totalElevationGain } }.overMonth()
     }
 
     fun maxAltitude(): Double {
-        return Trainings(trainings){ if(it.isEmpty()) 0.0 else it.maxOf { training -> training.elevHigh } }.overMonth()
+        return Trainings(trainings) { if (it.isEmpty()) 0.0 else it.maxOf { training -> training.elevHigh } }.overMonth()
     }
 
     fun maxHeartRate(): Double {
-        return Trainings(trainings){ if(it.isEmpty()) 0.0 else it.maxOf { training -> training.maxHeartrate } }.overMonth()
+        return Trainings(trainings) { if (it.isEmpty()) 0.0 else it.maxOf { training -> training.maxHeartrate } }.overMonth()
     }
 
     fun monthlyDistanceGoal() = settingRepository.loadMonthlyGoal().toFloat()
+
+    fun topTrainings(): Map<String, List<Training>> {
+        return Trainings(trainings) { 0.0 }.ofMonth().groupBy { it.type!! }
+    }
 }

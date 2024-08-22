@@ -20,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +32,7 @@ import com.statsup.ui.components.BottomMenuBar
 import com.statsup.ui.components.DashboardScreen
 import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
+import com.statsup.ui.components.LoadingBox
 import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.theme.StatsUpTheme
 import com.statsup.ui.viewmodel.DashboardViewModel
@@ -63,25 +65,27 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             StatsUpTheme(settingsViewModel) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Scaffold(
-                        modifier = Modifier.fillMaxSize(),
-                        bottomBar = { BottomMenuBar(navController) },
-                        floatingActionButton = { ImportButton(launcher, mainViewModel) },
-                        floatingActionButtonPosition = FabPosition.Center,
-                        snackbarHost = { SnackbarHost(snackBarHostState) },
-                    ) { innerPadding ->
-                        NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
-                            composable(Screens.Dashboard.route) { DashboardScreen(dashboardViewModel) }
-                            composable(Screens.History.route) { HistoryScreen(historyViewModel) }
-                            composable(Screens.Stats.route) { Text(text = "Stats") }
-                            composable(Screens.Settings.route) { SettingsScreen(settingsViewModel) }
+                    LoadingBox(isLoading = mainViewModel.loading.value) {
+                        Scaffold(
+                            modifier = Modifier.fillMaxSize(),
+                            bottomBar = { BottomMenuBar(navController) },
+                            floatingActionButton = { ImportButton(launcher, mainViewModel) },
+                            floatingActionButtonPosition = FabPosition.Center,
+                            snackbarHost = { SnackbarHost(snackBarHostState) },
+                        ) { innerPadding ->
+                            NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
+                                composable(Screens.Dashboard.route) { DashboardScreen(dashboardViewModel) }
+                                composable(Screens.History.route) { HistoryScreen(historyViewModel) }
+                                composable(Screens.Stats.route) { Text(text = "Stats") }
+                                composable(Screens.Settings.route) { SettingsScreen(settingsViewModel) }
+                            }
                         }
-                    }
-                    LaunchedEffect(Unit) {
-                        mainViewModel.newTrainingsCounter.collect { message ->
-                            snackBarHostState.showSnackbar(
-                                message = context.getString(R.string.imported, message), duration = SnackbarDuration.Short
-                            )
+                        LaunchedEffect(Unit) {
+                            mainViewModel.newTrainingsCounter.collect { message ->
+                                snackBarHostState.showSnackbar(
+                                    message = context.getString(R.string.imported, message), duration = SnackbarDuration.Short
+                                )
+                            }
                         }
                     }
                 }
