@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.statsup.ui.components.stats.MonthCumulativeChart
+import com.statsup.ui.components.stats.ProviderSelector
 import com.statsup.ui.components.stats.SpanSelector
 import com.statsup.ui.components.stats.YearCumulativeChart
 import com.statsup.ui.viewmodel.StatsViewModel
@@ -16,6 +17,8 @@ import com.statsup.ui.viewmodel.StatsViewModel
 fun StatsScreen(viewModel: StatsViewModel) {
     Column(modifier = Modifier.padding(20.dp)) {
         SpanSelector(viewModel)
+        Spacer(modifier = Modifier.height(10.dp))
+        ProviderSelector(viewModel)
         Spacer(modifier = Modifier.height(10.dp))
         MonthCumulativeChart(viewModel)
         YearCumulativeChart(viewModel)

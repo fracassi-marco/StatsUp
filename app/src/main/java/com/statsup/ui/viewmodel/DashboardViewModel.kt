@@ -19,6 +19,9 @@ class DashboardViewModel(
 
     private var trainings: List<Training> by mutableStateOf(emptyList())
     private val distance: (List<Training>) -> Double = { it.sumOf { training -> training.distanceInKilometers() } }
+    private val frequency: (List<Training>) -> Double = { it.count().toDouble() }
+    private val duration: (List<Training>) -> Double = { it.sumOf { training -> training.durationInHours() } }
+    private val elevation: (List<Training>) -> Double = { it.sumOf { training -> training.totalElevationGain } }
 
     init {
         viewModelScope.launch {
@@ -37,15 +40,15 @@ class DashboardViewModel(
     }
 
     fun totalFrequency(): Double {
-        return Trainings(trainings) { it.count().toDouble() }.overMonth()
+        return Trainings(trainings, provider = frequency).overMonth()
     }
 
     fun totalDuration(): Double {
-        return Trainings(trainings) { it.sumOf { training -> training.durationInHours() } }.overMonth()
+        return Trainings(trainings, provider = duration) .overMonth()
     }
 
     fun cumulativeDuration(): Map<Int, Double> {
-        return Trainings(trainings) { it.sumOf { training -> training.durationInHours() } }.cumulativeDays()
+        return Trainings(trainings, provider = duration).cumulativeDays()
     }
 
     fun cumulativeDistance(): Map<Int, Double> {

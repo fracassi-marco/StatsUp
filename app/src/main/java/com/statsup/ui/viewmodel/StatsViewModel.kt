@@ -18,6 +18,10 @@ class StatsViewModel(
 ) : ViewModel() {
     private var trainings: List<Training> by mutableStateOf(emptyList())
     private val distance: (List<Training>) -> Double = { it.sumOf { training -> training.distanceInKilometers() } }
+    private val frequency: (List<Training>) -> Double = { it.count().toDouble() }
+    private val duration: (List<Training>) -> Double = { it.sumOf { training -> training.durationInHours() } }
+    private val elevation: (List<Training>) -> Double = { it.sumOf { training -> training.totalElevationGain } }
+
     var selectedSpan by mutableIntStateOf(0)
         private set
     var selectedProvider by mutableIntStateOf(0)
@@ -27,19 +31,26 @@ class StatsViewModel(
     }
 
     fun cumulativeMonth(): Map<Int, Double> {
-        return Trainings(trainings, provider = distance).cumulativeDays()
+        return Trainings(trainings, provider = provider()).cumulativeDays()
     }
 
     fun pastCumulativeMonth(): Map<Int, Double> {
-        return Trainings(trainings, provider = distance, now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
+        return Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
     }
 
     fun cumulativeYear(): LinkedHashMap<Month, Double> {
-        return Trainings(trainings, provider = distance).cumulativeMonths()
+        return Trainings(trainings, provider = provider()).cumulativeMonths()
     }
 
     fun pastCumulativeYear(): LinkedHashMap<Month, Double> {
-        return Trainings(trainings, provider = distance, now = ZonedDateTime.now().minusYears(1)).cumulativeMonths()
+        return Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusYears(1)).cumulativeMonths()
+    }
+
+    private fun provider() = when (selectedProvider) {
+        0 -> distance
+        1 -> frequency
+        2 -> duration
+        else -> elevation
     }
 
     fun hideMonthChart(): Boolean {
@@ -48,6 +59,10 @@ class StatsViewModel(
 
     fun hideYearChart(): Boolean {
         return selectedSpan != 1
+    }
+
+    fun switchProvider(index: Int) {
+        selectedProvider = index
     }
 
     init {
