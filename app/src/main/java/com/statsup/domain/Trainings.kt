@@ -10,9 +10,10 @@ import java.time.ZonedDateTime.now
 class Trainings(
     private val trainings: List<Training>,
     private val now: ZonedDateTime = now(),
-    private val provider: (List<Training>) -> Double) {
+    private val provider: Provider
+) {
 
-    fun overMonth() = provider(ofMonth())
+    fun overMonth() = provider.cumulative(ofMonth())
 
     fun ofMonth() = trainings.filter { it.date.month == now.month && it.date.year == now.year }
 
@@ -34,7 +35,7 @@ class Trainings(
 
         return (minMonth..maxMonth).map { Month.of(it) }.associateWith {
             val ts = ofYear.filter { t -> t.date.month == it }
-            provider(ts)
+            provider.cumulative(ts)
         }
     }
 
@@ -43,7 +44,7 @@ class Trainings(
         val result = LinkedHashMap<Int, Double>()
         (1..now.month.maxLength()).forEach {
             val ts = ofMonth.filter { t -> t.date.dayOfMonth == it }
-            result[it] = provider(ts)
+            result[it] = provider.cumulative(ts)
         }
 
         return result
@@ -68,5 +69,9 @@ class Trainings(
             result[it] = byDay.filter { bm -> bm.key <= it }.values.sum()
         }
         return result
+    }
+
+    fun maxOfMonth(): Double {
+        return provider.max(ofMonth())
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.statsup.domain.Provider
 import com.statsup.domain.Training
 import com.statsup.domain.Trainings
 import com.statsup.domain.repository.TrainingRepository
@@ -17,10 +18,6 @@ class StatsViewModel(
     private val trainingRepository: TrainingRepository
 ) : ViewModel() {
     private var trainings: List<Training> by mutableStateOf(emptyList())
-    private val distance: (List<Training>) -> Double = { it.sumOf { training -> training.distanceInKilometers() } }
-    private val frequency: (List<Training>) -> Double = { it.count().toDouble() }
-    private val duration: (List<Training>) -> Double = { it.sumOf { training -> training.durationInHours() } }
-    private val elevation: (List<Training>) -> Double = { it.sumOf { training -> training.totalElevationGain } }
 
     var selectedSpan by mutableIntStateOf(0)
         private set
@@ -46,12 +43,7 @@ class StatsViewModel(
         return Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusYears(1)).cumulativeMonths()
     }
 
-    private fun provider() = when (selectedProvider) {
-        0 -> distance
-        1 -> frequency
-        2 -> duration
-        else -> elevation
-    }
+    private fun provider() = Provider.byIndex(selectedProvider)
 
     fun hideMonthChart(): Boolean {
         return selectedSpan != 0
@@ -73,3 +65,4 @@ class StatsViewModel(
         }
     }
 }
+

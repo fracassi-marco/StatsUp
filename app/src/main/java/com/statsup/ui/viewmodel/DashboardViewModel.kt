@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.statsup.domain.Provider
 import com.statsup.domain.Training
 import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
@@ -18,10 +19,6 @@ class DashboardViewModel(
 ) : ViewModel() {
 
     private var trainings: List<Training> by mutableStateOf(emptyList())
-    private val distance: (List<Training>) -> Double = { it.sumOf { training -> training.distanceInKilometers() } }
-    private val frequency: (List<Training>) -> Double = { it.count().toDouble() }
-    private val duration: (List<Training>) -> Double = { it.sumOf { training -> training.durationInHours() } }
-    private val elevation: (List<Training>) -> Double = { it.sumOf { training -> training.totalElevationGain } }
 
     init {
         viewModelScope.launch {
@@ -36,44 +33,44 @@ class DashboardViewModel(
     }
 
     fun totalDistance(): Double {
-        return Trainings(trainings, provider = distance).overMonth()
+        return Trainings(trainings, provider = Provider.Distance).overMonth()
     }
 
     fun totalFrequency(): Double {
-        return Trainings(trainings, provider = frequency).overMonth()
+        return Trainings(trainings, provider = Provider.Frequency).overMonth()
     }
 
     fun totalDuration(): Double {
-        return Trainings(trainings, provider = duration) .overMonth()
+        return Trainings(trainings, provider = Provider.Duration) .overMonth()
     }
 
     fun cumulativeDuration(): Map<Int, Double> {
-        return Trainings(trainings, provider = duration).cumulativeDays()
+        return Trainings(trainings, provider = Provider.Duration).cumulativeDays()
     }
 
     fun cumulativeDistance(): Map<Int, Double> {
-        return Trainings(trainings, provider = distance).cumulativeDays()
+        return Trainings(trainings, provider = Provider.Distance).cumulativeDays()
     }
 
     fun pastCumulativeDistance(): Map<Int, Double> {
-        return Trainings(trainings, provider = distance, now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
+        return Trainings(trainings, provider = Provider.Distance, now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
     }
 
     fun maxElevationGain(): Double {
-        return Trainings(trainings) { if (it.isEmpty()) 0.0 else it.maxOf { training -> training.totalElevationGain } }.overMonth()
+        return Trainings(trainings, provider = Provider.Elevation).maxOfMonth()
     }
 
     fun maxAltitude(): Double {
-        return Trainings(trainings) { if (it.isEmpty()) 0.0 else it.maxOf { training -> training.elevHigh } }.overMonth()
+        return Trainings(trainings, provider = Provider.Altitude).maxOfMonth()
     }
 
     fun maxHeartRate(): Double {
-        return Trainings(trainings) { if (it.isEmpty()) 0.0 else it.maxOf { training -> training.maxHeartrate } }.overMonth()
+        return Trainings(trainings, provider = Provider.HeartRate).maxOfMonth()
     }
 
     fun monthlyDistanceGoal() = settingRepository.loadMonthlyGoal().toFloat()
 
     fun topTrainings(): Map<String, List<Training>> {
-        return Trainings(trainings) { 0.0 }.ofMonth().groupBy { it.type!! }
+        return Trainings(trainings, provider = Provider.None).ofMonth().groupBy { it.type!! }
     }
 }
