@@ -57,6 +57,14 @@ class StatsViewModel(
         selectedProvider = index
     }
 
+    fun groupByDay(): Map<Int, Double> {
+        return Trainings(trainings, provider = provider()).groupByDay()
+    }
+
+    fun groupByMonth(): Map<Month, Double> {
+        return Trainings(trainings, provider = provider()).byMonth()
+    }
+
     init {
         viewModelScope.launch {
             trainingRepository.all().collect {

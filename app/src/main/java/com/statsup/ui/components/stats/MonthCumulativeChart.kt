@@ -7,7 +7,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.statsup.R
+import com.statsup.ui.components.Title
 import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.viewmodel.StatsViewModel
 import io.jetchart.common.animation.fadeInAnimation
@@ -24,6 +27,8 @@ import io.jetchart.line.renderer.yaxis.LineYAxisWithValueDrawer
 fun MonthCumulativeChart(viewModel: StatsViewModel) {
     if(viewModel.hideMonthChart())
         return
+
+    Title(text = stringResource(R.string.cumulative_chart), marginTop = 40.dp)
     LineChart(
         lines = listOf(
             Line(

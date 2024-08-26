@@ -1,13 +1,15 @@
 package com.statsup.domain
 
-enum class Provider(val cumulative: (List<Training>) -> Double, val max: (List<Training>) -> Double) {
+enum class Provider(
+    val cumulative: (List<Training>) -> Double,
+    val max: (List<Training>) -> Double) {
     Distance(
         cumulative = { it.sumOf { training -> training.distanceInKilometers() } },
-        max = { 0.0 }
+        max = { if (it.isEmpty()) 0.0 else it.maxOf { training -> training.distanceInKilometers() } }
     ),
     Duration(
         cumulative = { it.sumOf { training -> training.durationInHours() } },
-        max = { 0.0 }
+        max = { if (it.isEmpty()) 0.0 else it.maxOf { training -> training.durationInHours() } }
     ),
     Frequency(
         cumulative = { it.count().toDouble() },

@@ -23,6 +23,9 @@
     <string name="duration">Duration</string>
     <string name="imported">%1$d activities have been imported</string>
     <string name="distance_mom">Distance month over month</string>
+    <string name="day_by_day">Day by day</string>
+    <string name="month_by_month">Month by month</string>
+    <string name="cumulative_chart">Cumulative</string>
     <string name="top_training">Top training</string>
     <string name="load">Syncing from Strava…</string>
 </resources>
