@@ -7,8 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.statsup.domain.Athlete
 import com.statsup.domain.Training
-import com.statsup.infrastructure.DbAthleteRepository
-import com.statsup.infrastructure.DbTrainingRepository
 
 @Database(
     entities = [Training::class, Athlete::class],
@@ -20,7 +18,7 @@ abstract class TrainingDatabase: RoomDatabase() {
     abstract val athleteRepository: DbAthleteRepository
 
     companion object {
-        const val DATABASE_NAME = "training_db"
+        private const val DATABASE_NAME = "training_db"
 
         @Volatile
         private var INSTANCE: TrainingDatabase? = null

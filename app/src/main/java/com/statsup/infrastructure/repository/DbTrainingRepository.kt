@@ -1,4 +1,4 @@
-package com.statsup.infrastructure
+package com.statsup.infrastructure.repository
 
 import androidx.room.Dao
 import androidx.room.Insert

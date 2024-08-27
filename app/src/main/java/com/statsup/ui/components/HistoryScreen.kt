@@ -38,6 +38,7 @@ import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
 import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.viewmodel.HistoryViewModel
+import java.util.Locale
 
 
 @Composable
@@ -88,11 +89,11 @@ fun TrainingListItem(training: Training) {
         ) {
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.distance))
-                Text(text = String.format("%.2f Km", training.distanceInKilometers()))
+                Text(text = String.format(Locale.getDefault(), "%.2f Km", training.distanceInKilometers()))
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.elevation_gain))
-                Text(text = String.format("%.0f m", training.totalElevationGain))
+                Text(text = String.format(Locale.getDefault(), "%.0f m", training.totalElevationGain))
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.duration))

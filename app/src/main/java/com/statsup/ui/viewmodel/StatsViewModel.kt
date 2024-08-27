@@ -11,7 +11,6 @@ import com.statsup.domain.Training
 import com.statsup.domain.Trainings
 import com.statsup.domain.repository.TrainingRepository
 import kotlinx.coroutines.launch
-import java.time.Month
 import java.time.ZonedDateTime
 
 class StatsViewModel(

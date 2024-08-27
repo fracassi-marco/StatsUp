@@ -1,11 +1,15 @@
 package com.statsup.domain
 
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.sin
+
 fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
     val theta = lon1 - lon2
-    var dist = (Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + (Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta))))
-    dist = Math.acos(dist)
+    var dist = (sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + (cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta))))
+    dist = acos(dist)
     dist = rad2deg(dist)
-    dist = dist * 60 * 1.1515
+    dist *= 60 * 1.1515
     return dist
 }
 

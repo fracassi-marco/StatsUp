@@ -2,7 +2,6 @@ package com.statsup.ui.components.stats
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ChangeHistory
 import androidx.compose.material.icons.outlined.Compress
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
