@@ -27,43 +27,33 @@ class StatsViewModel(
         selectedSpan = index
     }
 
-    fun cumulativeMonth(): Map<Int, Double> {
-        return Trainings(trainings, provider = provider()).cumulativeDays()
-    }
-
-    fun pastCumulativeMonth(): Map<Int, Double> {
-        return Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
-    }
-
-    fun cumulativeYear(): LinkedHashMap<Month, Double> {
-        return Trainings(trainings, provider = provider()).cumulativeMonths()
-    }
-
-    fun pastCumulativeYear(): LinkedHashMap<Month, Double> {
-        return Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusYears(1)).cumulativeMonths()
-    }
-
-    private fun provider() = Provider.byIndex(selectedProvider)
-
-    fun hideMonthChart(): Boolean {
-        return selectedSpan != 0
-    }
-
-    fun hideYearChart(): Boolean {
-        return selectedSpan != 1
-    }
-
     fun switchProvider(index: Int) {
         selectedProvider = index
     }
 
-    fun groupByDay(): Map<Int, Double> {
-        return Trainings(trainings, provider = provider()).groupByDay()
-    }
+    fun cumulativeMonth() = trainings().cumulativeDays()
 
-    fun groupByMonth(): Map<Month, Double> {
-        return Trainings(trainings, provider = provider()).byMonth()
-    }
+    fun pastCumulativeMonth() = Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
+
+    fun cumulativeYear() = trainings().cumulativeMonths()
+
+    fun pastCumulativeYear() = Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusYears(1)).cumulativeMonths()
+
+    fun hideMonthChart() = selectedSpan != 0
+
+    fun hideYearChart() = selectedSpan != 1
+
+    fun groupByDay() = trainings().groupByDay()
+
+    fun groupByMonth() = trainings().byMonth()
+
+    fun max() = trainings().groupByDay().maxOf { it.value }
+
+    fun average() = trainings().groupByDay().values.average()
+
+    private fun provider() = Provider.byIndex(selectedProvider)
+
+    private fun trainings() = Trainings(trainings, provider = provider())
 
     init {
         viewModelScope.launch {

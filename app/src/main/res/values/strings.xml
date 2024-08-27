@@ -20,6 +20,8 @@
     <string name="max_elevation_gain">Max + elev.</string>
     <string name="max_heart_rate">Max HR</string>
     <string name="max_altitude">Max altit.</string>
+    <string name="max">Max</string>
+    <string name="average">Average</string>
     <string name="duration">Duration</string>
     <string name="imported">%1$d activities have been imported</string>
     <string name="distance_mom">Distance month over month</string>
