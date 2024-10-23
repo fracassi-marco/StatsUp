@@ -44,7 +44,7 @@ fun DurationCard(viewModel: DashboardViewModel) {
                     Line(
                         points = viewModel.cumulativeDuration().map { Point(it.value.toFloat(), "") },
                         lineDrawer = SolidLineDrawer(thickness = 1.dp, color = MaterialTheme.colorScheme.primary),
-                        pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().dayOfMonth), FilledPointDrawer(color = Color.Black)),
+                        pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().dayOfMonth - 1), FilledPointDrawer(color = Color.Black)),
                         startAtZero = true,
                         shader = GradientLineShader(listOf(MaterialTheme.colorScheme.primary, Transparent))
                     )

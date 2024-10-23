@@ -15,8 +15,8 @@ android {
         applicationId = "com.statsup"
         minSdk = 34
         targetSdk = 34
-        versionCode = 40010
-        versionName = "4.0.1"
+        versionCode = 40020
+        versionName = "4.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
