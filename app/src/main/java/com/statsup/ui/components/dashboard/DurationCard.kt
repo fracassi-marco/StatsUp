@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -25,9 +26,13 @@ import io.jetchart.line.LineChart
 import io.jetchart.line.Point
 import io.jetchart.line.renderer.line.GradientLineShader
 import io.jetchart.line.renderer.line.SolidLineDrawer
+import io.jetchart.line.renderer.point.CircularPointDrawer
+import io.jetchart.line.renderer.point.FilledPointDrawer
+import io.jetchart.line.renderer.point.IndexesPointDrawer
 import io.jetchart.line.renderer.point.NoPointDrawer
 import io.jetchart.line.renderer.xaxis.LineEmptyXAxisDrawer
 import io.jetchart.line.renderer.yaxis.LineYAxisWithValueDrawer
+import java.time.ZonedDateTime
 import java.util.Locale
 
 @Composable
@@ -39,6 +44,7 @@ fun DurationCard(viewModel: DashboardViewModel) {
                     Line(
                         points = viewModel.cumulativeDuration().map { Point(it.value.toFloat(), "") },
                         lineDrawer = SolidLineDrawer(thickness = 1.dp, color = MaterialTheme.colorScheme.primary),
+                        pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().dayOfMonth), FilledPointDrawer(color = Color.Black)),
                         startAtZero = true,
                         shader = GradientLineShader(listOf(MaterialTheme.colorScheme.primary, Transparent))
                     )
@@ -48,7 +54,6 @@ fun DurationCard(viewModel: DashboardViewModel) {
                     .fillMaxWidth()
                     .height(80.dp),
                 animation = fadeInAnimation(3000),
-                pointDrawer = NoPointDrawer,
                 xAxisDrawer = LineEmptyXAxisDrawer(),
                 yAxisDrawer = LineYAxisWithValueDrawer(
                     labelValueFormatter = { value -> "%.0f".format(value) },

@@ -46,9 +46,17 @@ class StatsViewModel(
 
     fun groupByMonth() = trainings().byMonth()
 
-    fun max() = trainings().groupByDay().maxOf { it.value }
+    fun maxOfMonth() = trainings().groupByDay().maxOf { it.value }
 
-    fun average() = trainings().groupByDay().values.average()
+    fun totalAverageOfMonth() = trainings().groupByDay().values.average()
+
+    fun averageOfMonth() = trainings().groupByDay().values.filter { it != 0.0 } .average()
+
+    fun maxOfYear() = trainings().byMonth().maxOf { it.value }
+
+    fun totalAverageOfYear() = trainings().byMonth().values.average()
+
+    fun averageOfYear() = trainings().byMonth().values.filter { it != 0.0 } .average()
 
     private fun provider() = Provider.byIndex(selectedProvider)
 

@@ -12,11 +12,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.statsup.R
 import com.statsup.ui.components.SecondaryCard
 import com.statsup.ui.components.Title
-import com.statsup.ui.viewmodel.StatsViewModel
 import java.util.Locale
 
 @Composable
-fun MaxCard(viewModel: StatsViewModel) {
+fun MaxCard(max: Double) {
     SecondaryCard(icon = Icons.Outlined.ArrowCircleUp) {
         Column {
             Text(
@@ -26,7 +25,7 @@ fun MaxCard(viewModel: StatsViewModel) {
                 overflow = TextOverflow.Ellipsis,
             )
             Title(
-                text = String.format(Locale.getDefault(), "%.0f", viewModel.max()),
+                text = String.format(Locale.getDefault(), "%.0f", max),
             )
         }
     }

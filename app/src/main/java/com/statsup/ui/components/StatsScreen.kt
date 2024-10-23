@@ -27,17 +27,30 @@ fun StatsScreen(viewModel: StatsViewModel) {
         ProviderSelector(viewModel)
         Spacer(modifier = Modifier.height(10.dp))
 
-        Row(
-            modifier = Modifier.padding(top = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                MaxCard(viewModel)
+        if(viewModel.hideYearChart())
+            Row(
+                modifier = Modifier.padding(top = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    MaxCard(viewModel.maxOfMonth())
+                }
+                Column(modifier = Modifier.weight(1f)) {
+                    AverageCard(viewModel.averageOfMonth())
+                }
             }
-            Column(modifier = Modifier.weight(1f)) {
-                AverageCard(viewModel)
+        if(viewModel.hideMonthChart())
+            Row(
+                modifier = Modifier.padding(top = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    MaxCard(viewModel.maxOfYear())
+                }
+                Column(modifier = Modifier.weight(1f)) {
+                    AverageCard(viewModel.averageOfYear())
+                }
             }
-        }
 
         MonthCumulativeChart(viewModel)
         MonthBarChart(viewModel)

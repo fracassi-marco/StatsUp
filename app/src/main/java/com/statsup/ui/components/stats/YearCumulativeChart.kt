@@ -33,12 +33,14 @@ fun YearCumulativeChart(viewModel: StatsViewModel) {
             Line(
                 points = viewModel.cumulativeYear().map { Point(it.value.toFloat(), it.key.value.toString()) },
                 lineDrawer = SolidLineDrawer(thickness = 2.dp, color = MaterialTheme.colorScheme.primary),
+                pointDrawer = NoPointDrawer,
                 startAtZero = true,
                 shader = GradientLineShader(listOf(MaterialTheme.colorScheme.primary, Transparent))
             ),
             Line(
                 points = viewModel.pastCumulativeYear().map { Point(it.value.toFloat(), "") },
                 lineDrawer = SolidLineDrawer(thickness = 2.dp, color = SecondaryText),
+                pointDrawer = NoPointDrawer,
                 startAtZero = true
             )
         ),
@@ -47,7 +49,6 @@ fun YearCumulativeChart(viewModel: StatsViewModel) {
             .fillMaxWidth()
             .height(120.dp),
         animation = fadeInAnimation(3000),
-        pointDrawer = NoPointDrawer,
         xAxisDrawer = LineXAxisDrawer(axisLineThickness = 0.dp),
         yAxisDrawer = LineYAxisWithValueDrawer(
             labelValueFormatter = { value -> "%.0f".format(value) },

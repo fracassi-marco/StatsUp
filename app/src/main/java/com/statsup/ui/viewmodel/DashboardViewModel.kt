@@ -41,7 +41,7 @@ class DashboardViewModel(
     }
 
     fun totalDuration(): Double {
-        return Trainings(trainings, provider = Provider.Duration) .overMonth()
+        return Trainings(trainings, provider = Provider.Duration).overMonth()
     }
 
     fun cumulativeDuration(): Map<Int, Double> {

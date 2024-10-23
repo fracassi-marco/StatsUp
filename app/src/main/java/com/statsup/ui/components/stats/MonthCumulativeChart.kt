@@ -34,12 +34,14 @@ fun MonthCumulativeChart(viewModel: StatsViewModel) {
             Line(
                 points = viewModel.cumulativeMonth().map { Point(it.value.toFloat(), it.key.toString()) },
                 lineDrawer = SolidLineDrawer(thickness = 2.dp, color = MaterialTheme.colorScheme.primary),
+                pointDrawer = NoPointDrawer,
                 startAtZero = true,
                 shader = GradientLineShader(listOf(MaterialTheme.colorScheme.primary, Transparent))
             ),
             Line(
                 points = viewModel.pastCumulativeMonth().map { Point(it.value.toFloat(), it.key.toString()) },
                 lineDrawer = SolidLineDrawer(thickness = 2.dp, color = SecondaryText),
+                pointDrawer = NoPointDrawer,
                 startAtZero = true
             )
         ),
@@ -48,7 +50,6 @@ fun MonthCumulativeChart(viewModel: StatsViewModel) {
             .fillMaxWidth()
             .height(120.dp),
         animation = fadeInAnimation(3000),
-        pointDrawer = NoPointDrawer,
         xAxisDrawer = LineXAxisDrawer(
             axisLineThickness = 0.dp,
             labelRatio = 5
