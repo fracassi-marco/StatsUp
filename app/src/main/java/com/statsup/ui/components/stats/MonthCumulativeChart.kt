@@ -32,7 +32,7 @@ fun MonthCumulativeChart(viewModel: StatsViewModel) {
     if(viewModel.hideMonthChart())
         return
 
-    Title(text = stringResource(R.string.cumulative_chart), marginTop = 40.dp)
+    Title(text = stringResource(R.string.trend), marginTop = 40.dp)
     LineChart(
         lines = listOf(
             Line(

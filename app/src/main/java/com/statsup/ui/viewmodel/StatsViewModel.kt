@@ -30,31 +30,35 @@ class StatsViewModel(
         selectedProvider = index
     }
 
-    fun cumulativeMonth() = trainings().cumulativeDays()
+    fun cumulativeMonth() = trainings().cumulativeDaysTrend()
 
-    fun pastCumulativeMonth() = Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
+    fun pastCumulativeMonth() = pastMonthTrainings().cumulativeDays()
 
-    fun cumulativeYear() = trainings().cumulativeMonths()
+    private fun pastMonthTrainings() = Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusMonths(1))
+    private fun pastYearTraining() = Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusYears(1))
 
-    fun pastCumulativeYear() = Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusYears(1)).cumulativeMonths()
+    fun cumulativeYear() = trainings().cumulativeMonthsTrend()
+    fun pastCumulativeYear() = pastYearTraining().cumulativeMonths()
 
     fun hideMonthChart() = selectedSpan != 0
-
     fun hideYearChart() = selectedSpan != 1
 
-    fun groupByDay() = trainings().groupByDay()
-
-    fun groupByMonth() = trainings().byMonth()
+    fun groupByDay() = trainings().groupBy31Day()
+    fun groupByMonth() = trainings().by12Month()
 
     fun maxOfMonth() = trainings().groupByDay().maxOf { it.value }
 
-    fun totalAverageOfMonth() = trainings().groupByDay().values.average()
+    fun doneOfMonth() = trainings().groupByDay().values.sum()
+    fun trendOfMonth() = cumulativeMonth().values.last()
+    fun doneOfPastMonth() = pastMonthTrainings().groupByDay().values.sum()
 
     fun averageOfMonth() = trainings().groupByDay().values.filter { it != 0.0 } .average()
 
     fun maxOfYear() = trainings().byMonth().maxOf { it.value }
 
-    fun totalAverageOfYear() = trainings().byMonth().values.average()
+    fun doneOfYear() = trainings().byMonth().values.sum()
+    fun trendOfYear() = cumulativeYear().values.last()
+    fun doneOfPastYear() = pastYearTraining().byMonth().values.sum()
 
     fun averageOfYear() = trainings().byMonth().values.filter { it != 0.0 } .average()
 

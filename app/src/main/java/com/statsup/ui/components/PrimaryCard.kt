@@ -29,7 +29,7 @@ import com.statsup.ui.theme.SecondaryText
 fun SecondaryCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
-    icon: ImageVector,
+    icon: ImageVector? = null,
     bottom: @Composable () -> Unit = {},
     content: @Composable () -> Unit
 ) {
@@ -50,7 +50,7 @@ fun PrimaryCard(
     onClick: (() -> Unit)? = null,
     colors: CardColors = CardDefaults.cardColors(),
     border: BorderStroke? = null,
-    icon: ImageVector,
+    icon: ImageVector? = null,
     bottom: @Composable () -> Unit = {},
     content: @Composable () -> Unit
 ) {
@@ -63,11 +63,13 @@ fun PrimaryCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
+                if (icon != null) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
                 Box(modifier = Modifier.padding(0.dp, 16.dp)) {
                     content()
                 }

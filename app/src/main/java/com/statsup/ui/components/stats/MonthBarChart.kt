@@ -30,7 +30,7 @@ fun MonthBarChart(viewModel: StatsViewModel) {
     Title(text = stringResource(R.string.day_by_day), marginTop = 40.dp)
     BarChart(
         bars = Bars(bars = viewModel.groupByDay().map {
-            Bar(label = if (it.key % 2 != 0) it.key.toString() else "", value = it.value.toFloat(), color = MaterialTheme.colorScheme.primary)
+            Bar(label = if (it.key.dayOfMonth % 2 != 0) it.key.dayOfMonth.toString() else "", value = it.value.toFloat(), color = MaterialTheme.colorScheme.primary)
         }),
         modifier = Modifier
             .padding(0.dp, 10.dp, 0.dp, 0.dp)

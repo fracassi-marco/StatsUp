@@ -30,3 +30,20 @@ fun MaxCard(max: Double) {
         }
     }
 }
+
+@Composable
+fun SmallCard(value: Double, label: String) {
+    SecondaryCard() {
+        Column {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Start,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Title(
+                text = String.format(Locale.getDefault(), "%.0f", value),
+            )
+        }
+    }
+}

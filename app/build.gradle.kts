@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.statsup"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.statsup"
         minSdk = 34
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 40020
         versionName = "4.0.2"
 
