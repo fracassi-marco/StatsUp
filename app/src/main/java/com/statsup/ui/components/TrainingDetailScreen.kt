@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -126,7 +124,7 @@ fun TrainingDetailScreen(
                         shape = RoundedCornerShape(16.dp),
                         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
+                        Column(modifier = Modifier.padding(20.dp)) {
                             Text(
                                 text = training.name,
                                 fontSize = 24.sp,
@@ -137,60 +135,55 @@ fun TrainingDetailScreen(
                                 text = formatLocal(training.date),
                                 fontSize = 14.sp,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                                modifier = Modifier.padding(bottom = 16.dp)
+                                modifier = Modifier.padding(bottom = 20.dp)
                             )
 
-                            // Grid con le statistiche
+                            // Grid con le statistiche in 2 colonne
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
-                                StatItem(
-                                    label = stringResource(id = R.string.distance),
-                                    value = String.format(Locale.getDefault(), "%.2f", training.distanceInKilometers()),
-                                    unit = stringResource(id = R.string.km)
-                                )
-                                StatItem(
-                                    label = stringResource(id = R.string.duration),
-                                    value = Measure.hm(training.movingTime),
-                                    unit = ""
-                                )
-                            }
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    StatItem(
+                                        label = stringResource(id = R.string.distance),
+                                        value = String.format(Locale.getDefault(), "%.2f", training.distanceInKilometers()),
+                                        unit = stringResource(id = R.string.km)
+                                    )
+                                    StatItem(
+                                        label = stringResource(id = R.string.min_altitude),
+                                        value = String.format(Locale.getDefault(), "%.0f", training.elevLow),
+                                        unit = stringResource(id = R.string.m)
+                                    )
+                                    StatItem(
+                                        label = stringResource(id = R.string.average_pace),
+                                        value = calculatePace(training.distance, training.movingTime),
+                                        unit = stringResource(id = R.string.pace_unit)
+                                    )
+                                }
 
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                StatItem(
-                                    label = stringResource(id = R.string.min_altitude),
-                                    value = String.format(Locale.getDefault(), "%.0f", training.elevLow),
-                                    unit = stringResource(id = R.string.m)
-                                )
-                                StatItem(
-                                    label = stringResource(id = R.string.max_altitude),
-                                    value = String.format(Locale.getDefault(), "%.0f", training.elevHigh),
-                                    unit = stringResource(id = R.string.m)
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                StatItem(
-                                    label = stringResource(id = R.string.average_pace),
-                                    value = calculatePace(training.distance, training.movingTime),
-                                    unit = stringResource(id = R.string.pace_unit)
-                                )
-                                StatItem(
-                                    label = stringResource(id = R.string.elevation_gain),
-                                    value = String.format(Locale.getDefault(), "%.0f", training.totalElevationGain),
-                                    unit = stringResource(id = R.string.m)
-                                )
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    StatItem(
+                                        label = stringResource(id = R.string.duration),
+                                        value = Measure.hm(training.movingTime),
+                                        unit = ""
+                                    )
+                                    StatItem(
+                                        label = stringResource(id = R.string.max_altitude),
+                                        value = String.format(Locale.getDefault(), "%.0f", training.elevHigh),
+                                        unit = stringResource(id = R.string.m)
+                                    )
+                                    StatItem(
+                                        label = stringResource(id = R.string.elevation_gain),
+                                        value = String.format(Locale.getDefault(), "%.0f", training.totalElevationGain),
+                                        unit = stringResource(id = R.string.m)
+                                    )
+                                }
                             }
                         }
                     }
@@ -202,25 +195,35 @@ fun TrainingDetailScreen(
 
 @Composable
 fun StatItem(label: String, value: String, unit: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.Start
+    ) {
         Text(
             text = label,
-            fontSize = 12.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+            modifier = Modifier.padding(bottom = 4.dp)
         )
-        Row(verticalAlignment = Alignment.Bottom) {
+        Row(
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(
                 text = value,
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                letterSpacing = 0.sp
             )
             if (unit.isNotEmpty()) {
                 Text(
                     text = " $unit",
-                    fontSize = 12.sp,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                    modifier = Modifier.padding(bottom = 2.dp)
+                    modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
                 )
             }
         }
