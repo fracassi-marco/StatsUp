@@ -15,23 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.maps.android.compose.Circle
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Polyline
-import com.google.maps.android.compose.rememberCameraPositionState
 import com.statsup.R
 import com.statsup.domain.Measure
 import com.statsup.domain.Training
@@ -95,36 +84,16 @@ fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
             }
         }
         if (training.trip != null) {
-            val trip = training.trip!!
-            val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(trip.boundaries.center, trip.zoomForBoundaries)
-            }
-            val googleMapOptionsFactory = { GoogleMapOptions().liteMode(true) }
-            GoogleMap(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp),
-                cameraPositionState = cameraPositionState,
-                properties = MapProperties(mapType = MapType.NORMAL),
-                googleMapOptionsFactory = googleMapOptionsFactory,
-                uiSettings = MapUiSettings(
-                    mapToolbarEnabled = false,
-                    scrollGesturesEnabled = false,
-                    scrollGesturesEnabledDuringRotateOrZoom = false,
-                    zoomControlsEnabled = false,
-                    zoomGesturesEnabled = false,
-                    rotationGesturesEnabled = false
-                )
-            ) {
-                Circle(center = trip.begin(), strokeColor = Color.Green, fillColor = Color.Green, radius = 12.0)
-                Circle(center = trip.end(), strokeColor = Color.Red, fillColor = Color.Red, radius = 12.0)
-                Polyline(points = trip.steps(), width = 8f, color = Color.Blue, geodesic = true)
-            }
+            MapListItemPreview(
+                trip = training.trip!!,
+                modifier = Modifier.fillMaxWidth(),
+                height = 180
+            )
         } else {
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp),
+                    .height(180.dp),
                 painter = painterResource(id = R.drawable.bg),
                 contentDescription = "background",
                 contentScale = ContentScale.FillWidth
