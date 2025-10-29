@@ -42,7 +42,7 @@ import java.util.Locale
 
 
 @Composable
-fun HistoryScreen(viewModel: HistoryViewModel) {
+fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (Long) -> Unit) {
     val state = viewModel.state.value
 
     if (state.show) {
@@ -50,7 +50,7 @@ fun HistoryScreen(viewModel: HistoryViewModel) {
             items(
                 count = state.activities.size,
                 key = { state.activities[it].id },
-                itemContent = { TrainingListItem(state.activities[it]) })
+                itemContent = { TrainingListItem(state.activities[it], onTrainingClick) })
         }
     }
 
@@ -58,20 +58,14 @@ fun HistoryScreen(viewModel: HistoryViewModel) {
 
 //@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TrainingListItem(training: Training) {
-    val context = LocalContext.current
+fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
         colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, SecondaryText)
-        /*onClick = {
-            val intent = Intent(context, DetailsActivity::class.java).apply {
-                putExtra("id", training.id)
-            }
-            context.startActivity(intent)
-        }*/
+        border = BorderStroke(1.dp, SecondaryText),
+        onClick = { onTrainingClick(training.id) }
     ) {
         Title(text = training.name, marginStart = 16.dp, marginTop = 8.dp)
         Text(

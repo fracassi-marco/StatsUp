@@ -22,6 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.NavType
 import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.StravaTrainingApi
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
@@ -31,14 +33,17 @@ import com.statsup.ui.components.DashboardScreen
 import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
 import com.statsup.ui.components.LoadingBox
+import com.statsup.ui.components.MapFullscreenScreen
 import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.components.StatsScreen
+import com.statsup.ui.components.TrainingDetailScreen
 import com.statsup.ui.theme.StatsUpTheme
 import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.ui.viewmodel.HistoryViewModel
 import com.statsup.ui.viewmodel.MainViewModel
 import com.statsup.ui.viewmodel.SettingsViewModel
 import com.statsup.ui.viewmodel.StatsViewModel
+import com.statsup.ui.viewmodel.TrainingDetailViewModel
 import net.openid.appauth.AuthorizationService
 
 class MainActivity : ComponentActivity() {
@@ -76,9 +81,42 @@ class MainActivity : ComponentActivity() {
                         ) { innerPadding ->
                             NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
                                 composable(Screens.Dashboard.route) { DashboardScreen(dashboardViewModel) }
-                                composable(Screens.History.route) { HistoryScreen(historyViewModel) }
+                                composable(Screens.History.route) {
+                                    HistoryScreen(historyViewModel) { trainingId ->
+                                        navController.navigate(Screens.trainingDetailRoute(trainingId))
+                                    }
+                                }
                                 composable(Screens.Stats.route) { StatsScreen(statsViewModel) }
                                 composable(Screens.Settings.route) { SettingsScreen(settingsViewModel) }
+
+                                // Training Detail Screen
+                                composable(
+                                    route = Screens.TRAINING_DETAIL,
+                                    arguments = listOf(navArgument("trainingId") { type = NavType.LongType })
+                                ) { backStackEntry ->
+                                    val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
+                                    val detailViewModel = remember { TrainingDetailViewModel(db.trainingRepository, trainingId) }
+                                    TrainingDetailScreen(
+                                        training = detailViewModel.training.value,
+                                        isLoading = detailViewModel.isLoading.value,
+                                        onNavigateBack = { navController.popBackStack() },
+                                        onOpenFullscreenMap = { navController.navigate(Screens.mapFullscreenRoute(trainingId)) }
+                                    )
+                                }
+
+                                // Map Fullscreen Screen
+                                composable(
+                                    route = Screens.MAP_FULLSCREEN,
+                                    arguments = listOf(navArgument("trainingId") { type = NavType.LongType })
+                                ) { backStackEntry ->
+                                    val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
+                                    val detailViewModel = remember { TrainingDetailViewModel(db.trainingRepository, trainingId) }
+                                    MapFullscreenScreen(
+                                        training = detailViewModel.training.value,
+                                        isLoading = detailViewModel.isLoading.value,
+                                        onNavigateBack = { navController.popBackStack() }
+                                    )
+                                }
                             }
                         }
                         LaunchedEffect(Unit) {

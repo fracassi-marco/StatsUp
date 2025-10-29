@@ -13,5 +13,13 @@ enum class Screens(val route: String, val icon: ImageVector) {
     History("history", Icons.AutoMirrored.Outlined.List),
     Separator("", Icons.Filled.Edit),
     Stats("profile", Icons.Outlined.DateRange),
-    Settings("settings", Icons.Outlined.Settings)
+    Settings("settings", Icons.Outlined.Settings);
+
+    companion object {
+        const val TRAINING_DETAIL = "training_detail/{trainingId}"
+        const val MAP_FULLSCREEN = "map_fullscreen/{trainingId}"
+
+        fun trainingDetailRoute(trainingId: Long) = "training_detail/$trainingId"
+        fun mapFullscreenRoute(trainingId: Long) = "map_fullscreen/$trainingId"
+    }
 }

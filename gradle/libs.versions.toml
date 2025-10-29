@@ -1,12 +1,12 @@
 [versions]
-agp = "8.9.1"
+agp = "8.13.0"
 androidMapsUtils = "3.5.2"
 appauth = "0.11.1"
 jacksonCore = "2.17.2"
 jacksonDatabind = "2.17.2"
 jacksonModuleKotlin = "2.17.2"
 jetchart = "1.4.3"
-kotlin = "1.9.24"
+kotlin = "2.1.20"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -58,3 +58,4 @@ topinambur = { module = "com.github.daikonweb:topinambur", version.ref = "topina
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

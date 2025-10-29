@@ -32,4 +32,10 @@
     <string name="load">Syncing from Strava…</string>
     <string name="done">Done</string>
     <string name="past">Past</string>
+    <string name="min_altitude">Min altit.</string>
+    <string name="average_pace">Avg. pace</string>
+    <string name="pace_unit">min/km</string>
+    <string name="map">Map</string>
+    <string name="view_fullscreen_map">View full map</string>
 </resources>
+

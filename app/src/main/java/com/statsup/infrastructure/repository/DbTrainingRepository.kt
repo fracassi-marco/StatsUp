@@ -17,7 +17,7 @@ interface DbTrainingRepository : TrainingRepository {
     override fun all(): Flow<List<Training>>
 
     @Query("SELECT * FROM training ORDER BY startDate DESC LIMIT 1")
-    override fun latest(): Training
+    override fun latest(): Training?
 
     @Query("SELECT * FROM training WHERE id = :id")
     override fun byId(id: Long): Training
