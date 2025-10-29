@@ -1,10 +1,16 @@
 package com.statsup.domain
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.ZonedDateTime
 
-@Entity
+@Entity(
+    indices = [
+        Index(value = ["startDate"], name = "idx_training_start_date"),
+        Index(value = ["sportType"], name = "idx_training_sport_type")
+    ]
+)
 data class Training(
     @PrimaryKey var id: Long,
     var resourceState: Int? = null,

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "78bd6b3dd3e3392f7a80c8cc73ec1899",
+    "identityHash": "95c11800005b33d5b153232da6cd0498",
     "entities": [
       {
         "tableName": "Training",
@@ -17,8 +17,7 @@
           {
             "fieldPath": "resourceState",
             "columnName": "resourceState",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "name",
@@ -53,20 +52,17 @@
           {
             "fieldPath": "type",
             "columnName": "type",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "sportType",
             "columnName": "sportType",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "workoutType",
             "columnName": "workoutType",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "startDate",
@@ -77,122 +73,102 @@
           {
             "fieldPath": "startDateLocal",
             "columnName": "startDateLocal",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "timezone",
             "columnName": "timezone",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "utcOffset",
             "columnName": "utcOffset",
-            "affinity": "REAL",
-            "notNull": false
+            "affinity": "REAL"
           },
           {
             "fieldPath": "locationCity",
             "columnName": "locationCity",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "locationState",
             "columnName": "locationState",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "locationCountry",
             "columnName": "locationCountry",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "achievementCount",
             "columnName": "achievementCount",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "kudosCount",
             "columnName": "kudosCount",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "commentCount",
             "columnName": "commentCount",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "athleteCount",
             "columnName": "athleteCount",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "photoCount",
             "columnName": "photoCount",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "map",
             "columnName": "map",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "trainer",
             "columnName": "trainer",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "commute",
             "columnName": "commute",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "manual",
             "columnName": "manual",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "private",
             "columnName": "private",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "visibility",
             "columnName": "visibility",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "flagged",
             "columnName": "flagged",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "gearId",
             "columnName": "gearId",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "averageSpeed",
             "columnName": "averageSpeed",
-            "affinity": "REAL",
-            "notNull": false
+            "affinity": "REAL"
           },
           {
             "fieldPath": "maxSpeed",
@@ -215,8 +191,7 @@
           {
             "fieldPath": "maxWatts",
             "columnName": "maxWatts",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "weightedAverageWatts",
@@ -239,14 +214,12 @@
           {
             "fieldPath": "hasHeartrate",
             "columnName": "hasHeartrate",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "averageHeartrate",
             "columnName": "averageHeartrate",
-            "affinity": "REAL",
-            "notNull": false
+            "affinity": "REAL"
           },
           {
             "fieldPath": "maxHeartrate",
@@ -257,14 +230,12 @@
           {
             "fieldPath": "heartrateOptOut",
             "columnName": "heartrateOptOut",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "displayHideHeartrateOption",
             "columnName": "displayHideHeartrateOption",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "elevHigh",
@@ -287,44 +258,37 @@
           {
             "fieldPath": "uploadIdStr",
             "columnName": "uploadIdStr",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "externalId",
             "columnName": "externalId",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "fromAcceptedTag",
             "columnName": "fromAcceptedTag",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "prCount",
             "columnName": "prCount",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "totalPhotoCount",
             "columnName": "totalPhotoCount",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "hasKudoed",
             "columnName": "hasKudoed",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "sufferScore",
             "columnName": "sufferScore",
-            "affinity": "REAL",
-            "notNull": false
+            "affinity": "REAL"
           }
         ],
         "primaryKey": {
@@ -333,8 +297,26 @@
             "id"
           ]
         },
-        "indices": [],
-        "foreignKeys": []
+        "indices": [
+          {
+            "name": "idx_training_start_date",
+            "unique": false,
+            "columnNames": [
+              "startDate"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `idx_training_start_date` ON `${TABLE_NAME}` (`startDate`)"
+          },
+          {
+            "name": "idx_training_sport_type",
+            "unique": false,
+            "columnNames": [
+              "sportType"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `idx_training_sport_type` ON `${TABLE_NAME}` (`sportType`)"
+          }
+        ]
       },
       {
         "tableName": "Athlete",
@@ -355,20 +337,17 @@
           {
             "fieldPath": "resourceState",
             "columnName": "resourceState",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "profileMedium",
             "columnName": "profileMedium",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "profile",
             "columnName": "profile",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -376,15 +355,12 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '78bd6b3dd3e3392f7a80c8cc73ec1899')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '95c11800005b33d5b153232da6cd0498')"
     ]
   }
 }

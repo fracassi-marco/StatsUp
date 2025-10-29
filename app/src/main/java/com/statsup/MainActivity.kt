@@ -49,16 +49,17 @@ import net.openid.appauth.AuthorizationService
 class MainActivity : ComponentActivity() {
 
     private val db: TrainingDatabase by lazy { TrainingDatabase.getInstance(application) }
+    private var authService: AuthorizationService? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val authService = AuthorizationService(this)
+        authService = AuthorizationService(this)
         setContent {
             val settingRepository = SharedPreferencesSettingRepository(applicationContext)
             val updateActivitiesUseCase = UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi())
             val navController = rememberNavController()
-            val mainViewModel = remember { MainViewModel(updateActivitiesUseCase, authService) }
+            val mainViewModel = remember { MainViewModel(updateActivitiesUseCase) }
             val settingsViewModel = remember { SettingsViewModel(settingRepository) }
             val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository) }
@@ -66,7 +67,7 @@ class MainActivity : ComponentActivity() {
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
-                onResult = { mainViewModel.onStravaResult(it) }
+                onResult = { mainViewModel.onStravaResult(it, authService!!) }
             )
             val context = LocalContext.current
             StatsUpTheme(settingsViewModel) {
@@ -75,7 +76,7 @@ class MainActivity : ComponentActivity() {
                         Scaffold(
                             modifier = Modifier.fillMaxSize(),
                             bottomBar = { BottomMenuBar(navController) },
-                            floatingActionButton = { ImportButton(launcher, mainViewModel) },
+                            floatingActionButton = { ImportButton(launcher, mainViewModel, authService!!) },
                             floatingActionButtonPosition = FabPosition.Center,
                             snackbarHost = { SnackbarHost(snackBarHostState) },
                         ) { innerPadding ->
@@ -130,5 +131,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        authService?.dispose()
+        authService = null
+        super.onDestroy()
     }
 }

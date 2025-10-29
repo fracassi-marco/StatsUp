@@ -7,44 +7,54 @@ import com.google.maps.android.PolyUtil
 
 class Trip(private val map: String) {
 
-    val list: List<LatLng> by lazy {
+    // Cache della lista decodificata - calcolato una sola volta
+    private val _list: List<LatLng> by lazy {
         PolyUtil.decode(map)
     }
 
-    fun begin() = list.first()
+    val list: List<LatLng> get() = _list
 
-    fun end() = list.last()
+    fun begin() = _list.firstOrNull() ?: LatLng(0.0, 0.0)
 
-    fun steps() = list
+    fun end() = _list.lastOrNull() ?: LatLng(0.0, 0.0)
 
-    val zoomForBoundaries: Float by lazy {
-        val distance = distance(
-            boundaries.northeast.latitude,
-            boundaries.northeast.longitude,
-            boundaries.southwest.latitude,
-            boundaries.southwest.longitude
-        )
-        //Log.i("RANGE", "distance -> $distance, b: $boundaries")
-        when(distance) {
-            in 0.0..<0.3 -> 17f
-            in 0.3..<1.0 -> 16f
-            in 1.0..1.5 -> 15f
-            in 1.5..1.6 -> 14f
-            in 1.6..2.0 -> 13f
-            else -> 12f
+    fun steps() = _list
+
+    // Cache delle boundaries - calcolato prima dello zoom
+    val boundaries: LatLngBounds by lazy {
+        try {
+            if (_list.isEmpty()) {
+                LatLngBounds(LatLng(0.0, 0.0), LatLng(0.0, 0.0))
+            } else {
+                val builder = LatLngBounds.Builder()
+                _list.forEach { builder.include(it) }
+                builder.build()
+            }
+        } catch (t: Throwable) {
+            Log.e("StatsUp", "Error calculating boundaries: ${t.message}", t)
+            LatLngBounds(LatLng(0.0, 0.0), LatLng(0.0, 0.0))
         }
     }
 
-    val boundaries: LatLngBounds by lazy {
+    val zoomForBoundaries: Float by lazy {
         try {
-            val builder = LatLngBounds.Builder()
-            list.forEach {
-                builder.include(it)
+            val distance = distance(
+                boundaries.northeast.latitude,
+                boundaries.northeast.longitude,
+                boundaries.southwest.latitude,
+                boundaries.southwest.longitude
+            )
+            when (distance) {
+                in 0.0..<0.3 -> 17f
+                in 0.3..<1.0 -> 16f
+                in 1.0..1.5 -> 15f
+                in 1.5..1.6 -> 14f
+                in 1.6..2.0 -> 13f
+                else -> 12f
             }
-            builder.build()
-        }catch (t: Throwable) {
-            Log.e("StatsUp", t.message!!, t)
-            LatLngBounds.Builder().build()
+        } catch (t: Throwable) {
+            Log.e("StatsUp", "Error calculating zoom: ${t.message}", t)
+            12f
         }
     }
 }

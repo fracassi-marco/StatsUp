@@ -24,8 +24,7 @@ import net.openid.appauth.NoClientAuthentication
 import net.openid.appauth.ResponseTypeValues.CODE
 
 class MainViewModel(
-    private val updateActivitiesUseCase: UpdateTrainingsUseCase,
-    private val authService: AuthorizationService
+    private val updateActivitiesUseCase: UpdateTrainingsUseCase
 ) : ViewModel() {
 
     private val _loading = mutableStateOf(false)
@@ -50,7 +49,7 @@ class MainViewModel(
         _loading.value = false
     }
 
-    fun onStravaResult(activityResult: ActivityResult) {
+    fun onStravaResult(activityResult: ActivityResult, authService: AuthorizationService) {
         if (activityResult.resultCode == RESULT_OK) {
             val ex = AuthorizationException.fromIntent(activityResult.data!!)
             if (ex != null) {
@@ -74,7 +73,7 @@ class MainViewModel(
         }
     }
 
-    fun startImport(): Intent {
+    fun startImport(authService: AuthorizationService): Intent {
         startLoading()
         val redirectUri = Uri.parse("oauth://com-sportshub")
         val authorizeUri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")

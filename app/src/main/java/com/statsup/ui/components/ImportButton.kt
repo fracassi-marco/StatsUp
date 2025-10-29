@@ -18,9 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.statsup.ui.viewmodel.MainViewModel
+import net.openid.appauth.AuthorizationService
 
 @Composable
-fun ImportButton(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>, mainViewModel: MainViewModel) {
+fun ImportButton(
+    launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
+    mainViewModel: MainViewModel,
+    authService: AuthorizationService
+) {
     Box {
         FloatingActionButton(
             shape = CircleShape,
@@ -28,7 +33,7 @@ fun ImportButton(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
             modifier = Modifier.align(Alignment.Center).size(70.dp).offset(y = 70.dp),
             onClick = {
-                launcher.launch(mainViewModel.startImport())
+                launcher.launch(mainViewModel.startImport(authService))
             },
         ) {
             Icon(Icons.Outlined.Autorenew, null, modifier = Modifier.size(44.dp))

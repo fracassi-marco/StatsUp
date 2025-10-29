@@ -10,7 +10,8 @@ import com.statsup.domain.Training
 
 @Database(
     entities = [Training::class, Athlete::class],
-    version = 1
+    version = 2,
+    exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class TrainingDatabase: RoomDatabase() {
@@ -32,7 +33,9 @@ abstract class TrainingDatabase: RoomDatabase() {
                         context.applicationContext,
                         TrainingDatabase::class.java,
                         DATABASE_NAME
-                    ).build()
+                    )
+                    .fallbackToDestructiveMigration() // Per sviluppo - ricrea il DB se cambia versione
+                    .build()
 
                     INSTANCE = instance
                 }
