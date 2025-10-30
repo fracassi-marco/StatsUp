@@ -17,6 +17,7 @@
     <string name="trainings">Trainings</string>
     <string name="distance">Distance</string>
     <string name="elevation_gain">Elevation</string>
+    <string name="elevation">Elevation</string>
     <string name="max_elevation_gain">Max + elev.</string>
     <string name="max_heart_rate">Max HR</string>
     <string name="max_altitude">Max altit.</string>
@@ -42,5 +43,7 @@
     <string name="altitude_range">Alt. range</string>
     <string name="m_per_km">m/km</string>
     <string name="m_per_hour">m/h</string>
+    <string name="distance_and_time">Distance &amp; Time</string>
+    <string name="performance">Performance</string>
 </resources>
 

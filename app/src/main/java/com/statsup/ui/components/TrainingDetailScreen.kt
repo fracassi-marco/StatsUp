@@ -4,16 +4,27 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.DirectionsRun
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Landscape
+import androidx.compose.material.icons.filled.Route
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Terrain
 import androidx.compose.material.icons.filled.ZoomOutMap
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -155,65 +166,187 @@ fun TrainingDetailScreen(
                                 modifier = Modifier.padding(bottom = 20.dp)
                             )
 
-                            // Grid con le statistiche in 2 colonne
+                            // Sezione Distanza & Tempo
+                            StatSection(
+                                title = stringResource(id = R.string.distance_and_time),
+                                icon = Icons.AutoMirrored.Filled.DirectionsRun
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                StatItemWithIcon(
+                                    icon = Icons.Default.Route,
+                                    label = stringResource(id = R.string.distance),
+                                    value = String.format(Locale.getDefault(), "%.2f", training.distanceInKilometers()),
+                                    unit = stringResource(id = R.string.km),
+                                    modifier = Modifier.weight(1f)
+                                )
+                                StatItemWithIcon(
+                                    icon = Icons.Default.AccessTime,
+                                    label = stringResource(id = R.string.duration),
+                                    value = Measure.hm(training.movingTime),
+                                    unit = "",
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+                            // Sezione Altimetria
+                            StatSection(
+                                title = stringResource(id = R.string.elevation),
+                                icon = Icons.Default.Landscape
+                            )
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
                                 Column(
                                     modifier = Modifier.weight(1f),
-                                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
                                 ) {
-                                    StatItem(
-                                        label = stringResource(id = R.string.distance),
-                                        value = String.format(Locale.getDefault(), "%.2f", training.distanceInKilometers()),
-                                        unit = stringResource(id = R.string.km)
-                                    )
-                                    StatItem(
+                                    StatItemWithIcon(
+                                        icon = Icons.AutoMirrored.Filled.TrendingUp,
                                         label = stringResource(id = R.string.elevation_gain),
                                         value = String.format(Locale.getDefault(), "%.0f", training.totalElevationGain),
-                                        unit = stringResource(id = R.string.m)
+                                        unit = stringResource(id = R.string.m),
+                                        modifier = Modifier.fillMaxWidth()
                                     )
-                                    StatItem(
-                                        label = stringResource(id = R.string.average_pace),
-                                        value = formatPaceFromMinutes(training.averagePace()),
-                                        unit = stringResource(id = R.string.pace_unit)
-                                    )
-                                    StatItem(
+                                    StatItemWithIcon(
+                                        icon = Icons.Default.Terrain,
                                         label = stringResource(id = R.string.elevation_per_km),
                                         value = String.format(Locale.getDefault(), "%.1f", training.elevationPerKm()),
-                                        unit = stringResource(id = R.string.m_per_km)
+                                        unit = stringResource(id = R.string.m_per_km),
+                                        modifier = Modifier.fillMaxWidth()
                                     )
                                 }
-
                                 Column(
                                     modifier = Modifier.weight(1f),
-                                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
                                 ) {
-                                    StatItem(
-                                        label = stringResource(id = R.string.duration),
-                                        value = Measure.hm(training.movingTime),
-                                        unit = ""
-                                    )
-                                    StatItem(
+                                    StatItemWithIcon(
+                                        icon = Icons.Default.Landscape,
                                         label = stringResource(id = R.string.max_altitude),
                                         value = String.format(Locale.getDefault(), "%.0f", training.elevHigh),
-                                        unit = stringResource(id = R.string.m)
+                                        unit = stringResource(id = R.string.m),
+                                        modifier = Modifier.fillMaxWidth()
                                     )
-                                    StatItem(
+                                    StatItemWithIcon(
+                                        icon = Icons.Default.Landscape,
                                         label = stringResource(id = R.string.min_altitude),
                                         value = String.format(Locale.getDefault(), "%.0f", training.elevLow),
-                                        unit = stringResource(id = R.string.m)
-                                    )
-                                    StatItem(
-                                        label = stringResource(id = R.string.vam),
-                                        value = String.format(Locale.getDefault(), "%.0f", training.vam()),
-                                        unit = stringResource(id = R.string.m_per_hour)
+                                        unit = stringResource(id = R.string.m),
+                                        modifier = Modifier.fillMaxWidth()
                                     )
                                 }
                             }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+                            // Sezione Performance
+                            StatSection(
+                                title = stringResource(id = R.string.performance),
+                                icon = Icons.Default.Speed
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                StatItemWithIcon(
+                                    icon = Icons.Default.Speed,
+                                    label = stringResource(id = R.string.average_pace),
+                                    value = formatPaceFromMinutes(training.averagePace()),
+                                    unit = stringResource(id = R.string.pace_unit),
+                                    modifier = Modifier.weight(1f)
+                                )
+                                StatItemWithIcon(
+                                    icon = Icons.AutoMirrored.Filled.TrendingUp,
+                                    label = stringResource(id = R.string.vam),
+                                    value = String.format(Locale.getDefault(), "%.0f", training.vam()),
+                                    unit = stringResource(id = R.string.m_per_hour),
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun StatSection(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(bottom = 12.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = title,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun StatItemWithIcon(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    value: String,
+    unit: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        )
+        Column(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .weight(1f)
+        ) {
+            Text(
+                text = label,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.padding(bottom = 2.dp)
+            )
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = value,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    letterSpacing = 0.sp
+                )
+                if (unit.isNotEmpty()) {
+                    Text(
+                        text = " $unit",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        modifier = Modifier.padding(start = 2.dp, bottom = 1.dp)
+                    )
                 }
             }
         }
