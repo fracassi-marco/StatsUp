@@ -82,7 +82,6 @@ data class Training(
         return if (hours > 0) totalElevationGain / hours else 0.0
     }
 
-    fun altitudeRange(): Double = elevHigh - elevLow
 
     fun averagePace(): Double {
         val distKm = distanceInKilometers()

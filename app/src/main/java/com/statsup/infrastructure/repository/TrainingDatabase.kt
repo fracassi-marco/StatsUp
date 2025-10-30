@@ -34,7 +34,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    .fallbackToDestructiveMigration() // Per sviluppo - ricrea il DB se cambia versione
+                    .fallbackToDestructiveMigration(dropAllTables = true) // Ricrea il DB se cambia versione
                     .build()
 
                     INSTANCE = instance

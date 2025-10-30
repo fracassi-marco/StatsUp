@@ -350,52 +350,6 @@ fun StatItemWithIcon(
     }
 }
 
-@Composable
-fun StatItem(label: String, value: String, unit: String) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.Start
-    ) {
-        Text(
-            text = label,
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            modifier = Modifier.padding(bottom = 4.dp)
-        )
-        Row(
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = value,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
-                letterSpacing = 0.sp
-            )
-            if (unit.isNotEmpty()) {
-                Text(
-                    text = " $unit",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                    modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
-                )
-            }
-        }
-    }
-}
-
-private fun calculatePace(distanceInMeters: Double, timeInSeconds: Int): String {
-    if (distanceInMeters == 0.0) return "0:00"
-
-    val paceInMinutesPerKm = (timeInSeconds / 60.0) / (distanceInMeters / 1000.0)
-    val minutes = paceInMinutesPerKm.toInt()
-    val seconds = ((paceInMinutesPerKm - minutes) * 60).toInt()
-
-    return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
-}
 
 private fun formatPaceFromMinutes(paceInMinutes: Double): String {
     if (paceInMinutes == 0.0) return "0:00"
