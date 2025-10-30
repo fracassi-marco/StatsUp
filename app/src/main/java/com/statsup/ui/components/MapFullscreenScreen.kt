@@ -11,11 +11,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -49,9 +50,27 @@ fun MapFullscreenScreen(
             LoadingBox(isLoading = true) { }
         } else if (training?.trip != null) {
             val trip = training.trip!!
-            val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(trip.boundaries.center, trip.zoomForBoundaries)
+            val cameraPositionState = rememberCameraPositionState()
+
+            // LaunchedEffect per centrare con zoom ottimale automatico
+            LaunchedEffect(trip) {
+                try {
+                    val paddedBounds = trip.getBoundariesWithPadding(0.1) // 10% di padding
+                    val cameraUpdate = CameraUpdateFactory.newLatLngBounds(paddedBounds, 50) // 50px per controlli UI
+                    cameraPositionState.move(cameraUpdate)
+                } catch (_: Exception) {
+                    // Fallback: prova senza padding aggiuntivo
+                    try {
+                        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(trip.boundaries, 50)
+                        cameraPositionState.move(cameraUpdate)
+                    } catch (_: Exception) {
+                        // Ultimo fallback
+                        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(trip.boundaries.center, 13f)
+                        cameraPositionState.move(cameraUpdate)
+                    }
+                }
             }
+
             val googleMapOptionsFactory = { GoogleMapOptions().liteMode(false) }
             GoogleMap(
                 modifier = Modifier

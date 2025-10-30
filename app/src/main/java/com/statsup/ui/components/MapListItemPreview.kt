@@ -6,13 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -25,6 +26,7 @@ import com.statsup.domain.Trip
 /**
  * Componente ottimizzato per visualizzare una mappa in modalità lite nella lista
  * Usa configurazioni minimali per ridurre il consumo di risorse
+ * Lo zoom è calcolato automaticamente per mostrare tutto il percorso
  */
 @Composable
 fun MapListItemPreview(
@@ -32,8 +34,32 @@ fun MapListItemPreview(
     modifier: Modifier = Modifier,
     height: Int = 180
 ) {
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(trip.boundaries.center, trip.zoomForBoundaries)
+    val cameraPositionState = rememberCameraPositionState()
+
+    // LaunchedEffect per centrare la mappa con zoom ottimale automatico
+    // Google Maps calcola lo zoom perfetto per mostrare tutto il percorso
+    LaunchedEffect(trip) {
+        try {
+            val paddedBounds = trip.getBoundariesWithPadding(0.15) // 15% di padding
+            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(
+                paddedBounds,
+                0 // padding già gestito nei boundaries
+            )
+            cameraPositionState.move(cameraUpdate)
+        } catch (_: Exception) {
+            // Fallback: usa boundaries senza padding
+            try {
+                val cameraUpdate = CameraUpdateFactory.newLatLngBounds(trip.boundaries, 20)
+                cameraPositionState.move(cameraUpdate)
+            } catch (_: Exception) {
+                // Ultimo fallback: usa centro con zoom manuale
+                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                    trip.boundaries.center,
+                    13f
+                )
+                cameraPositionState.move(cameraUpdate)
+            }
+        }
     }
 
     // Ottimizzazione: crea le opzioni una sola volta

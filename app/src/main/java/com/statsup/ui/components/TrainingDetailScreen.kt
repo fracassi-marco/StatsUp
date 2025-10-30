@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -71,9 +72,25 @@ fun TrainingDetailScreen(
                 // Mappa di sfondo
                 if (training.trip != null) {
                     val trip = training.trip!!
-                    val cameraPositionState = rememberCameraPositionState {
-                        position = CameraPosition.fromLatLngZoom(trip.boundaries.center, trip.zoomForBoundaries)
+                    val cameraPositionState = rememberCameraPositionState()
+
+                    // LaunchedEffect per centrare correttamente la mappa con padding e zoom ottimale
+                    LaunchedEffect(trip) {
+                        try {
+                            val paddedBounds = trip.getBoundariesWithPadding(0.1) // 10% di padding
+                            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(paddedBounds, 0)
+                            cameraPositionState.move(cameraUpdate)
+                        } catch (_: Exception) {
+                            try {
+                                val cameraUpdate = CameraUpdateFactory.newLatLngBounds(trip.boundaries, 20)
+                                cameraPositionState.move(cameraUpdate)
+                            } catch (_: Exception) {
+                                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(trip.boundaries.center, 13f)
+                                cameraPositionState.move(cameraUpdate)
+                            }
+                        }
                     }
+
                     val googleMapOptionsFactory = { GoogleMapOptions().liteMode(false) }
                     GoogleMap(
                         modifier = Modifier.fillMaxSize(),

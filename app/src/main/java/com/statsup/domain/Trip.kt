@@ -36,25 +36,39 @@ class Trip(private val map: String) {
         }
     }
 
-    val zoomForBoundaries: Float by lazy {
+    /**
+     * Restituisce boundaries con padding percentuale per garantire che
+     * il percorso sia sempre completamente visibile con margine uniforme.
+     * Google Maps calcolerà automaticamente lo zoom ottimale.
+     *
+     * @param paddingPercent Percentuale di padding (0.15 = 15% di margine su ogni lato)
+     * @return LatLngBounds espanso con padding
+     */
+    fun getBoundariesWithPadding(paddingPercent: Double = 0.15): LatLngBounds {
         try {
-            val distance = distance(
-                boundaries.northeast.latitude,
-                boundaries.northeast.longitude,
-                boundaries.southwest.latitude,
-                boundaries.southwest.longitude
-            )
-            when (distance) {
-                in 0.0..<0.3 -> 17f
-                in 0.3..<1.0 -> 16f
-                in 1.0..1.5 -> 15f
-                in 1.5..1.6 -> 14f
-                in 1.6..2.0 -> 13f
-                else -> 12f
+            if (_list.isEmpty()) {
+                return LatLngBounds(LatLng(0.0, 0.0), LatLng(0.0, 0.0))
             }
+
+            val latDiff = boundaries.northeast.latitude - boundaries.southwest.latitude
+            val lngDiff = boundaries.northeast.longitude - boundaries.southwest.longitude
+
+            val latPadding = latDiff * paddingPercent
+            val lngPadding = lngDiff * paddingPercent
+
+            val paddedNorthEast = LatLng(
+                boundaries.northeast.latitude + latPadding,
+                boundaries.northeast.longitude + lngPadding
+            )
+            val paddedSouthWest = LatLng(
+                boundaries.southwest.latitude - latPadding,
+                boundaries.southwest.longitude - lngPadding
+            )
+
+            return LatLngBounds(paddedSouthWest, paddedNorthEast)
         } catch (t: Throwable) {
-            Log.e("StatsUp", "Error calculating zoom: ${t.message}", t)
-            12f
+            Log.e("StatsUp", "Error calculating padded boundaries: ${t.message}", t)
+            return boundaries
         }
     }
 }
