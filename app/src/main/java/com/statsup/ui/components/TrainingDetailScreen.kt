@@ -1,5 +1,6 @@
 package com.statsup.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,23 +34,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMapOptions
-import com.google.maps.android.compose.Circle
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Polyline
-import com.google.maps.android.compose.rememberCameraPositionState
 import com.statsup.R
 import com.statsup.domain.Measure
 import com.statsup.domain.Training
@@ -80,48 +74,17 @@ fun TrainingDetailScreen(
             LoadingBox(isLoading = true) { }
         } else if (training != null) {
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-                // Mappa di sfondo
-                if (training.trip != null) {
-                    val trip = training.trip!!
-                    val cameraPositionState = rememberCameraPositionState()
-
-                    // LaunchedEffect per centrare correttamente la mappa con padding e zoom ottimale
-                    LaunchedEffect(trip) {
-                        try {
-                            val paddedBounds = trip.getBoundariesWithPadding(0.1) // 10% di padding
-                            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(paddedBounds, 0)
-                            cameraPositionState.move(cameraUpdate)
-                        } catch (_: Exception) {
-                            try {
-                                val cameraUpdate = CameraUpdateFactory.newLatLngBounds(trip.boundaries, 20)
-                                cameraPositionState.move(cameraUpdate)
-                            } catch (_: Exception) {
-                                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(trip.boundaries.center, 13f)
-                                cameraPositionState.move(cameraUpdate)
-                            }
-                        }
-                    }
-
-                    val googleMapOptionsFactory = { GoogleMapOptions().liteMode(false) }
-                    GoogleMap(
-                        modifier = Modifier.fillMaxSize(),
-                        cameraPositionState = cameraPositionState,
-                        properties = MapProperties(mapType = MapType.NORMAL),
-                        googleMapOptionsFactory = googleMapOptionsFactory,
-                        uiSettings = MapUiSettings(
-                            mapToolbarEnabled = false,
-                            scrollGesturesEnabled = false,
-                            scrollGesturesEnabledDuringRotateOrZoom = false,
-                            zoomControlsEnabled = false,
-                            zoomGesturesEnabled = false,
-                            rotationGesturesEnabled = false
-                        )
-                    ) {
-                        Circle(center = trip.begin(), strokeColor = Color.Green, fillColor = Color.Green, radius = 12.0)
-                        Circle(center = trip.end(), strokeColor = Color.Red, fillColor = Color.Red, radius = 12.0)
-                        Polyline(points = trip.steps(), width = 8f, color = Color.Blue, geodesic = true)
-                    }
-                }
+                // Sfondo con immagine a tema basata sul tipo di attività
+                Image(
+                    painter = painterResource(id = getActivityBackground(training.sportType)),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    colorFilter = ColorFilter.tint(
+                        color = Color.Black.copy(alpha = 0.3f),
+                        blendMode = androidx.compose.ui.graphics.BlendMode.Darken
+                    )
+                )
 
                 // Box con le informazioni in basso
                 Column(
@@ -441,5 +404,19 @@ private fun formatPaceFromMinutes(paceInMinutes: Double): String {
     val seconds = ((paceInMinutes - minutes) * 60).toInt()
 
     return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
+}
+
+private fun getActivityBackground(sportType: String?): Int {
+    return when (sportType?.lowercase()) {
+        "run", "running" -> R.drawable.bg_running
+        "ride", "cycling", "virtualride" -> R.drawable.bg_cycling
+        "hike", "hiking" -> R.drawable.bg_hiking
+        "walk", "walking" -> R.drawable.bg_walking
+        "swim", "swimming" -> R.drawable.bg_swimming
+        "workout", "crossfit" -> R.drawable.bg_workout
+        "yoga" -> R.drawable.bg_yoga
+        "ski", "skiing", "alpineski", "backcountryski", "nordicski" -> R.drawable.bg_skiing
+        else -> R.drawable.bg_default
+    }
 }
 
