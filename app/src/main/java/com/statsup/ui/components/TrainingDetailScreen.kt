@@ -167,108 +167,142 @@ fun TrainingDetailScreen(
                             )
 
                             // Sezione Distanza & Tempo
-                            StatSection(
-                                title = stringResource(id = R.string.distance_and_time),
-                                icon = Icons.AutoMirrored.Filled.DirectionsRun
-                            )
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                StatItemWithIcon(
-                                    icon = Icons.Default.Route,
-                                    label = stringResource(id = R.string.distance),
-                                    value = String.format(Locale.getDefault(), "%.2f", training.distanceInKilometers()),
-                                    unit = stringResource(id = R.string.km),
-                                    modifier = Modifier.weight(1f)
+                            if (training.distance > 0 || training.movingTime > 0) {
+                                StatSection(
+                                    title = stringResource(id = R.string.distance_and_time),
+                                    icon = Icons.AutoMirrored.Filled.DirectionsRun
                                 )
-                                StatItemWithIcon(
-                                    icon = Icons.Default.AccessTime,
-                                    label = stringResource(id = R.string.duration),
-                                    value = Measure.hm(training.movingTime),
-                                    unit = "",
-                                    modifier = Modifier.weight(1f)
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    if (training.distance > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.Default.Route,
+                                            label = stringResource(id = R.string.distance),
+                                            value = String.format(Locale.getDefault(), "%.2f", training.distanceInKilometers()),
+                                            unit = stringResource(id = R.string.km),
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                    if (training.movingTime > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.Default.AccessTime,
+                                            label = stringResource(id = R.string.duration),
+                                            value = Measure.hm(training.movingTime),
+                                            unit = "",
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
                             }
-
-                            Spacer(modifier = Modifier.height(8.dp))
-                            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
 
                             // Sezione Altimetria
-                            StatSection(
-                                title = stringResource(id = R.string.elevation),
-                                icon = Icons.Default.Landscape
-                            )
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    StatItemWithIcon(
-                                        icon = Icons.AutoMirrored.Filled.TrendingUp,
-                                        label = stringResource(id = R.string.elevation_gain),
-                                        value = String.format(Locale.getDefault(), "%.0f", training.totalElevationGain),
-                                        unit = stringResource(id = R.string.m),
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                    StatItemWithIcon(
-                                        icon = Icons.Default.Terrain,
-                                        label = stringResource(id = R.string.elevation_per_km),
-                                        value = String.format(Locale.getDefault(), "%.1f", training.elevationPerKm()),
-                                        unit = stringResource(id = R.string.m_per_km),
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
+                            val hasElevationData = training.totalElevationGain > 0 ||
+                                                   training.elevHigh > 0 ||
+                                                   training.elevLow > 0
+
+                            if (hasElevationData) {
+                                if (training.distance > 0 || training.movingTime > 0) {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
                                 }
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+
+                                StatSection(
+                                    title = stringResource(id = R.string.elevation),
+                                    icon = Icons.Default.Landscape
+                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                                 ) {
-                                    StatItemWithIcon(
-                                        icon = Icons.Default.Landscape,
-                                        label = stringResource(id = R.string.max_altitude),
-                                        value = String.format(Locale.getDefault(), "%.0f", training.elevHigh),
-                                        unit = stringResource(id = R.string.m),
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                    StatItemWithIcon(
-                                        icon = Icons.Default.Landscape,
-                                        label = stringResource(id = R.string.min_altitude),
-                                        value = String.format(Locale.getDefault(), "%.0f", training.elevLow),
-                                        unit = stringResource(id = R.string.m),
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
+                                    Column(
+                                        modifier = Modifier.weight(1f),
+                                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                                    ) {
+                                        if (training.totalElevationGain > 0) {
+                                            StatItemWithIcon(
+                                                icon = Icons.AutoMirrored.Filled.TrendingUp,
+                                                label = stringResource(id = R.string.elevation_gain),
+                                                value = String.format(Locale.getDefault(), "%.0f", training.totalElevationGain),
+                                                unit = stringResource(id = R.string.m),
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                        if (training.elevationPerKm() > 0) {
+                                            StatItemWithIcon(
+                                                icon = Icons.Default.Terrain,
+                                                label = stringResource(id = R.string.elevation_per_km),
+                                                value = String.format(Locale.getDefault(), "%.1f", training.elevationPerKm()),
+                                                unit = stringResource(id = R.string.m_per_km),
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                    }
+                                    Column(
+                                        modifier = Modifier.weight(1f),
+                                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                                    ) {
+                                        if (training.elevHigh > 0) {
+                                            StatItemWithIcon(
+                                                icon = Icons.Default.Landscape,
+                                                label = stringResource(id = R.string.max_altitude),
+                                                value = String.format(Locale.getDefault(), "%.0f", training.elevHigh),
+                                                unit = stringResource(id = R.string.m),
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                        if (training.elevLow > 0 || training.elevHigh > 0) {
+                                            StatItemWithIcon(
+                                                icon = Icons.Default.Landscape,
+                                                label = stringResource(id = R.string.min_altitude),
+                                                value = String.format(Locale.getDefault(), "%.0f", training.elevLow),
+                                                unit = stringResource(id = R.string.m),
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                    }
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(8.dp))
-                            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-
                             // Sezione Performance
-                            StatSection(
-                                title = stringResource(id = R.string.performance),
-                                icon = Icons.Default.Speed
-                            )
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                StatItemWithIcon(
-                                    icon = Icons.Default.Speed,
-                                    label = stringResource(id = R.string.average_pace),
-                                    value = formatPaceFromMinutes(training.averagePace()),
-                                    unit = stringResource(id = R.string.pace_unit),
-                                    modifier = Modifier.weight(1f)
+                            val hasPerformanceData = training.averagePace() > 0 || training.vam() > 0
+
+                            if (hasPerformanceData) {
+                                val hasPreviousSections = (training.distance > 0 || training.movingTime > 0) || hasElevationData
+
+                                if (hasPreviousSections) {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+                                }
+
+                                StatSection(
+                                    title = stringResource(id = R.string.performance),
+                                    icon = Icons.Default.Speed
                                 )
-                                StatItemWithIcon(
-                                    icon = Icons.AutoMirrored.Filled.TrendingUp,
-                                    label = stringResource(id = R.string.vam),
-                                    value = String.format(Locale.getDefault(), "%.0f", training.vam()),
-                                    unit = stringResource(id = R.string.m_per_hour),
-                                    modifier = Modifier.weight(1f)
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    if (training.averagePace() > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.Default.Speed,
+                                            label = stringResource(id = R.string.average_pace),
+                                            value = formatPaceFromMinutes(training.averagePace()),
+                                            unit = stringResource(id = R.string.pace_unit),
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                    if (training.vam() > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.AutoMirrored.Filled.TrendingUp,
+                                            label = stringResource(id = R.string.vam),
+                                            value = String.format(Locale.getDefault(), "%.0f", training.vam()),
+                                            unit = stringResource(id = R.string.m_per_hour),
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
