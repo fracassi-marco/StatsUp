@@ -170,14 +170,19 @@ fun TrainingDetailScreen(
                                         unit = stringResource(id = R.string.km)
                                     )
                                     StatItem(
-                                        label = stringResource(id = R.string.min_altitude),
-                                        value = String.format(Locale.getDefault(), "%.0f", training.elevLow),
+                                        label = stringResource(id = R.string.elevation_gain),
+                                        value = String.format(Locale.getDefault(), "%.0f", training.totalElevationGain),
                                         unit = stringResource(id = R.string.m)
                                     )
                                     StatItem(
                                         label = stringResource(id = R.string.average_pace),
-                                        value = calculatePace(training.distance, training.movingTime),
+                                        value = formatPaceFromMinutes(training.averagePace()),
                                         unit = stringResource(id = R.string.pace_unit)
+                                    )
+                                    StatItem(
+                                        label = stringResource(id = R.string.elevation_per_km),
+                                        value = String.format(Locale.getDefault(), "%.1f", training.elevationPerKm()),
+                                        unit = stringResource(id = R.string.m_per_km)
                                     )
                                 }
 
@@ -196,9 +201,14 @@ fun TrainingDetailScreen(
                                         unit = stringResource(id = R.string.m)
                                     )
                                     StatItem(
-                                        label = stringResource(id = R.string.elevation_gain),
-                                        value = String.format(Locale.getDefault(), "%.0f", training.totalElevationGain),
+                                        label = stringResource(id = R.string.min_altitude),
+                                        value = String.format(Locale.getDefault(), "%.0f", training.elevLow),
                                         unit = stringResource(id = R.string.m)
+                                    )
+                                    StatItem(
+                                        label = stringResource(id = R.string.vam),
+                                        value = String.format(Locale.getDefault(), "%.0f", training.vam()),
+                                        unit = stringResource(id = R.string.m_per_hour)
                                     )
                                 }
                             }
@@ -253,6 +263,15 @@ private fun calculatePace(distanceInMeters: Double, timeInSeconds: Int): String 
     val paceInMinutesPerKm = (timeInSeconds / 60.0) / (distanceInMeters / 1000.0)
     val minutes = paceInMinutesPerKm.toInt()
     val seconds = ((paceInMinutesPerKm - minutes) * 60).toInt()
+
+    return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
+}
+
+private fun formatPaceFromMinutes(paceInMinutes: Double): String {
+    if (paceInMinutes == 0.0) return "0:00"
+
+    val minutes = paceInMinutes.toInt()
+    val seconds = ((paceInMinutes - minutes) * 60).toInt()
 
     return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
 }

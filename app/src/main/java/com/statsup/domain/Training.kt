@@ -72,6 +72,23 @@ data class Training(
 
     fun durationInHours() = elapsedTime / 3600.0
 
+    fun elevationPerKm(): Double {
+        val distKm = distanceInKilometers()
+        return if (distKm > 0) totalElevationGain / distKm else 0.0
+    }
+
+    fun vam(): Double {
+        val hours = movingTime / 3600.0
+        return if (hours > 0) totalElevationGain / hours else 0.0
+    }
+
+    fun altitudeRange(): Double = elevHigh - elevLow
+
+    fun averagePace(): Double {
+        val distKm = distanceInKilometers()
+        return if (distKm > 0) movingTime / distKm / 60.0 else 0.0 // min/km
+    }
+
     val trip: Trip? by lazy {
         if(map != null && !map!!.summaryPolyline.isNullOrBlank()) Trip(map!!.summaryPolyline!!) else null
     }
