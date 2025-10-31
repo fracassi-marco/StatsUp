@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,6 +28,7 @@ import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
 import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.viewmodel.HistoryViewModel
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
@@ -35,14 +37,43 @@ fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (Long) -> Unit) 
     val state = viewModel.state.value
 
     if (state.show) {
+        // Raggruppa i training per mese
+        val monthYearFormatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault())
+        val groupedTrainings = state.activities.groupBy { training ->
+            training.date.format(monthYearFormatter)
+        }
+
         LazyColumn {
-            items(
-                count = state.activities.size,
-                key = { state.activities[it].id },
-                itemContent = { TrainingListItem(state.activities[it], onTrainingClick) })
+            groupedTrainings.forEach { (monthYear, trainings) ->
+                // Header del mese
+                item(key = "header_$monthYear") {
+                    MonthHeader(monthYear = monthYear)
+                }
+
+                // Items del mese
+                items(
+                    count = trainings.size,
+                    key = { trainings[it].id },
+                    itemContent = { index ->
+                        TrainingListItem(trainings[index], onTrainingClick)
+                    }
+                )
+            }
         }
     }
+}
 
+@Composable
+fun MonthHeader(monthYear: String) {
+    Text(
+        text = monthYear.replaceFirstChar { it.uppercase() },
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, top = 16.dp, bottom = 8.dp, end = 16.dp)
+    )
 }
 
 //@OptIn(ExperimentalMaterial3Api::class)
