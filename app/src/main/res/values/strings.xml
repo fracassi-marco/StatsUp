@@ -45,5 +45,7 @@
     <string name="m_per_hour">m/h</string>
     <string name="distance_and_time">Distance &amp; Time</string>
     <string name="performance">Performance</string>
+    <string name="all_routes">All Routes</string>
+    <string name="no_routes_found">No routes found</string>
 </resources>
 

@@ -29,6 +29,7 @@ import com.statsup.infrastructure.StravaTrainingApi
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
 import com.statsup.ui.components.BottomMenuBar
+import com.statsup.ui.components.AllRoutesMapScreen
 import com.statsup.ui.components.DashboardScreen
 import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
@@ -38,6 +39,7 @@ import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.components.StatsScreen
 import com.statsup.ui.components.TrainingDetailScreen
 import com.statsup.ui.theme.StatsUpTheme
+import com.statsup.ui.viewmodel.AllRoutesViewModel
 import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.ui.viewmodel.HistoryViewModel
 import com.statsup.ui.viewmodel.MainViewModel
@@ -64,6 +66,7 @@ class MainActivity : ComponentActivity() {
             val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository) }
             val statsViewModel = remember { StatsViewModel(db.trainingRepository) }
+            val allRoutesViewModel = remember { AllRoutesViewModel(db.trainingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
@@ -87,6 +90,7 @@ class MainActivity : ComponentActivity() {
                                         navController.navigate(Screens.trainingDetailRoute(trainingId))
                                     }
                                 }
+                                composable(Screens.Map.route) { AllRoutesMapScreen(allRoutesViewModel) }
                                 composable(Screens.Stats.route) { StatsScreen(statsViewModel) }
                                 composable(Screens.Settings.route) { SettingsScreen(settingsViewModel) }
 

@@ -20,6 +20,17 @@ class Trip(private val map: String) {
 
     fun steps() = _list
 
+    /**
+     * Restituisce una versione semplificata del percorso per risparmiare memoria.
+     * Usa l'algoritmo Douglas-Peucker per ridurre i punti mantenendo la forma.
+     * @param tolerance Tolleranza in metri (default 10m)
+     * @return Lista semplificata di LatLng
+     */
+    fun simplifiedSteps(tolerance: Double = 10.0): List<LatLng> {
+        if (_list.size <= 2) return _list
+        return PolyUtil.simplify(_list, tolerance)
+    }
+
     // Cache delle boundaries - calcolato prima dello zoom
     val boundaries: LatLngBounds by lazy {
         try {
