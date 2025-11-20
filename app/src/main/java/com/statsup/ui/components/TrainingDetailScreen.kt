@@ -34,7 +34,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -106,21 +105,25 @@ fun TrainingDetailScreen(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f),
                                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                             ),
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(6.dp),
                             elevation = ButtonDefaults.buttonElevation(
-                                defaultElevation = 4.dp,
-                                pressedElevation = 8.dp
+                                defaultElevation = 3.dp,
+                                pressedElevation = 6.dp
+                            ),
+                            contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                                horizontal = 12.dp,
+                                vertical = 8.dp
                             )
                         ) {
                             Icon(
                                 Icons.Default.ZoomOutMap,
                                 contentDescription = "Full screen map",
-                                modifier = Modifier.size(20.dp)
+                                modifier = Modifier.size(16.dp)
                             )
-                            Spacer(modifier = Modifier.padding(4.dp))
+                            Spacer(modifier = Modifier.padding(3.dp))
                             Text(
                                 text = stringResource(id = R.string.view_fullscreen_map),
-                                fontSize = 14.sp,
+                                fontSize = 12.sp,
                                 fontWeight = FontWeight.Medium
                             )
                         }

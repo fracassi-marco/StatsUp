@@ -31,12 +31,12 @@ fun ImportButton(
             shape = CircleShape,
             containerColor = MaterialTheme.colorScheme.primary,
             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-            modifier = Modifier.align(Alignment.Center).size(70.dp).offset(y = 70.dp),
+            modifier = Modifier.align(Alignment.Center).size(56.dp).offset(y = 56.dp),
             onClick = {
                 launcher.launch(mainViewModel.startImport(authService))
             },
         ) {
-            Icon(Icons.Outlined.Autorenew, null, modifier = Modifier.size(44.dp))
+            Icon(Icons.Outlined.Autorenew, null, modifier = Modifier.size(32.dp))
         }
     }
 }
