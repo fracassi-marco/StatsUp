@@ -2,6 +2,7 @@ package com.statsup.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -82,10 +83,10 @@ fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(10.dp)
+            .clickable { onTrainingClick(training.id) },
         colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, SecondaryText),
-        onClick = { onTrainingClick(training.id) }
+        border = BorderStroke(1.dp, SecondaryText)
     ) {
         Title(text = training.name, marginStart = 16.dp, marginTop = 8.dp)
         Text(
@@ -118,13 +119,15 @@ fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
             MapListItemPreview(
                 trip = training.trip!!,
                 modifier = Modifier.fillMaxWidth(),
-                height = 180
+                height = 180,
+                onClick = { onTrainingClick(training.id) }
             )
         } else {
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp),
+                    .height(180.dp)
+                    .clickable { onTrainingClick(training.id) },
                 painter = painterResource(id = R.drawable.bg),
                 contentDescription = "background",
                 contentScale = ContentScale.FillWidth

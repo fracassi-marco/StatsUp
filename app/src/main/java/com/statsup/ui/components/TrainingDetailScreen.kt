@@ -17,11 +17,14 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Landscape
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Terrain
 import androidx.compose.material.icons.filled.ZoomOutMap
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -96,14 +99,29 @@ fun TrainingDetailScreen(
                 ) {
                     // Pulsante per aprire la mappa a schermo intero
                     if (training.trip != null) {
-                        TextButton(
+                        Button(
                             onClick = onOpenFullscreenMap,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(Alignment.End),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f),
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                            elevation = ButtonDefaults.buttonElevation(
+                                defaultElevation = 4.dp,
+                                pressedElevation = 8.dp
+                            )
                         ) {
-                            Icon(Icons.Default.ZoomOutMap, contentDescription = "Full screen map")
+                            Icon(
+                                Icons.Default.ZoomOutMap,
+                                contentDescription = "Full screen map",
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.padding(4.dp))
                             Text(
                                 text = stringResource(id = R.string.view_fullscreen_map),
-                                modifier = Modifier.padding(start = 4.dp)
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
@@ -229,7 +247,10 @@ fun TrainingDetailScreen(
                             }
 
                             // Sezione Performance
-                            val hasPerformanceData = training.averagePace() > 0 || training.vam() > 0
+                            val hasPerformanceData = training.averagePace() > 0 ||
+                                                   training.vam() > 0 ||
+                                                   training.averageSpeedKmh() > 0 ||
+                                                   (training.averageHeartrate != null && training.averageHeartrate!! > 0)
 
                             if (hasPerformanceData) {
                                 val hasPreviousSections = (training.distance > 0 || training.movingTime > 0) || hasElevationData
@@ -243,27 +264,58 @@ fun TrainingDetailScreen(
                                     title = stringResource(id = R.string.performance),
                                     icon = Icons.Default.Speed
                                 )
-                                Row(
+                                Column(
                                     modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
                                 ) {
-                                    if (training.averagePace() > 0) {
-                                        StatItemWithIcon(
-                                            icon = Icons.Default.Speed,
-                                            label = stringResource(id = R.string.average_pace),
-                                            value = formatPaceFromMinutes(training.averagePace()),
-                                            unit = stringResource(id = R.string.pace_unit),
-                                            modifier = Modifier.weight(1f)
-                                        )
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                    ) {
+                                        if (training.averagePace() > 0) {
+                                            StatItemWithIcon(
+                                                icon = Icons.Default.Speed,
+                                                label = stringResource(id = R.string.average_pace),
+                                                value = formatPaceFromMinutes(training.averagePace()),
+                                                unit = stringResource(id = R.string.pace_unit),
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                        }
+                                        if (training.averageSpeedKmh() > 0) {
+                                            StatItemWithIcon(
+                                                icon = Icons.Default.Speed,
+                                                label = stringResource(id = R.string.average_speed),
+                                                value = String.format(Locale.getDefault(), "%.1f", training.averageSpeedKmh()),
+                                                unit = stringResource(id = R.string.speed_unit),
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                        }
                                     }
-                                    if (training.vam() > 0) {
-                                        StatItemWithIcon(
-                                            icon = Icons.AutoMirrored.Filled.TrendingUp,
-                                            label = stringResource(id = R.string.vam),
-                                            value = String.format(Locale.getDefault(), "%.0f", training.vam()),
-                                            unit = stringResource(id = R.string.m_per_hour),
-                                            modifier = Modifier.weight(1f)
-                                        )
+                                    // Seconda riga con VAM e FC media
+                                    if (training.vam() > 0 || (training.averageHeartrate != null && training.averageHeartrate!! > 0)) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                        ) {
+                                            if (training.vam() > 0) {
+                                                StatItemWithIcon(
+                                                    icon = Icons.AutoMirrored.Filled.TrendingUp,
+                                                    label = stringResource(id = R.string.vam),
+                                                    value = String.format(Locale.getDefault(), "%.0f", training.vam()),
+                                                    unit = stringResource(id = R.string.m_per_hour),
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                            }
+                                            if (training.averageHeartrate != null && training.averageHeartrate!! > 0) {
+                                                StatItemWithIcon(
+                                                    icon = Icons.Default.Favorite,
+                                                    label = stringResource(id = R.string.average),
+                                                    value = String.format(Locale.getDefault(), "%.0f", training.averageHeartrate),
+                                                    unit = stringResource(id = R.string.bpm),
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             }

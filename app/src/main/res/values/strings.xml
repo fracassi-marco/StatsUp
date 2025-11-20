@@ -35,7 +35,9 @@
     <string name="past">Past</string>
     <string name="min_altitude">Min altit.</string>
     <string name="average_pace">Avg. pace</string>
+    <string name="average_speed">Avg. speed</string>
     <string name="pace_unit">min/km</string>
+    <string name="speed_unit">km/h</string>
     <string name="map">Map</string>
     <string name="view_fullscreen_map">View full map</string>
     <string name="elevation_per_km">Elev./km</string>

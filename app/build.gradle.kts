@@ -10,21 +10,18 @@ plugins {
 
 android {
     namespace = "com.statsup"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.statsup"
         minSdk = 34
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 40020
         versionName = "4.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
-        }
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
         }
         val properties = Properties()
         if (project.rootProject.file("local.properties").canRead()) {
@@ -34,6 +31,10 @@ android {
         manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("maps.apiKey")
         buildConfigField("String", "STRAVA_CLIENT_ID", """"${properties.getProperty("strava.clientId")}"""")
         buildConfigField("String", "STRAVA_CLIENT_SECRET", """"${properties.getProperty("strava.clientSecret")}"""")
+    }
+
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
 
     buildTypes {

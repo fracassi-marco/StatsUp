@@ -88,6 +88,10 @@ data class Training(
         return if (distKm > 0) movingTime / distKm / 60.0 else 0.0 // min/km
     }
 
+    fun averageSpeedKmh(): Double {
+        return averageSpeed?.times(3.6) ?: 0.0 // converti da m/s a km/h
+    }
+
     val trip: Trip? by lazy {
         if(map != null && !map!!.summaryPolyline.isNullOrBlank()) Trip(map!!.summaryPolyline!!) else null
     }
