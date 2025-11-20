@@ -49,5 +49,7 @@
     <string name="performance">Performance</string>
     <string name="all_routes">All Routes</string>
     <string name="no_routes_found">No routes found</string>
+    <string name="all_sports">All sports</string>
+    <string name="filter_by_sport">Filter by sport</string>
 </resources>
 
