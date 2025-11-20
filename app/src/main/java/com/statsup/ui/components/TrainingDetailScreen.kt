@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.statsup.R
 import com.statsup.domain.Measure
+import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
 import java.util.Locale
@@ -137,12 +138,23 @@ fun TrainingDetailScreen(
                         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                     ) {
                         Column(modifier = Modifier.padding(20.dp)) {
-                            Text(
-                                text = training.name,
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
+                            // Titolo con emoji del tipo di sport
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(bottom = 4.dp)
+                            ) {
+                                Text(
+                                    text = SportTypeFormatter.getEmojiForSportType(training.sportType),
+                                    fontSize = 28.sp,
+                                    modifier = Modifier.padding(end = 8.dp)
+                                )
+                                Text(
+                                    text = training.name,
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
                             Text(
                                 text = formatLocal(training.date),
                                 fontSize = 14.sp,

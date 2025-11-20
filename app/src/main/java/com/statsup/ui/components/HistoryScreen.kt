@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.statsup.R
 import com.statsup.domain.Measure
+import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
 import com.statsup.ui.theme.SecondaryText
@@ -109,7 +110,7 @@ fun SportTypeFilter(
             FilterChip(
                 selected = selectedSportType == sportType,
                 onClick = { onSportTypeSelected(sportType) },
-                label = { Text(formatSportTypeName(sportType)) },
+                label = { Text(SportTypeFormatter.getFormattedNameWithEmoji(sportType)) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                     selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -119,39 +120,6 @@ fun SportTypeFilter(
     }
 }
 
-@Composable
-fun formatSportTypeName(sportType: String): String {
-    return when (sportType.lowercase()) {
-        "run" -> "🏃 Running"
-        "ride" -> "🚴 Cycling"
-        "swim" -> "🏊 Swimming"
-        "walk" -> "🚶 Walking"
-        "hike" -> "🥾 Hiking"
-        "virtualride" -> "🚴 Virtual Ride"
-        "virtualrun" -> "🏃 Virtual Run"
-        "workout" -> "💪 Workout"
-        "yoga" -> "🧘 Yoga"
-        "ski" -> "⛷️ Skiing"
-        "snowboard" -> "🏂 Snowboard"
-        "alpineski" -> "⛷️ Alpine Ski"
-        "nordicski" -> "⛷️ Nordic Ski"
-        "backcountryski" -> "⛷️ Backcountry Ski"
-        "iceskate" -> "⛸️ Ice Skate"
-        "inlineskate" -> "🛼 Inline Skate"
-        "soccer" -> "⚽ Soccer"
-        "tennis" -> "🎾 Tennis"
-        "golf" -> "⛳ Golf"
-        "rowing" -> "🚣 Rowing"
-        "kayaking" -> "🛶 Kayaking"
-        "canoeing" -> "🛶 Canoeing"
-        "mountainbikingride" -> "🚵 MTB"
-        "elliptical" -> "🏋️ Elliptical"
-        "stairstepper" -> "🪜 Stair Stepper"
-        "weighttraining" -> "🏋️ Weight Training"
-        "rockclimbing" -> "🧗 Rock Climbing"
-        else -> sportType.replaceFirstChar { it.uppercase() }
-    }
-}
 
 @Composable
 fun MonthHeader(monthYear: String) {
@@ -177,7 +145,16 @@ fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
         colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background),
         border = BorderStroke(1.dp, SecondaryText)
     ) {
-        Title(text = training.name, marginStart = 16.dp, marginTop = 8.dp)
+        // Titolo centrato
+        Text(
+            text = training.name,
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            textAlign = TextAlign.Center
+        )
+        // Data centrata
         Text(
             modifier = Modifier
                 .fillMaxWidth()
