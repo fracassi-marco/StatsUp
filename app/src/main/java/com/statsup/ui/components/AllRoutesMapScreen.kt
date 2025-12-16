@@ -119,14 +119,18 @@ fun AllRoutesMap(trainings: List<Training>) {
             if (hasPoints) {
                 try {
                     val bounds = boundsBuilder.build()
-                    // Padding ridotto a 50px per zoom massimo mantenendo i percorsi visibili
-                    val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 50)
+                    // Padding minimo di 20px per zoom massimo mantenendo i percorsi visibili
+                    val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 20)
                     cameraPositionState.move(cameraUpdate)
                 } catch (_: Exception) {
                     // Fallback: centra sulla prima posizione
-                    trainings.firstOrNull()?.trip?.steps()?.firstOrNull()?.let { firstPoint ->
-                        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(firstPoint, 12f)
-                        cameraPositionState.move(cameraUpdate)
+                    try {
+                        trainings.firstOrNull()?.trip?.steps()?.firstOrNull()?.let { firstPoint ->
+                            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(firstPoint, 12f)
+                            cameraPositionState.move(cameraUpdate)
+                        }
+                    } catch (_: Exception) {
+                        // Ignora se CameraUpdateFactory non è ancora inizializzato
                     }
                 }
             }
