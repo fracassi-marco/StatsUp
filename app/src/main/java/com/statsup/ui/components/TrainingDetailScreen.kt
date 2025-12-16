@@ -32,9 +32,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,33 +59,36 @@ fun TrainingDetailScreen(
     onNavigateBack: () -> Unit,
     onOpenFullscreenMap: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = training?.name ?: "") },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        if (isLoading) {
-            LoadingBox(isLoading = true) { }
-        } else if (training != null) {
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-                // Sfondo con immagine a tema basata sul tipo di attività
-                Image(
-                    painter = painterResource(id = getActivityBackground(training.sportType)),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
-                    colorFilter = ColorFilter.tint(
-                        color = Color.Black.copy(alpha = 0.3f),
-                        blendMode = androidx.compose.ui.graphics.BlendMode.Darken
-                    )
+    if (isLoading) {
+        LoadingBox(isLoading = true) { }
+    } else if (training != null) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Sfondo con immagine a tema basata sul tipo di attività
+            Image(
+                painter = painterResource(id = getActivityBackground(training.sportType)),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                colorFilter = ColorFilter.tint(
+                    color = Color.Black.copy(alpha = 0.3f),
+                    blendMode = androidx.compose.ui.graphics.BlendMode.Darken
                 )
+            )
+
+                // Pulsante back in alto a sinistra
+                IconButton(
+                    onClick = onNavigateBack,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
 
                 // Box con le informazioni in basso
                 Column(
@@ -340,7 +341,6 @@ fun TrainingDetailScreen(
             }
         }
     }
-}
 
 @Composable
 fun StatSection(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector) {
