@@ -15,6 +15,7 @@ import com.statsup.ui.components.dashboard.MaxAltitudeCard
 import com.statsup.ui.components.dashboard.MaxElevationGainCard
 import com.statsup.ui.components.dashboard.MaxHeartRateCard
 import com.statsup.ui.components.dashboard.MonthlyDistanceGoalCard
+import com.statsup.ui.components.dashboard.MonthlyTrainingGoalCard
 import com.statsup.ui.components.dashboard.TopTrainingTypes
 import com.statsup.ui.components.dashboard.TrainingCard
 import com.statsup.ui.viewmodel.DashboardViewModel
@@ -23,6 +24,8 @@ import com.statsup.ui.viewmodel.DashboardViewModel
 fun DashboardScreen(viewModel: DashboardViewModel) {
     Column(modifier = Modifier.padding(20.dp)) {
         MonthlyDistanceGoalCard(viewModel)
+        Spacer(modifier = Modifier.height(10.dp))
+        MonthlyTrainingGoalCard(viewModel)
         Row(
             modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)

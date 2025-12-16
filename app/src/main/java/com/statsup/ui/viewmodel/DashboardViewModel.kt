@@ -40,6 +40,20 @@ class DashboardViewModel(
         return Trainings(trainings, provider = Provider.Frequency).overMonth()
     }
 
+    fun totalFrequencyInt(): Int {
+        return totalFrequency().toInt()
+    }
+
+    fun trainingGoalPercentage(): Float {
+        val goal = settingRepository.loadMonthlyTrainingGoal()
+        if (goal == 0) return 0f
+        return totalFrequencyInt().toFloat() / goal.toFloat()
+    }
+
+    fun monthlyTrainingGoal(): Int {
+        return settingRepository.loadMonthlyTrainingGoal()
+    }
+
     fun totalDuration(): Double {
         return Trainings(trainings, provider = Provider.Duration).overMonth()
     }

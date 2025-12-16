@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel) {
     val monthlyGoalSheetState = rememberModalBottomSheetState()
+    val monthlyTrainingGoalSheetState = rememberModalBottomSheetState()
     val themeSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     Scaffold(
@@ -59,6 +60,12 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                 name = R.string.settings_screen_goals_monthly,
                 value = "${viewModel.monthlyGoal} ${stringResource(id = R.string.km)}",
                 onClick = { viewModel.showMonthlyGoal() }
+            )
+            SettingsClickableComponent(
+                icon = Icons.Outlined.EmojiEvents,
+                name = R.string.settings_screen_goals_monthly_trainings,
+                value = "${viewModel.monthlyTrainingGoal} ${stringResource(id = R.string.trainings)}",
+                onClick = { viewModel.showMonthlyTrainingGoal() }
             )
             Title(text = stringResource(R.string.settings_screen_app), marginTop = 22.dp)
             SettingsClickableComponent(
@@ -95,6 +102,41 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                             scope.launch { monthlyGoalSheetState.hide() }.invokeOnCompletion {
                                 if (!monthlyGoalSheetState.isVisible) {
                                     viewModel.saveMonthlyGoal()
+                                }
+                            }
+                        }) {
+                        Text(text = stringResource(R.string.settings_screen_set_goal))
+                    }
+                }
+            }
+        }
+        if (viewModel.showMonthlyTrainingGoalSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    viewModel.hideMonthlyTrainingGoalSheet()
+                },
+                sheetState = monthlyTrainingGoalSheetState,
+                containerColor = MaterialTheme.colorScheme.background,
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        NumberPicker(
+                            value = viewModel.monthlyTrainingGoal,
+                            range = 0..100,
+                            onValueChange = { value -> viewModel.monthlyTrainingGoal(value) },
+                            dividersColor = MaterialTheme.colorScheme.primary,
+                        )
+                        Text(text = stringResource(R.string.trainings))
+                    }
+                    Button(
+                        onClick = {
+                            scope.launch { monthlyTrainingGoalSheetState.hide() }.invokeOnCompletion {
+                                if (!monthlyTrainingGoalSheetState.isVisible) {
+                                    viewModel.saveMonthlyTrainingGoal()
                                 }
                             }
                         }) {

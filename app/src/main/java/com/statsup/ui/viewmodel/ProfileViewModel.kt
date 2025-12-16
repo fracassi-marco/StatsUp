@@ -16,6 +16,10 @@ class SettingsViewModel(
         private set
     var showMonthlyGoalSheet by mutableStateOf(false)
         private set
+    var monthlyTrainingGoal by mutableIntStateOf(settingRepository.loadMonthlyTrainingGoal())
+        private set
+    var showMonthlyTrainingGoalSheet by mutableStateOf(false)
+        private set
     var theme by mutableIntStateOf(settingRepository.loadTheme())
         private set
     var showThemeSheet by mutableStateOf(false)
@@ -27,6 +31,14 @@ class SettingsViewModel(
 
     fun hideMonthlyGoalSheet() {
         showMonthlyGoalSheet = false
+    }
+
+    fun showMonthlyTrainingGoal() {
+        showMonthlyTrainingGoalSheet = true
+    }
+
+    fun hideMonthlyTrainingGoalSheet() {
+        showMonthlyTrainingGoalSheet = false
     }
 
     fun hideThemeSheet() {
@@ -53,9 +65,18 @@ class SettingsViewModel(
         monthlyGoal = value
     }
 
+    fun monthlyTrainingGoal(value: Int) {
+        monthlyTrainingGoal = value
+    }
+
     fun saveMonthlyGoal() {
         settingRepository.saveMonthlyGoal(monthlyGoal)
         hideMonthlyGoalSheet()
+    }
+
+    fun saveMonthlyTrainingGoal() {
+        settingRepository.saveMonthlyTrainingGoal(monthlyTrainingGoal)
+        hideMonthlyTrainingGoalSheet()
     }
 
     fun saveTheme() {

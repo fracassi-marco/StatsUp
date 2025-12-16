@@ -4,6 +4,7 @@
     <string name="settings_title">Settings</string>
     <string name="settings_screen_goals">Goals</string>
     <string name="settings_screen_goals_monthly">Monthly distance</string>
+    <string name="settings_screen_goals_monthly_trainings">Monthly trainings target</string>
     <string name="settings_screen_set_goal">Set as my goal</string>
 
     <string name="settings_screen_app">App</string>
@@ -51,5 +52,7 @@
     <string name="no_routes_found">No routes found</string>
     <string name="all_sports">All sports</string>
     <string name="filter_by_sport">Filter by sport</string>
+    <string name="monthly_training_goal">Monthly training goal</string>
+    <string name="trainings_completed">trainings completed</string>
 </resources>
 

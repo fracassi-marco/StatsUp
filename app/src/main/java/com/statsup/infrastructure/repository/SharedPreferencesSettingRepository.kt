@@ -16,6 +16,12 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         editor.apply()
     }
 
+    override fun saveMonthlyTrainingGoal(value: Int) {
+        val editor = sharedPreferences().edit()
+        editor.putInt("settings.monthlyTrainingGoal", value)
+        editor.apply()
+    }
+
     override fun loadTheme(): Int {
         val sp = sharedPreferences()
         val value = sp.getInt("settings.theme", 0)
@@ -25,6 +31,12 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
     override fun loadMonthlyGoal(): Int {
         val sp = sharedPreferences()
         val value = sp.getInt("settings.monthlyGoal", 10)
+        return value
+    }
+
+    override fun loadMonthlyTrainingGoal(): Int {
+        val sp = sharedPreferences()
+        val value = sp.getInt("settings.monthlyTrainingGoal", 12)
         return value
     }
 
