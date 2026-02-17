@@ -14,8 +14,8 @@ enum class Screens(val route: String, val icon: ImageVector) {
     Dashboard("dashboard", Icons.Outlined.Home),
     History("history", Icons.AutoMirrored.Outlined.List),
     Bookmarks("bookmarks", Icons.Outlined.Bookmark),
-    Map("map", Icons.Outlined.LocationOn),
     Separator("", Icons.Filled.Edit),
+    Map("map", Icons.Outlined.LocationOn),
     Stats("profile", Icons.Outlined.DateRange),
     Settings("settings", Icons.Outlined.Settings);
 

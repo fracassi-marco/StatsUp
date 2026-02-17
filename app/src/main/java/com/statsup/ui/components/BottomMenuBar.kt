@@ -28,11 +28,18 @@ fun BottomMenuBar(navController: NavHostController, enabled: Boolean = true) {
         val currentDestination = navBackStackEntry?.destination
         Screens.entries.forEach { screen ->
             if (screen == Screens.Separator) {
-                Box(modifier = Modifier.size(80.dp, 1.dp))
+                // Spazio più largo per il FAB centrale
+                Box(modifier = Modifier.size(90.dp, 1.dp))
                 return@forEach
             }
             NavigationBarItem(
-                icon = { Icon(screen.icon, contentDescription = null) },
+                icon = {
+                    Icon(
+                        screen.icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(26.dp) // Icone più grandi
+                    )
+                },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 enabled = enabled,
                 colors = NavigationBarItemDefaults.colors(
