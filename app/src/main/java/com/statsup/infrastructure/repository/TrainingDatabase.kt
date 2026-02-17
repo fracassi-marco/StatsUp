@@ -6,17 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.statsup.domain.Athlete
+import com.statsup.domain.BookmarkedTraining
 import com.statsup.domain.Training
 
 @Database(
-    entities = [Training::class, Athlete::class],
-    version = 2,
+    entities = [Training::class, Athlete::class, BookmarkedTraining::class],
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class TrainingDatabase: RoomDatabase() {
     abstract val trainingRepository: DbTrainingRepository
     abstract val athleteRepository: DbAthleteRepository
+    abstract val bookmarkedTrainingRepository: DbBookmarkedTrainingRepository
 
     companion object {
         private const val DATABASE_NAME = "training_db"

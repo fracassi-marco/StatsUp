@@ -5,17 +5,22 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.DirectionsRun
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,21 +65,26 @@ fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (Long) -> Unit) 
                 training.date.format(monthYearFormatter)
             }
 
-            LazyColumn {
-                groupedTrainings.forEach { (monthYear, trainings) ->
-                    // Header del mese
-                    item(key = "header_$monthYear") {
-                        MonthHeader(monthYear = monthYear)
-                    }
-
-                    // Items del mese
-                    items(
-                        count = trainings.size,
-                        key = { trainings[it].id },
-                        itemContent = { index ->
-                            TrainingListItem(trainings[index], onTrainingClick)
+            // Mostra messaggio se non ci sono allenamenti
+            if (groupedTrainings.isEmpty()) {
+                EmptyHistoryState(hasFilter = state.selectedSportType != null)
+            } else {
+                LazyColumn {
+                    groupedTrainings.forEach { (monthYear, trainings) ->
+                        // Header del mese
+                        item(key = "header_$monthYear") {
+                            MonthHeader(monthYear = monthYear)
                         }
-                    )
+
+                        // Items del mese
+                        items(
+                            count = trainings.size,
+                            key = { trainings[it].id },
+                            itemContent = { index ->
+                                TrainingListItem(trainings[index], onTrainingClick)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -198,6 +208,51 @@ fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
                 contentDescription = "background",
                 contentScale = ContentScale.FillWidth
             )
+        }
+    }
+}
+
+@Composable
+fun EmptyHistoryState(hasFilter: Boolean) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.DirectionsRun,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .height(64.dp)
+                    .fillMaxWidth(),
+                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+            )
+            Text(
+                text = if (hasFilter) {
+                    stringResource(id = R.string.no_trainings_with_filter)
+                } else {
+                    stringResource(id = R.string.no_trainings_yet)
+                },
+                fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 32.dp)
+            )
+            if (!hasFilter) {
+                Text(
+                    text = stringResource(id = R.string.import_trainings_hint),
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                )
+            }
         }
     }
 }

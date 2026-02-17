@@ -4,14 +4,17 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.statsup.domain.BookmarkedTraining
 import com.statsup.domain.Training
 import com.statsup.domain.repository.TrainingRepository
+import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TrainingDetailViewModel(
     private val trainingRepository: TrainingRepository,
+    private val bookmarkedTrainingRepository: DbBookmarkedTrainingRepository,
     private val trainingId: Long
 ) : ViewModel() {
 
@@ -21,8 +24,18 @@ class TrainingDetailViewModel(
     private val _isLoading = mutableStateOf(true)
     val isLoading: State<Boolean> = _isLoading
 
+    private val _isBookmarked = mutableStateOf(false)
+    val isBookmarked: State<Boolean> = _isBookmarked
+
+    private val _bookmarkNote = mutableStateOf("")
+    val bookmarkNote: State<String> = _bookmarkNote
+
+    private val _showBookmarkDialog = mutableStateOf(false)
+    val showBookmarkDialog: State<Boolean> = _showBookmarkDialog
+
     init {
         loadTraining()
+        checkBookmarkStatus()
     }
 
     private fun loadTraining() {
@@ -37,6 +50,64 @@ class TrainingDetailViewModel(
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    private fun checkBookmarkStatus() {
+        viewModelScope.launch {
+            try {
+                val bookmark = withContext(Dispatchers.IO) {
+                    bookmarkedTrainingRepository.getBookmarkByTrainingId(trainingId)
+                }
+                _isBookmarked.value = bookmark != null
+                _bookmarkNote.value = bookmark?.note ?: ""
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun toggleBookmark() {
+        // Mostra il dialog invece di agire direttamente
+        _showBookmarkDialog.value = true
+    }
+
+    fun dismissBookmarkDialog() {
+        _showBookmarkDialog.value = false
+    }
+
+    fun addBookmarkWithNote(note: String) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    if (_isBookmarked.value) {
+                        // Se già bookmarkato, aggiorna solo la nota
+                        bookmarkedTrainingRepository.updateNote(trainingId, note)
+                    } else {
+                        // Se non bookmarkato, crea nuovo bookmark
+                        val bookmark = BookmarkedTraining(trainingId = trainingId, note = note)
+                        bookmarkedTrainingRepository.addBookmark(bookmark)
+                    }
+                }
+                _isBookmarked.value = true
+                _bookmarkNote.value = note
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun removeBookmark() {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    bookmarkedTrainingRepository.removeBookmarkByTrainingId(trainingId)
+                }
+                _isBookmarked.value = false
+                _bookmarkNote.value = ""
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

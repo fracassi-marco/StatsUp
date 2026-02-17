@@ -54,5 +54,26 @@
     <string name="filter_by_sport">Filter by sport</string>
     <string name="monthly_training_goal">Monthly training goal</string>
     <string name="trainings_completed">trainings completed</string>
+    <string name="bookmarked_trainings">Bookmarked Trainings</string>
+    <string name="no_bookmarked_trainings">No bookmarked trainings yet.\nTap the bookmark icon on any training to save it here.</string>
+    <string name="note">Note</string>
+    <string name="add_note_placeholder">Add a note about this training…</string>
+    <string name="note_saved">Saved</string>
+    <string name="save_note">Save</string>
+    <string name="add_to_bookmarks">Add to Bookmarks</string>
+    <string name="edit_bookmark">Edit Bookmark</string>
+    <string name="note_optional">Note (optional)</string>
+    <string name="remove_bookmark">Remove</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_bookmark">Add</string>
+    <string name="no_trainings_yet">No trainings yet</string>
+    <string name="no_trainings_with_filter">No trainings found for this sport type</string>
+    <string name="import_trainings_hint">Tap the import button to sync your trainings from Strava</string>
+    <string name="welcome_title">Welcome to StatsUp!</string>
+    <string name="welcome_subtitle">Start tracking your athletic progress by importing your trainings from Strava</string>
+    <string name="instruction_step_1">Tap the circular import button at the bottom center</string>
+    <string name="instruction_step_2">Sign in with your Strava account</string>
+    <string name="instruction_step_3">Your trainings will be synced automatically</string>
 </resources>
 

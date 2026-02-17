@@ -19,7 +19,7 @@ import com.statsup.Screens
 import com.statsup.ui.theme.SecondaryText
 
 @Composable
-fun BottomMenuBar(navController: NavHostController) {
+fun BottomMenuBar(navController: NavHostController, enabled: Boolean = true) {
     androidx.compose.material3.NavigationBar(
         modifier = Modifier.border(1.dp, color = SecondaryText),
         containerColor = MaterialTheme.colorScheme.background,
@@ -34,18 +34,22 @@ fun BottomMenuBar(navController: NavHostController) {
             NavigationBarItem(
                 icon = { Icon(screen.icon, contentDescription = null) },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                enabled = enabled,
                 colors = NavigationBarItemDefaults.colors(
-                    unselectedIconColor = SecondaryText,
+                    unselectedIconColor = if (enabled) SecondaryText else SecondaryText.copy(alpha = 0.3f),
                     selectedIconColor = MaterialTheme.colorScheme.primary,
-                    indicatorColor = MaterialTheme.colorScheme.background
+                    indicatorColor = MaterialTheme.colorScheme.background,
+                    disabledIconColor = SecondaryText.copy(alpha = 0.3f)
                 ),
                 onClick = {
-                    navController.navigate(screen.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    if (enabled) {
+                        navController.navigate(screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
                 }
             )

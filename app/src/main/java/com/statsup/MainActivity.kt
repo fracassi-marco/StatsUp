@@ -28,8 +28,9 @@ import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.StravaTrainingApi
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
-import com.statsup.ui.components.BottomMenuBar
 import com.statsup.ui.components.AllRoutesMapScreen
+import com.statsup.ui.components.BookmarksScreen
+import com.statsup.ui.components.BottomMenuBar
 import com.statsup.ui.components.DashboardScreen
 import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
@@ -38,8 +39,10 @@ import com.statsup.ui.components.MapFullscreenScreen
 import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.components.StatsScreen
 import com.statsup.ui.components.TrainingDetailScreen
+import com.statsup.ui.components.WelcomeScreen
 import com.statsup.ui.theme.StatsUpTheme
 import com.statsup.ui.viewmodel.AllRoutesViewModel
+import com.statsup.ui.viewmodel.BookmarksViewModel
 import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.ui.viewmodel.HistoryViewModel
 import com.statsup.ui.viewmodel.MainViewModel
@@ -67,26 +70,43 @@ class MainActivity : ComponentActivity() {
             val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository) }
             val statsViewModel = remember { StatsViewModel(db.trainingRepository) }
             val allRoutesViewModel = remember { AllRoutesViewModel(db.trainingRepository) }
+            val bookmarksViewModel = remember { BookmarksViewModel(db.bookmarkedTrainingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
                 onResult = { mainViewModel.onStravaResult(it, authService!!) }
             )
             val context = LocalContext.current
+
+            // Osserva il numero di allenamenti per decidere se mostrare la WelcomeScreen
+            val hasTrainings = historyViewModel.state.value.show
+
             StatsUpTheme(settingsViewModel) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     LoadingBox(isLoading = mainViewModel.loading.value) {
                         Scaffold(
                             modifier = Modifier.fillMaxSize(),
-                            bottomBar = { BottomMenuBar(navController) },
+                            bottomBar = {
+                                // Menu sempre visibile, ma disabilitato se non ci sono allenamenti
+                                BottomMenuBar(navController, enabled = hasTrainings)
+                            },
                             floatingActionButton = { ImportButton(launcher, mainViewModel, authService!!) },
                             floatingActionButtonPosition = FabPosition.Center,
                             snackbarHost = { SnackbarHost(snackBarHostState) },
                         ) { innerPadding ->
-                            NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
+                            // Se non ci sono allenamenti, mostra la WelcomeScreen
+                            if (!hasTrainings) {
+                                WelcomeScreen()
+                            } else {
+                                NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
                                 composable(Screens.Dashboard.route) { DashboardScreen(dashboardViewModel) }
                                 composable(Screens.History.route) {
                                     HistoryScreen(historyViewModel) { trainingId ->
+                                        navController.navigate(Screens.trainingDetailRoute(trainingId))
+                                    }
+                                }
+                                composable(Screens.Bookmarks.route) {
+                                    BookmarksScreen(bookmarksViewModel) { trainingId ->
                                         navController.navigate(Screens.trainingDetailRoute(trainingId))
                                     }
                                 }
@@ -100,12 +120,25 @@ class MainActivity : ComponentActivity() {
                                     arguments = listOf(navArgument("trainingId") { type = NavType.LongType })
                                 ) { backStackEntry ->
                                     val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
-                                    val detailViewModel = remember { TrainingDetailViewModel(db.trainingRepository, trainingId) }
+                                    val detailViewModel = remember {
+                                        TrainingDetailViewModel(
+                                            db.trainingRepository,
+                                            db.bookmarkedTrainingRepository,
+                                            trainingId
+                                        )
+                                    }
                                     TrainingDetailScreen(
                                         training = detailViewModel.training.value,
                                         isLoading = detailViewModel.isLoading.value,
+                                        isBookmarked = detailViewModel.isBookmarked.value,
+                                        bookmarkNote = detailViewModel.bookmarkNote.value,
+                                        showBookmarkDialog = detailViewModel.showBookmarkDialog.value,
                                         onNavigateBack = { navController.popBackStack() },
-                                        onOpenFullscreenMap = { navController.navigate(Screens.mapFullscreenRoute(trainingId)) }
+                                        onOpenFullscreenMap = { navController.navigate(Screens.mapFullscreenRoute(trainingId)) },
+                                        onToggleBookmark = { detailViewModel.toggleBookmark() },
+                                        onDismissDialog = { detailViewModel.dismissBookmarkDialog() },
+                                        onConfirmBookmark = { note -> detailViewModel.addBookmarkWithNote(note) },
+                                        onRemoveBookmark = { detailViewModel.removeBookmark() }
                                     )
                                 }
 
@@ -115,13 +148,20 @@ class MainActivity : ComponentActivity() {
                                     arguments = listOf(navArgument("trainingId") { type = NavType.LongType })
                                 ) { backStackEntry ->
                                     val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
-                                    val detailViewModel = remember { TrainingDetailViewModel(db.trainingRepository, trainingId) }
+                                    val detailViewModel = remember {
+                                        TrainingDetailViewModel(
+                                            db.trainingRepository,
+                                            db.bookmarkedTrainingRepository,
+                                            trainingId
+                                        )
+                                    }
                                     MapFullscreenScreen(
                                         training = detailViewModel.training.value,
                                         isLoading = detailViewModel.isLoading.value,
                                         onNavigateBack = { navController.popBackStack() }
                                     )
                                 }
+                            }
                             }
                         }
                         LaunchedEffect(Unit) {
