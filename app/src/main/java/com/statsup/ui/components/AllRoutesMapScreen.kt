@@ -3,7 +3,6 @@ package com.statsup.ui.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +41,8 @@ fun AllRoutesMapScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.all_routes)) }
+                title = { Text(text = stringResource(id = R.string.all_routes)) },
+                windowInsets = androidx.compose.foundation.layout.WindowInsets(0)
             )
         }
     ) { paddingValues ->
@@ -60,8 +60,7 @@ fun AllRoutesMapScreen(
                     // Info card in alto con numero di percorsi
                     Card(
                         modifier = Modifier
-                            .padding(16.dp)
-                            .statusBarsPadding(),
+                            .padding(16.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
                         )

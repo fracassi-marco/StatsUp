@@ -81,6 +81,7 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.titleMedium
                     )
                 },
+                windowInsets = androidx.compose.foundation.layout.WindowInsets(0)
             )
         },
     ) {
