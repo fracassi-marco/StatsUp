@@ -14,4 +14,7 @@ interface DbAthleteRepository : AthleteRepository {
 
     @Query("SELECT * FROM athlete LIMIT 1")
     override fun load(): Athlete?
+
+    @Query("DELETE FROM athlete")
+    suspend fun deleteAthlete()
 }

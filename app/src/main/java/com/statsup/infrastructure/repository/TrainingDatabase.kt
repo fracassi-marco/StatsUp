@@ -11,7 +11,7 @@ import com.statsup.domain.Training
 
 @Database(
     entities = [Training::class, Athlete::class, BookmarkedTraining::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

@@ -1,15 +1,20 @@
 package com.statsup.ui.viewmodel
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.statsup.domain.repository.SettingRepository
+import com.statsup.infrastructure.service.DataExportImportService
+import kotlinx.coroutines.launch
 
 
 class SettingsViewModel(
     private val settingRepository: SettingRepository,
+    private val dataExportImportService: DataExportImportService
 ) : ViewModel() {
 
     var monthlyGoal by mutableIntStateOf(settingRepository.loadMonthlyGoal())
@@ -23,6 +28,16 @@ class SettingsViewModel(
     var theme by mutableIntStateOf(settingRepository.loadTheme())
         private set
     var showThemeSheet by mutableStateOf(false)
+        private set
+    var showImportConfirmDialog by mutableStateOf(false)
+        private set
+    var importUri by mutableStateOf<Uri?>(null)
+        private set
+    var exportImportMessage by mutableStateOf<String?>(null)
+        private set
+    var isExportImportLoading by mutableStateOf(false)
+        private set
+    var importSuccessful by mutableStateOf(false)
         private set
 
     fun showMonthlyGoal() {
@@ -83,4 +98,60 @@ class SettingsViewModel(
         settingRepository.saveTheme(theme)
         hideThemeSheet()
     }
+
+    fun exportData(uri: Uri) {
+        viewModelScope.launch {
+            isExportImportLoading = true
+            val result = dataExportImportService.exportData(uri)
+            isExportImportLoading = false
+
+            if (result.isSuccess) {
+                exportImportMessage = "Data exported successfully"
+            } else {
+                exportImportMessage = "Export failed: ${result.exceptionOrNull()?.message}"
+            }
+        }
+    }
+
+    fun showImportConfirmDialog(uri: Uri) {
+        importUri = uri
+        showImportConfirmDialog = true
+    }
+
+    fun hideImportConfirmDialog() {
+        showImportConfirmDialog = false
+        importUri = null
+    }
+
+    fun confirmImport() {
+        importUri?.let { uri ->
+            viewModelScope.launch {
+                isExportImportLoading = true
+                hideImportConfirmDialog()
+
+                val result = dataExportImportService.importData(uri)
+                isExportImportLoading = false
+
+                if (result.isSuccess) {
+                    exportImportMessage = "Data imported successfully!"
+                    // Reload settings
+                    monthlyGoal = settingRepository.loadMonthlyGoal()
+                    monthlyTrainingGoal = settingRepository.loadMonthlyTrainingGoal()
+                    theme = settingRepository.loadTheme()
+                    importSuccessful = true
+                } else {
+                    exportImportMessage = "Import failed: ${result.exceptionOrNull()?.message}"
+                }
+            }
+        }
+    }
+
+    fun clearExportImportMessage() {
+        exportImportMessage = null
+    }
+
+    fun resetImportSuccessful() {
+        importSuccessful = false
+    }
 }
+

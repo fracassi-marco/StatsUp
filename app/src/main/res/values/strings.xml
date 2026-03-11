@@ -63,6 +63,13 @@
     <string name="add_to_bookmarks">Add to Bookmarks</string>
     <string name="edit_bookmark">Edit Bookmark</string>
     <string name="note_optional">Note (optional)</string>
+    <string name="custom_title_optional">Custom title (optional)</string>
+    <string name="custom_title_placeholder">Enter a custom name for this training…</string>
+    <string name="difficulty_optional">Difficulty (optional)</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="select_difficulty">Select difficulty</string>
     <string name="remove_bookmark">Remove</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
@@ -75,5 +82,7 @@
     <string name="instruction_step_1">Tap the circular import button at the bottom center</string>
     <string name="instruction_step_2">Sign in with your Strava account</string>
     <string name="instruction_step_3">Your trainings will be synced automatically</string>
+    <string name="settings_export_data">Export data</string>
+    <string name="settings_import_data">Import data</string>
 </resources>
 

@@ -99,6 +99,8 @@ dependencies {
     implementation(libs.android.maps.utils)
     // OAuth
     implementation(libs.appauth)
+    // Gson
+    implementation(libs.gson)
     // Xml manipulation
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)

@@ -9,6 +9,7 @@ import androidx.room.Transaction
 import com.statsup.domain.BookmarkedTraining
 import com.statsup.domain.Training
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Dao
 interface DbBookmarkedTrainingRepository {
@@ -36,7 +37,19 @@ interface DbBookmarkedTrainingRepository {
     """)
     fun getBookmarkedTrainings(): Flow<List<Training>>
 
+    @Query("SELECT * FROM bookmarked_training ORDER BY bookmarkedAt DESC")
+    fun getAllBookmarksFlow(): Flow<List<BookmarkedTraining>>
+
     @Query("UPDATE bookmarked_training SET note = :note WHERE trainingId = :trainingId")
     suspend fun updateNote(trainingId: Long, note: String)
+
+    @Query("UPDATE bookmarked_training SET note = :note, customTitle = :customTitle, difficulty = :difficulty WHERE trainingId = :trainingId")
+    suspend fun updateBookmark(trainingId: Long, note: String, customTitle: String, difficulty: String)
+
+    @Query("SELECT * FROM bookmarked_training ORDER BY bookmarkedAt DESC")
+    suspend fun getAllBookmarksList(): List<BookmarkedTraining>
+
+    @Query("DELETE FROM bookmarked_training")
+    suspend fun deleteAllBookmarks()
 }
 

@@ -18,7 +18,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -28,6 +27,7 @@ import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.StravaTrainingApi
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
+import com.statsup.infrastructure.service.DataExportImportService
 import com.statsup.ui.components.AllRoutesMapScreen
 import com.statsup.ui.components.BookmarksScreen
 import com.statsup.ui.components.BottomMenuBar
@@ -37,6 +37,7 @@ import com.statsup.ui.components.ImportButton
 import com.statsup.ui.components.LoadingBox
 import com.statsup.ui.components.MapFullscreenScreen
 import com.statsup.ui.components.SettingsScreen
+import com.statsup.ui.components.SplashScreen
 import com.statsup.ui.components.StatsScreen
 import com.statsup.ui.components.TrainingDetailScreen
 import com.statsup.ui.components.WelcomeScreen
@@ -62,38 +63,49 @@ class MainActivity : ComponentActivity() {
         authService = AuthorizationService(this)
         setContent {
             val settingRepository = SharedPreferencesSettingRepository(applicationContext)
+            val dataExportImportService = remember {
+                DataExportImportService(
+                    applicationContext,
+                    db,
+                    settingRepository
+                )
+            }
             val updateActivitiesUseCase = UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi())
             val navController = rememberNavController()
             val mainViewModel = remember { MainViewModel(updateActivitiesUseCase) }
-            val settingsViewModel = remember { SettingsViewModel(settingRepository) }
+            val settingsViewModel = remember { SettingsViewModel(settingRepository, dataExportImportService) }
             val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository) }
             val statsViewModel = remember { StatsViewModel(db.trainingRepository) }
             val allRoutesViewModel = remember { AllRoutesViewModel(db.trainingRepository) }
-            val bookmarksViewModel = remember { BookmarksViewModel(db.bookmarkedTrainingRepository) }
+            val bookmarksViewModel = remember { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
                 onResult = { mainViewModel.onStravaResult(it, authService!!) }
             )
-            val context = LocalContext.current
 
-            // Osserva il numero di allenamenti per decidere se mostrare la WelcomeScreen
+            // Osserva il numero di allenamenti e lo stato di caricamento
+            val isInitialLoading = historyViewModel.isInitialLoading.value
             val hasTrainings = historyViewModel.state.value.show
 
             StatsUpTheme(settingsViewModel) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    LoadingBox(isLoading = mainViewModel.loading.value) {
-                        Scaffold(
-                            modifier = Modifier.fillMaxSize(),
-                            bottomBar = {
-                                // Menu sempre visibile, ma disabilitato se non ci sono allenamenti
-                                BottomMenuBar(navController, enabled = hasTrainings)
-                            },
-                            floatingActionButton = { ImportButton(launcher, mainViewModel, authService!!) },
-                            floatingActionButtonPosition = FabPosition.Center,
-                            snackbarHost = { SnackbarHost(snackBarHostState) },
-                        ) { innerPadding ->
+                    // Mostra SplashScreen durante il caricamento iniziale
+                    if (isInitialLoading) {
+                        SplashScreen()
+                    } else {
+                        LoadingBox(isLoading = mainViewModel.loading.value) {
+                            Scaffold(
+                                modifier = Modifier.fillMaxSize(),
+                                bottomBar = {
+                                    // Menu sempre visibile, ma disabilitato se non ci sono allenamenti
+                                    BottomMenuBar(navController, enabled = hasTrainings)
+                                },
+                                floatingActionButton = { ImportButton(launcher, mainViewModel, authService!!) },
+                                floatingActionButtonPosition = FabPosition.Center,
+                                snackbarHost = { SnackbarHost(snackBarHostState) },
+                            ) { innerPadding ->
                             // Se non ci sono allenamenti, mostra la WelcomeScreen
                             if (!hasTrainings) {
                                 WelcomeScreen()
@@ -112,7 +124,17 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(Screens.Map.route) { AllRoutesMapScreen(allRoutesViewModel) }
                                 composable(Screens.Stats.route) { StatsScreen(statsViewModel) }
-                                composable(Screens.Settings.route) { SettingsScreen(settingsViewModel) }
+                                composable(Screens.Settings.route) {
+                                    SettingsScreen(
+                                        viewModel = settingsViewModel,
+                                        onImportSuccess = {
+                                            // Navigate to dashboard after successful import
+                                            navController.navigate(Screens.Dashboard.route) {
+                                                popUpTo(Screens.Dashboard.route) { inclusive = true }
+                                            }
+                                        }
+                                    )
+                                }
 
                                 // Training Detail Screen
                                 composable(
@@ -132,12 +154,16 @@ class MainActivity : ComponentActivity() {
                                         isLoading = detailViewModel.isLoading.value,
                                         isBookmarked = detailViewModel.isBookmarked.value,
                                         bookmarkNote = detailViewModel.bookmarkNote.value,
+                                        customTitle = detailViewModel.customTitle.value,
+                                        difficulty = detailViewModel.difficulty.value,
                                         showBookmarkDialog = detailViewModel.showBookmarkDialog.value,
                                         onNavigateBack = { navController.popBackStack() },
                                         onOpenFullscreenMap = { navController.navigate(Screens.mapFullscreenRoute(trainingId)) },
                                         onToggleBookmark = { detailViewModel.toggleBookmark() },
                                         onDismissDialog = { detailViewModel.dismissBookmarkDialog() },
-                                        onConfirmBookmark = { note -> detailViewModel.addBookmarkWithNote(note) },
+                                        onConfirmBookmark = { note, customTitle, difficulty ->
+                                            detailViewModel.addBookmarkWithNote(note, customTitle, difficulty)
+                                        },
                                         onRemoveBookmark = { detailViewModel.removeBookmark() }
                                     )
                                 }
@@ -162,20 +188,23 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             }
-                            }
-                        }
+                            }  // chiude NavHost e else
+                        }  // chiude Scaffold content lambda
+
                         LaunchedEffect(Unit) {
-                            mainViewModel.newTrainingsCounter.collect { message ->
+                            mainViewModel.newTrainingsCounter.collect { count ->
                                 snackBarHostState.showSnackbar(
-                                    message = context.getString(R.string.imported, message), duration = SnackbarDuration.Short
+                                    message = "$count activities have been imported",
+                                    duration = SnackbarDuration.Short
                                 )
                             }
                         }
-                    }
-                }
-            }
-        }
-    }
+                        }  // chiude LoadingBox
+                    }  // chiude else (isInitialLoading)
+                }  // chiude Surface
+            }  // chiude StatsUpTheme
+        }  // chiude setContent
+    }  // chiude onCreate
 
     override fun onDestroy() {
         authService?.dispose()

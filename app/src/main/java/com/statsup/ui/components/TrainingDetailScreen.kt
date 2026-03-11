@@ -21,10 +21,13 @@ import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Landscape
 import androidx.compose.material.icons.filled.Route
+import androidx.compose.material.icons.filled.SentimentSatisfied
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Terrain
+import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material.icons.filled.ZoomOutMap
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.Button
@@ -62,12 +65,14 @@ fun TrainingDetailScreen(
     isLoading: Boolean,
     isBookmarked: Boolean,
     bookmarkNote: String,
+    customTitle: String,
+    difficulty: String,
     showBookmarkDialog: Boolean,
     onNavigateBack: () -> Unit,
     onOpenFullscreenMap: () -> Unit,
     onToggleBookmark: () -> Unit,
     onDismissDialog: () -> Unit,
-    onConfirmBookmark: (String) -> Unit,
+    onConfirmBookmark: (String, String, String) -> Unit,
     onRemoveBookmark: () -> Unit
 ) {
     if (isLoading) {
@@ -150,12 +155,19 @@ fun TrainingDetailScreen(
                                 fontSize = 28.sp,
                                 modifier = Modifier.padding(end = 8.dp)
                             )
-                            Text(
-                                text = training.name,
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = if (customTitle.isNotEmpty()) customTitle else training.name,
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                // Mostra badge difficoltà se presente
+                                if (difficulty.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    DifficultyBadge(difficulty = difficulty)
+                                }
+                            }
                         }
                         Text(
                             text = formatLocal(training.date),
@@ -375,24 +387,6 @@ fun TrainingDetailScreen(
                             Spacer(modifier = Modifier.height(8.dp))
                             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(bottom = 12.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Bookmark,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(20.dp),
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                                Text(
-                                    text = stringResource(id = R.string.note),
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.padding(start = 8.dp)
-                                )
-                            }
 
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
@@ -449,6 +443,8 @@ fun TrainingDetailScreen(
                 trainingName = training.name,
                 isBookmarked = isBookmarked,
                 currentNote = bookmarkNote,
+                currentCustomTitle = customTitle,
+                currentDifficulty = difficulty,
                 onDismiss = onDismissDialog,
                 onConfirm = onConfirmBookmark,
                 onRemove = onRemoveBookmark
@@ -555,4 +551,54 @@ private fun getActivityBackground(sportType: String?): Int {
         else -> R.drawable.bg_default
     }
 }
+
+@Composable
+fun DifficultyBadge(difficulty: String) {
+    val (color, text, icon) = when (difficulty) {
+        "easy" -> Triple(
+            Color(0xFF4CAF50),
+            stringResource(id = R.string.difficulty_easy),
+            Icons.Filled.SentimentSatisfied
+        )
+        "medium" -> Triple(
+            Color(0xFFFF9800),
+            stringResource(id = R.string.difficulty_medium),
+            Icons.Filled.FitnessCenter
+        )
+        "hard" -> Triple(
+            Color(0xFFF44336),
+            stringResource(id = R.string.difficulty_hard),
+            Icons.Filled.Whatshot
+        )
+        else -> return
+    }
+
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = color.copy(alpha = 0.2f)
+        ),
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier.padding(top = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.size(16.dp)
+            )
+            Text(
+                text = text,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = color
+            )
+        }
+    }
+}
+
 

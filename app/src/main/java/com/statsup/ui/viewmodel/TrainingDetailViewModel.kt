@@ -30,6 +30,12 @@ class TrainingDetailViewModel(
     private val _bookmarkNote = mutableStateOf("")
     val bookmarkNote: State<String> = _bookmarkNote
 
+    private val _customTitle = mutableStateOf("")
+    val customTitle: State<String> = _customTitle
+
+    private val _difficulty = mutableStateOf("")
+    val difficulty: State<String> = _difficulty
+
     private val _showBookmarkDialog = mutableStateOf(false)
     val showBookmarkDialog: State<Boolean> = _showBookmarkDialog
 
@@ -62,6 +68,8 @@ class TrainingDetailViewModel(
                 }
                 _isBookmarked.value = bookmark != null
                 _bookmarkNote.value = bookmark?.note ?: ""
+                _customTitle.value = bookmark?.customTitle ?: ""
+                _difficulty.value = bookmark?.difficulty ?: ""
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -77,21 +85,28 @@ class TrainingDetailViewModel(
         _showBookmarkDialog.value = false
     }
 
-    fun addBookmarkWithNote(note: String) {
+    fun addBookmarkWithNote(note: String, customTitle: String, difficulty: String) {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
                     if (_isBookmarked.value) {
-                        // Se già bookmarkato, aggiorna solo la nota
-                        bookmarkedTrainingRepository.updateNote(trainingId, note)
+                        // Se già bookmarkato, aggiorna note, customTitle e difficulty
+                        bookmarkedTrainingRepository.updateBookmark(trainingId, note, customTitle, difficulty)
                     } else {
                         // Se non bookmarkato, crea nuovo bookmark
-                        val bookmark = BookmarkedTraining(trainingId = trainingId, note = note)
+                        val bookmark = BookmarkedTraining(
+                            trainingId = trainingId,
+                            note = note,
+                            customTitle = customTitle,
+                            difficulty = difficulty
+                        )
                         bookmarkedTrainingRepository.addBookmark(bookmark)
                     }
                 }
                 _isBookmarked.value = true
                 _bookmarkNote.value = note
+                _customTitle.value = customTitle
+                _difficulty.value = difficulty
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -106,6 +121,8 @@ class TrainingDetailViewModel(
                 }
                 _isBookmarked.value = false
                 _bookmarkNote.value = ""
+                _customTitle.value = ""
+                _difficulty.value = ""
             } catch (e: Exception) {
                 e.printStackTrace()
             }

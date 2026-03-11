@@ -1,6 +1,7 @@
 package com.statsup.infrastructure.repository
 
 import android.content.Context
+import com.statsup.domain.ExportSettings
 import com.statsup.domain.repository.SettingRepository
 
 class SharedPreferencesSettingRepository(private val context: Context) : SettingRepository {
@@ -38,6 +39,26 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         val sp = sharedPreferences()
         val value = sp.getInt("settings.monthlyTrainingGoal", 12)
         return value
+    }
+
+    override fun exportSettings(): ExportSettings {
+        return ExportSettings(
+            theme = loadTheme(),
+            monthlyGoal = loadMonthlyGoal(),
+            monthlyTrainingGoal = loadMonthlyTrainingGoal()
+        )
+    }
+
+    override fun importSettings(settings: ExportSettings) {
+        saveTheme(settings.theme)
+        saveMonthlyGoal(settings.monthlyGoal)
+        saveMonthlyTrainingGoal(settings.monthlyTrainingGoal)
+    }
+
+    override fun clearAllSettings() {
+        val editor = sharedPreferences().edit()
+        editor.clear()
+        editor.apply()
     }
 
     private fun sharedPreferences() = context.getSharedPreferences("StatsUpPrefs", 0)

@@ -24,5 +24,8 @@ interface DbTrainingRepository : TrainingRepository {
 
     @Query("DELETE FROM training")
     override suspend fun deleteAll()
+
+    @Query("SELECT * FROM training ORDER BY startDate DESC")
+    override suspend fun getAllTrainings(): List<Training>
 }
 

@@ -12,12 +12,16 @@ class HistoryViewModel(private val trainingRepository: TrainingRepository) : Vie
     private val _state = mutableStateOf(HistoryState())
     val state: State<HistoryState> = _state
 
+    private val _isInitialLoading = mutableStateOf(true)
+    val isInitialLoading: State<Boolean> = _isInitialLoading
+
     init {
         viewModelScope.launch {
             trainingRepository.all().collect {
                 _state.value = state.value.copy(
                     activities = it
                 )
+                _isInitialLoading.value = false
             }
         }
     }
