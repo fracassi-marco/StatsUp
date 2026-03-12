@@ -18,12 +18,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.statsup.domain.UpdateTrainingsUseCase
+import com.statsup.infrastructure.TrainingShareService
 import com.statsup.infrastructure.StravaTrainingApi
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
@@ -142,6 +144,7 @@ class MainActivity : ComponentActivity() {
                                     arguments = listOf(navArgument("trainingId") { type = NavType.LongType })
                                 ) { backStackEntry ->
                                     val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
+                                    val context = LocalContext.current
                                     val detailViewModel = remember {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
@@ -160,6 +163,11 @@ class MainActivity : ComponentActivity() {
                                         onNavigateBack = { navController.popBackStack() },
                                         onOpenFullscreenMap = { navController.navigate(Screens.mapFullscreenRoute(trainingId)) },
                                         onToggleBookmark = { detailViewModel.toggleBookmark() },
+                                        onShare = {
+                                            detailViewModel.training.value?.let { t ->
+                                                TrainingShareService.share(context, t)
+                                            }
+                                        },
                                         onDismissDialog = { detailViewModel.dismissBookmarkDialog() },
                                         onConfirmBookmark = { note, customTitle, difficulty ->
                                             detailViewModel.addBookmarkWithNote(note, customTitle, difficulty)

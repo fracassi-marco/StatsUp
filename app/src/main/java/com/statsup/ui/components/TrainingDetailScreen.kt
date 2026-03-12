@@ -21,6 +21,7 @@ import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Landscape
 import androidx.compose.material.icons.filled.Route
@@ -71,6 +72,7 @@ fun TrainingDetailScreen(
     onNavigateBack: () -> Unit,
     onOpenFullscreenMap: () -> Unit,
     onToggleBookmark: () -> Unit,
+    onShare: () -> Unit,
     onDismissDialog: () -> Unit,
     onConfirmBookmark: (String, String, String) -> Unit,
     onRemoveBookmark: () -> Unit
@@ -426,14 +428,25 @@ fun TrainingDetailScreen(
                     )
                 }
 
-                // Pulsante bookmark in alto a destra
-                IconButton(onClick = onToggleBookmark) {
-                    Icon(
-                        if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
-                        contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
-                        tint = if (isBookmarked) MaterialTheme.colorScheme.primary else Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
+                Row {
+                    // Pulsante share
+                    IconButton(onClick = onShare) {
+                        Icon(
+                            Icons.Filled.Share,
+                            contentDescription = "Share",
+                            tint = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    // Pulsante bookmark
+                    IconButton(onClick = onToggleBookmark) {
+                        Icon(
+                            if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                            contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
+                            tint = if (isBookmarked) MaterialTheme.colorScheme.primary else Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
         }

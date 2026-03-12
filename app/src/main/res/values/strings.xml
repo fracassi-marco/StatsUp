@@ -89,6 +89,7 @@
     <string name="instruction_step_1">Tap the circular import button at the bottom center</string>
     <string name="instruction_step_2">Sign in with your Strava account</string>
     <string name="instruction_step_3">Your trainings will be synced automatically</string>
+    <string name="share">Share</string>
     <string name="settings_export_data">Export data</string>
     <string name="settings_import_data">Import data</string>
     <string name="hr_zones_title">Heart Rate Zones</string>

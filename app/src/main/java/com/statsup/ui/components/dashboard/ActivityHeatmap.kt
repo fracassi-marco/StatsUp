@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.statsup.ui.viewmodel.DashboardViewModel
@@ -36,20 +38,25 @@ fun ActivityHeatmap(viewModel: DashboardViewModel) {
 
     val weeks = (0 until 52).map { w ->
         (0 until 7).map { d -> gridStart.plusDays((w * 7 + d).toLong()) }
-    }
+    }.reversed()
 
     val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
     val primary = MaterialTheme.colorScheme.primary
+    val labelColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
 
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Text(text = "Recent", fontSize = 10.sp, color = labelColor, textAlign = TextAlign.Start)
+        Text(text = "Old", fontSize = 10.sp, color = labelColor, textAlign = TextAlign.End)
+    }
     Row {
         Column(verticalArrangement = Arrangement.spacedBy(CELL_GAP)) {
             DAY_LABELS.forEach { label ->
                 Box(modifier = Modifier.size(CELL_SIZE), contentAlignment = Alignment.Center) {
-                    Text(
-                        text = label,
-                        fontSize = 7.sp,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
-                    )
+                    Text(text = label, fontSize = 7.sp, color = labelColor)
                 }
             }
         }
