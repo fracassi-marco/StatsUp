@@ -50,6 +50,7 @@ fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (Long) -> Unit) 
 
     if (state.show) {
         Column {
+            ScreenTitle(text = stringResource(R.string.history_title))
             // Filtri per tipo di sport
             if (state.availableSportTypes.isNotEmpty()) {
                 SportTypeFilter(

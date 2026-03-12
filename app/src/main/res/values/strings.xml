@@ -2,6 +2,9 @@
     <string name="app_name">StatsUp</string>
 
     <string name="settings_title">Settings</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="stats_title">Statistics</string>
+    <string name="history_title">History</string>
     <string name="settings_screen_goals">Goals</string>
     <string name="settings_screen_goals_monthly">Monthly distance</string>
     <string name="settings_screen_goals_monthly_trainings">Monthly trainings target</string>

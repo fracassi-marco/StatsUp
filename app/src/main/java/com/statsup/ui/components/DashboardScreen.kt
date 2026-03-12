@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.statsup.R
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
 import com.statsup.ui.components.dashboard.DurationCard
 import com.statsup.ui.components.dashboard.MaxAltitudeCard
@@ -22,7 +24,9 @@ import com.statsup.ui.viewmodel.DashboardViewModel
 
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
-    Column(modifier = Modifier.padding(20.dp)) {
+    Column {
+        ScreenTitle(text = stringResource(R.string.dashboard_title))
+        Column(modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)) {
         MonthlyDistanceGoalCard(viewModel)
         Spacer(modifier = Modifier.height(10.dp))
         MonthlyTrainingGoalCard(viewModel)
@@ -48,6 +52,7 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
         }
         Column(modifier = Modifier.padding(top = 40.dp)) {
             TopTrainingTypes(viewModel)
+        }
         }
     }
 }

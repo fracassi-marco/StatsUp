@@ -1,15 +1,13 @@
 package com.statsup.ui.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,7 +28,6 @@ import com.statsup.R
 import com.statsup.domain.Training
 import com.statsup.ui.viewmodel.AllRoutesViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllRoutesMapScreen(
     viewModel: AllRoutesViewModel
@@ -38,19 +35,9 @@ fun AllRoutesMapScreen(
     val trainings by viewModel.trainings.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(id = R.string.all_routes)) },
-                windowInsets = androidx.compose.foundation.layout.WindowInsets(0)
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        ScreenTitle(text = stringResource(id = R.string.all_routes))
+        Box(modifier = Modifier.fillMaxSize()) {
             if (isLoading) {
                 LoadingBox(isLoading = true) { }
             } else if (trainings.isNotEmpty()) {
@@ -76,7 +63,7 @@ fun AllRoutesMapScreen(
                 Box(modifier = Modifier.fillMaxSize()) {
                     Text(
                         text = stringResource(id = R.string.no_routes_found),
-                        modifier = Modifier.padding(paddingValues)
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
             }

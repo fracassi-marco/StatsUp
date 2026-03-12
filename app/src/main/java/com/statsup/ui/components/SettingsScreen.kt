@@ -21,11 +21,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -72,23 +70,11 @@ fun SettingsScreen(
         uri?.let { viewModel.showImportConfirmDialog(it) }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.settings_title),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                },
-                windowInsets = androidx.compose.foundation.layout.WindowInsets(0)
-            )
-        },
-    ) {
+    Column {
+        ScreenTitle(text = stringResource(id = R.string.settings_title))
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(it)
                 .padding(20.dp, 16.dp)
         ) {
             Title(text = stringResource(R.string.settings_screen_goals))
@@ -154,7 +140,9 @@ fun SettingsScreen(
                 }
             }
         }
-        if (viewModel.showMonthlyGoalSheet) {
+    }
+
+    if (viewModel.showMonthlyGoalSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
                     viewModel.hideMonthlyGoalSheet()
@@ -278,5 +266,4 @@ fun SettingsScreen(
                 }
             )
         }
-    }
 }

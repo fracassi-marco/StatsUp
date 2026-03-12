@@ -24,7 +24,9 @@ import com.statsup.R
 
 @Composable
 fun StatsScreen(viewModel: StatsViewModel) {
-    Column(modifier = Modifier.padding(20.dp)) {
+    Column {
+        ScreenTitle(text = stringResource(R.string.stats_title))
+        Column(modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)) {
         SpanSelector(viewModel)
         Spacer(modifier = Modifier.height(10.dp))
         ProviderSelector(viewModel)
@@ -89,5 +91,6 @@ fun StatsScreen(viewModel: StatsViewModel) {
         MonthBarChart(viewModel)
         YearCumulativeChart(viewModel)
         YearBarChart(viewModel)
+        }
     }
 }

@@ -48,24 +48,14 @@ fun BookmarksScreen(
 ) {
     val trainings by viewModel.bookmarkedTrainings.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = stringResource(id = R.string.bookmarked_trainings),
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+    Column(modifier = Modifier.fillMaxSize()) {
+        ScreenTitle(text = stringResource(id = R.string.bookmarked_trainings))
 
         if (trainings.isEmpty()) {
             EmptyBookmarksState()
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(bottom = 16.dp)
             ) {
