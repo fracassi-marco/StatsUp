@@ -34,6 +34,12 @@ fun DistanceMonthOverMonthChart(viewModel: DashboardViewModel) {
     LineChart(
         lines = listOf(
             Line(
+                points = viewModel.projectedCumulativeDistance().map { Point(it.value.toFloat(), "") },
+                lineDrawer = SolidLineDrawer(thickness = 1.5.dp, color = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)),
+                pointDrawer = NoPointDrawer,
+                startAtZero = true
+            ),
+            Line(
                 points = viewModel.cumulativeDistance().map { Point(it.value.toFloat(), "") },
                 lineDrawer = SolidLineDrawer(thickness = 2.dp, color = MaterialTheme.colorScheme.primary),
                 pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().dayOfMonth - 1), FilledPointDrawer(color = Color.Black)),

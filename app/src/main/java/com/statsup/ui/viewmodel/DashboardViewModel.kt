@@ -97,6 +97,14 @@ class DashboardViewModel(
         return Trainings(trainings, provider = Provider.None).bestStreak()
     }
 
+    fun projectedDistanceEndOfMonth(): Double {
+        return Trainings(trainings, provider = Provider.Distance).cumulativeDaysTrend().values.lastOrNull() ?: 0.0
+    }
+
+    fun projectedCumulativeDistance(): Map<Int, Double> {
+        return Trainings(trainings, provider = Provider.Distance).cumulativeDaysTrend()
+    }
+
     fun activityHeatmap(): Map<LocalDate, Double> {
         return Trainings(trainings, provider = Provider.Distance).heatmapByDay()
     }

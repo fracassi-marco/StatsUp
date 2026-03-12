@@ -2,6 +2,7 @@ package com.statsup.ui.components.dashboard
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.EmojiEvents
@@ -34,7 +35,7 @@ fun MonthlyDistanceGoalCard(viewModel: DashboardViewModel) {
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "${String.format(Locale.getDefault(), "%.0f", viewModel.totalDistance())} ${stringResource(R.string.km)}",
+                text = "${String.format(Locale.getDefault(), "%.0f", viewModel.totalDistance())} ${stringResource(R.string.km)} → ~${String.format(Locale.getDefault(), "%.0f", viewModel.projectedDistanceEndOfMonth())} ${stringResource(R.string.km)}",
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp
