@@ -14,14 +14,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.statsup.R
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
+import com.statsup.ui.components.dashboard.StreakCard
 import com.statsup.ui.components.dashboard.DurationCard
 import com.statsup.ui.components.dashboard.MaxAltitudeCard
 import com.statsup.ui.components.dashboard.MaxElevationGainCard
-import com.statsup.ui.components.dashboard.MaxHeartRateCard
 import com.statsup.ui.components.dashboard.MonthlyDistanceGoalCard
 import com.statsup.ui.components.dashboard.MonthlyTrainingGoalCard
 import com.statsup.ui.components.dashboard.TopTrainingTypes
-import com.statsup.ui.components.dashboard.TrainingCard
 import com.statsup.ui.viewmodel.DashboardViewModel
 
 @Composable
@@ -32,21 +31,19 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
         MonthlyDistanceGoalCard(viewModel)
         Spacer(modifier = Modifier.height(10.dp))
         MonthlyTrainingGoalCard(viewModel)
+        Spacer(modifier = Modifier.height(10.dp))
+        StreakCard(viewModel)
         Row(
             modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                TrainingCard(viewModel)
-                Spacer(modifier = Modifier.height(10.dp))
                 MaxElevationGainCard(viewModel)
                 Spacer(modifier = Modifier.height(10.dp))
-                MaxHeartRateCard(viewModel)
+                MaxAltitudeCard(viewModel)
             }
             Column(modifier = Modifier.weight(1f)) {
                 DurationCard(viewModel)
-                Spacer(modifier = Modifier.height(10.dp))
-                MaxAltitudeCard(viewModel)
             }
         }
         Column(modifier = Modifier.padding(top = 40.dp)) {

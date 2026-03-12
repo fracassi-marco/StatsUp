@@ -1,5 +1,6 @@
 package com.statsup.domain
 
+import java.time.LocalDate
 import java.time.Month
 import java.time.Month.JANUARY
 import java.time.Month.DECEMBER
@@ -134,5 +135,37 @@ class Trainings(
 
     fun maxOfMonth(): Double {
         return provider.max(ofMonth())
+    }
+
+    fun currentStreak(): Int {
+        if (trainings.isEmpty()) return 0
+        val daysWithActivity = trainings.map { it.date.toLocalDate() }.toSet()
+        var day = now.toLocalDate()
+        if (!daysWithActivity.contains(day)) {
+            day = day.minusDays(1)
+        }
+        var streak = 0
+        while (daysWithActivity.contains(day)) {
+            streak++
+            day = day.minusDays(1)
+        }
+        return streak
+    }
+
+    fun bestStreak(): Int {
+        if (trainings.isEmpty()) return 0
+        val sortedDays = trainings.map { it.date.toLocalDate() }.distinct().sorted()
+        if (sortedDays.isEmpty()) return 0
+        var best = 1
+        var current = 1
+        for (i in 1 until sortedDays.size) {
+            if (sortedDays[i] == sortedDays[i - 1].plusDays(1)) {
+                current++
+                if (current > best) best = current
+            } else {
+                current = 1
+            }
+        }
+        return best
     }
 }

@@ -87,4 +87,18 @@ class DashboardViewModel(
     fun topTrainings(): Map<String, List<Training>> {
         return Trainings(trainings, provider = Provider.None).ofMonth().groupBy { it.type!! }
     }
+
+    fun currentStreak(): Int {
+        return Trainings(trainings, provider = Provider.None).currentStreak()
+    }
+
+    fun bestStreak(): Int {
+        return Trainings(trainings, provider = Provider.None).bestStreak()
+    }
+
+    fun streakPercentage(): Float {
+        val best = bestStreak()
+        if (best == 0) return 0f
+        return currentStreak().toFloat() / best.toFloat()
+    }
 }
