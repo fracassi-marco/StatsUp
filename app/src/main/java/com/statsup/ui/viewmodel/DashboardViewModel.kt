@@ -109,6 +109,10 @@ class DashboardViewModel(
         return Trainings(trainings, provider = Provider.Distance).heatmapByDay()
     }
 
+    fun hrZoneDistribution(): Map<Int, Int> {
+        return Trainings(trainings, provider = Provider.None).hrZoneDistribution()
+    }
+
     fun streakPercentage(): Float {
         val best = bestStreak()
         if (best == 0) return 0f

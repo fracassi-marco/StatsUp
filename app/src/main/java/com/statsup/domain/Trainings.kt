@@ -163,6 +163,25 @@ class Trainings(
         return streak
     }
 
+    fun hrZoneDistribution(): Map<Int, Int> {
+        val maxHr = 190.0
+        val zones = mapOf(1 to 0, 2 to 0, 3 to 0, 4 to 0, 5 to 0).toMutableMap()
+        ofMonth()
+            .filter { it.hasHeartrate == true && it.averageHeartrate != null && it.averageHeartrate!! > 0 }
+            .forEach { t ->
+                val pct = t.averageHeartrate!! / maxHr
+                val zone = when {
+                    pct < 0.60 -> 1
+                    pct < 0.70 -> 2
+                    pct < 0.80 -> 3
+                    pct < 0.90 -> 4
+                    else -> 5
+                }
+                zones[zone] = zones[zone]!! + 1
+            }
+        return zones
+    }
+
     fun bestStreak(): Int {
         if (trainings.isEmpty()) return 0
         val sortedDays = trainings.map { it.date.toLocalDate() }.distinct().sorted()

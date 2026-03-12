@@ -91,5 +91,12 @@
     <string name="instruction_step_3">Your trainings will be synced automatically</string>
     <string name="settings_export_data">Export data</string>
     <string name="settings_import_data">Import data</string>
+    <string name="hr_zones_title">Heart Rate Zones</string>
+    <string name="hr_zone_1">Z1 Recovery</string>
+    <string name="hr_zone_2">Z2 Endurance</string>
+    <string name="hr_zone_3">Z3 Aerobic</string>
+    <string name="hr_zone_4">Z4 Threshold</string>
+    <string name="hr_zone_5">Z5 Max</string>
+    <string name="hr_zones_no_data">No heart rate data this month</string>
 </resources>
 

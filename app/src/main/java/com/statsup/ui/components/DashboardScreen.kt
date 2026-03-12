@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.statsup.R
 import com.statsup.ui.components.dashboard.ActivityHeatmap
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
+import com.statsup.ui.components.dashboard.HeartRateZonesCard
 import com.statsup.ui.components.dashboard.StreakCard
 import com.statsup.ui.components.dashboard.DurationCard
 import com.statsup.ui.components.dashboard.MaxAltitudeCard
@@ -55,6 +56,9 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
         }
         Column(modifier = Modifier.padding(top = 40.dp)) {
             TopTrainingTypes(viewModel)
+        }
+        Column(modifier = Modifier.padding(top = 40.dp)) {
+            HeartRateZonesCard(viewModel)
         }
         Column(modifier = Modifier.padding(top = 40.dp)) {
             Text(
