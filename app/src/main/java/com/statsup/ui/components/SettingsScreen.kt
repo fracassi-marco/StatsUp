@@ -6,7 +6,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -84,6 +86,7 @@ fun SettingsScreen(
                 value = "${viewModel.monthlyGoal} ${stringResource(id = R.string.km)}",
                 onClick = { viewModel.showMonthlyGoal() }
             )
+            Spacer(modifier = Modifier.height(8.dp))
             SettingsClickableComponent(
                 icon = Icons.Outlined.EmojiEvents,
                 name = R.string.settings_screen_goals_monthly_trainings,
@@ -106,6 +109,7 @@ fun SettingsScreen(
                     exportLauncher.launch("statsup_export_${System.currentTimeMillis()}.json")
                 }
             )
+            Spacer(modifier = Modifier.height(8.dp))
             SettingsClickableComponent(
                 icon = Icons.Outlined.Download,
                 name = R.string.settings_import_data,
