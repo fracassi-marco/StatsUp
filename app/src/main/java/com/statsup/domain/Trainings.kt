@@ -137,6 +137,17 @@ class Trainings(
         return provider.max(ofMonth())
     }
 
+    fun heatmapByDay(): Map<LocalDate, Double> {
+        val today = now.toLocalDate()
+        val start = today.minusDays(363)
+        return generateSequence(start) { it.plusDays(1) }
+            .takeWhile { !it.isAfter(today) }
+            .associateWith { day ->
+                val ts = trainings.filter { t -> t.date.toLocalDate() == day }
+                provider.cumulative(ts)
+            }
+    }
+
     fun currentStreak(): Int {
         if (trainings.isEmpty()) return 0
         val daysWithActivity = trainings.map { it.date.toLocalDate() }.toSet()

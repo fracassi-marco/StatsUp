@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.statsup.R
+import com.statsup.ui.components.dashboard.ActivityHeatmap
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
 import com.statsup.ui.components.dashboard.StreakCard
 import com.statsup.ui.components.dashboard.DurationCard
@@ -51,6 +55,14 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
         }
         Column(modifier = Modifier.padding(top = 40.dp)) {
             TopTrainingTypes(viewModel)
+        }
+        Column(modifier = Modifier.padding(top = 40.dp)) {
+            Text(
+                text = stringResource(R.string.activity_heatmap_title),
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            ActivityHeatmap(viewModel)
         }
         }
     }

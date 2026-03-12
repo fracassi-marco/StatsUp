@@ -11,6 +11,7 @@ import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.ZonedDateTime
 
 class DashboardViewModel(
@@ -94,6 +95,10 @@ class DashboardViewModel(
 
     fun bestStreak(): Int {
         return Trainings(trainings, provider = Provider.None).bestStreak()
+    }
+
+    fun activityHeatmap(): Map<LocalDate, Double> {
+        return Trainings(trainings, provider = Provider.Distance).heatmapByDay()
     }
 
     fun streakPercentage(): Float {
