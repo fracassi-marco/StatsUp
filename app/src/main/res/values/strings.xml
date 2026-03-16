@@ -32,7 +32,6 @@
     <string name="max">Max</string>
     <string name="average">Average</string>
     <string name="duration">Duration</string>
-    <string name="imported">%1$d activities have been imported</string>
     <string name="distance_mom">Distance month over month</string>
     <string name="day_by_day">Last 31 days</string>
     <string name="month_by_month">Last 12 months</string>
@@ -50,7 +49,7 @@
     <string name="view_fullscreen_map">View full map</string>
     <string name="elevation_per_km">Elev./km</string>
     <string name="vam">VAM</string>
-    <string name="altitude_range">Alt. range</string>
+
     <string name="m_per_km">m/km</string>
     <string name="m_per_hour">m/h</string>
     <string name="distance_and_time">Distance &amp; Time</string>
@@ -58,15 +57,14 @@
     <string name="all_routes">All Routes</string>
     <string name="no_routes_found">No routes found</string>
     <string name="all_sports">All sports</string>
-    <string name="filter_by_sport">Filter by sport</string>
+
     <string name="monthly_training_goal">Monthly training goal</string>
     <string name="trainings_completed">trainings completed</string>
     <string name="bookmarked_trainings">Bookmarked Trainings</string>
     <string name="no_bookmarked_trainings">No bookmarked trainings yet.\nTap the bookmark icon on any training to save it here.</string>
     <string name="note">Note</string>
     <string name="add_note_placeholder">Add a note about this training…</string>
-    <string name="note_saved">Saved</string>
-    <string name="save_note">Save</string>
+
     <string name="add_to_bookmarks">Add to Bookmarks</string>
     <string name="edit_bookmark">Edit Bookmark</string>
     <string name="note_optional">Note (optional)</string>

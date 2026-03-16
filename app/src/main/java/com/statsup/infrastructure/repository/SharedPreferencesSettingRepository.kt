@@ -1,44 +1,33 @@
 package com.statsup.infrastructure.repository
 
 import android.content.Context
+import androidx.core.content.edit
 import com.statsup.domain.ExportSettings
 import com.statsup.domain.repository.SettingRepository
 
 class SharedPreferencesSettingRepository(private val context: Context) : SettingRepository {
     override fun saveTheme(value: Int) {
-        val editor = sharedPreferences().edit()
-        editor.putInt("settings.theme", value)
-        editor.apply()
+        sharedPreferences().edit { putInt("settings.theme", value) }
     }
 
     override fun saveMonthlyGoal(value: Int) {
-        val editor = sharedPreferences().edit()
-        editor.putInt("settings.monthlyGoal", value)
-        editor.apply()
+        sharedPreferences().edit { putInt("settings.monthlyGoal", value) }
     }
 
     override fun saveMonthlyTrainingGoal(value: Int) {
-        val editor = sharedPreferences().edit()
-        editor.putInt("settings.monthlyTrainingGoal", value)
-        editor.apply()
+        sharedPreferences().edit { putInt("settings.monthlyTrainingGoal", value) }
     }
 
     override fun loadTheme(): Int {
-        val sp = sharedPreferences()
-        val value = sp.getInt("settings.theme", 0)
-        return value
+        return sharedPreferences().getInt("settings.theme", 0)
     }
 
     override fun loadMonthlyGoal(): Int {
-        val sp = sharedPreferences()
-        val value = sp.getInt("settings.monthlyGoal", 10)
-        return value
+        return sharedPreferences().getInt("settings.monthlyGoal", 10)
     }
 
     override fun loadMonthlyTrainingGoal(): Int {
-        val sp = sharedPreferences()
-        val value = sp.getInt("settings.monthlyTrainingGoal", 12)
-        return value
+        return sharedPreferences().getInt("settings.monthlyTrainingGoal", 12)
     }
 
     override fun exportSettings(): ExportSettings {
@@ -56,9 +45,7 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
     }
 
     override fun clearAllSettings() {
-        val editor = sharedPreferences().edit()
-        editor.clear()
-        editor.apply()
+        sharedPreferences().edit { clear() }
     }
 
     private fun sharedPreferences() = context.getSharedPreferences("StatsUpPrefs", 0)

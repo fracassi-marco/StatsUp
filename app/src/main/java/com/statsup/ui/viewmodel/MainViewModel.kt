@@ -2,7 +2,7 @@ package com.statsup.ui.viewmodel
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.State
@@ -75,9 +75,9 @@ class MainViewModel(
 
     fun startImport(authService: AuthorizationService): Intent {
         startLoading()
-        val redirectUri = Uri.parse("oauth://com-sportshub")
-        val authorizeUri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
-        val tokenUri = Uri.parse("https://www.strava.com/api/v3/oauth/token")
+        val redirectUri = "oauth://com-sportshub".toUri()
+        val authorizeUri = "https://www.strava.com/oauth/mobile/authorize".toUri()
+        val tokenUri = "https://www.strava.com/api/v3/oauth/token".toUri()
 
         val config = AuthorizationServiceConfiguration(authorizeUri, tokenUri)
         val request = AuthorizationRequest
