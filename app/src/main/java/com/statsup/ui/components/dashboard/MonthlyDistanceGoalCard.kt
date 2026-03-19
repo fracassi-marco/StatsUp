@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.statsup.R
 import com.statsup.ui.components.PrimaryCard
-import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.viewmodel.DashboardViewModel
 import java.util.Locale
 
@@ -45,7 +44,7 @@ fun MonthlyDistanceGoalCard(viewModel: DashboardViewModel) {
             LinearProgressIndicator(
                 progress = { viewModel.distancePercentage() },
                 color = MaterialTheme.colorScheme.primary,
-                trackColor = SecondaryText
+                trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
             )
         }
     }

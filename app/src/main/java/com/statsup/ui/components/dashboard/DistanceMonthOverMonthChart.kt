@@ -6,13 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.statsup.R
 import com.statsup.ui.components.Title
-import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.viewmodel.DashboardViewModel
 import io.jetchart.common.animation.fadeInAnimation
 import io.jetchart.line.Line
@@ -42,19 +40,19 @@ fun DistanceMonthOverMonthChart(viewModel: DashboardViewModel) {
             Line(
                 points = viewModel.cumulativeDistance().map { Point(it.value.toFloat(), "") },
                 lineDrawer = SolidLineDrawer(thickness = 2.dp, color = MaterialTheme.colorScheme.primary),
-                pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().dayOfMonth - 1), FilledPointDrawer(color = Color.Black)),
+                pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().dayOfMonth - 1), FilledPointDrawer(color = MaterialTheme.colorScheme.onBackground)),
                 startAtZero = true,
                 shader = GradientLineShader(listOf(MaterialTheme.colorScheme.primary, Transparent))
             ),
             Line(
                 points = viewModel.pastCumulativeDistance().map { Point(it.value.toFloat(), "") },
-                lineDrawer = SolidLineDrawer(thickness = 2.dp, color = SecondaryText),
+                lineDrawer = SolidLineDrawer(thickness = 2.dp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)),
                 pointDrawer = NoPointDrawer,
                 startAtZero = true
             ),
             Line(
                 points = viewModel.cumulativeDistance().map { Point(viewModel.monthlyDistanceGoal(), "") },
-                lineDrawer = SolidLineDrawer(thickness = 1.dp, color = Color.Green),
+                lineDrawer = SolidLineDrawer(thickness = 1.dp, color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.6f)),
                 pointDrawer = NoPointDrawer,
                 startAtZero = true
             )

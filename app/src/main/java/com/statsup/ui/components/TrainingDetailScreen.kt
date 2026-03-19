@@ -57,6 +57,9 @@ import com.statsup.domain.Measure
 import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
+import com.statsup.ui.theme.DifficultyEasy
+import com.statsup.ui.theme.DifficultyHard
+import com.statsup.ui.theme.DifficultyMedium
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -569,17 +572,17 @@ private fun getActivityBackground(sportType: String?): Int {
 fun DifficultyBadge(difficulty: String) {
     val (color, text, icon) = when (difficulty) {
         "easy" -> Triple(
-            Color(0xFF4CAF50),
+            DifficultyEasy,
             stringResource(id = R.string.difficulty_easy),
             Icons.Filled.SentimentSatisfied
         )
         "medium" -> Triple(
-            Color(0xFFFF9800),
+            DifficultyMedium,
             stringResource(id = R.string.difficulty_medium),
             Icons.Filled.FitnessCenter
         )
         "hard" -> Triple(
-            Color(0xFFF44336),
+            DifficultyHard,
             stringResource(id = R.string.difficulty_hard),
             Icons.Filled.Whatshot
         )
@@ -588,7 +591,7 @@ fun DifficultyBadge(difficulty: String) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.2f)
+            containerColor = color.copy(alpha = 0.25f)
         ),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.padding(top = 4.dp)

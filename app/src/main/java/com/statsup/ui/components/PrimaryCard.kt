@@ -23,8 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.statsup.ui.theme.SecondaryText
-
 @Composable
 fun SecondaryCard(
     modifier: Modifier = Modifier,
@@ -37,7 +35,7 @@ fun SecondaryCard(
         modifier = modifier,
         onClick = onClick,
         colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, SecondaryText),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         icon = icon,
         bottom = bottom,
         content = content

@@ -35,7 +35,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.statsup.R
 import com.statsup.ui.viewmodel.SettingsViewModel
@@ -177,6 +179,7 @@ fun SettingsScreen(
                             range = 0..500,
                             onValueChange = { value -> viewModel.monthlyGoal(value) },
                             dividersColor = MaterialTheme.colorScheme.primary,
+                            textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp),
                         )
                         Text(text = stringResource(R.string.km))
                     }
@@ -212,6 +215,7 @@ fun SettingsScreen(
                             range = 0..100,
                             onValueChange = { value -> viewModel.monthlyTrainingGoal(value) },
                             dividersColor = MaterialTheme.colorScheme.primary,
+                            textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp),
                         )
                         Text(text = stringResource(R.string.trainings))
                     }
@@ -246,7 +250,8 @@ fun SettingsScreen(
                         range = 0..2,
                         onValueChange = { value -> viewModel.theme(value) },
                         dividersColor = MaterialTheme.colorScheme.primary,
-                        label = { value -> viewModel.themeLabel(value) }
+                        label = { value -> viewModel.themeLabel(value) },
+                        textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp),
                     )
                     Button(
                         onClick = {

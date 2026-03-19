@@ -10,22 +10,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.statsup.R
 import com.statsup.ui.components.Title
-import com.statsup.ui.theme.SecondaryText
+import com.statsup.ui.theme.HrZone1
+import com.statsup.ui.theme.HrZone2
+import com.statsup.ui.theme.HrZone3
+import com.statsup.ui.theme.HrZone4
+import com.statsup.ui.theme.HrZone5
 import com.statsup.ui.viewmodel.DashboardViewModel
 
-private val ZONE_COLORS = listOf(
-    Color(0xFF64B5F6), // Z1 blue
-    Color(0xFF81C784), // Z2 green
-    Color(0xFFFFD54F), // Z3 yellow
-    Color(0xFFFF8A65), // Z4 orange
-    Color(0xFFE57373), // Z5 red
-)
+private val ZONE_COLORS = listOf(HrZone1, HrZone2, HrZone3, HrZone4, HrZone5)
 
 private val ZONE_LABELS = listOf(
     R.string.hr_zone_1,
@@ -64,7 +61,7 @@ fun HeartRateZonesCard(viewModel: DashboardViewModel) {
                 LinearProgressIndicator(
                     progress = { if (total > 0) count / total.toFloat() else 0f },
                     color = ZONE_COLORS[zone - 1],
-                    trackColor = SecondaryText,
+                    trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
                     modifier = Modifier
                         .weight(4f)
                         .padding(horizontal = 10.dp)

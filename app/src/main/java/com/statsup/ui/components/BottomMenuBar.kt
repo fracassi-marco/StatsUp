@@ -16,12 +16,12 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.statsup.Screens
-import com.statsup.ui.theme.SecondaryText
 
 @Composable
 fun BottomMenuBar(navController: NavHostController, enabled: Boolean = true) {
+    val unselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
     androidx.compose.material3.NavigationBar(
-        modifier = Modifier.border(1.dp, color = SecondaryText),
+        modifier = Modifier.border(1.dp, color = MaterialTheme.colorScheme.outlineVariant),
         containerColor = MaterialTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -43,10 +43,10 @@ fun BottomMenuBar(navController: NavHostController, enabled: Boolean = true) {
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 enabled = enabled,
                 colors = NavigationBarItemDefaults.colors(
-                    unselectedIconColor = if (enabled) SecondaryText else SecondaryText.copy(alpha = 0.3f),
+                    unselectedIconColor = if (enabled) unselectedColor else unselectedColor.copy(alpha = 0.38f),
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     indicatorColor = MaterialTheme.colorScheme.background,
-                    disabledIconColor = SecondaryText.copy(alpha = 0.3f)
+                    disabledIconColor = unselectedColor.copy(alpha = 0.38f)
                 ),
                 onClick = {
                     if (enabled) {

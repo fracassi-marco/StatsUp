@@ -15,7 +15,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.statsup.R
 import com.statsup.ui.components.Title
-import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.viewmodel.DashboardViewModel
 
 @Composable
@@ -32,7 +31,7 @@ fun TopTrainingTypes(viewModel: DashboardViewModel) {
                 LinearProgressIndicator(
                     progress = { v.size / total.toFloat() },
                     color = MaterialTheme.colorScheme.primary,
-                    trackColor = SecondaryText,
+                    trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
                     modifier = Modifier
                         .weight(4f)
                         .padding(horizontal = 10.dp)

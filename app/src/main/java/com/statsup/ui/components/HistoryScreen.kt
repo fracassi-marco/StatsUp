@@ -38,7 +38,6 @@ import com.statsup.domain.Measure
 import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
-import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.viewmodel.HistoryViewModel
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -154,7 +153,7 @@ fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
             .padding(10.dp)
             .clickable { onTrainingClick(training.id) },
         colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background),
-        border = BorderStroke(1.dp, SecondaryText)
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         // Titolo centrato
         Text(

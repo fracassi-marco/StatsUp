@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.statsup.R
-import com.statsup.ui.theme.SecondaryText
 import com.statsup.ui.viewmodel.DashboardViewModel
 
 @Composable
@@ -57,7 +56,7 @@ fun StreakCard(viewModel: DashboardViewModel) {
             progress = { viewModel.streakPercentage() },
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,
-            trackColor = SecondaryText
+            trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(

@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -44,7 +43,7 @@ fun DurationCard(viewModel: DashboardViewModel) {
                     Line(
                         points = viewModel.cumulativeDuration().map { Point(it.value.toFloat(), "") },
                         lineDrawer = SolidLineDrawer(thickness = 1.dp, color = MaterialTheme.colorScheme.primary),
-                        pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().dayOfMonth - 1), FilledPointDrawer(color = Color.Black)),
+                        pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().dayOfMonth - 1), FilledPointDrawer(color = MaterialTheme.colorScheme.onBackground)),
                         startAtZero = true,
                         shader = GradientLineShader(listOf(MaterialTheme.colorScheme.primary, Transparent))
                     )

@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.statsup.R
 import com.statsup.ui.components.PrimaryCard
+import com.statsup.ui.theme.GoalGreen
 import com.statsup.ui.viewmodel.DashboardViewModel
 
 @Composable
@@ -50,10 +50,9 @@ fun MonthlyTrainingGoalCard(viewModel: DashboardViewModel) {
             Spacer(modifier = Modifier.height(4.dp))
             LinearProgressIndicator(
                 progress = { viewModel.trainingGoalPercentage() },
-                color = Color(0xFF4CAF50),
-                trackColor = Color(0xFF4CAF50).copy(alpha = 0.2f)
+                color = GoalGreen,
+                trackColor = GoalGreen.copy(alpha = 0.2f)
             )
         }
     }
 }
-
