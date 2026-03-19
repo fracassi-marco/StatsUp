@@ -1,12 +1,21 @@
 package com.statsup.ui.components.stats
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.statsup.ui.viewmodel.StatsViewModel
 
@@ -23,6 +32,39 @@ fun SpanSelector(viewModel: StatsViewModel) {
             ) {
                 Text(label)
             }
+        }
+    }
+}
+
+@Composable
+fun PeriodNavigator(viewModel: StatsViewModel) {
+    val isCurrent = viewModel.isCurrentPeriod()
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = { viewModel.previousPeriod() }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                contentDescription = "Previous period",
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+        Text(
+            text = viewModel.periodLabel(),
+            style = MaterialTheme.typography.titleMedium
+        )
+        IconButton(
+            onClick = { viewModel.nextPeriod() },
+            enabled = !isCurrent
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = "Next period",
+                tint = if (isCurrent) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                       else MaterialTheme.colorScheme.primary
+            )
         }
     }
 }

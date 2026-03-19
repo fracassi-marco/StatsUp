@@ -12,6 +12,8 @@ import com.statsup.domain.Trainings
 import com.statsup.domain.repository.TrainingRepository
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
+import java.time.format.TextStyle
+import java.util.Locale
 
 class StatsViewModel(
     private val trainingRepository: TrainingRepository
@@ -22,20 +24,53 @@ class StatsViewModel(
         private set
     var selectedProvider by mutableIntStateOf(0)
 
+    private var selectedNow: ZonedDateTime by mutableStateOf(ZonedDateTime.now())
+
     fun switchSpan(index: Int) {
         selectedSpan = index
+        selectedNow = ZonedDateTime.now()
     }
 
     fun switchProvider(index: Int) {
         selectedProvider = index
     }
 
+    fun previousPeriod() {
+        selectedNow = if (selectedSpan == 0) selectedNow.minusMonths(1) else selectedNow.minusYears(1)
+    }
+
+    fun nextPeriod() {
+        if (!isCurrentPeriod()) {
+            selectedNow = if (selectedSpan == 0) selectedNow.plusMonths(1) else selectedNow.plusYears(1)
+        }
+    }
+
+    fun isCurrentPeriod(): Boolean {
+        val now = ZonedDateTime.now()
+        return if (selectedSpan == 0) {
+            selectedNow.year == now.year && selectedNow.month == now.month
+        } else {
+            selectedNow.year == now.year
+        }
+    }
+
+    fun periodLabel(): String {
+        return if (selectedSpan == 0) {
+            val month = selectedNow.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+                .replaceFirstChar { it.uppercaseChar() }
+            if (selectedNow.year == ZonedDateTime.now().year) month
+            else "$month ${selectedNow.year}"
+        } else {
+            selectedNow.year.toString()
+        }
+    }
+
     fun cumulativeMonth() = trainings().cumulativeDaysTrend()
 
     fun pastCumulativeMonth() = pastMonthTrainings().cumulativeDays()
 
-    private fun pastMonthTrainings() = Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusMonths(1))
-    private fun pastYearTraining() = Trainings(trainings, provider = provider(), now = ZonedDateTime.now().minusYears(1))
+    private fun pastMonthTrainings() = Trainings(trainings, provider = provider(), now = selectedNow.minusMonths(1))
+    private fun pastYearTraining() = Trainings(trainings, provider = provider(), now = selectedNow.minusYears(1))
 
     fun cumulativeYear() = trainings().cumulativeMonthsTrend()
     fun pastCumulativeYear() = pastYearTraining().cumulativeMonths()
@@ -52,7 +87,7 @@ class StatsViewModel(
     fun trendOfMonth() = cumulativeMonth().values.last()
     fun doneOfPastMonth() = pastMonthTrainings().groupByDay().values.sum()
 
-    fun averageOfMonth() = trainings().groupByDay().values.filter { it != 0.0 } .average()
+    fun averageOfMonth() = trainings().groupByDay().values.filter { it != 0.0 }.average()
 
     fun maxOfYear() = trainings().byMonth().maxOf { it.value }
 
@@ -60,11 +95,11 @@ class StatsViewModel(
     fun trendOfYear() = cumulativeYear().values.last()
     fun doneOfPastYear() = pastYearTraining().byMonth().values.sum()
 
-    fun averageOfYear() = trainings().byMonth().values.filter { it != 0.0 } .average()
+    fun averageOfYear() = trainings().byMonth().values.filter { it != 0.0 }.average()
 
     private fun provider() = Provider.byIndex(selectedProvider)
 
-    private fun trainings() = Trainings(trainings, provider = provider())
+    private fun trainings() = Trainings(trainings, provider = provider(), now = selectedNow)
 
     init {
         viewModelScope.launch {
@@ -74,4 +109,3 @@ class StatsViewModel(
         }
     }
 }
-

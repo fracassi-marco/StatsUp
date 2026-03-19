@@ -16,6 +16,7 @@ import com.statsup.ui.components.stats.AverageCard
 import com.statsup.ui.components.stats.MaxCard
 import com.statsup.ui.components.stats.MonthBarChart
 import com.statsup.ui.components.stats.MonthCumulativeChart
+import com.statsup.ui.components.stats.PeriodNavigator
 import com.statsup.ui.components.stats.ProviderSelector
 import com.statsup.ui.components.stats.SmallCard
 import com.statsup.ui.components.stats.SpanSelector
@@ -30,7 +31,7 @@ fun StatsScreen(viewModel: StatsViewModel) {
         ScreenTitle(text = stringResource(R.string.stats_title))
         Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(start = 20.dp, end = 20.dp, bottom = 20.dp)) {
         SpanSelector(viewModel)
-        Spacer(modifier = Modifier.height(10.dp))
+        PeriodNavigator(viewModel)
         ProviderSelector(viewModel)
         Spacer(modifier = Modifier.height(10.dp))
 
