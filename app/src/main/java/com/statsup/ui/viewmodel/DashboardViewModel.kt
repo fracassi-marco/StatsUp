@@ -5,11 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.statsup.domain.GoalAchievement
 import com.statsup.domain.Provider
 import com.statsup.domain.Training
 import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -21,12 +25,55 @@ class DashboardViewModel(
 
     private var trainings: List<Training> by mutableStateOf(emptyList())
 
+    private val _goalAchieved = MutableSharedFlow<GoalAchievement>(extraBufferCapacity = 1)
+    val goalAchieved: SharedFlow<GoalAchievement> = _goalAchieved.asSharedFlow()
+
+    // Track previous percentages to detect the crossing of the 1.0 threshold
+    private var previousDistancePercentage = 0f
+    private var previousTrainingGoalPercentage = 0f
+    private var isFirstEmission = true
+
     init {
         viewModelScope.launch {
             trainingRepository.all().collect {
                 trainings = it
+                checkGoalAchievement()
             }
         }
+    }
+
+    private fun checkGoalAchievement() {
+        val currentDistance = distancePercentage()
+        val currentTraining = trainingGoalPercentage()
+
+        if (isFirstEmission) {
+            // On first load, just initialise baselines without triggering celebrations
+            previousDistancePercentage = currentDistance
+            previousTrainingGoalPercentage = currentTraining
+            isFirstEmission = false
+            return
+        }
+
+        val distanceGoalJustReached = previousDistancePercentage < 1f && currentDistance >= 1f
+        val trainingGoalJustReached = previousTrainingGoalPercentage < 1f && currentTraining >= 1f
+
+        previousDistancePercentage = currentDistance
+        previousTrainingGoalPercentage = currentTraining
+
+        val achievement = when {
+            distanceGoalJustReached && trainingGoalJustReached -> GoalAchievement.BOTH
+            distanceGoalJustReached -> GoalAchievement.DISTANCE
+            trainingGoalJustReached -> GoalAchievement.TRAINING_COUNT
+            else -> return
+        }
+
+        viewModelScope.launch {
+            _goalAchieved.emit(achievement)
+        }
+    }
+
+    suspend fun testGoalAchieved(achievement: GoalAchievement) {
+        _goalAchieved.emit(achievement)
     }
 
     fun distancePercentage(): Float {

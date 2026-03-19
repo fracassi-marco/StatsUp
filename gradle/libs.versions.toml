@@ -23,6 +23,7 @@ roomRuntime = "2.8.4"
 roomCompiler = "2.8.4"
 roomKtx = "2.8.4"
 topinambur = "1.9.0"
+lottie = "6.6.6"
 
 [libraries]
 android-maps-utils = { module = "com.google.maps.android:android-maps-utils", version.ref = "androidMapsUtils" }
@@ -55,6 +56,7 @@ maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = 
 numberpicker = { module = "com.chargemap.compose:numberpicker", version.ref = "numberpicker" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 topinambur = { module = "com.github.daikonweb:topinambur", version.ref = "topinambur" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

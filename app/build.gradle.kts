@@ -89,6 +89,8 @@ dependencies {
     implementation(libs.numberpicker)
     implementation(libs.topinambur)
     implementation(libs.jetchart)
+    // Lottie
+    implementation(libs.lottie.compose)
     // Room
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)

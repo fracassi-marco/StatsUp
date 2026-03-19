@@ -97,5 +97,11 @@
     <string name="hr_zone_4">Z4 Threshold</string>
     <string name="hr_zone_5">Z5 Max</string>
     <string name="hr_zones_no_data">No heart rate data this month</string>
+
+    <string name="celebration_title">Goal reached!</string>
+    <string name="celebration_distance_message">You\'ve hit your monthly distance target. Keep it up!</string>
+    <string name="celebration_training_message">You\'ve completed your monthly training target. Keep it up!</string>
+    <string name="celebration_both_message">You\'ve crushed both your monthly goals. Incredible!</string>
+    <string name="celebration_close">Great, thanks!</string>
 </resources>
 
