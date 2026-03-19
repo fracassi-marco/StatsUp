@@ -51,12 +51,23 @@ class MainViewModel(
 
     fun onStravaResult(activityResult: ActivityResult, authService: AuthorizationService) {
         if (activityResult.resultCode == RESULT_OK) {
-            val ex = AuthorizationException.fromIntent(activityResult.data!!)
+            val data = activityResult.data
+            if (data == null) {
+                Log.e("StatsUp", "launcher: result data is null")
+                stopLoading()
+                return
+            }
+            val ex = AuthorizationException.fromIntent(data)
             if (ex != null) {
                 Log.e("StatsUp", "launcher: $ex")
                 stopLoading()
             } else {
-                val result = AuthorizationResponse.fromIntent(activityResult.data!!)!!
+                val result = AuthorizationResponse.fromIntent(data)
+                if (result == null) {
+                    Log.e("StatsUp", "launcher: AuthorizationResponse is null")
+                    stopLoading()
+                    return
+                }
                 val tokenRequest = result.createTokenExchangeRequest(mapOf("client_secret" to BuildConfig.STRAVA_CLIENT_SECRET))
                 authService.performTokenRequest(tokenRequest, NoClientAuthentication.INSTANCE) { res, exception ->
                     if (exception != null) {

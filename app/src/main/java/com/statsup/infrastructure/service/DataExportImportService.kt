@@ -50,7 +50,6 @@ class DataExportImportService(
         .setExclusionStrategies(object : ExclusionStrategy {
             override fun shouldSkipField(f: FieldAttributes): Boolean {
                 // Skip lazy properties and Kotlin synthetic fields
-                val declaringClass = f.declaringClass
                 val fieldName = f.name
 
                 // Check if it's a lazy property by checking if the type is Lazy

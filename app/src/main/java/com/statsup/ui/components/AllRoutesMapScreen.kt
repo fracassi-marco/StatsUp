@@ -139,7 +139,7 @@ fun AllRoutesMap(trainings: List<Training>) {
         // Disegna ogni percorso con un colore diverso usando percorsi semplificati
         trainings.forEachIndexed { index, training ->
             training.trip?.let { trip ->
-                val routeColor = getRouteColor(index, trainings.size)
+                val routeColor = getRouteColor(index)
                 // Usa simplifiedSteps con tolleranza di 20m per ridurre i punti
                 val simplifiedPoints = trip.simplifiedSteps(tolerance = 20.0)
                 Polyline(
@@ -154,7 +154,7 @@ fun AllRoutesMap(trainings: List<Training>) {
 }
 
 // Genera colori diversi per ogni percorso
-private fun getRouteColor(index: Int, @Suppress("UNUSED_PARAMETER") totalRoutes: Int): Color {
+private fun getRouteColor(index: Int): Color {
     val colors = listOf(
         Color(0xFF2196F3), // Blue
         Color(0xFFF44336), // Red

@@ -17,12 +17,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.statsup.R
 import com.statsup.ui.viewmodel.StatsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpanSelector(viewModel: StatsViewModel) {
-    val options = listOf("Month", "Year"/*, "All"*/)
+    val options = listOf(stringResource(R.string.span_month), stringResource(R.string.span_year))
     SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
         options.forEachIndexed { index, label ->
             SegmentedButton(
@@ -47,7 +49,7 @@ fun PeriodNavigator(viewModel: StatsViewModel) {
         IconButton(onClick = { viewModel.previousPeriod() }) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                contentDescription = "Previous period",
+                contentDescription = stringResource(R.string.period_previous),
                 tint = MaterialTheme.colorScheme.primary
             )
         }
@@ -61,7 +63,7 @@ fun PeriodNavigator(viewModel: StatsViewModel) {
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = "Next period",
+                contentDescription = stringResource(R.string.period_next),
                 tint = if (isCurrent) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                        else MaterialTheme.colorScheme.primary
             )
@@ -72,7 +74,12 @@ fun PeriodNavigator(viewModel: StatsViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProviderSelector(viewModel: StatsViewModel) {
-    val options = listOf("Distance", "Frequency", "Duration", "Elevation"/*, "All"*/)
+    val options = listOf(
+        stringResource(R.string.provider_distance),
+        stringResource(R.string.provider_frequency),
+        stringResource(R.string.provider_duration),
+        stringResource(R.string.provider_elevation)
+    )
     SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
         options.forEachIndexed { index, label ->
             SegmentedButton(

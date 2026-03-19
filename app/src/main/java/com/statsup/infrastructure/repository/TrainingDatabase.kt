@@ -36,7 +36,9 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    .fallbackToDestructiveMigration(dropAllTables = true) // Ricrea il DB se cambia versione
+                    // WARNING: add a proper Migration object before bumping the DB version,
+                    // otherwise user data will be permanently lost on update.
+                    // .fallbackToDestructiveMigration(dropAllTables = true)
                     .build()
 
                     INSTANCE = instance

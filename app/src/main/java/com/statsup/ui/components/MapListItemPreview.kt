@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -20,8 +21,6 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.statsup.domain.Trip
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -37,6 +36,7 @@ fun MapListItemPreview(
     onClick: (() -> Unit)? = null
 ) {
     val cameraPositionState = rememberCameraPositionState()
+    val coroutineScope = rememberCoroutineScope()
 
     // Funzione per aggiornare la camera quando la mappa è pronta
     val updateCamera: suspend () -> Unit = remember(trip) {
@@ -114,7 +114,7 @@ fun MapListItemPreview(
             uiSettings = mapUiSettings,
             onMapLoaded = {
                 // Aggiorna la camera solo quando la mappa è completamente caricata
-                CoroutineScope(Dispatchers.Main).launch {
+                coroutineScope.launch {
                     updateCamera()
                 }
             }

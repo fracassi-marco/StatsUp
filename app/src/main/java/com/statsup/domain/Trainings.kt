@@ -116,8 +116,7 @@ class Trainings(
     fun cumulativeDays(): LinkedHashMap<Int, Double> {
         val result = LinkedHashMap<Int, Double>()
         val byDay: Map<Int, Double> = groupByDay()
-        val max =
-            31 //if(Year.of(now.year).isCurrent() && now.month.isCurrent()) now.dayOfMonth else 31
+        val max = 31
         (1..max).forEach {
             result[it] = byDay.filter { bm -> bm.key <= it }.values.sum()
         }

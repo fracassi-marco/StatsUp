@@ -44,4 +44,3 @@ fun MonthBarChart(viewModel: StatsViewModel) {
         barHorizontalMargin = 3.dp
     )
 }
-private fun barValueFormatter() = { value: Float -> if (value == 0f) "" else "%.0f".format(value) }

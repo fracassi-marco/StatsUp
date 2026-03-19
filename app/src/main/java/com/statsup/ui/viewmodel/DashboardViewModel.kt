@@ -200,7 +200,7 @@ class DashboardViewModel(
     fun monthlyDistanceGoal() = effectiveMonthlyDistanceGoal().toFloat()
 
     fun topTrainings(): Map<String, List<Training>> {
-        return Trainings(trainings, provider = Provider.None).ofMonth().groupBy { it.type!! }
+        return Trainings(trainings, provider = Provider.None).ofMonth().groupBy { it.sportType ?: it.type ?: "Unknown" }
     }
 
     fun currentStreak(): Int {

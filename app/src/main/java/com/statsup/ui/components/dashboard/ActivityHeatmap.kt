@@ -24,10 +24,12 @@ import androidx.compose.ui.unit.sp
 import com.statsup.ui.viewmodel.DashboardViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 private val CELL_SIZE = 10.dp
 private val CELL_GAP = 2.dp
-private val DAY_LABELS = listOf("L", "M", "M", "G", "V", "S", "D")
+private val DAY_LABELS = DayOfWeek.entries.map { it.getDisplayName(TextStyle.NARROW, Locale.getDefault()) }
 
 @Composable
 fun ActivityHeatmap(viewModel: DashboardViewModel) {

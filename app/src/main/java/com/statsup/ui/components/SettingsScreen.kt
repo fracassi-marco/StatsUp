@@ -114,11 +114,11 @@ fun SettingsScreen(
                 value = viewModel.themeLabel(),
                 onClick = { viewModel.showTheme() }
             )
-            Title(text = "Data Management", marginTop = 22.dp)
+            Title(text = stringResource(R.string.settings_data_management), marginTop = 22.dp)
             SettingsClickableComponent(
                 icon = Icons.Outlined.Upload,
                 name = R.string.settings_export_data,
-                value = "Export to JSON",
+                value = stringResource(R.string.settings_export_to_json),
                 onClick = {
                     exportLauncher.launch("statsup_export_${System.currentTimeMillis()}.json")
                 }
@@ -127,7 +127,7 @@ fun SettingsScreen(
             SettingsClickableComponent(
                 icon = Icons.Outlined.Download,
                 name = R.string.settings_import_data,
-                value = "Import from JSON",
+                value = stringResource(R.string.settings_import_from_json),
                 onClick = {
                     importLauncher.launch("application/json")
                 }
@@ -271,18 +271,18 @@ fun SettingsScreen(
         if (viewModel.showImportConfirmDialog) {
             AlertDialog(
                 onDismissRequest = { viewModel.hideImportConfirmDialog() },
-                title = { Text("Import Data") },
+                title = { Text(stringResource(R.string.settings_import_confirm_title)) },
                 text = {
-                    Text("This will delete all current data and replace it with the imported data. This action cannot be undone. Are you sure you want to continue?")
+                    Text(stringResource(R.string.settings_import_confirm_body))
                 },
                 confirmButton = {
                     TextButton(onClick = { viewModel.confirmImport() }) {
-                        Text("Import")
+                        Text(stringResource(R.string.settings_import_action))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { viewModel.hideImportConfirmDialog() }) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                 }
             )

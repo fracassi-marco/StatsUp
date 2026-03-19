@@ -18,7 +18,6 @@ import io.jetchart.line.LineChart
 import io.jetchart.line.Point
 import io.jetchart.line.renderer.line.GradientLineShader
 import io.jetchart.line.renderer.line.SolidLineDrawer
-import io.jetchart.line.renderer.point.CircularPointDrawer
 import io.jetchart.line.renderer.point.FilledPointDrawer
 import io.jetchart.line.renderer.point.IndexesPointDrawer
 import io.jetchart.line.renderer.point.NoPointDrawer
