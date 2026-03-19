@@ -22,6 +22,18 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         sharedPreferences().edit { putBoolean("settings.autoTargets", value) }
     }
 
+    override fun saveLastSuggestedYearMonth(value: String) {
+        sharedPreferences().edit { putString("settings.lastSuggestedYearMonth", value) }
+    }
+
+    override fun loadAutoTargets(): Boolean {
+        return sharedPreferences().getBoolean("settings.autoTargets", false)
+    }
+
+    override fun loadLastSuggestedYearMonth(): String {
+        return sharedPreferences().getString("settings.lastSuggestedYearMonth", "") ?: ""
+    }
+
     override fun loadTheme(): Int {
         return sharedPreferences().getInt("settings.theme", 0)
     }
@@ -32,10 +44,6 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
 
     override fun loadMonthlyTrainingGoal(): Int {
         return sharedPreferences().getInt("settings.monthlyTrainingGoal", 12)
-    }
-
-    override fun loadAutoTargets(): Boolean {
-        return sharedPreferences().getBoolean("settings.autoTargets", false)
     }
 
     override fun exportSettings(): ExportSettings {

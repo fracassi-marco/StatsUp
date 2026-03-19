@@ -7,10 +7,12 @@ interface SettingRepository {
     fun saveMonthlyGoal(value: Int)
     fun saveMonthlyTrainingGoal(value: Int)
     fun saveAutoTargets(value: Boolean)
+    fun saveLastSuggestedYearMonth(value: String)
     fun loadTheme(): Int
     fun loadMonthlyGoal(): Int
     fun loadMonthlyTrainingGoal(): Int
     fun loadAutoTargets(): Boolean
+    fun loadLastSuggestedYearMonth(): String
     fun exportSettings(): ExportSettings
     fun importSettings(settings: ExportSettings)
     fun clearAllSettings()

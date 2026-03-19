@@ -104,5 +104,13 @@
     <string name="celebration_training_message">You\'ve completed your monthly training target. Keep it up!</string>
     <string name="celebration_both_message">You\'ve crushed both your monthly goals. Incredible!</string>
     <string name="celebration_close">Great, thanks!</string>
+
+    <string name="target_suggestion_title">New month, new targets?</string>
+    <string name="target_suggestion_message">Based on your training history, here are the suggested targets for this month:</string>
+    <string name="target_suggestion_distance">Distance: %1$d Km</string>
+    <string name="target_suggestion_trainings">Trainings: %1$d</string>
+    <string name="target_suggestion_accept">Use these targets</string>
+    <string name="target_suggestion_dismiss">Keep current targets</string>
+    <string name="target_suggestion_snooze">Ask me later</string>
 </resources>
 

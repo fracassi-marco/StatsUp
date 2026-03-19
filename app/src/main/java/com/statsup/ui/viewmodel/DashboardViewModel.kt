@@ -16,7 +16,10 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZonedDateTime
+
+data class TargetSuggestion(val distanceKm: Int, val trainingCount: Int)
 
 class DashboardViewModel(
     private val trainingRepository: TrainingRepository,
@@ -28,6 +31,9 @@ class DashboardViewModel(
     private val _goalAchieved = MutableSharedFlow<GoalAchievement>(extraBufferCapacity = 1)
     val goalAchieved: SharedFlow<GoalAchievement> = _goalAchieved.asSharedFlow()
 
+    var targetSuggestion: TargetSuggestion? by mutableStateOf(null)
+        private set
+
     // Track previous percentages to detect the crossing of the 1.0 threshold
     private var previousDistancePercentage = 0f
     private var previousTrainingGoalPercentage = 0f
@@ -38,6 +44,7 @@ class DashboardViewModel(
             trainingRepository.all().collect {
                 trainings = it
                 checkGoalAchievement()
+                if (isFirstEmission.not()) checkTargetSuggestion()
             }
         }
     }
@@ -51,6 +58,7 @@ class DashboardViewModel(
             previousDistancePercentage = currentDistance
             previousTrainingGoalPercentage = currentTraining
             isFirstEmission = false
+            checkTargetSuggestion()
             return
         }
 
@@ -70,6 +78,47 @@ class DashboardViewModel(
         viewModelScope.launch {
             _goalAchieved.emit(achievement)
         }
+    }
+
+    private fun checkTargetSuggestion() {
+        if (settingRepository.loadAutoTargets()) return
+
+        val currentYearMonth = YearMonth.now().toString() // e.g. "2026-03"
+        if (settingRepository.loadLastSuggestedYearMonth() == currentYearMonth) return
+
+        val suggestedDistance = Trainings(trainings, provider = Provider.Distance)
+            .autoDistanceTarget(fallbackKm = settingRepository.loadMonthlyGoal())
+        val suggestedTraining = Trainings(trainings, provider = Provider.Frequency)
+            .autoTrainingTarget(fallbackCount = settingRepository.loadMonthlyTrainingGoal())
+
+        // Only suggest if the computed values differ from current manual targets
+        val distanceDiffers = suggestedDistance != settingRepository.loadMonthlyGoal()
+        val trainingDiffers = suggestedTraining != settingRepository.loadMonthlyTrainingGoal()
+        if (!distanceDiffers && !trainingDiffers) {
+            // Nothing meaningful to suggest — mark as seen so we don't check again this month
+            settingRepository.saveLastSuggestedYearMonth(currentYearMonth)
+            return
+        }
+
+        targetSuggestion = TargetSuggestion(suggestedDistance, suggestedTraining)
+    }
+
+    fun acceptTargetSuggestion() {
+        val suggestion = targetSuggestion ?: return
+        settingRepository.saveMonthlyGoal(suggestion.distanceKm)
+        settingRepository.saveMonthlyTrainingGoal(suggestion.trainingCount)
+        settingRepository.saveLastSuggestedYearMonth(YearMonth.now().toString())
+        targetSuggestion = null
+    }
+
+    fun dismissTargetSuggestion() {
+        settingRepository.saveLastSuggestedYearMonth(YearMonth.now().toString())
+        targetSuggestion = null
+    }
+
+    fun snoozeTargetSuggestion() {
+        // Close the dialog but do NOT mark the month as handled — it will re-appear next launch
+        targetSuggestion = null
     }
 
     suspend fun testGoalAchieved(achievement: GoalAchievement) {
