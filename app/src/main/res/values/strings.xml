@@ -12,6 +12,7 @@
     <string name="settings_screen_goals">Goals</string>
     <string name="settings_screen_goals_monthly">Monthly distance</string>
     <string name="settings_screen_goals_monthly_trainings">Monthly trainings target</string>
+    <string name="settings_screen_goals_auto_targets">Automatic targets</string>
     <string name="settings_screen_set_goal">Set as my goal</string>
 
     <string name="settings_screen_app">App</string>

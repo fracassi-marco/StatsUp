@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.Style
@@ -32,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
@@ -80,18 +82,28 @@ fun SettingsScreen(
                 .padding(20.dp, 16.dp)
         ) {
             Title(text = stringResource(R.string.settings_screen_goals))
+            SettingsToggleComponent(
+                icon = Icons.Outlined.AutoMode,
+                name = R.string.settings_screen_goals_auto_targets,
+                checked = viewModel.autoTargets,
+                onCheckedChange = { viewModel.toggleAutoTargets() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            val manualGoalAlpha = if (viewModel.autoTargets) 0.38f else 1f
             SettingsClickableComponent(
                 icon = Icons.Outlined.EmojiEvents,
                 name = R.string.settings_screen_goals_monthly,
-                value = "${viewModel.monthlyGoal} ${stringResource(id = R.string.km)}",
-                onClick = { viewModel.showMonthlyGoal() }
+                value = "${viewModel.effectiveMonthlyDistanceGoal()} ${stringResource(id = R.string.km)}",
+                onClick = { if (!viewModel.autoTargets) viewModel.showMonthlyGoal() },
+                modifier = Modifier.alpha(manualGoalAlpha)
             )
             Spacer(modifier = Modifier.height(8.dp))
             SettingsClickableComponent(
                 icon = Icons.Outlined.EmojiEvents,
                 name = R.string.settings_screen_goals_monthly_trainings,
-                value = "${viewModel.monthlyTrainingGoal} ${stringResource(id = R.string.trainings)}",
-                onClick = { viewModel.showMonthlyTrainingGoal() }
+                value = "${viewModel.effectiveMonthlyTrainingGoal()} ${stringResource(id = R.string.trainings)}",
+                onClick = { if (!viewModel.autoTargets) viewModel.showMonthlyTrainingGoal() },
+                modifier = Modifier.alpha(manualGoalAlpha)
             )
             Title(text = stringResource(R.string.settings_screen_app), marginTop = 22.dp)
             SettingsClickableComponent(

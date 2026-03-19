@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -16,9 +18,10 @@ fun SettingsClickableComponent(
     @StringRes name: Int,
     icon: ImageVector,
     onClick: () -> Unit,
-    value: String = ""
+    value: String = "",
+    modifier: Modifier = Modifier
 ) {
-    SecondaryCard(onClick = onClick, icon = icon) {
+    SecondaryCard(onClick = onClick, icon = icon, modifier = modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(0.8f),
             horizontalArrangement = Arrangement.SpaceBetween) {
@@ -29,6 +32,31 @@ fun SettingsClickableComponent(
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyLarge,
+            )
+        }
+    }
+}
+
+@Composable
+fun SettingsToggleComponent(
+    @StringRes name: Int,
+    icon: ImageVector,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    SecondaryCard(onClick = { onCheckedChange(!checked) }, icon = icon) {
+        Row(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(id = name),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Switch(
+                checked = checked,
+                onCheckedChange = onCheckedChange
             )
         }
     }

@@ -18,6 +18,10 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         sharedPreferences().edit { putInt("settings.monthlyTrainingGoal", value) }
     }
 
+    override fun saveAutoTargets(value: Boolean) {
+        sharedPreferences().edit { putBoolean("settings.autoTargets", value) }
+    }
+
     override fun loadTheme(): Int {
         return sharedPreferences().getInt("settings.theme", 0)
     }
@@ -30,11 +34,16 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         return sharedPreferences().getInt("settings.monthlyTrainingGoal", 12)
     }
 
+    override fun loadAutoTargets(): Boolean {
+        return sharedPreferences().getBoolean("settings.autoTargets", false)
+    }
+
     override fun exportSettings(): ExportSettings {
         return ExportSettings(
             theme = loadTheme(),
             monthlyGoal = loadMonthlyGoal(),
-            monthlyTrainingGoal = loadMonthlyTrainingGoal()
+            monthlyTrainingGoal = loadMonthlyTrainingGoal(),
+            autoTargets = loadAutoTargets()
         )
     }
 
@@ -42,6 +51,7 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         saveTheme(settings.theme)
         saveMonthlyGoal(settings.monthlyGoal)
         saveMonthlyTrainingGoal(settings.monthlyTrainingGoal)
+        saveAutoTargets(settings.autoTargets)
     }
 
     override fun clearAllSettings() {

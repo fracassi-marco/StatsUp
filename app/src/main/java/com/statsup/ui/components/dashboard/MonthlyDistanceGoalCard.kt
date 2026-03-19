@@ -35,7 +35,7 @@ fun MonthlyDistanceGoalCard(viewModel: DashboardViewModel) {
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "${String.format(Locale.getDefault(), "%.0f", viewModel.totalDistance())} ${stringResource(R.string.km)} → ~${String.format(Locale.getDefault(), "%.0f", viewModel.projectedDistanceEndOfMonth())} ${stringResource(R.string.km)}",
+                text = "${String.format(Locale.getDefault(), "%.0f", viewModel.totalDistance())} ${stringResource(R.string.km)} → ~${String.format(Locale.getDefault(), "%.0f", viewModel.projectedDistanceEndOfMonth())} ${stringResource(R.string.km)} / ${String.format(Locale.getDefault(), "%.0f", viewModel.monthlyDistanceGoal())} ${stringResource(R.string.km)}",
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp

@@ -30,6 +30,9 @@ data class ExportSettings(
     val monthlyGoal: Int,
 
     @SerializedName("monthlyTrainingGoal")
-    val monthlyTrainingGoal: Int
+    val monthlyTrainingGoal: Int,
+
+    @SerializedName("autoTargets")
+    val autoTargets: Boolean = false
 )
 

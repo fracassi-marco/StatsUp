@@ -198,4 +198,45 @@ class Trainings(
         }
         return best
     }
+
+    /**
+     * Calculates an automatic monthly distance target (km) based on historical data.
+     * Takes the median of completed months in the past 12 months and applies a +5% progression factor.
+     * Falls back to [fallbackKm] when no historical data is available.
+     */
+    fun autoDistanceTarget(fallbackKm: Int = 10): Int {
+        val monthlyValues = last12CompletedMonthlyValues(Provider.Distance)
+        if (monthlyValues.isEmpty()) return fallbackKm
+        val median = median(monthlyValues)
+        return (median * 1.05).toInt().coerceAtLeast(1)
+    }
+
+    /**
+     * Calculates an automatic monthly training count target based on historical data.
+     * Takes the median of completed months in the past 12 months and applies a +5% progression factor.
+     * Falls back to [fallbackCount] when no historical data is available.
+     */
+    fun autoTrainingTarget(fallbackCount: Int = 12): Int {
+        val monthlyValues = last12CompletedMonthlyValues(Provider.Frequency)
+        if (monthlyValues.isEmpty()) return fallbackCount
+        val median = median(monthlyValues)
+        return (median * 1.05).toInt().coerceAtLeast(1)
+    }
+
+    private fun last12CompletedMonthlyValues(p: Provider): List<Double> {
+        // Look at the 12 months before the current month (completed months only)
+        return (1L..12L).mapNotNull { offset ->
+            val monthDate = now.minusMonths(offset)
+            val monthTrainings = trainings.filter {
+                it.date.month == monthDate.month && it.date.year == monthDate.year
+            }
+            if (monthTrainings.isEmpty()) null else p.cumulative(monthTrainings)
+        }
+    }
+
+    private fun median(values: List<Double>): Double {
+        val sorted = values.sorted()
+        val mid = sorted.size / 2
+        return if (sorted.size % 2 == 0) (sorted[mid - 1] + sorted[mid]) / 2.0 else sorted[mid]
+    }
 }

@@ -77,7 +77,7 @@ class DashboardViewModel(
     }
 
     fun distancePercentage(): Float {
-        return totalDistance().toFloat() / settingRepository.loadMonthlyGoal()
+        return totalDistance().toFloat() / effectiveMonthlyDistanceGoal()
     }
 
     fun totalDistance(): Double {
@@ -93,13 +93,31 @@ class DashboardViewModel(
     }
 
     fun trainingGoalPercentage(): Float {
-        val goal = settingRepository.loadMonthlyTrainingGoal()
+        val goal = effectiveMonthlyTrainingGoal()
         if (goal == 0) return 0f
         return totalFrequencyInt().toFloat() / goal.toFloat()
     }
 
     fun monthlyTrainingGoal(): Int {
-        return settingRepository.loadMonthlyTrainingGoal()
+        return effectiveMonthlyTrainingGoal()
+    }
+
+    fun effectiveMonthlyDistanceGoal(): Int {
+        return if (settingRepository.loadAutoTargets()) {
+            Trainings(trainings, provider = Provider.Distance)
+                .autoDistanceTarget(fallbackKm = settingRepository.loadMonthlyGoal())
+        } else {
+            settingRepository.loadMonthlyGoal()
+        }
+    }
+
+    fun effectiveMonthlyTrainingGoal(): Int {
+        return if (settingRepository.loadAutoTargets()) {
+            Trainings(trainings, provider = Provider.Frequency)
+                .autoTrainingTarget(fallbackCount = settingRepository.loadMonthlyTrainingGoal())
+        } else {
+            settingRepository.loadMonthlyTrainingGoal()
+        }
     }
 
     fun totalDuration(): Double {
@@ -130,7 +148,7 @@ class DashboardViewModel(
         return Trainings(trainings, provider = Provider.HeartRate).maxOfMonth()
     }
 
-    fun monthlyDistanceGoal() = settingRepository.loadMonthlyGoal().toFloat()
+    fun monthlyDistanceGoal() = effectiveMonthlyDistanceGoal().toFloat()
 
     fun topTrainings(): Map<String, List<Training>> {
         return Trainings(trainings, provider = Provider.None).ofMonth().groupBy { it.type!! }
