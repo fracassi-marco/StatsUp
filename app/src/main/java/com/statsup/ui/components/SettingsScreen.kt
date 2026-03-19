@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.EmojiEvents
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Style
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.AlertDialog
@@ -47,7 +48,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
-    onImportSuccess: () -> Unit = {}
+    onImportSuccess: () -> Unit = {},
+    onFullImportFromStrava: () -> Unit = {}
 ) {
     val monthlyGoalSheetState = rememberModalBottomSheetState()
     val monthlyTrainingGoalSheetState = rememberModalBottomSheetState()
@@ -131,6 +133,13 @@ fun SettingsScreen(
                 onClick = {
                     importLauncher.launch("application/json")
                 }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            SettingsClickableComponent(
+                icon = Icons.Outlined.Refresh,
+                name = R.string.settings_full_import_strava,
+                value = stringResource(R.string.settings_full_import_strava_description),
+                onClick = { viewModel.showFullImportFromStravaConfirmDialog() }
             )
 
             // Loading indicator
@@ -265,6 +274,28 @@ fun SettingsScreen(
                     }
                 }
             }
+        }
+
+        // Full import from Strava confirmation dialog
+        if (viewModel.showFullImportFromStravaDialog) {
+            AlertDialog(
+                onDismissRequest = { viewModel.hideFullImportFromStravaDialog() },
+                title = { Text(stringResource(R.string.settings_full_import_confirm_title)) },
+                text = { Text(stringResource(R.string.settings_full_import_confirm_body)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        viewModel.hideFullImportFromStravaDialog()
+                        onFullImportFromStrava()
+                    }) {
+                        Text(stringResource(R.string.settings_full_import_action))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { viewModel.hideFullImportFromStravaDialog() }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                }
+            )
         }
 
         // Import confirmation dialog

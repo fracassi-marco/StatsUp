@@ -9,7 +9,12 @@ class Trip(private val map: String) {
 
     // Cache della lista decodificata - calcolato una sola volta
     private val _list: List<LatLng> by lazy {
-        PolyUtil.decode(map)
+        try {
+            PolyUtil.decode(map)
+        } catch (t: Throwable) {
+            Log.e("StatsUp", "Error decoding polyline: ${t.message}", t)
+            emptyList()
+        }
     }
 
     val list: List<LatLng> get() = _list

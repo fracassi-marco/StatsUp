@@ -42,6 +42,8 @@ class SettingsViewModel(
         private set
     var importUri by mutableStateOf<Uri?>(null)
         private set
+    var showFullImportFromStravaDialog by mutableStateOf(false)
+        private set
     var exportImportMessage by mutableStateOf<String?>(null)
         private set
     var isExportImportLoading by mutableStateOf(false)
@@ -159,6 +161,14 @@ class SettingsViewModel(
     fun hideImportConfirmDialog() {
         showImportConfirmDialog = false
         importUri = null
+    }
+
+    fun showFullImportFromStravaConfirmDialog() {
+        showFullImportFromStravaDialog = true
+    }
+
+    fun hideFullImportFromStravaDialog() {
+        showFullImportFromStravaDialog = false
     }
 
     fun confirmImport() {

@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.BuildConfig
+import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,17 +25,25 @@ import net.openid.appauth.NoClientAuthentication
 import net.openid.appauth.ResponseTypeValues.CODE
 
 class MainViewModel(
-    private val updateActivitiesUseCase: UpdateTrainingsUseCase
+    private val updateActivitiesUseCase: UpdateTrainingsUseCase,
+    private val fullImportUseCase: FullImportUseCase
 ) : ViewModel() {
 
     private val _loading = mutableStateOf(false)
     val loading: State<Boolean> = _loading
     val newTrainingsCounter = MutableSharedFlow<Int>()
 
+    private var fullImportPending = false
+
     private fun updateActivities(token: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val trainings = updateActivitiesUseCase(token)
+                val trainings = if (fullImportPending) {
+                    fullImportPending = false
+                    fullImportUseCase(token)
+                } else {
+                    updateActivitiesUseCase(token)
+                }
                 newTrainingsCounter.emit(trainings.count())
                 stopLoading()
             }
@@ -86,6 +95,16 @@ class MainViewModel(
 
     fun startImport(authService: AuthorizationService): Intent {
         startLoading()
+        return buildAuthIntent(authService)
+    }
+
+    fun startFullImport(authService: AuthorizationService): Intent {
+        fullImportPending = true
+        startLoading()
+        return buildAuthIntent(authService)
+    }
+
+    private fun buildAuthIntent(authService: AuthorizationService): Intent {
         val redirectUri = "oauth://com-sportshub".toUri()
         val authorizeUri = "https://www.strava.com/oauth/mobile/authorize".toUri()
         val tokenUri = "https://www.strava.com/api/v3/oauth/token".toUri()

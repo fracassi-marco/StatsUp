@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
+import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.TrainingShareService
 import com.statsup.infrastructure.StravaTrainingApi
@@ -73,8 +74,9 @@ class MainActivity : ComponentActivity() {
                 )
             }
             val updateActivitiesUseCase = UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi())
+            val fullImportUseCase = FullImportUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi())
             val navController = rememberNavController()
-            val mainViewModel = remember { MainViewModel(updateActivitiesUseCase) }
+            val mainViewModel = remember { MainViewModel(updateActivitiesUseCase, fullImportUseCase) }
             val settingsViewModel = remember { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService) }
             val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository) }
@@ -83,6 +85,10 @@ class MainActivity : ComponentActivity() {
             val bookmarksViewModel = remember { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartActivityForResult(),
+                onResult = { mainViewModel.onStravaResult(it, authService!!) }
+            )
+            val fullImportLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
                 onResult = { mainViewModel.onStravaResult(it, authService!!) }
             )
@@ -134,6 +140,9 @@ class MainActivity : ComponentActivity() {
                                             navController.navigate(Screens.Dashboard.route) {
                                                 popUpTo(Screens.Dashboard.route) { inclusive = true }
                                             }
+                                        },
+                                        onFullImportFromStrava = {
+                                            fullImportLauncher.launch(mainViewModel.startFullImport(authService!!))
                                         }
                                     )
                                 }

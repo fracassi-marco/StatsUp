@@ -106,6 +106,12 @@
     <string name="settings_import_confirm_body">This will delete all current data and replace it with the imported data. This action cannot be undone. Are you sure you want to continue?</string>
     <string name="settings_import_action">Import</string>
 
+    <string name="settings_full_import_strava">Full re-sync</string>
+    <string name="settings_full_import_strava_description">Strava</string>
+    <string name="settings_full_import_confirm_title">Re-import from Strava</string>
+    <string name="settings_full_import_confirm_body">This will delete all local data and re-download everything from Strava. The operation may take a while. Are you sure?</string>
+    <string name="settings_full_import_action">Re-import</string>
+
     <string name="span_month">Month</string>
     <string name="span_year">Year</string>
     <string name="provider_distance">Distance</string>
