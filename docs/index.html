@@ -9,6 +9,8 @@
   <meta property="og:description" content="Deep analytics for your Strava activities." />
   <meta property="og:image" content="assets/images/logo.png" />
 
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -304,108 +306,6 @@
       object-fit: cover;
     }
 
-    .phone-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      text-align: center;
-      padding: 1rem;
-    }
-
-    .phone-placeholder .screen-preview {
-      width: 100%;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      padding: 1rem 0.75rem 0.75rem;
-    }
-
-    /* Mini UI mockup inside phone */
-    .mock-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .mock-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--orange);
-    }
-
-    .mock-title { flex: 1; }
-    .mock-bar { height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; }
-    .mock-bar.w60 { width: 60%; }
-    .mock-bar.w40 { width: 40%; margin-top: 3px; height: 4px; }
-
-    .mock-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.4rem;
-    }
-
-    .mock-stat {
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .mock-stat-val {
-      height: 10px;
-      background: var(--orange);
-      border-radius: 3px;
-      opacity: 0.8;
-    }
-
-    .mock-stat-val.blue { background: var(--blue); }
-    .mock-stat-val.green { background: var(--green); }
-
-    .mock-stat-label {
-      height: 5px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-      width: 70%;
-    }
-
-    .mock-chart {
-      background: rgba(255,255,255,0.03);
-      border-radius: 10px;
-      padding: 0.5rem;
-      height: 60px;
-      display: flex;
-      align-items: flex-end;
-      gap: 3px;
-    }
-
-    .mock-bar-chart {
-      flex: 1;
-      border-radius: 2px;
-      background: var(--orange);
-      opacity: 0.6;
-    }
-
-    .mock-list { display: flex; flex-direction: column; gap: 0.35rem; }
-    .mock-list-item {
-      background: rgba(255,255,255,0.04);
-      border-radius: 8px;
-      padding: 0.45rem 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
     .mock-dot {
       width: 8px; height: 8px;
       border-radius: 50%;
@@ -588,44 +488,6 @@
 
     .screen-item { flex-shrink: 0; }
 
-    /* Placeholder screen content */
-    .screen-mock {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      padding: 1.25rem 0.85rem 0.85rem;
-      gap: 0.6rem;
-    }
-
-    .screen-mock-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.25rem;
-    }
-
-    .screen-mock-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .screen-mock-sub {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-    }
-
-    .screen-add-note {
-      margin-top: 3rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      padding: 1rem;
-      border: 1px dashed var(--border);
-      border-radius: 12px;
-    }
-
     /* ── BADGES SECTION ── */
     .badges-showcase {
       display: flex;
@@ -789,7 +651,7 @@
   <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">
-      <img src="assets/images/icon.webp" alt="StatsUp icon" />
+      <img src="assets/images/logo.png" alt="StatsUp logo" />
       Stats<span>Up</span>
     </a>
     <a href="#download" class="nav-cta">Download</a>
@@ -823,106 +685,19 @@
       <div class="mockups-glow"></div>
       <div class="phone-container">
 
-        <!-- Left phone: Dashboard -->
+        <!-- Left phone: Badges -->
         <div class="phone phone-side">
-          <div class="screen-mock">
-            <div class="screen-mock-header">
-              <div>
-                <div class="screen-mock-title" style="font-size:0.8rem">Badges</div>
-              </div>
-            </div>
-            <div class="mock-badge-grid">
-              <div class="mock-badge earned">🏃</div>
-              <div class="mock-badge earned">🚴</div>
-              <div class="mock-badge earned">⛰️</div>
-              <div class="mock-badge earned">🏅</div>
-              <div class="mock-badge locked">🏊</div>
-              <div class="mock-badge locked">⚡</div>
-              <div class="mock-badge earned">🎯</div>
-              <div class="mock-badge locked">🔥</div>
-              <div class="mock-badge locked">🌟</div>
-            </div>
-            <div style="height:1px;background:var(--border);margin:0.3rem 0"></div>
-            <div class="mock-list">
-              <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line"></div></div>
-              <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div></div>
-              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
-            </div>
-          </div>
+          <img src="assets/images/screenshots/badges_1.jpg" alt="Badges screen" />
         </div>
 
-        <!-- Center phone: Stats -->
+        <!-- Center phone: Dashboard -->
         <div class="phone phone-main">
-          <div class="screen-mock">
-            <div class="screen-mock-header">
-              <div>
-                <div class="screen-mock-title">Dashboard</div>
-                <div class="screen-mock-sub">March 2026</div>
-              </div>
-              <div style="width:32px;height:32px;border-radius:50%;background:var(--orange);opacity:0.8"></div>
-            </div>
-            <div class="mock-stats">
-              <div class="mock-stat">
-                <div class="mock-stat-val" style="width:75%"></div>
-                <div class="mock-stat-label"></div>
-              </div>
-              <div class="mock-stat">
-                <div class="mock-stat-val blue" style="width:50%"></div>
-                <div class="mock-stat-label"></div>
-              </div>
-              <div class="mock-stat">
-                <div class="mock-stat-val green" style="width:90%"></div>
-                <div class="mock-stat-label"></div>
-              </div>
-              <div class="mock-stat">
-                <div class="mock-stat-val" style="width:60%;opacity:0.5"></div>
-                <div class="mock-stat-label"></div>
-              </div>
-            </div>
-            <div class="mock-chart">
-              <div class="mock-bar-chart" style="height:30%"></div>
-              <div class="mock-bar-chart" style="height:55%"></div>
-              <div class="mock-bar-chart" style="height:45%"></div>
-              <div class="mock-bar-chart" style="height:70%"></div>
-              <div class="mock-bar-chart" style="height:50%"></div>
-              <div class="mock-bar-chart" style="height:85%;opacity:1"></div>
-              <div class="mock-bar-chart" style="height:65%"></div>
-            </div>
-            <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:0.25rem">Recent activities</div>
-            <div class="mock-list">
-              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--text-muted)">12.4 km</div></div>
-              <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div><div style="font-size:0.5rem;color:var(--text-muted)">45.2 km</div></div>
-              <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--text-muted)">8.1 km</div></div>
-              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line short"></div><div style="font-size:0.5rem;color:var(--text-muted)">21.0 km</div></div>
-            </div>
-          </div>
+          <img src="assets/images/screenshots/dashboard_1.jpg" alt="Dashboard screen" />
         </div>
 
-        <!-- Right phone: Records -->
+        <!-- Right phone: Activity Details -->
         <div class="phone phone-side">
-          <div class="screen-mock">
-            <div class="screen-mock-header">
-              <div>
-                <div class="screen-mock-title" style="font-size:0.8rem">Records</div>
-              </div>
-            </div>
-            <div class="mock-list">
-              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
-              <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line"></div></div>
-              <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div></div>
-              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
-              <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line short"></div></div>
-            </div>
-            <div style="height:1px;background:var(--border);margin:0.3rem 0"></div>
-            <div class="mock-chart" style="height:50px">
-              <div class="mock-bar-chart" style="height:40%;background:var(--blue)"></div>
-              <div class="mock-bar-chart" style="height:60%;background:var(--blue)"></div>
-              <div class="mock-bar-chart" style="height:35%;background:var(--blue)"></div>
-              <div class="mock-bar-chart" style="height:80%;background:var(--orange)"></div>
-              <div class="mock-bar-chart" style="height:55%;background:var(--blue)"></div>
-              <div class="mock-bar-chart" style="height:70%;background:var(--blue)"></div>
-            </div>
-          </div>
+          <img src="assets/images/screenshots/details_1.jpg" alt="Activity details screen" />
         </div>
 
       </div>
@@ -1015,121 +790,62 @@
       <h2 class="section-title reveal">See it in action</h2>
       <p class="section-sub reveal">A clean, focused interface designed for athletes who care about their data.</p>
 
-      <!-- Replace these placeholders with real screenshots -->
       <div class="screens-scroll">
 
         <div class="screen-item">
           <div class="screen-card">
-            <div class="screen-mock">
-              <div class="screen-mock-header">
-                <div class="screen-mock-title">Dashboard</div>
-              </div>
-              <div class="mock-stats">
-                <div class="mock-stat"><div class="mock-stat-val" style="width:80%"></div><div class="mock-stat-label"></div></div>
-                <div class="mock-stat"><div class="mock-stat-val blue" style="width:55%"></div><div class="mock-stat-label"></div></div>
-                <div class="mock-stat"><div class="mock-stat-val green" style="width:95%"></div><div class="mock-stat-label"></div></div>
-                <div class="mock-stat"><div class="mock-stat-val" style="width:40%;opacity:0.5"></div><div class="mock-stat-label"></div></div>
-              </div>
-              <div class="mock-chart">
-                <div class="mock-bar-chart" style="height:30%"></div>
-                <div class="mock-bar-chart" style="height:60%"></div>
-                <div class="mock-bar-chart" style="height:45%"></div>
-                <div class="mock-bar-chart" style="height:75%"></div>
-                <div class="mock-bar-chart" style="height:55%"></div>
-                <div class="mock-bar-chart" style="height:90%;opacity:1"></div>
-                <div class="mock-bar-chart" style="height:65%"></div>
-              </div>
-              <div class="screen-add-note">Add your<br/>dashboard screenshot</div>
-            </div>
+            <img src="assets/images/screenshots/dashboard_1.jpg" alt="Dashboard" />
           </div>
           <div class="screen-label">Dashboard</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
-            <div class="screen-mock">
-              <div class="screen-mock-header">
-                <div class="screen-mock-title">Statistics</div>
-              </div>
-              <div class="mock-chart" style="height:80px">
-                <div class="mock-bar-chart" style="height:40%"></div>
-                <div class="mock-bar-chart" style="height:65%"></div>
-                <div class="mock-bar-chart" style="height:30%"></div>
-                <div class="mock-bar-chart" style="height:80%"></div>
-                <div class="mock-bar-chart" style="height:55%"></div>
-                <div class="mock-bar-chart" style="height:70%"></div>
-                <div class="mock-bar-chart" style="height:45%"></div>
-                <div class="mock-bar-chart" style="height:85%"></div>
-                <div class="mock-bar-chart" style="height:60%"></div>
-                <div class="mock-bar-chart" style="height:90%"></div>
-                <div class="mock-bar-chart" style="height:50%"></div>
-                <div class="mock-bar-chart" style="height:75%"></div>
-              </div>
-              <div class="screen-add-note">Add your<br/>statistics screenshot</div>
-            </div>
+            <img src="assets/images/screenshots/dashboard_2.jpg" alt="Dashboard 2" />
           </div>
-          <div class="screen-label">Statistics</div>
+          <div class="screen-label">Dashboard</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
-            <div class="screen-mock">
-              <div class="screen-mock-header">
-                <div class="screen-mock-title">Badges</div>
-              </div>
-              <div class="mock-badge-grid">
-                <div class="mock-badge earned">🏃</div>
-                <div class="mock-badge earned">🚴</div>
-                <div class="mock-badge earned">⛰️</div>
-                <div class="mock-badge earned">🏅</div>
-                <div class="mock-badge earned">🎯</div>
-                <div class="mock-badge locked">🔥</div>
-                <div class="mock-badge locked">🏊</div>
-                <div class="mock-badge locked">⚡</div>
-                <div class="mock-badge locked">🌟</div>
-              </div>
-              <div class="screen-add-note">Add your<br/>badges screenshot</div>
-            </div>
+            <img src="assets/images/screenshots/details_1.jpg" alt="Activity Details" />
           </div>
-          <div class="screen-label">Achievements</div>
+          <div class="screen-label">Activity Details</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
-            <div class="screen-mock">
-              <div class="screen-mock-header">
-                <div class="screen-mock-title">Records</div>
-              </div>
-              <div class="mock-list">
-                <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
-                <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line"></div></div>
-                <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div></div>
-                <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
-                <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line short"></div></div>
-              </div>
-              <div class="screen-add-note">Add your<br/>records screenshot</div>
-            </div>
+            <img src="assets/images/screenshots/list_1.jpg" alt="Activity List" />
+          </div>
+          <div class="screen-label">Activity List</div>
+        </div>
+
+        <div class="screen-item">
+          <div class="screen-card">
+            <img src="assets/images/screenshots/records_1.jpg" alt="Personal Records" />
           </div>
           <div class="screen-label">Personal Records</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
-            <div class="screen-mock">
-              <div class="screen-mock-header">
-                <div class="screen-mock-title">Activities</div>
-              </div>
-              <div class="mock-list">
-                <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--orange)">12.4k</div></div>
-                <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--orange)">45.2k</div></div>
-                <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line short"></div><div style="font-size:0.5rem;color:var(--orange)">8.1k</div></div>
-                <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--orange)">21.0k</div></div>
-                <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div><div style="font-size:0.5rem;color:var(--orange)">5.5k</div></div>
-              </div>
-              <div class="screen-add-note">Add your<br/>activities screenshot</div>
-            </div>
+            <img src="assets/images/screenshots/stats_1.jpg" alt="Statistics" />
           </div>
-          <div class="screen-label">Activity History</div>
+          <div class="screen-label">Statistics</div>
+        </div>
+
+        <div class="screen-item">
+          <div class="screen-card">
+            <img src="assets/images/screenshots/stats_2.jpg" alt="Statistics 2" />
+          </div>
+          <div class="screen-label">Statistics</div>
+        </div>
+
+        <div class="screen-item">
+          <div class="screen-card">
+            <img src="assets/images/screenshots/badges_1.jpg" alt="Achievements" />
+          </div>
+          <div class="screen-label">Achievements</div>
         </div>
 
       </div>
@@ -1219,14 +935,14 @@
   <!-- FOOTER -->
   <footer>
     <a href="#" class="footer-logo">
-      <img src="assets/images/icon.webp" alt="StatsUp" />
+      <img src="assets/images/logo.png" alt="StatsUp" />
       Stats<span>Up</span>
     </a>
     <p style="margin-bottom:0.5rem">Built with ❤️ for athletes who love their data.</p>
     <p>
-      <a href="https://github.com/YOUR_USERNAME/StatsUp" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a>
       &nbsp;·&nbsp;
-      <a href="mailto:your@email.com">Contact</a>
+      <a href="mailto:fracassi.marco@gmail.com">Contact</a>
       &nbsp;·&nbsp;
       <a href="#">Privacy Policy</a>
     </p>
