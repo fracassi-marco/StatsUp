@@ -8,8 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.statsup.domain.Athlete
 import com.statsup.domain.Badge
 import com.statsup.domain.BadgeCategory
+import com.statsup.domain.BestEffort
 import com.statsup.domain.EvaluateBadgesUseCase
+import com.statsup.domain.PersonalRecord
+import com.statsup.domain.Provider
 import com.statsup.domain.Training
+import com.statsup.domain.Trainings
 import com.statsup.domain.repository.AthleteRepository
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
@@ -29,6 +33,12 @@ class ProfileViewModel(
     var badges: List<Badge> by mutableStateOf(emptyList())
         private set
 
+    var bestEfforts: List<BestEffort> by mutableStateOf(emptyList())
+        private set
+
+    var personalRecords: List<PersonalRecord> by mutableStateOf(emptyList())
+        private set
+
     private val evaluateBadges = EvaluateBadgesUseCase()
 
     init {
@@ -40,6 +50,9 @@ class ProfileViewModel(
                     monthlyDistanceGoalKm = settingRepository.loadMonthlyGoal(),
                     monthlyTrainingGoal = settingRepository.loadMonthlyTrainingGoal()
                 )
+                val t = Trainings(trainings, provider = Provider.Distance)
+                bestEfforts = t.bestEfforts()
+                personalRecords = t.personalRecords()
             }
         }
     }

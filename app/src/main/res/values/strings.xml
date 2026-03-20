@@ -148,5 +148,7 @@
     <string name="profile_tab_monthly">Mensili</string>
     <string name="profile_tab_annual">Annuali</string>
     <string name="profile_tab_alltime">Sempre</string>
+    <string name="profile_tab_records">Record</string>
+    <string name="profile_records_empty">Nessun record disponibile.\nCompleta almeno un\'attività di corsa.</string>
 </resources>
 

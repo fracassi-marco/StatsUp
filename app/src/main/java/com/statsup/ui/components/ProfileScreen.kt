@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.statsup.R
 import com.statsup.domain.BadgeCategory
 import com.statsup.ui.components.profile.BadgeGrid
+import com.statsup.ui.components.profile.RecordsSection
 import com.statsup.ui.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 
@@ -42,7 +43,8 @@ fun ProfileScreen(viewModel: ProfileViewModel, onNavigateBack: () -> Unit) {
     val tabs = listOf(
         stringResource(R.string.profile_tab_monthly),
         stringResource(R.string.profile_tab_annual),
-        stringResource(R.string.profile_tab_alltime)
+        stringResource(R.string.profile_tab_alltime),
+        stringResource(R.string.profile_tab_records)
     )
     val categories = listOf(BadgeCategory.MONTHLY, BadgeCategory.ANNUAL, BadgeCategory.ALL_TIME)
     val pagerState = rememberPagerState(pageCount = { tabs.size })
@@ -129,7 +131,14 @@ fun ProfileScreen(viewModel: ProfileViewModel, onNavigateBack: () -> Unit) {
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { page ->
-            BadgeGrid(badges = viewModel.badgesFor(categories[page]))
+            if (page < categories.size) {
+                BadgeGrid(badges = viewModel.badgesFor(categories[page]))
+            } else {
+                RecordsSection(
+                    personalRecords = viewModel.personalRecords,
+                    bestEfforts = viewModel.bestEfforts
+                )
+            }
         }
     }
 }
