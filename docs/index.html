@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StatsUp — Your Strava Analytics Companion</title>
+  <meta name="description" content="Deep analytics for your Strava activities. Track progress, earn badges, and discover your personal bests with StatsUp for Android." />
+  <meta property="og:title" content="StatsUp — Your Strava Analytics Companion" />
+  <meta property="og:description" content="Deep analytics for your Strava activities." />
+  <meta property="og:image" content="assets/images/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #FF5722;
+      --orange-light: #FF7043;
+      --orange-dark: #E64A19;
+      --orange-glow: rgba(255, 87, 34, 0.25);
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --surface: #1e1e1e;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --green: #4CAF50;
+      --blue: #42A5F5;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-logo img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .nav-logo span { color: var(--orange); }
+
+    .nav-cta {
+      background: var(--orange);
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--orange-dark); transform: scale(1.03); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,87,34,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(66,165,245,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,87,34,0.12);
+      border: 1px solid rgba(255,87,34,0.3);
+      color: var(--orange-light);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--orange);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .hero h1 span { color: var(--orange); }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--orange);
+      color: white;
+      padding: 0.9rem 2rem;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.2s;
+      box-shadow: 0 0 30px var(--orange-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--orange-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px var(--orange-glow);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255,255,255,0.07);
+      color: var(--text);
+      padding: 0.9rem 2rem;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Google Play Badge */
+    .play-badge {
+      margin-top: 1rem;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+
+    .play-badge a {
+      display: inline-block;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .play-badge a:hover { transform: scale(1.05); opacity: 0.9; }
+
+    .play-badge img { height: 60px; }
+
+    /* ── MOCKUPS ── */
+    .mockups {
+      position: relative;
+      margin: 4rem auto 0;
+      max-width: 900px;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+
+    .mockups-glow {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 100px;
+      background: var(--orange);
+      filter: blur(80px);
+      opacity: 0.2;
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    .phone-container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .phone {
+      border-radius: 36px;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.12);
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      background: var(--bg3);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .phone::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    .phone-main {
+      width: 220px;
+      height: 480px;
+    }
+
+    .phone-side {
+      width: 180px;
+      height: 390px;
+      opacity: 0.75;
+    }
+
+    .phone img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .phone-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .phone-placeholder .screen-preview {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1rem 0.75rem 0.75rem;
+    }
+
+    /* Mini UI mockup inside phone */
+    .mock-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .mock-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+
+    .mock-title { flex: 1; }
+    .mock-bar { height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; }
+    .mock-bar.w60 { width: 60%; }
+    .mock-bar.w40 { width: 40%; margin-top: 3px; height: 4px; }
+
+    .mock-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+
+    .mock-stat {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .mock-stat-val {
+      height: 10px;
+      background: var(--orange);
+      border-radius: 3px;
+      opacity: 0.8;
+    }
+
+    .mock-stat-val.blue { background: var(--blue); }
+    .mock-stat-val.green { background: var(--green); }
+
+    .mock-stat-label {
+      height: 5px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      width: 70%;
+    }
+
+    .mock-chart {
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 0.5rem;
+      height: 60px;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .mock-bar-chart {
+      flex: 1;
+      border-radius: 2px;
+      background: var(--orange);
+      opacity: 0.6;
+    }
+
+    .mock-list { display: flex; flex-direction: column; gap: 0.35rem; }
+    .mock-list-item {
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 0.45rem 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .mock-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--orange);
+      flex-shrink: 0;
+    }
+
+    .mock-dot.green { background: var(--green); }
+    .mock-dot.blue { background: var(--blue); }
+
+    .mock-line { flex: 1; height: 5px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+    .mock-line.short { width: 40%; }
+
+    .mock-badge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.4rem;
+    }
+
+    .mock-badge {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .mock-badge.earned { background: rgba(255,87,34,0.2); border: 1px solid rgba(255,87,34,0.4); }
+    .mock-badge.locked { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); opacity: 0.5; }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 520px;
+    }
+
+    /* ── STATS BAND ── */
+    .stats-band {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 2rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .stat-item span {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--orange);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-item p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── FEATURES GRID ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(255,87,34,0.3);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      background: rgba(255,87,34,0.1);
+    }
+
+    .feature-icon.blue { background: rgba(66,165,245,0.1); }
+    .feature-icon.green { background: rgba(76,175,80,0.1); }
+    .feature-icon.purple { background: rgba(156,39,176,0.1); }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── SCREENSHOTS ── */
+    .screenshots-section { background: var(--bg2); }
+
+    .screens-scroll {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      padding: 2.5rem 0 1.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--orange) transparent;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .screens-scroll::-webkit-scrollbar { height: 4px; }
+    .screens-scroll::-webkit-scrollbar-track { background: transparent; }
+    .screens-scroll::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 2px; }
+
+    .screen-card {
+      flex-shrink: 0;
+      width: 240px;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: var(--bg3);
+      aspect-ratio: 9/19;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .screen-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .screen-label {
+      text-align: center;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .screen-item { flex-shrink: 0; }
+
+    /* Placeholder screen content */
+    .screen-mock {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 0.85rem 0.85rem;
+      gap: 0.6rem;
+    }
+
+    .screen-mock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .screen-mock-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .screen-mock-sub {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .screen-add-note {
+      margin-top: 3rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      padding: 1rem;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    /* ── BADGES SECTION ── */
+    .badges-showcase {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+      justify-content: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: all 0.2s;
+    }
+
+    .badge-pill:hover {
+      border-color: var(--orange);
+      background: rgba(255,87,34,0.08);
+      transform: scale(1.04);
+    }
+
+    /* ── STRAVA SECTION ── */
+    .strava-section {
+      text-align: center;
+    }
+
+    .strava-logo {
+      width: 120px;
+      margin: 0 auto 2rem;
+      opacity: 0.6;
+    }
+
+    .strava-steps {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: white;
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step h4 { font-size: 0.95rem; font-weight: 600; }
+    .step p { font-size: 0.82rem; color: var(--text-muted); }
+
+    .step-arrow {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      align-self: center;
+      margin-top: -1.5rem;
+    }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255,87,34,0.1) 0%, rgba(66,165,245,0.05) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 6rem 2rem;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 2rem;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
+      text-decoration: none;
+      margin-bottom: 1rem;
+    }
+
+    .footer-logo img { width: 28px; height: 28px; border-radius: 7px; }
+    .footer-logo span { color: var(--orange); }
+
+    footer p { font-size: 0.8rem; color: var(--text-muted); }
+
+    footer a { color: var(--orange); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 0.75rem 1rem; }
+      .hero { padding: 7rem 1.25rem 3rem; }
+      .phone-side { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .strava-steps { gap: 0.75rem; }
+      .step-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <img src="assets/images/icon.webp" alt="StatsUp icon" />
+      Stats<span>Up</span>
+    </a>
+    <a href="#download" class="nav-cta">Download</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-badge">Strava Analytics for Android</div>
+
+    <h1>Your training,<br /><span>deeper than ever.</span></h1>
+    <p>Import your Strava activities and unlock powerful analytics, personal records, achievement badges, and beautiful insights — all in your pocket.</p>
+
+    <div class="hero-actions">
+      <a href="#download" class="btn-primary">
+        <!-- Google Play icon SVG -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3.18 23.8a1.5 1.5 0 0 0 .92-.31L15.48 12 4.1.51A1.5 1.5 0 0 0 3 1.5v21a1.5 1.5 0 0 0 .18.3zm14.62-8.34-2.94-2.94-2.22 2.22 3.72 2.15c.41.24.9.18 1.24-.09l.2-.18a1.28 1.28 0 0 0 0-1.16zm-2.94-5.92 2.94-2.94a1.28 1.28 0 0 0 0-1.16l-.2-.18a1.25 1.25 0 0 0-1.24-.09L12.64 8.3zm-1.8 1.8L12 10.28 5.44 3.72l7.74 4.48z"/>
+        </svg>
+        Get it on Google Play
+      </a>
+      <a href="#features" class="btn-secondary">
+        Explore features →
+      </a>
+    </div>
+
+    <!-- Phone Mockups -->
+    <div class="mockups">
+      <div class="mockups-glow"></div>
+      <div class="phone-container">
+
+        <!-- Left phone: Dashboard -->
+        <div class="phone phone-side">
+          <div class="screen-mock">
+            <div class="screen-mock-header">
+              <div>
+                <div class="screen-mock-title" style="font-size:0.8rem">Badges</div>
+              </div>
+            </div>
+            <div class="mock-badge-grid">
+              <div class="mock-badge earned">🏃</div>
+              <div class="mock-badge earned">🚴</div>
+              <div class="mock-badge earned">⛰️</div>
+              <div class="mock-badge earned">🏅</div>
+              <div class="mock-badge locked">🏊</div>
+              <div class="mock-badge locked">⚡</div>
+              <div class="mock-badge earned">🎯</div>
+              <div class="mock-badge locked">🔥</div>
+              <div class="mock-badge locked">🌟</div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.3rem 0"></div>
+            <div class="mock-list">
+              <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line"></div></div>
+              <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div></div>
+              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center phone: Stats -->
+        <div class="phone phone-main">
+          <div class="screen-mock">
+            <div class="screen-mock-header">
+              <div>
+                <div class="screen-mock-title">Dashboard</div>
+                <div class="screen-mock-sub">March 2026</div>
+              </div>
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--orange);opacity:0.8"></div>
+            </div>
+            <div class="mock-stats">
+              <div class="mock-stat">
+                <div class="mock-stat-val" style="width:75%"></div>
+                <div class="mock-stat-label"></div>
+              </div>
+              <div class="mock-stat">
+                <div class="mock-stat-val blue" style="width:50%"></div>
+                <div class="mock-stat-label"></div>
+              </div>
+              <div class="mock-stat">
+                <div class="mock-stat-val green" style="width:90%"></div>
+                <div class="mock-stat-label"></div>
+              </div>
+              <div class="mock-stat">
+                <div class="mock-stat-val" style="width:60%;opacity:0.5"></div>
+                <div class="mock-stat-label"></div>
+              </div>
+            </div>
+            <div class="mock-chart">
+              <div class="mock-bar-chart" style="height:30%"></div>
+              <div class="mock-bar-chart" style="height:55%"></div>
+              <div class="mock-bar-chart" style="height:45%"></div>
+              <div class="mock-bar-chart" style="height:70%"></div>
+              <div class="mock-bar-chart" style="height:50%"></div>
+              <div class="mock-bar-chart" style="height:85%;opacity:1"></div>
+              <div class="mock-bar-chart" style="height:65%"></div>
+            </div>
+            <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:0.25rem">Recent activities</div>
+            <div class="mock-list">
+              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--text-muted)">12.4 km</div></div>
+              <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div><div style="font-size:0.5rem;color:var(--text-muted)">45.2 km</div></div>
+              <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--text-muted)">8.1 km</div></div>
+              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line short"></div><div style="font-size:0.5rem;color:var(--text-muted)">21.0 km</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right phone: Records -->
+        <div class="phone phone-side">
+          <div class="screen-mock">
+            <div class="screen-mock-header">
+              <div>
+                <div class="screen-mock-title" style="font-size:0.8rem">Records</div>
+              </div>
+            </div>
+            <div class="mock-list">
+              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
+              <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line"></div></div>
+              <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div></div>
+              <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
+              <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line short"></div></div>
+            </div>
+            <div style="height:1px;background:var(--border);margin:0.3rem 0"></div>
+            <div class="mock-chart" style="height:50px">
+              <div class="mock-bar-chart" style="height:40%;background:var(--blue)"></div>
+              <div class="mock-bar-chart" style="height:60%;background:var(--blue)"></div>
+              <div class="mock-bar-chart" style="height:35%;background:var(--blue)"></div>
+              <div class="mock-bar-chart" style="height:80%;background:var(--orange)"></div>
+              <div class="mock-bar-chart" style="height:55%;background:var(--blue)"></div>
+              <div class="mock-bar-chart" style="height:70%;background:var(--blue)"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAND -->
+  <div class="stats-band">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <span>30+</span>
+        <p>Achievement Badges</p>
+      </div>
+      <div class="stat-item reveal">
+        <span>5</span>
+        <p>Heart Rate Zones</p>
+      </div>
+      <div class="stat-item reveal">
+        <span>8</span>
+        <p>Sport Types</p>
+      </div>
+      <div class="stat-item reveal">
+        <span>4</span>
+        <p>Languages</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-label reveal">Features</div>
+      <h2 class="section-title reveal">Everything Strava doesn't show you</h2>
+      <p class="section-sub reveal">StatsUp goes beyond the basics — giving you the analytics tools that serious athletes need, without the subscription.</p>
+
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">📊</div>
+          <h3>Deep Statistics</h3>
+          <p>Monthly and annual breakdowns of distance, elevation, duration, and pace. See trends over time with beautiful charts.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🏅</div>
+          <h3>Achievement Badges</h3>
+          <p>Earn 30+ badges for milestones like running 100km in a month, completing the Everest challenge, or your first marathon.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon blue">⚡</div>
+          <h3>Personal Records</h3>
+          <p>Track your all-time bests: max distance, top speed, highest elevation, best pace, and race predictions using Riegel's formula.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon green">❤️</div>
+          <h3>HR Zone Analysis</h3>
+          <p>Visualize how you distribute your effort across 5 heart rate zones. Understand if you're training at the right intensity.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon purple">🗺️</div>
+          <h3>Route Maps</h3>
+          <p>View your activity routes on interactive Google Maps. See all your routes on a single map to visualize your training geography.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🎯</div>
+          <h3>Goal Tracking</h3>
+          <p>Set monthly distance and frequency goals. Get smart suggestions based on your historical performance. Never miss a target.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon blue">🔖</div>
+          <h3>Bookmarks</h3>
+          <p>Save your favorite workouts with custom notes and difficulty ratings. Build a personal library of memorable activities.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon green">📤</div>
+          <h3>Data Export & Backup</h3>
+          <p>Export all your data to JSON for full portability. Restore anytime. Your data is always yours — stored locally on your device.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🌙</div>
+          <h3>Light, Dark & System Theme</h3>
+          <p>Beautiful in any light. Switch between themes manually or let the system decide. Available in English, Italian, Spanish, and French.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="screenshots-section" id="screenshots">
+    <div class="container">
+      <div class="section-label reveal">Screenshots</div>
+      <h2 class="section-title reveal">See it in action</h2>
+      <p class="section-sub reveal">A clean, focused interface designed for athletes who care about their data.</p>
+
+      <!-- Replace these placeholders with real screenshots -->
+      <div class="screens-scroll">
+
+        <div class="screen-item">
+          <div class="screen-card">
+            <div class="screen-mock">
+              <div class="screen-mock-header">
+                <div class="screen-mock-title">Dashboard</div>
+              </div>
+              <div class="mock-stats">
+                <div class="mock-stat"><div class="mock-stat-val" style="width:80%"></div><div class="mock-stat-label"></div></div>
+                <div class="mock-stat"><div class="mock-stat-val blue" style="width:55%"></div><div class="mock-stat-label"></div></div>
+                <div class="mock-stat"><div class="mock-stat-val green" style="width:95%"></div><div class="mock-stat-label"></div></div>
+                <div class="mock-stat"><div class="mock-stat-val" style="width:40%;opacity:0.5"></div><div class="mock-stat-label"></div></div>
+              </div>
+              <div class="mock-chart">
+                <div class="mock-bar-chart" style="height:30%"></div>
+                <div class="mock-bar-chart" style="height:60%"></div>
+                <div class="mock-bar-chart" style="height:45%"></div>
+                <div class="mock-bar-chart" style="height:75%"></div>
+                <div class="mock-bar-chart" style="height:55%"></div>
+                <div class="mock-bar-chart" style="height:90%;opacity:1"></div>
+                <div class="mock-bar-chart" style="height:65%"></div>
+              </div>
+              <div class="screen-add-note">Add your<br/>dashboard screenshot</div>
+            </div>
+          </div>
+          <div class="screen-label">Dashboard</div>
+        </div>
+
+        <div class="screen-item">
+          <div class="screen-card">
+            <div class="screen-mock">
+              <div class="screen-mock-header">
+                <div class="screen-mock-title">Statistics</div>
+              </div>
+              <div class="mock-chart" style="height:80px">
+                <div class="mock-bar-chart" style="height:40%"></div>
+                <div class="mock-bar-chart" style="height:65%"></div>
+                <div class="mock-bar-chart" style="height:30%"></div>
+                <div class="mock-bar-chart" style="height:80%"></div>
+                <div class="mock-bar-chart" style="height:55%"></div>
+                <div class="mock-bar-chart" style="height:70%"></div>
+                <div class="mock-bar-chart" style="height:45%"></div>
+                <div class="mock-bar-chart" style="height:85%"></div>
+                <div class="mock-bar-chart" style="height:60%"></div>
+                <div class="mock-bar-chart" style="height:90%"></div>
+                <div class="mock-bar-chart" style="height:50%"></div>
+                <div class="mock-bar-chart" style="height:75%"></div>
+              </div>
+              <div class="screen-add-note">Add your<br/>statistics screenshot</div>
+            </div>
+          </div>
+          <div class="screen-label">Statistics</div>
+        </div>
+
+        <div class="screen-item">
+          <div class="screen-card">
+            <div class="screen-mock">
+              <div class="screen-mock-header">
+                <div class="screen-mock-title">Badges</div>
+              </div>
+              <div class="mock-badge-grid">
+                <div class="mock-badge earned">🏃</div>
+                <div class="mock-badge earned">🚴</div>
+                <div class="mock-badge earned">⛰️</div>
+                <div class="mock-badge earned">🏅</div>
+                <div class="mock-badge earned">🎯</div>
+                <div class="mock-badge locked">🔥</div>
+                <div class="mock-badge locked">🏊</div>
+                <div class="mock-badge locked">⚡</div>
+                <div class="mock-badge locked">🌟</div>
+              </div>
+              <div class="screen-add-note">Add your<br/>badges screenshot</div>
+            </div>
+          </div>
+          <div class="screen-label">Achievements</div>
+        </div>
+
+        <div class="screen-item">
+          <div class="screen-card">
+            <div class="screen-mock">
+              <div class="screen-mock-header">
+                <div class="screen-mock-title">Records</div>
+              </div>
+              <div class="mock-list">
+                <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
+                <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line"></div></div>
+                <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div></div>
+                <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div></div>
+                <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line short"></div></div>
+              </div>
+              <div class="screen-add-note">Add your<br/>records screenshot</div>
+            </div>
+          </div>
+          <div class="screen-label">Personal Records</div>
+        </div>
+
+        <div class="screen-item">
+          <div class="screen-card">
+            <div class="screen-mock">
+              <div class="screen-mock-header">
+                <div class="screen-mock-title">Activities</div>
+              </div>
+              <div class="mock-list">
+                <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--orange)">12.4k</div></div>
+                <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--orange)">45.2k</div></div>
+                <div class="mock-list-item"><div class="mock-dot green"></div><div class="mock-line short"></div><div style="font-size:0.5rem;color:var(--orange)">8.1k</div></div>
+                <div class="mock-list-item"><div class="mock-dot"></div><div class="mock-line"></div><div style="font-size:0.5rem;color:var(--orange)">21.0k</div></div>
+                <div class="mock-list-item"><div class="mock-dot blue"></div><div class="mock-line short"></div><div style="font-size:0.5rem;color:var(--orange)">5.5k</div></div>
+              </div>
+              <div class="screen-add-note">Add your<br/>activities screenshot</div>
+            </div>
+          </div>
+          <div class="screen-label">Activity History</div>
+        </div>
+
+      </div>
+
+      <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:0.5rem">
+        ← Scroll to see more →
+      </p>
+    </div>
+  </section>
+
+  <!-- BADGES SHOWCASE -->
+  <section>
+    <div class="container" style="text-align:center">
+      <div class="section-label reveal">Achievements</div>
+      <h2 class="section-title reveal">Earn badges, stay motivated</h2>
+      <p class="section-sub reveal" style="margin:0 auto">30+ challenges designed to push your limits — from your very first activity to conquering the equivalent of Everest in elevation gain.</p>
+
+      <div class="badges-showcase reveal">
+        <span class="badge-pill">🏃 First Step</span>
+        <span class="badge-pill">📏 Half Marathon</span>
+        <span class="badge-pill">🏁 Marathon</span>
+        <span class="badge-pill">📅 100km Month</span>
+        <span class="badge-pill">🔥 30-Day Streak</span>
+        <span class="badge-pill">⛰️ Everest Elevation</span>
+        <span class="badge-pill">📆 Annual 1000km</span>
+        <span class="badge-pill">⚡ 500 Activities</span>
+        <span class="badge-pill">🌟 Annual Streak</span>
+        <span class="badge-pill">🎯 Goal Crusher</span>
+        <span class="badge-pill">🚀 Top Speed</span>
+        <span class="badge-pill">❤️ Max Heart Rate</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container strava-section">
+      <div class="section-label reveal">Setup</div>
+      <h2 class="section-title reveal">Up and running in 3 steps</h2>
+      <p class="section-sub reveal" style="margin:0 auto">StatsUp connects to your existing Strava account. No new accounts, no new tracking — just better insights.</p>
+
+      <div class="strava-steps reveal">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h4>Install StatsUp</h4>
+          <p>Download the app from Google Play — free to install.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h4>Connect Strava</h4>
+          <p>Sign in with your Strava account via secure OAuth. StatsUp never sees your password.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h4>Explore your data</h4>
+          <p>Your activities sync automatically. Start discovering insights immediately.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / DOWNLOAD -->
+  <section class="cta-section" id="download">
+    <div class="container">
+      <div class="section-label reveal" style="display:block;margin-bottom:1rem">Download</div>
+      <h2 class="reveal">Ready to level up<br />your training?</h2>
+      <p class="reveal">Join athletes who use StatsUp to understand their performance like never before. Free to download.</p>
+
+      <div class="play-badge reveal">
+        <!-- Replace href with your actual Google Play link -->
+        <a href="https://play.google.com/store/apps/details?id=com.statsup" target="_blank" rel="noopener">
+          <img
+            src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+            alt="Get it on Google Play"
+          />
+        </a>
+      </div>
+
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-top:1.5rem">
+        Requires Android 14+. Free download. Your data stays on your device.
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="footer-logo">
+      <img src="assets/images/icon.webp" alt="StatsUp" />
+      Stats<span>Up</span>
+    </a>
+    <p style="margin-bottom:0.5rem">Built with ❤️ for athletes who love their data.</p>
+    <p>
+      <a href="https://github.com/YOUR_USERNAME/StatsUp" target="_blank" rel="noopener">GitHub</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:your@email.com">Contact</a>
+      &nbsp;·&nbsp;
+      <a href="#">Privacy Policy</a>
+    </p>
+    <p style="margin-top:1rem;font-size:0.7rem;opacity:0.4">
+      StatsUp is not affiliated with Strava Inc.
+    </p>
+  </footer>
+
+  <script>
+    // Intersection Observer for reveal animations
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); }
+      }),
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
