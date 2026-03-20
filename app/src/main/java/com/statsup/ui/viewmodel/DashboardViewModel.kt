@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.statsup.domain.Badge
 import com.statsup.domain.BestEffort
 import com.statsup.domain.CheckGoalAchievementUseCase
+import com.statsup.domain.EvaluateBadgesUseCase
 import com.statsup.domain.GoalAchievement
 import com.statsup.domain.Provider
 import com.statsup.domain.SuggestAutoTargetsUseCase
@@ -43,12 +45,20 @@ class DashboardViewModel(
 
     private val checkAchievement = CheckGoalAchievementUseCase()
     private val suggestTargets = SuggestAutoTargetsUseCase()
+    private val evaluateBadges = EvaluateBadgesUseCase()
+
+    private val _badgesEarned = MutableSharedFlow<List<Badge>>(extraBufferCapacity = 10)
+    val badgesEarned: SharedFlow<List<Badge>> = _badgesEarned.asSharedFlow()
+
+    // null = not yet initialized (first emission); used to skip initial state
+    private var previousEarnedBadgeIds: Set<String>? = null
 
     init {
         viewModelScope.launch {
             trainingRepository.all().collect {
                 trainings = it
                 checkGoalAchievement()
+                checkBadgeEarning()
                 if (isFirstEmission.not()) checkTargetSuggestion()
             }
         }
@@ -105,6 +115,23 @@ class DashboardViewModel(
         targetSuggestion = suggestion
     }
 
+    private fun checkBadgeEarning() {
+        val badges = evaluateBadges(
+            trainings = trainings,
+            monthlyDistanceGoalKm = effectiveMonthlyDistanceGoal(),
+            monthlyTrainingGoal = effectiveMonthlyTrainingGoal()
+        )
+        val earnedIds = badges.filter { it.earned }.map { it.id }.toSet()
+        val prev = previousEarnedBadgeIds
+        if (prev != null) {
+            val newlyEarned = badges.filter { it.earned && it.id !in prev }
+            if (newlyEarned.isNotEmpty()) {
+                viewModelScope.launch { _badgesEarned.emit(newlyEarned) }
+            }
+        }
+        previousEarnedBadgeIds = earnedIds
+    }
+
     fun acceptTargetSuggestion() {
         val suggestion = targetSuggestion ?: return
         settingRepository.saveMonthlyGoal(suggestion.distanceKm)
@@ -121,10 +148,6 @@ class DashboardViewModel(
     fun snoozeTargetSuggestion() {
         // Close the dialog but do NOT mark the month as handled — it will re-appear next launch
         targetSuggestion = null
-    }
-
-    suspend fun testGoalAchieved(achievement: GoalAchievement) {
-        _goalAchieved.emit(achievement)
     }
 
     fun distancePercentage(): Float {

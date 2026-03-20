@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.statsup.R
+import com.statsup.domain.Badge
 import com.statsup.domain.GoalAchievement
 import com.statsup.ui.components.dashboard.ActivityHeatmap
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
@@ -60,6 +61,13 @@ import com.statsup.domain.TargetSuggestion
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel, onProfileClick: () -> Unit = {}) {
     var celebrationAchievement by remember { mutableStateOf<GoalAchievement?>(null) }
+    var badgeQueue by remember { mutableStateOf<List<Badge>>(emptyList()) }
+    var currentBadge by remember { mutableStateOf<Badge?>(null) }
+
+    fun showNextBadge() {
+        currentBadge = badgeQueue.firstOrNull()
+        if (badgeQueue.isNotEmpty()) badgeQueue = badgeQueue.drop(1)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.goalAchieved.collect { achievement ->
@@ -67,10 +75,34 @@ fun DashboardScreen(viewModel: DashboardViewModel, onProfileClick: () -> Unit = 
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.badgesEarned.collect { badges ->
+            if (celebrationAchievement == null && currentBadge == null) {
+                currentBadge = badges.firstOrNull()
+                badgeQueue = badgeQueue + badges.drop(1)
+            } else {
+                badgeQueue = badgeQueue + badges
+            }
+        }
+    }
+
     celebrationAchievement?.let { achievement ->
         CelebrationDialog(
             achievement = achievement,
-            onDismiss = { celebrationAchievement = null }
+            onDismiss = {
+                celebrationAchievement = null
+                showNextBadge()
+            }
+        )
+    }
+
+    currentBadge?.let { badge ->
+        BadgeCelebrationDialog(
+            badge = badge,
+            onDismiss = {
+                currentBadge = null
+                showNextBadge()
+            }
         )
     }
 

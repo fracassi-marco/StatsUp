@@ -141,6 +141,9 @@
     <string name="target_suggestion_dismiss">Keep current targets</string>
     <string name="target_suggestion_snooze">Ask me later</string>
 
+    <string name="badge_celebration_title">Nuovo badge!</string>
+    <string name="badge_celebration_close">Fantastico!</string>
+
     <string name="profile_title">Profilo</string>
     <string name="profile_tab_monthly">Mensili</string>
     <string name="profile_tab_annual">Annuali</string>
