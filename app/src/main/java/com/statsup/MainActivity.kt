@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -26,6 +27,8 @@ import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
+import com.statsup.infrastructure.ActivityExportService
+import kotlinx.coroutines.launch
 import com.statsup.infrastructure.TrainingShareService
 import com.statsup.infrastructure.StravaTrainingApi
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
@@ -154,6 +157,7 @@ class MainActivity : ComponentActivity() {
                                 ) { backStackEntry ->
                                     val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
                                     val context = LocalContext.current
+                                    val scope = rememberCoroutineScope()
                                     val detailViewModel = remember {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
@@ -175,6 +179,16 @@ class MainActivity : ComponentActivity() {
                                         onShare = {
                                             detailViewModel.training.value?.let { t ->
                                                 TrainingShareService.share(context, t)
+                                            }
+                                        },
+                                        onExportGpx = {
+                                            detailViewModel.training.value?.let { t ->
+                                                scope.launch { ActivityExportService.exportGpx(context, t) }
+                                            }
+                                        },
+                                        onExportTcx = {
+                                            detailViewModel.training.value?.let { t ->
+                                                scope.launch { ActivityExportService.exportTcx(context, t) }
                                             }
                                         },
                                         onDismissDialog = { detailViewModel.dismissBookmarkDialog() },

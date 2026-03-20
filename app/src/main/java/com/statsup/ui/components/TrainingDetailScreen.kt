@@ -21,6 +21,7 @@ import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Landscape
@@ -35,6 +36,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -42,6 +45,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -76,6 +83,8 @@ fun TrainingDetailScreen(
     onOpenFullscreenMap: () -> Unit,
     onToggleBookmark: () -> Unit,
     onShare: () -> Unit,
+    onExportGpx: () -> Unit,
+    onExportTcx: () -> Unit,
     onDismissDialog: () -> Unit,
     onConfirmBookmark: (String, String, String) -> Unit,
     onRemoveBookmark: () -> Unit
@@ -432,6 +441,31 @@ fun TrainingDetailScreen(
                 }
 
                 Row {
+                    // Pulsante export GPX/TCX
+                    var showExportMenu by remember { mutableStateOf(false) }
+                    Box {
+                        IconButton(onClick = { showExportMenu = true }) {
+                            Icon(
+                                Icons.Filled.FileDownload,
+                                contentDescription = "Export",
+                                tint = Color.White,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                        DropdownMenu(
+                            expanded = showExportMenu,
+                            onDismissRequest = { showExportMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Export GPX") },
+                                onClick = { showExportMenu = false; onExportGpx() }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Export TCX") },
+                                onClick = { showExportMenu = false; onExportTcx() }
+                            )
+                        }
+                    }
                     // Pulsante share
                     IconButton(onClick = onShare) {
                         Icon(
