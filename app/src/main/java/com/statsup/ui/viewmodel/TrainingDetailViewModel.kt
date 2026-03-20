@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.statsup.domain.BookmarkedTraining
+import com.statsup.domain.ManageBookmarkUseCase
 import com.statsup.domain.Training
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
@@ -39,6 +39,8 @@ class TrainingDetailViewModel(
     private val _showBookmarkDialog = mutableStateOf(false)
     val showBookmarkDialog: State<Boolean> = _showBookmarkDialog
 
+    private val manageBookmark = ManageBookmarkUseCase(bookmarkedTrainingRepository)
+
     init {
         loadTraining()
         checkBookmarkStatus()
@@ -52,7 +54,6 @@ class TrainingDetailViewModel(
                     trainingRepository.byId(trainingId)
                 }
             } catch (e: Exception) {
-                // Log the error but don't crash
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
@@ -64,7 +65,7 @@ class TrainingDetailViewModel(
         viewModelScope.launch {
             try {
                 val bookmark = withContext(Dispatchers.IO) {
-                    bookmarkedTrainingRepository.getBookmarkByTrainingId(trainingId)
+                    manageBookmark.getBookmark(trainingId)
                 }
                 _isBookmarked.value = bookmark != null
                 _bookmarkNote.value = bookmark?.note ?: ""
@@ -77,7 +78,6 @@ class TrainingDetailViewModel(
     }
 
     fun toggleBookmark() {
-        // Mostra il dialog invece di agire direttamente
         _showBookmarkDialog.value = true
     }
 
@@ -89,19 +89,7 @@ class TrainingDetailViewModel(
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    if (_isBookmarked.value) {
-                        // Se già bookmarkato, aggiorna note, customTitle e difficulty
-                        bookmarkedTrainingRepository.updateBookmark(trainingId, note, customTitle, difficulty)
-                    } else {
-                        // Se non bookmarkato, crea nuovo bookmark
-                        val bookmark = BookmarkedTraining(
-                            trainingId = trainingId,
-                            note = note,
-                            customTitle = customTitle,
-                            difficulty = difficulty
-                        )
-                        bookmarkedTrainingRepository.addBookmark(bookmark)
-                    }
+                    manageBookmark.addOrUpdate(trainingId, note, customTitle, difficulty)
                 }
                 _isBookmarked.value = true
                 _bookmarkNote.value = note
@@ -117,7 +105,7 @@ class TrainingDetailViewModel(
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    bookmarkedTrainingRepository.removeBookmarkByTrainingId(trainingId)
+                    manageBookmark.remove(trainingId)
                 }
                 _isBookmarked.value = false
                 _bookmarkNote.value = ""
@@ -129,4 +117,3 @@ class TrainingDetailViewModel(
         }
     }
 }
-

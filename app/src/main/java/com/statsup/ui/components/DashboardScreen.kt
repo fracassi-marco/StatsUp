@@ -54,7 +54,7 @@ import com.statsup.ui.components.dashboard.MonthlyTrainingGoalCard
 import com.statsup.ui.components.dashboard.BestEffortsCard
 import com.statsup.ui.components.dashboard.TopTrainingTypes
 import com.statsup.ui.viewmodel.DashboardViewModel
-import com.statsup.ui.viewmodel.TargetSuggestion
+import com.statsup.domain.TargetSuggestion
 
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {

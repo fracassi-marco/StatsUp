@@ -6,8 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.domain.BestEffort
+import com.statsup.domain.CheckGoalAchievementUseCase
 import com.statsup.domain.GoalAchievement
 import com.statsup.domain.Provider
+import com.statsup.domain.SuggestAutoTargetsUseCase
+import com.statsup.domain.TargetSuggestion
 import com.statsup.domain.Training
 import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
@@ -19,8 +22,6 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZonedDateTime
-
-data class TargetSuggestion(val distanceKm: Int, val trainingCount: Int)
 
 class DashboardViewModel(
     private val trainingRepository: TrainingRepository,
@@ -39,6 +40,9 @@ class DashboardViewModel(
     private var previousDistancePercentage = 0f
     private var previousTrainingGoalPercentage = 0f
     private var isFirstEmission = true
+
+    private val checkAchievement = CheckGoalAchievementUseCase()
+    private val suggestTargets = SuggestAutoTargetsUseCase()
 
     init {
         viewModelScope.launch {
@@ -63,45 +67,42 @@ class DashboardViewModel(
             return
         }
 
-        val distanceGoalJustReached = previousDistancePercentage < 1f && currentDistance >= 1f
-        val trainingGoalJustReached = previousTrainingGoalPercentage < 1f && currentTraining >= 1f
+        val achievement = checkAchievement(
+            previousDistance = previousDistancePercentage,
+            currentDistance = currentDistance,
+            previousTraining = previousTrainingGoalPercentage,
+            currentTraining = currentTraining
+        )
 
         previousDistancePercentage = currentDistance
         previousTrainingGoalPercentage = currentTraining
 
-        val achievement = when {
-            distanceGoalJustReached && trainingGoalJustReached -> GoalAchievement.BOTH
-            distanceGoalJustReached -> GoalAchievement.DISTANCE
-            trainingGoalJustReached -> GoalAchievement.TRAINING_COUNT
-            else -> return
-        }
-
-        viewModelScope.launch {
-            _goalAchieved.emit(achievement)
+        if (achievement != null) {
+            viewModelScope.launch {
+                _goalAchieved.emit(achievement)
+            }
         }
     }
 
     private fun checkTargetSuggestion() {
         if (settingRepository.loadAutoTargets()) return
 
-        val currentYearMonth = YearMonth.now().toString() // e.g. "2026-03"
+        val currentYearMonth = YearMonth.now().toString()
         if (settingRepository.loadLastSuggestedYearMonth() == currentYearMonth) return
 
-        val suggestedDistance = Trainings(trainings, provider = Provider.Distance)
-            .autoDistanceTarget(fallbackKm = settingRepository.loadMonthlyGoal())
-        val suggestedTraining = Trainings(trainings, provider = Provider.Frequency)
-            .autoTrainingTarget(fallbackCount = settingRepository.loadMonthlyTrainingGoal())
+        val suggestion = suggestTargets(
+            trainings = trainings,
+            currentDistanceGoalKm = settingRepository.loadMonthlyGoal(),
+            currentTrainingGoal = settingRepository.loadMonthlyTrainingGoal()
+        )
 
-        // Only suggest if the computed values differ from current manual targets
-        val distanceDiffers = suggestedDistance != settingRepository.loadMonthlyGoal()
-        val trainingDiffers = suggestedTraining != settingRepository.loadMonthlyTrainingGoal()
-        if (!distanceDiffers && !trainingDiffers) {
+        if (suggestion == null) {
             // Nothing meaningful to suggest — mark as seen so we don't check again this month
             settingRepository.saveLastSuggestedYearMonth(currentYearMonth)
             return
         }
 
-        targetSuggestion = TargetSuggestion(suggestedDistance, suggestedTraining)
+        targetSuggestion = suggestion
     }
 
     fun acceptTargetSuggestion() {
