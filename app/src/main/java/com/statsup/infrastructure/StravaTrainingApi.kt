@@ -24,7 +24,8 @@ class StravaTrainingApi : TrainingApi {
     }
 
     override suspend fun athlete(token: String): Athlete {
-        val response = Http("https://www.strava.com/api/v3/athlete").get(
+        val response = Http().get(
+            url = "https://www.strava.com/api/v3/athlete",
             auth = Bearer(token),
             headers = mapOf("Accept" to "application/json")
         )
@@ -37,7 +38,8 @@ class StravaTrainingApi : TrainingApi {
         if (latest != null) {
             params["after"] = latest.date.toEpochSecond().toString()
         }
-        val response = Http("https://www.strava.com/api/v3/athlete/activities").get(
+        val response = Http().get(
+            url = "https://www.strava.com/api/v3/athlete/activities",
             params = params,
             auth = Bearer(token),
             headers = mapOf("Accept" to "application/json")
