@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.domain.BestEffort
+import com.statsup.domain.PerformancePrediction
 import com.statsup.domain.Provider
 import com.statsup.domain.Training
 import com.statsup.domain.Trainings
@@ -97,6 +98,15 @@ class StatsViewModel(
     fun doneOfPastYear() = pastYearTraining().byMonth().values.sum()
 
     fun averageOfYear() = trainings().byMonth().values.filter { it != 0.0 }.average()
+
+    fun performancePredictions(): List<PerformancePrediction> {
+        val filtered = if (selectedSpan == 0) {
+            trainings.filter { it.date.month == selectedNow.month && it.date.year == selectedNow.year }
+        } else {
+            trainings.filter { it.date.year == selectedNow.year }
+        }
+        return Trainings(filtered, provider = Provider.None).performancePredictions()
+    }
 
     fun bestEfforts(): List<BestEffort> {
         val filtered = if (selectedSpan == 0) {

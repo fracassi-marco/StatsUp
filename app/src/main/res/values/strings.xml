@@ -4,6 +4,9 @@
     <string name="settings_title">Settings</string>
     <string name="activity_heatmap_title">Activity</string>
     <string name="best_efforts_title">Best Efforts</string>
+    <string name="performance_predictions_title">Performance Predictions</string>
+    <string name="performance_predictions_subtitle">Estimated race finish times</string>
+    <string name="performance_predictions_formula">Based on Riegel\'s formula (T₂ = T₁ × (D₂/D₁)^1.06)</string>
     <string name="best_efforts_time">Time</string>
     <string name="best_efforts_pace">Pace</string>
     <string name="streak_days">Streak</string>

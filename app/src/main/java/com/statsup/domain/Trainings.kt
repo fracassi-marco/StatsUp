@@ -2,6 +2,7 @@ package com.statsup.domain
 
 import java.time.LocalDate
 import java.time.Month
+import kotlin.math.pow
 import java.time.Month.JANUARY
 import java.time.Month.DECEMBER
 import java.time.Year
@@ -256,6 +257,34 @@ class Trainings(
                         date = t.date
                     )
                 }
+        }
+    }
+
+    /**
+     * Predicts finish times for standard race distances using Riegel's formula:
+     * T2 = T1 × (D2 / D1)^1.06
+     * Reference: the run with the best average pace (≥ 1 km) in the current set.
+     */
+    fun performancePredictions(): List<PerformancePrediction> {
+        val targets = listOf(
+            5_000.0 to "5 km",
+            10_000.0 to "10 km",
+            21_097.5 to "Half M.",
+            42_195.0 to "Marathon"
+        )
+        val reference = trainings
+            .filter { (it.sportType == "Run" || it.type == "Run") && it.distance >= 1_000.0 }
+            .minByOrNull { it.movingTime.toDouble() / it.distance }
+            ?: return emptyList()
+
+        return targets.map { (targetDist, label) ->
+            val predictedSeconds = (reference.movingTime * (targetDist / reference.distance).pow(1.06)).toInt()
+            PerformancePrediction(
+                label = label,
+                distanceMeters = targetDist,
+                timeSeconds = predictedSeconds,
+                paceMinPerKm = predictedSeconds / (targetDist / 1000.0) / 60.0
+            )
         }
     }
 
