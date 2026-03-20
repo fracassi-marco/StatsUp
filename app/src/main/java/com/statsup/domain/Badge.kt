@@ -8,5 +8,13 @@ data class Badge(
     val description: String,
     val emoji: String,
     val category: BadgeCategory,
-    val earned: Boolean
-)
+    val earned: Boolean,
+    val currentValue: Double? = null,
+    val targetValue: Double? = null,
+    val unit: String? = null
+) {
+    val progress: Float get() = if (currentValue != null && targetValue != null && targetValue > 0)
+        (currentValue / targetValue).toFloat().coerceIn(0f, 1f)
+    else
+        if (earned) 1f else 0f
+}
