@@ -12,20 +12,21 @@ android {
     namespace = "com.statsup"
     compileSdk = 36
 
+    val properties = Properties()
+    if (project.rootProject.file("local.properties").canRead()) {
+        properties.load(project.rootProject.file("local.properties").inputStream())
+    }
+
     defaultConfig {
         applicationId = "com.statsup"
         minSdk = 34
         targetSdk = 36
-        versionCode = 40020
-        versionName = "4.0.2"
+        versionCode = 10000
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
-        }
-        val properties = Properties()
-        if (project.rootProject.file("local.properties").canRead()) {
-            properties.load(project.rootProject.file("local.properties").inputStream())
         }
 
         manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("maps.apiKey")
@@ -37,8 +38,25 @@ android {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
 
+    signingConfigs {
+        create("release") {
+            val keystorePath = properties.getProperty("signing.keystoreFile")
+            val keystoreFile = if (keystorePath != null) rootProject.file(keystorePath) else null
+            if (keystoreFile != null && keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = properties.getProperty("signing.storePassword")
+                keyAlias = properties.getProperty("signing.keyAlias")
+                keyPassword = properties.getProperty("signing.keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            val releaseSigningConfig = signingConfigs.getByName("release")
+            if (releaseSigningConfig.storeFile?.exists() == true) {
+                signingConfig = releaseSigningConfig
+            }
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
