@@ -42,6 +42,7 @@ import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
 import com.statsup.ui.components.LoadingBox
 import com.statsup.ui.components.MapFullscreenScreen
+import com.statsup.ui.components.ProfileScreen
 import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.components.SplashScreen
 import com.statsup.ui.components.StatsScreen
@@ -53,6 +54,7 @@ import com.statsup.ui.viewmodel.BookmarksViewModel
 import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.ui.viewmodel.HistoryViewModel
 import com.statsup.ui.viewmodel.MainViewModel
+import com.statsup.ui.viewmodel.ProfileViewModel
 import com.statsup.ui.viewmodel.SettingsViewModel
 import com.statsup.ui.viewmodel.StatsViewModel
 import com.statsup.ui.viewmodel.TrainingDetailViewModel
@@ -86,6 +88,7 @@ class MainActivity : ComponentActivity() {
             val statsViewModel = remember { StatsViewModel(db.trainingRepository) }
             val allRoutesViewModel = remember { AllRoutesViewModel(db.trainingRepository) }
             val bookmarksViewModel = remember { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
+            val profileViewModel = remember { ProfileViewModel(db.trainingRepository, db.athleteRepository, settingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
@@ -122,7 +125,14 @@ class MainActivity : ComponentActivity() {
                                 WelcomeScreen()
                             } else {
                                 NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
-                                composable(Screens.Dashboard.route) { DashboardScreen(dashboardViewModel) }
+                                composable(Screens.Dashboard.route) {
+                                    DashboardScreen(dashboardViewModel) {
+                                        navController.navigate(Screens.PROFILE)
+                                    }
+                                }
+                                composable(Screens.PROFILE) {
+                                    ProfileScreen(profileViewModel) { navController.popBackStack() }
+                                }
                                 composable(Screens.History.route) {
                                     HistoryScreen(historyViewModel) { trainingId ->
                                         navController.navigate(Screens.trainingDetailRoute(trainingId))

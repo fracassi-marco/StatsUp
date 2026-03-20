@@ -13,7 +13,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ScreenTitle(text: String, modifier: Modifier = Modifier) {
+fun ScreenTitle(
+    text: String,
+    modifier: Modifier = Modifier,
+    trailingContent: @Composable (() -> Unit)? = null
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -33,5 +37,9 @@ fun ScreenTitle(text: String, modifier: Modifier = Modifier) {
             fontWeight = FontWeight.ExtraBold,
             color = MaterialTheme.colorScheme.onBackground
         )
+        if (trailingContent != null) {
+            Spacer(modifier = Modifier.weight(1f))
+            trailingContent()
+        }
     }
 }

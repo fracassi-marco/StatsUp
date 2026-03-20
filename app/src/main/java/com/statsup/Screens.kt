@@ -22,6 +22,7 @@ enum class Screens(val route: String, val icon: ImageVector) {
     companion object {
         const val TRAINING_DETAIL = "training_detail/{trainingId}"
         const val MAP_FULLSCREEN = "map_fullscreen/{trainingId}"
+        const val PROFILE = "athlete_profile"
 
         fun trainingDetailRoute(trainingId: Long) = "training_detail/$trainingId"
         fun mapFullscreenRoute(trainingId: Long) = "map_fullscreen/$trainingId"

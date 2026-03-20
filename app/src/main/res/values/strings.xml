@@ -140,5 +140,10 @@
     <string name="target_suggestion_accept">Use these targets</string>
     <string name="target_suggestion_dismiss">Keep current targets</string>
     <string name="target_suggestion_snooze">Ask me later</string>
+
+    <string name="profile_title">Profilo</string>
+    <string name="profile_tab_monthly">Mensili</string>
+    <string name="profile_tab_annual">Annuali</string>
+    <string name="profile_tab_alltime">Sempre</string>
 </resources>
 

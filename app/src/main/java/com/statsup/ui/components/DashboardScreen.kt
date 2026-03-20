@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.TrendingUp
 import androidx.compose.material.icons.outlined.CalendarMonth
@@ -57,7 +58,7 @@ import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.domain.TargetSuggestion
 
 @Composable
-fun DashboardScreen(viewModel: DashboardViewModel) {
+fun DashboardScreen(viewModel: DashboardViewModel, onProfileClick: () -> Unit = {}) {
     var celebrationAchievement by remember { mutableStateOf<GoalAchievement?>(null) }
 
     LaunchedEffect(Unit) {
@@ -83,7 +84,17 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
     }
 
     Column {
-        ScreenTitle(text = stringResource(R.string.dashboard_title))
+        ScreenTitle(
+            text = stringResource(R.string.dashboard_title),
+            trailingContent = {
+                IconButton(onClick = onProfileClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.EmojiEvents,
+                        contentDescription = null
+                    )
+                }
+            }
+        )
         Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(start = 20.dp, end = 20.dp, bottom = 20.dp)) {
 
             MonthlyDistanceGoalCard(viewModel)
