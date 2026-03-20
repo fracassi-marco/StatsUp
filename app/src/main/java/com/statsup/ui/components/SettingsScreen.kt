@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.EmojiEvents
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Style
 import androidx.compose.material.icons.outlined.Upload
@@ -54,6 +55,7 @@ fun SettingsScreen(
     val monthlyGoalSheetState = rememberModalBottomSheetState()
     val monthlyTrainingGoalSheetState = rememberModalBottomSheetState()
     val themeSheetState = rememberModalBottomSheetState()
+    val languageSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
     // Handle successful import - navigate to dashboard
@@ -115,6 +117,14 @@ fun SettingsScreen(
                 name = R.string.settings_screen_theme,
                 value = viewModel.themeLabel(),
                 onClick = { viewModel.showTheme() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            val systemLanguageLabel = stringResource(R.string.settings_screen_language_system)
+            SettingsClickableComponent(
+                icon = Icons.Outlined.Language,
+                name = R.string.settings_screen_language,
+                value = viewModel.languageLabel(systemLanguageLabel),
+                onClick = { viewModel.showLanguage() }
             )
             Title(text = stringResource(R.string.settings_data_management), marginTop = 22.dp)
             SettingsClickableComponent(
@@ -271,6 +281,40 @@ fun SettingsScreen(
                             }
                         }) {
                         Text(text = stringResource(R.string.settings_screen_set_theme))
+                    }
+                }
+            }
+        }
+
+        if (viewModel.showLanguageSheet) {
+            val systemLabel = stringResource(R.string.settings_screen_language_system)
+            ModalBottomSheet(
+                onDismissRequest = { viewModel.hideLanguageSheet() },
+                sheetState = languageSheetState,
+                containerColor = MaterialTheme.colorScheme.background,
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    NumberPicker(
+                        value = viewModel.language,
+                        range = 0..4,
+                        onValueChange = { value -> viewModel.language(value) },
+                        dividersColor = MaterialTheme.colorScheme.primary,
+                        label = { value -> viewModel.languageLabel(value, systemLabel) },
+                        textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp),
+                    )
+                    Button(
+                        onClick = {
+                            scope.launch { languageSheetState.hide() }.invokeOnCompletion {
+                                if (!languageSheetState.isVisible) {
+                                    viewModel.saveLanguage()
+                                }
+                            }
+                        }) {
+                        Text(text = stringResource(R.string.settings_screen_set_language))
                     }
                 }
             }

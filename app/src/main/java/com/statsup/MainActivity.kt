@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
             val fullImportUseCase = FullImportUseCase(db.trainingRepository, db.athleteRepository, db.bookmarkedTrainingRepository, StravaTrainingApi())
             val navController = rememberNavController()
             val mainViewModel = remember { MainViewModel(updateActivitiesUseCase, fullImportUseCase) }
-            val settingsViewModel = remember { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService) }
+            val settingsViewModel = remember { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService, applicationContext) }
             val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository, applicationContext) }
             val statsViewModel = remember { StatsViewModel(db.trainingRepository) }

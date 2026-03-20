@@ -1,6 +1,9 @@
 package com.statsup.ui.viewmodel
 
+import android.app.LocaleManager
+import android.content.Context
 import android.net.Uri
+import android.os.LocaleList
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -19,8 +22,11 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val settingRepository: SettingRepository,
     private val trainingRepository: TrainingRepository,
-    private val dataExportImportService: DataExportImportService
+    private val dataExportImportService: DataExportImportService,
+    private val context: Context
 ) : ViewModel() {
+
+    private val languageTags = listOf("", "it", "en", "fr", "es")
 
     private var trainings: List<Training> by mutableStateOf(emptyList())
 
@@ -37,6 +43,10 @@ class SettingsViewModel(
     var showThemeSheet by mutableStateOf(false)
         private set
     var autoTargets by mutableStateOf(settingRepository.loadAutoTargets())
+        private set
+    var language by mutableIntStateOf(loadCurrentLanguageIndex())
+        private set
+    var showLanguageSheet by mutableStateOf(false)
         private set
     var showImportConfirmDialog by mutableStateOf(false)
         private set
@@ -93,6 +103,41 @@ class SettingsViewModel(
 
     fun hideThemeSheet() {
         showThemeSheet = false
+    }
+
+    private fun loadCurrentLanguageIndex(): Int {
+        val locales = context.getSystemService(LocaleManager::class.java).applicationLocales
+        val tag = if (locales.isEmpty) "" else locales[0]?.language ?: ""
+        return languageTags.indexOf(tag).coerceAtLeast(0)
+    }
+
+    fun languageLabel(index: Int, systemLabel: String) = when (index) {
+        1 -> "Italiano"
+        2 -> "English"
+        3 -> "Français"
+        4 -> "Español"
+        else -> systemLabel
+    }
+
+    fun languageLabel(systemLabel: String) = languageLabel(language, systemLabel)
+
+    fun showLanguage() {
+        showLanguageSheet = true
+    }
+
+    fun hideLanguageSheet() {
+        showLanguageSheet = false
+    }
+
+    fun language(value: Int) {
+        language = value
+    }
+
+    fun saveLanguage() {
+        val tag = languageTags.getOrElse(language) { "" }
+        val locales = if (tag.isEmpty()) LocaleList.getEmptyLocaleList() else LocaleList.forLanguageTags(tag)
+        context.getSystemService(LocaleManager::class.java).applicationLocales = locales
+        hideLanguageSheet()
     }
 
     fun themeLabel(i: Int) = when (i) {

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StatsUp</string>
+
+    <string name="settings_title">Paramètres</string>
+    <string name="activity_heatmap_title">Activité</string>
+    <string name="best_efforts_title">Meilleures performances</string>
+    <string name="performance_predictions_title">Prévisions de performance</string>
+    <string name="performance_predictions_subtitle">Temps d\'arrivée de course estimés</string>
+    <string name="performance_predictions_formula">Basé sur la formule de Riegel (T₂ = T₁ × (D₂/D₁)^1.06)</string>
+    <string name="best_efforts_time">Temps</string>
+    <string name="best_efforts_pace">Allure</string>
+    <string name="streak_days">Série</string>
+    <string name="streak_current_days">%1$d jours</string>
+    <string name="streak_best">Meilleur : %1$d jours</string>
+    <string name="dashboard_title">Tableau de bord</string>
+    <string name="stats_title">Statistiques</string>
+    <string name="history_title">Historique</string>
+    <string name="settings_screen_goals">Objectifs</string>
+    <string name="settings_screen_goals_monthly">Distance mensuelle</string>
+    <string name="settings_screen_goals_monthly_trainings">Objectif entraînements mensuels</string>
+    <string name="settings_screen_goals_auto_targets">Objectifs automatiques</string>
+    <string name="settings_screen_set_goal">Définir comme mon objectif</string>
+
+    <string name="settings_screen_app">Application</string>
+    <string name="settings_screen_theme">Thème</string>
+    <string name="settings_screen_set_theme">Définir le thème</string>
+    <string name="settings_screen_language">Langue</string>
+    <string name="settings_screen_set_language">Définir la langue</string>
+    <string name="settings_screen_language_system">Système</string>
+
+    <string name="km">Km</string>
+    <string name="m">m</string>
+    <string name="bpm">bpm</string>
+    <string name="h">H</string>
+    <string name="trainings">Entraînements</string>
+    <string name="distance">Distance</string>
+    <string name="elevation_gain">Dénivelé</string>
+    <string name="elevation">Altitude</string>
+    <string name="max_elevation_gain">Dén. + max</string>
+    <string name="max_heart_rate">FC max</string>
+    <string name="max_altitude">Alt. max</string>
+    <string name="max">Max</string>
+    <string name="average">Moyenne</string>
+    <string name="duration">Durée</string>
+    <string name="distance_mom">Distance mois par mois</string>
+    <string name="day_by_day">31 derniers jours</string>
+    <string name="month_by_month">12 derniers mois</string>
+    <string name="trend">Tendance</string>
+    <string name="top_training">Meilleur entraînement</string>
+    <string name="load">Synchronisation depuis Strava…</string>
+    <string name="done">Terminé</string>
+    <string name="past">Passé</string>
+    <string name="min_altitude">Alt. min</string>
+    <string name="average_pace">Allure moy.</string>
+    <string name="average_speed">Vitesse moy.</string>
+    <string name="pace_unit">min/km</string>
+    <string name="speed_unit">km/h</string>
+    <string name="map">Carte</string>
+    <string name="view_fullscreen_map">Voir la carte complète</string>
+    <string name="elevation_per_km">Dén./km</string>
+    <string name="vam">VAM</string>
+
+    <string name="m_per_km">m/km</string>
+    <string name="m_per_hour">m/h</string>
+    <string name="distance_and_time">Distance et Temps</string>
+    <string name="performance">Performance</string>
+    <string name="all_routes">Tous les parcours</string>
+    <string name="no_routes_found">Aucun parcours trouvé</string>
+    <string name="all_sports">Tous les sports</string>
+
+    <string name="monthly_training_goal">Objectif entraînements mensuels</string>
+    <string name="trainings_completed">entraînements effectués</string>
+    <string name="bookmarked_trainings">Entraînements favoris</string>
+    <string name="no_bookmarked_trainings">Aucun entraînement favori.\nAppuyez sur l\'icône favori d\'un entraînement pour l\'enregistrer ici.</string>
+    <string name="note">Note</string>
+    <string name="add_note_placeholder">Ajouter une note sur cet entraînement…</string>
+
+    <string name="add_to_bookmarks">Ajouter aux favoris</string>
+    <string name="edit_bookmark">Modifier le favori</string>
+    <string name="note_optional">Note (optionnel)</string>
+    <string name="custom_title_optional">Titre personnalisé (optionnel)</string>
+    <string name="custom_title_placeholder">Entrez un nom personnalisé pour cet entraînement…</string>
+    <string name="difficulty_optional">Difficulté (optionnel)</string>
+    <string name="difficulty_easy">Facile</string>
+    <string name="difficulty_medium">Moyen</string>
+    <string name="difficulty_hard">Difficile</string>
+    <string name="select_difficulty">Sélectionner la difficulté</string>
+    <string name="remove_bookmark">Supprimer</string>
+    <string name="save">Enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="add_bookmark">Ajouter</string>
+    <string name="no_trainings_yet">Aucun entraînement</string>
+    <string name="no_trainings_with_filter">Aucun entraînement pour ce type de sport</string>
+    <string name="import_trainings_hint">Appuyez sur le bouton d\'importation pour synchroniser vos entraînements depuis Strava</string>
+    <string name="welcome_title">Bienvenue sur StatsUp !</string>
+    <string name="welcome_subtitle">Commencez à suivre vos progrès sportifs en important vos entraînements depuis Strava</string>
+    <string name="instruction_step_1">Appuyez sur le bouton d\'importation circulaire en bas au centre</string>
+    <string name="instruction_step_2">Connectez-vous avec votre compte Strava</string>
+    <string name="instruction_step_3">Vos entraînements seront synchronisés automatiquement</string>
+    <string name="share">Partager</string>
+    <string name="settings_export_data">Exporter les données</string>
+    <string name="settings_import_data">Importer les données</string>
+    <string name="hr_zones_title">Zones de fréquence cardiaque</string>
+    <string name="hr_zone_1">Z1 Récupération</string>
+    <string name="hr_zone_2">Z2 Endurance</string>
+    <string name="hr_zone_3">Z3 Aérobie</string>
+    <string name="hr_zone_4">Z4 Seuil</string>
+    <string name="hr_zone_5">Z5 Max</string>
+    <string name="hr_zones_no_data">Pas de données de fréquence cardiaque ce mois</string>
+
+    <string name="settings_data_management">Gestion des données</string>
+    <string name="settings_export_to_json">Exporter en JSON</string>
+    <string name="settings_import_from_json">Importer depuis JSON</string>
+    <string name="settings_import_confirm_title">Importer les données</string>
+    <string name="settings_import_confirm_body">Cela supprimera toutes les données actuelles et les remplacera par les données importées. Cette action est irréversible. Êtes-vous sûr de vouloir continuer ?</string>
+    <string name="settings_import_action">Importer</string>
+
+    <string name="settings_full_import_strava">Resynchronisation complète</string>
+    <string name="settings_full_import_strava_description">Strava</string>
+    <string name="settings_full_import_confirm_title">Ré-importer depuis Strava</string>
+    <string name="settings_full_import_confirm_body">Cela supprimera toutes les données locales et tout re-téléchargera depuis Strava. L\'opération peut prendre un moment. Êtes-vous sûr ?</string>
+    <string name="settings_full_import_action">Ré-importer</string>
+
+    <string name="span_month">Mois</string>
+    <string name="span_year">Année</string>
+    <string name="provider_distance">Distance</string>
+    <string name="provider_frequency">Fréquence</string>
+    <string name="provider_duration">Durée</string>
+    <string name="provider_elevation">Dénivelé</string>
+    <string name="period_previous">Période précédente</string>
+    <string name="period_next">Période suivante</string>
+
+    <string name="celebration_title">Objectif atteint !</string>
+    <string name="celebration_distance_message">Vous avez atteint votre objectif mensuel de distance. Continuez !</string>
+    <string name="celebration_training_message">Vous avez complété votre objectif mensuel d\'entraînements. Continuez !</string>
+    <string name="celebration_both_message">Vous avez dépassé vos deux objectifs mensuels. Incroyable !</string>
+    <string name="celebration_close">Super, merci !</string>
+
+    <string name="target_suggestion_title">Nouveau mois, nouveaux objectifs ?</string>
+    <string name="target_suggestion_message">Basé sur votre historique d\'entraînement, voici les objectifs suggérés pour ce mois :</string>
+    <string name="target_suggestion_distance">Distance : %1$d Km</string>
+    <string name="target_suggestion_trainings">Entraînements : %1$d</string>
+    <string name="target_suggestion_accept">Utiliser ces objectifs</string>
+    <string name="target_suggestion_dismiss">Conserver les objectifs actuels</string>
+    <string name="target_suggestion_snooze">Me demander plus tard</string>
+
+    <string name="badge_celebration_title">Nouveau badge !</string>
+    <string name="badge_celebration_close">Incroyable !</string>
+
+    <string name="profile_title">Profil</string>
+    <string name="profile_tab_monthly">Mensuel</string>
+    <string name="profile_tab_annual">Annuel</string>
+    <string name="profile_tab_alltime">Tout temps</string>
+    <string name="profile_tab_records">Records</string>
+    <string name="profile_records_empty">Aucun record disponible.\nEffectuez au moins une activité de course.</string>
+    <string name="profile_records_activity_section">Records d\'activité</string>
+    <string name="profile_records_best_efforts_section">Meilleures performances</string>
+    <string name="profile_badge_earned">✓ Obtenu</string>
+    <string name="profile_badge_not_earned">Pas encore obtenu</string>
+
+    <!-- Badge units -->
+    <string name="badge_unit_km">km</string>
+    <string name="badge_unit_m">m</string>
+    <string name="badge_unit_activities">activités</string>
+    <string name="badge_unit_consecutive_days">jours consécutifs</string>
+    <string name="badge_unit_active_months">mois actifs</string>
+    <string name="badge_unit_km_best_activity">km (meilleure activité)</string>
+    <string name="badge_unit_m_best_activity">m (meilleure activité)</string>
+    <string name="badge_unit_m_max_altitude">m (altitude max)</string>
+
+    <!-- Monthly badges -->
+    <string name="badge_monthly_first_name">Première sortie</string>
+    <string name="badge_monthly_first_desc">Au moins 1 activité dans le mois</string>
+    <string name="badge_monthly_bronze_name">50 km</string>
+    <string name="badge_monthly_bronze_desc">Distance mensuelle ≥ 50 km</string>
+    <string name="badge_monthly_silver_name">100 km</string>
+    <string name="badge_monthly_silver_desc">Distance mensuelle ≥ 100 km</string>
+    <string name="badge_monthly_gold_name">150 km</string>
+    <string name="badge_monthly_gold_desc">Distance mensuelle ≥ 150 km</string>
+    <string name="badge_monthly_diamond_name">200 km</string>
+    <string name="badge_monthly_diamond_desc">Distance mensuelle ≥ 200 km</string>
+    <string name="badge_monthly_goal_dist_name">Objectif %1$d km</string>
+    <string name="badge_monthly_goal_dist_desc">Vous avez atteint votre objectif mensuel de distance de %1$d km</string>
+    <string name="badge_monthly_goal_freq_name">Objectif %1$d activités</string>
+    <string name="badge_monthly_goal_freq_desc">Vous avez atteint votre objectif mensuel de %1$d activités</string>
+    <string name="badge_monthly_streak_week_name">Semaine parfaite</string>
+    <string name="badge_monthly_streak_week_desc">7 activités en 7 jours consécutifs ce mois</string>
+    <string name="badge_monthly_elevation_2k_name">Alpiniste</string>
+    <string name="badge_monthly_elevation_2k_desc">2 000 m de dénivelé total accumulé ce mois</string>
+    <string name="badge_monthly_elevation_5k_name">Grimpeur Pro</string>
+    <string name="badge_monthly_elevation_5k_desc">5 000 m de dénivelé total accumulé ce mois</string>
+
+    <!-- Annual badges -->
+    <string name="badge_yearly_500km_name">500 km</string>
+    <string name="badge_yearly_500km_desc">Distance annuelle ≥ 500 km</string>
+    <string name="badge_yearly_1000km_name">1 000 km</string>
+    <string name="badge_yearly_1000km_desc">Distance annuelle ≥ 1 000 km</string>
+    <string name="badge_yearly_2000km_name">2 000 km</string>
+    <string name="badge_yearly_2000km_desc">Distance annuelle ≥ 2 000 km</string>
+    <string name="badge_yearly_50act_name">50 Activités</string>
+    <string name="badge_yearly_50act_desc">50 activités dans l\'année</string>
+    <string name="badge_yearly_100act_name">100 Activités</string>
+    <string name="badge_yearly_100act_desc">100 activités dans l\'année</string>
+    <string name="badge_yearly_streak30_name">Série de 30 jours</string>
+    <string name="badge_yearly_streak30_desc">Au moins 30 jours consécutifs d\'entraînement dans l\'année</string>
+    <string name="badge_yearly_all_months_name">Année sans pause</string>
+    <string name="badge_yearly_all_months_desc">Au moins 1 activité chaque mois de l\'année</string>
+    <string name="badge_yearly_everest_name">Everest</string>
+    <string name="badge_yearly_everest_desc">8 848 m de dénivelé cumulé dans l\'année — comme gravir l\'Everest</string>
+    <string name="badge_yearly_elevation_20k_name">Ultra Grimpeur</string>
+    <string name="badge_yearly_elevation_20k_desc">20 000 m de dénivelé cumulé dans l\'année</string>
+
+    <!-- All-time badges -->
+    <string name="badge_alltime_first_name">Premier pas</string>
+    <string name="badge_alltime_first_desc">Vous avez enregistré votre première activité</string>
+    <string name="badge_alltime_halfmarathon_name">Semi-marathon</string>
+    <string name="badge_alltime_halfmarathon_desc">Vous avez couru au moins 21,1 km en une seule activité</string>
+    <string name="badge_alltime_marathon_name">Marathon</string>
+    <string name="badge_alltime_marathon_desc">Vous avez couru au moins 42,2 km en une seule activité</string>
+    <string name="badge_alltime_elevation1k_name">Grimpeur</string>
+    <string name="badge_alltime_elevation1k_desc">1 000 m de dénivelé en une seule activité</string>
+    <string name="badge_alltime_elevation2k_name">Conquérant</string>
+    <string name="badge_alltime_elevation2k_desc">2 000 m de dénivelé en une seule activité</string>
+    <string name="badge_alltime_altitude2k_name">Zone Alpine</string>
+    <string name="badge_alltime_altitude2k_desc">Vous avez atteint 2 000 m d\'altitude lors d\'une activité</string>
+    <string name="badge_alltime_altitude3k_name">Haute Altitude</string>
+    <string name="badge_alltime_altitude3k_desc">Vous avez atteint 3 000 m d\'altitude lors d\'une activité</string>
+    <string name="badge_alltime_altitude4k_name">Au-dessus des nuages</string>
+    <string name="badge_alltime_altitude4k_desc">Vous avez atteint 4 000 m d\'altitude lors d\'une activité</string>
+    <string name="badge_alltime_100act_name">100 activités</string>
+    <string name="badge_alltime_100act_desc">Vous avez enregistré 100 activités au total</string>
+    <string name="badge_alltime_500act_name">500 activités</string>
+    <string name="badge_alltime_500act_desc">Vous avez enregistré 500 activités au total</string>
+    <string name="badge_alltime_best_streak_name">Série de 60 jours</string>
+    <string name="badge_alltime_best_streak_desc">Vous avez maintenu une série de 60 jours consécutifs d\'entraînement</string>
+
+    <!-- Personal record labels -->
+    <string name="record_max_distance">Distance maximale</string>
+    <string name="record_max_elevation_gain">Dénivelé maximum</string>
+    <string name="record_max_altitude">Altitude maximum</string>
+    <string name="record_longest_activity">Activité la plus longue</string>
+    <string name="record_top_speed">Vitesse maximale</string>
+    <string name="record_max_heart_rate">Fréquence cardiaque maximale</string>
+    <string name="record_best_pace">Meilleure allure</string>
+</resources>
