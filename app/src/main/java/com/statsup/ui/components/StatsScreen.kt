@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.statsup.ui.components.dashboard.BestEffortsCard
 import com.statsup.ui.components.stats.AverageCard
 import com.statsup.ui.components.stats.MaxCard
 import com.statsup.ui.components.stats.MonthBarChart
@@ -94,6 +95,8 @@ fun StatsScreen(viewModel: StatsViewModel) {
         MonthBarChart(viewModel)
         YearCumulativeChart(viewModel)
         YearBarChart(viewModel)
+        Spacer(modifier = Modifier.height(40.dp))
+        BestEffortsCard(viewModel.bestEfforts())
         }
     }
 }

@@ -233,6 +233,32 @@ class Trainings(
         }
     }
 
+    fun bestEfforts(): List<BestEffort> {
+        val targets = listOf(
+            1_000.0 to "1 km",
+            5_000.0 to "5 km",
+            10_000.0 to "10 km",
+            21_097.5 to "Half M.",
+            42_195.0 to "Marathon"
+        )
+        val runs = trainings.filter { it.sportType == "Run" || it.type == "Run" }
+        return targets.mapNotNull { (targetDist, label) ->
+            runs.filter { it.distance >= targetDist }
+                .minByOrNull { it.movingTime.toDouble() / it.distance }
+                ?.let { t ->
+                    val secs = (t.movingTime.toDouble() / t.distance * targetDist).toInt()
+                    BestEffort(
+                        label = label,
+                        distanceMeters = targetDist,
+                        timeSeconds = secs,
+                        paceMinPerKm = secs / (targetDist / 1000.0) / 60.0,
+                        trainingId = t.id,
+                        date = t.date
+                    )
+                }
+        }
+    }
+
     private fun median(values: List<Double>): Double {
         val sorted = values.sorted()
         val mid = sorted.size / 2

@@ -3,6 +3,9 @@
 
     <string name="settings_title">Settings</string>
     <string name="activity_heatmap_title">Activity</string>
+    <string name="best_efforts_title">Best Efforts</string>
+    <string name="best_efforts_time">Time</string>
+    <string name="best_efforts_pace">Pace</string>
     <string name="streak_days">Streak</string>
     <string name="streak_current_days">%1$d days</string>
     <string name="streak_best">Best: %1$d days</string>

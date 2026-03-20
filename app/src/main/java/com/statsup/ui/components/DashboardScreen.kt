@@ -51,6 +51,7 @@ import com.statsup.ui.components.dashboard.MaxAltitudeCard
 import com.statsup.ui.components.dashboard.MaxElevationGainCard
 import com.statsup.ui.components.dashboard.MonthlyDistanceGoalCard
 import com.statsup.ui.components.dashboard.MonthlyTrainingGoalCard
+import com.statsup.ui.components.dashboard.BestEffortsCard
 import com.statsup.ui.components.dashboard.TopTrainingTypes
 import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.ui.viewmodel.TargetSuggestion
@@ -105,6 +106,9 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
             }
             Column(modifier = Modifier.padding(top = 40.dp)) {
                 DistanceMonthOverMonthChart(viewModel)
+            }
+            Column(modifier = Modifier.padding(top = 40.dp)) {
+                BestEffortsCard(viewModel.bestEfforts())
             }
             Column(modifier = Modifier.padding(top = 40.dp)) {
                 TopTrainingTypes(viewModel)

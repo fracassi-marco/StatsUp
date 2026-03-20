@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.statsup.domain.BestEffort
 import com.statsup.domain.GoalAchievement
 import com.statsup.domain.Provider
 import com.statsup.domain.Training
@@ -221,6 +222,12 @@ class DashboardViewModel(
 
     fun activityHeatmap(): Map<LocalDate, Double> {
         return Trainings(trainings, provider = Provider.Distance).heatmapByDay()
+    }
+
+    fun bestEfforts(): List<BestEffort> {
+        return Trainings(trainings, provider = Provider.None).ofMonth().let {
+            Trainings(it, provider = Provider.None).bestEfforts()
+        }
     }
 
     fun hrZoneDistribution(): Map<Int, Int> {
