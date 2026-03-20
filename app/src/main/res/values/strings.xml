@@ -141,14 +141,103 @@
     <string name="target_suggestion_dismiss">Keep current targets</string>
     <string name="target_suggestion_snooze">Ask me later</string>
 
-    <string name="badge_celebration_title">Nuovo badge!</string>
-    <string name="badge_celebration_close">Fantastico!</string>
+    <string name="badge_celebration_title">New badge!</string>
+    <string name="badge_celebration_close">Amazing!</string>
 
-    <string name="profile_title">Profilo</string>
-    <string name="profile_tab_monthly">Mensili</string>
-    <string name="profile_tab_annual">Annuali</string>
-    <string name="profile_tab_alltime">Sempre</string>
-    <string name="profile_tab_records">Record</string>
-    <string name="profile_records_empty">Nessun record disponibile.\nCompleta almeno un\'attività di corsa.</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_tab_monthly">Monthly</string>
+    <string name="profile_tab_annual">Annual</string>
+    <string name="profile_tab_alltime">All Time</string>
+    <string name="profile_tab_records">Records</string>
+    <string name="profile_records_empty">No records available.\nComplete at least one running activity.</string>
+    <string name="profile_records_activity_section">Activity records</string>
+    <string name="profile_records_best_efforts_section">Best efforts</string>
+    <string name="profile_badge_earned">✓ Earned</string>
+    <string name="profile_badge_not_earned">Not yet earned</string>
+
+    <!-- Badge units -->
+    <string name="badge_unit_km">km</string>
+    <string name="badge_unit_m">m</string>
+    <string name="badge_unit_activities">activities</string>
+    <string name="badge_unit_consecutive_days">consecutive days</string>
+    <string name="badge_unit_active_months">active months</string>
+    <string name="badge_unit_km_best_activity">km (best activity)</string>
+    <string name="badge_unit_m_best_activity">m (best activity)</string>
+    <string name="badge_unit_m_max_altitude">m (max altitude)</string>
+
+    <!-- Monthly badges -->
+    <string name="badge_monthly_first_name">First run</string>
+    <string name="badge_monthly_first_desc">At least 1 activity in the month</string>
+    <string name="badge_monthly_bronze_name">50 km</string>
+    <string name="badge_monthly_bronze_desc">Monthly distance ≥ 50 km</string>
+    <string name="badge_monthly_silver_name">100 km</string>
+    <string name="badge_monthly_silver_desc">Monthly distance ≥ 100 km</string>
+    <string name="badge_monthly_gold_name">150 km</string>
+    <string name="badge_monthly_gold_desc">Monthly distance ≥ 150 km</string>
+    <string name="badge_monthly_diamond_name">200 km</string>
+    <string name="badge_monthly_diamond_desc">Monthly distance ≥ 200 km</string>
+    <string name="badge_monthly_goal_dist_name">%1$d km goal</string>
+    <string name="badge_monthly_goal_dist_desc">You reached your monthly distance goal of %1$d km</string>
+    <string name="badge_monthly_goal_freq_name">%1$d activities goal</string>
+    <string name="badge_monthly_goal_freq_desc">You reached your monthly goal of %1$d activities</string>
+    <string name="badge_monthly_streak_week_name">Perfect Week</string>
+    <string name="badge_monthly_streak_week_desc">7 activities in 7 consecutive days this month</string>
+    <string name="badge_monthly_elevation_2k_name">Alpinist</string>
+    <string name="badge_monthly_elevation_2k_desc">2,000 m total elevation gain accumulated this month</string>
+    <string name="badge_monthly_elevation_5k_name">Pro Climber</string>
+    <string name="badge_monthly_elevation_5k_desc">5,000 m total elevation gain accumulated this month</string>
+
+    <!-- Annual badges -->
+    <string name="badge_yearly_500km_name">500 km</string>
+    <string name="badge_yearly_500km_desc">Annual distance ≥ 500 km</string>
+    <string name="badge_yearly_1000km_name">1000 km</string>
+    <string name="badge_yearly_1000km_desc">Annual distance ≥ 1000 km</string>
+    <string name="badge_yearly_2000km_name">2000 km</string>
+    <string name="badge_yearly_2000km_desc">Annual distance ≥ 2000 km</string>
+    <string name="badge_yearly_50act_name">50 Activities</string>
+    <string name="badge_yearly_50act_desc">50 activities in the year</string>
+    <string name="badge_yearly_100act_name">100 Activities</string>
+    <string name="badge_yearly_100act_desc">100 activities in the year</string>
+    <string name="badge_yearly_streak30_name">30-day streak</string>
+    <string name="badge_yearly_streak30_desc">At least 30 consecutive days of training this year</string>
+    <string name="badge_yearly_all_months_name">Non-stop year</string>
+    <string name="badge_yearly_all_months_desc">At least 1 activity in every month of the year</string>
+    <string name="badge_yearly_everest_name">Everest</string>
+    <string name="badge_yearly_everest_desc">8,848 m cumulative elevation gain in a year — like climbing Everest</string>
+    <string name="badge_yearly_elevation_20k_name">Ultra Climber</string>
+    <string name="badge_yearly_elevation_20k_desc">20,000 m cumulative elevation gain in a year</string>
+
+    <!-- All-time badges -->
+    <string name="badge_alltime_first_name">First step</string>
+    <string name="badge_alltime_first_desc">You recorded your first activity</string>
+    <string name="badge_alltime_halfmarathon_name">Half Marathon</string>
+    <string name="badge_alltime_halfmarathon_desc">You ran at least 21.1 km in a single activity</string>
+    <string name="badge_alltime_marathon_name">Marathon</string>
+    <string name="badge_alltime_marathon_desc">You ran at least 42.2 km in a single activity</string>
+    <string name="badge_alltime_elevation1k_name">Climber</string>
+    <string name="badge_alltime_elevation1k_desc">1,000 m elevation gain in a single activity</string>
+    <string name="badge_alltime_elevation2k_name">Conqueror</string>
+    <string name="badge_alltime_elevation2k_desc">2,000 m elevation gain in a single activity</string>
+    <string name="badge_alltime_altitude2k_name">Alpine Zone</string>
+    <string name="badge_alltime_altitude2k_desc">You reached 2,000 m altitude in an activity</string>
+    <string name="badge_alltime_altitude3k_name">High Altitude</string>
+    <string name="badge_alltime_altitude3k_desc">You reached 3,000 m altitude in an activity</string>
+    <string name="badge_alltime_altitude4k_name">Above the Clouds</string>
+    <string name="badge_alltime_altitude4k_desc">You reached 4,000 m altitude in an activity</string>
+    <string name="badge_alltime_100act_name">100 activities</string>
+    <string name="badge_alltime_100act_desc">You recorded 100 activities in total</string>
+    <string name="badge_alltime_500act_name">500 activities</string>
+    <string name="badge_alltime_500act_desc">You recorded 500 activities in total</string>
+    <string name="badge_alltime_best_streak_name">60-day streak</string>
+    <string name="badge_alltime_best_streak_desc">You maintained a streak of 60 consecutive days of training</string>
+
+    <!-- Personal record labels -->
+    <string name="record_max_distance">Max distance</string>
+    <string name="record_max_elevation_gain">Max elevation gain</string>
+    <string name="record_max_altitude">Max altitude</string>
+    <string name="record_longest_activity">Longest activity</string>
+    <string name="record_top_speed">Top speed</string>
+    <string name="record_max_heart_rate">Max heart rate</string>
+    <string name="record_best_pace">Best pace</string>
 </resources>
 

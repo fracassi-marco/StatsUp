@@ -13,6 +13,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.statsup.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -155,7 +157,7 @@ private fun BadgeDetailDialog(badge: Badge, onDismiss: () -> Unit) {
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = if (badge.earned) "✓ Ottenuto" else "Non ancora ottenuto",
+                    text = if (badge.earned) stringResource(R.string.profile_badge_earned) else stringResource(R.string.profile_badge_not_earned),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
                     color = if (badge.earned)
                         MaterialTheme.colorScheme.primary

@@ -54,7 +54,7 @@ fun RecordsSection(personalRecords: List<PersonalRecord>, bestEfforts: List<Best
     ) {
         if (personalRecords.isNotEmpty()) {
             item {
-                SectionHeader(title = "Record attività")
+                SectionHeader(title = stringResource(R.string.profile_records_activity_section))
             }
             items(personalRecords) { record ->
                 PersonalRecordItem(record)
@@ -64,7 +64,7 @@ fun RecordsSection(personalRecords: List<PersonalRecord>, bestEfforts: List<Best
         if (bestEfforts.isNotEmpty()) {
             item {
                 SectionHeader(
-                    title = "Migliori sforzi",
+                    title = stringResource(R.string.profile_records_best_efforts_section),
                     modifier = if (personalRecords.isNotEmpty()) Modifier.padding(top = 8.dp) else Modifier
                 )
             }

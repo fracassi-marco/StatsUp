@@ -17,6 +17,7 @@ import com.statsup.domain.Training
 import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
+import com.statsup.ui.buildBadgeStringMap
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -27,7 +28,8 @@ import java.time.ZonedDateTime
 
 class DashboardViewModel(
     private val trainingRepository: TrainingRepository,
-    private val settingRepository: SettingRepository
+    private val settingRepository: SettingRepository,
+    private val context: android.content.Context
 ) : ViewModel() {
 
     private var trainings: List<Training> by mutableStateOf(emptyList())
@@ -116,10 +118,13 @@ class DashboardViewModel(
     }
 
     private fun checkBadgeEarning() {
+        val distGoal = effectiveMonthlyDistanceGoal()
+        val trainGoal = effectiveMonthlyTrainingGoal()
         val badges = evaluateBadges(
             trainings = trainings,
-            monthlyDistanceGoalKm = effectiveMonthlyDistanceGoal(),
-            monthlyTrainingGoal = effectiveMonthlyTrainingGoal()
+            monthlyDistanceGoalKm = distGoal,
+            monthlyTrainingGoal = trainGoal,
+            strings = buildBadgeStringMap(context, distGoal, trainGoal)
         )
         val earnedIds = badges.filter { it.earned }.map { it.id }.toSet()
         val prev = previousEarnedBadgeIds

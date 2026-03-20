@@ -84,11 +84,11 @@ class MainActivity : ComponentActivity() {
             val mainViewModel = remember { MainViewModel(updateActivitiesUseCase, fullImportUseCase) }
             val settingsViewModel = remember { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService) }
             val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
-            val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository) }
+            val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository, applicationContext) }
             val statsViewModel = remember { StatsViewModel(db.trainingRepository) }
             val allRoutesViewModel = remember { AllRoutesViewModel(db.trainingRepository) }
             val bookmarksViewModel = remember { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
-            val profileViewModel = remember { ProfileViewModel(db.trainingRepository, db.athleteRepository, settingRepository) }
+            val profileViewModel = remember { ProfileViewModel(db.trainingRepository, db.athleteRepository, settingRepository, applicationContext) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),

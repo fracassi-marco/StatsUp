@@ -288,21 +288,21 @@ class Trainings(
         }
     }
 
-    fun personalRecords(): List<PersonalRecord> {
+    fun personalRecords(labels: PersonalRecordLabels): List<PersonalRecord> {
         if (trainings.isEmpty()) return emptyList()
         val records = mutableListOf<PersonalRecord>()
 
         trainings.maxByOrNull { it.distance }
             ?.takeIf { it.distance > 0 }
-            ?.let { records.add(PersonalRecord("Max distanza", "📏", "%.2f km".format(it.distanceInKilometers()), it.date, it.name)) }
+            ?.let { records.add(PersonalRecord(labels.maxDistance, "📏", "%.2f km".format(it.distanceInKilometers()), it.date, it.name)) }
 
         trainings.maxByOrNull { it.totalElevationGain }
             ?.takeIf { it.totalElevationGain > 0 }
-            ?.let { records.add(PersonalRecord("Max dislivello positivo", "📈", "${it.totalElevationGain.toInt()} m", it.date, it.name)) }
+            ?.let { records.add(PersonalRecord(labels.maxElevationGain, "📈", "${it.totalElevationGain.toInt()} m", it.date, it.name)) }
 
         trainings.maxByOrNull { it.elevHigh }
             ?.takeIf { it.elevHigh > 0 }
-            ?.let { records.add(PersonalRecord("Max altitudine", "⛰️", "${it.elevHigh.toInt()} m", it.date, it.name)) }
+            ?.let { records.add(PersonalRecord(labels.maxAltitude, "⛰️", "${it.elevHigh.toInt()} m", it.date, it.name)) }
 
         trainings.maxByOrNull { it.movingTime }
             ?.takeIf { it.movingTime > 0 }
@@ -311,16 +311,16 @@ class Trainings(
                 val m = (t.movingTime % 3600) / 60
                 val s = t.movingTime % 60
                 val formatted = if (h > 0) "%d:%02d:%02d".format(h, m, s) else "%d:%02d".format(m, s)
-                records.add(PersonalRecord("Durata massima", "⏱️", formatted, t.date, t.name))
+                records.add(PersonalRecord(labels.longestActivity, "⏱️", formatted, t.date, t.name))
             }
 
         trainings.maxByOrNull { it.maxSpeed }
             ?.takeIf { it.maxSpeed > 0 }
-            ?.let { records.add(PersonalRecord("Velocità massima", "⚡", "%.1f km/h".format(it.maxSpeed * 3.6), it.date, it.name)) }
+            ?.let { records.add(PersonalRecord(labels.topSpeed, "⚡", "%.1f km/h".format(it.maxSpeed * 3.6), it.date, it.name)) }
 
         trainings.filter { it.hasHeartrate == true && it.maxHeartrate > 0 }
             .maxByOrNull { it.maxHeartrate }
-            ?.let { records.add(PersonalRecord("Max frequenza cardiaca", "❤️", "${it.maxHeartrate.toInt()} bpm", it.date, it.name)) }
+            ?.let { records.add(PersonalRecord(labels.maxHeartRate, "❤️", "${it.maxHeartrate.toInt()} bpm", it.date, it.name)) }
 
         trainings.filter { (it.sportType == "Run" || it.type == "Run") && it.distance >= 1_000.0 && it.averagePace() > 0 }
             .minByOrNull { it.averagePace() }
@@ -328,7 +328,7 @@ class Trainings(
                 val totalSecs = (t.averagePace() * 60).toInt()
                 val m = totalSecs / 60
                 val s = totalSecs % 60
-                records.add(PersonalRecord("Miglior passo", "🏅", "%d:%02d /km".format(m, s), t.date, t.name))
+                records.add(PersonalRecord(labels.bestPace, "🏅", "%d:%02d /km".format(m, s), t.date, t.name))
             }
 
         return records
