@@ -31,7 +31,7 @@ class EvaluateBadgesUseCase {
         }
         val monthDistance = monthTrainings.sumOf { it.distanceInKilometers() }
         val monthCount = monthTrainings.size.toDouble()
-        val monthElevation = monthTrainings.sumOf { it.totalElevationGain ?: 0.0 }
+        val monthElevation = monthTrainings.sumOf { it.totalElevationGain }
         val monthBestStreak = maxConsecutiveDays(monthTrainings).toDouble()
         val distancePct = if (monthlyDistanceGoalKm > 0) monthDistance / monthlyDistanceGoalKm else 0.0
         val trainingPct = if (monthlyTrainingGoal > 0) monthCount / monthlyTrainingGoal else 0.0
@@ -68,7 +68,7 @@ class EvaluateBadgesUseCase {
         val yearTrainings = trainings.filter { it.date.year == now.year }
         val yearDistance = yearTrainings.sumOf { it.distanceInKilometers() }
         val yearCount = yearTrainings.size.toDouble()
-        val yearElevation = yearTrainings.sumOf { it.totalElevationGain ?: 0.0 }
+        val yearElevation = yearTrainings.sumOf { it.totalElevationGain }
         val yearBestStreak = bestStreakOf(yearTrainings).toDouble()
         val monthsCovered = (1..now.monthValue).count { month ->
             yearTrainings.any { it.date.monthValue == month }
@@ -104,8 +104,8 @@ class EvaluateBadgesUseCase {
         val totalCount = trainings.size.toDouble()
         val allTimeBestStreak = bestStreakOf(trainings).toDouble()
         val bestSingleDistanceKm = trainings.maxOfOrNull { it.distanceInKilometers() } ?: 0.0
-        val bestSingleElevation = trainings.maxOfOrNull { it.totalElevationGain ?: 0.0 } ?: 0.0
-        val maxAltitudeEver = trainings.maxOfOrNull { it.elevHigh ?: 0.0 } ?: 0.0
+        val bestSingleElevation = trainings.maxOfOrNull { it.totalElevationGain } ?: 0.0
+        val maxAltitudeEver = trainings.maxOfOrNull { it.elevHigh } ?: 0.0
 
         return listOf(
             badge("alltime_first", strings, "🎬", BadgeCategory.ALL_TIME,
