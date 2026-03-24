@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,13 +35,14 @@ private val DAY_LABELS = DayOfWeek.entries.map { it.getDisplayName(TextStyle.NAR
 @Composable
 fun ActivityHeatmap(viewModel: DashboardViewModel) {
     val data = viewModel.activityHeatmap()
-    val maxValue = data.values.maxOrNull()?.takeIf { it > 0 } ?: 1.0
-    val today = LocalDate.now()
-    val gridStart = today.minusWeeks(51).with(DayOfWeek.MONDAY)
-
-    val weeks = (0 until 52).map { w ->
-        (0 until 7).map { d -> gridStart.plusDays((w * 7 + d).toLong()) }
-    }.reversed()
+    val maxValue = remember(data) { data.values.maxOrNull()?.takeIf { it > 0 } ?: 1.0 }
+    val today = remember { LocalDate.now() }
+    val weeks = remember {
+        val gridStart = today.minusWeeks(51).with(DayOfWeek.MONDAY)
+        (0 until 52).map { w ->
+            (0 until 7).map { d -> gridStart.plusDays((w * 7 + d).toLong()) }
+        }.reversed()
+    }
 
     val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
     val primary = MaterialTheme.colorScheme.primary

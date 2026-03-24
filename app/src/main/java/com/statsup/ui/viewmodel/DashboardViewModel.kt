@@ -1,5 +1,6 @@
 package com.statsup.ui.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -18,10 +19,12 @@ import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.ui.buildBadgeStringMap
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZonedDateTime
@@ -29,10 +32,32 @@ import java.time.ZonedDateTime
 class DashboardViewModel(
     private val trainingRepository: TrainingRepository,
     private val settingRepository: SettingRepository,
-    private val context: android.content.Context
+    private val context: Context
 ) : ViewModel() {
 
-    private var trainings: List<Training> by mutableStateOf(emptyList())
+    private data class Computed(
+        val totalDistance: Double = 0.0,
+        val totalFrequency: Double = 0.0,
+        val totalDuration: Double = 0.0,
+        val cumulativeDuration: Map<Int, Double> = emptyMap(),
+        val cumulativeDistance: Map<Int, Double> = emptyMap(),
+        val pastCumulativeDistance: Map<Int, Double> = emptyMap(),
+        val maxElevationGain: Double = 0.0,
+        val maxAltitude: Double = 0.0,
+        val maxHeartRate: Double = 0.0,
+        val topTrainings: Map<String, List<Training>> = emptyMap(),
+        val currentStreak: Int = 0,
+        val bestStreak: Int = 0,
+        val projectedCumulativeDistance: Map<Int, Double> = emptyMap(),
+        val activityHeatmap: Map<LocalDate, Double> = emptyMap(),
+        val bestEfforts: List<BestEffort> = emptyList(),
+        val hrZoneDistribution: Map<Int, Int> = emptyMap(),
+        val effectiveMonthlyDistanceGoal: Int = 0,
+        val effectiveMonthlyTrainingGoal: Int = 0,
+    )
+
+    private var trainings: List<Training> = emptyList()
+    private var computed: Computed by mutableStateOf(Computed())
 
     private val _goalAchieved = MutableSharedFlow<GoalAchievement>(extraBufferCapacity = 1)
     val goalAchieved: SharedFlow<GoalAchievement> = _goalAchieved.asSharedFlow()
@@ -40,7 +65,6 @@ class DashboardViewModel(
     var targetSuggestion: TargetSuggestion? by mutableStateOf(null)
         private set
 
-    // Track previous percentages to detect the crossing of the 1.0 threshold
     private var previousDistancePercentage = 0f
     private var previousTrainingGoalPercentage = 0f
     private var isFirstEmission = true
@@ -52,18 +76,53 @@ class DashboardViewModel(
     private val _badgesEarned = MutableSharedFlow<List<Badge>>(extraBufferCapacity = 10)
     val badgesEarned: SharedFlow<List<Badge>> = _badgesEarned.asSharedFlow()
 
-    // null = not yet initialized (first emission); used to skip initial state
     private var previousEarnedBadgeIds: Set<String>? = null
 
     init {
         viewModelScope.launch {
-            trainingRepository.all().collect {
-                trainings = it
+            trainingRepository.all().collect { newTrainings ->
+                trainings = newTrainings
+                computed = withContext(Dispatchers.Default) { computeAll(newTrainings) }
                 checkGoalAchievement()
                 checkBadgeEarning()
-                if (isFirstEmission.not()) checkTargetSuggestion()
+                if (!isFirstEmission) checkTargetSuggestion()
             }
         }
+    }
+
+    private fun computeAll(newTrainings: List<Training>): Computed {
+        val distT = Trainings(newTrainings, provider = Provider.Distance)
+        val freqT = Trainings(newTrainings, provider = Provider.Frequency)
+        val durT = Trainings(newTrainings, provider = Provider.Duration)
+        val noneT = Trainings(newTrainings, provider = Provider.None)
+        val pastDistT = Trainings(newTrainings, provider = Provider.Distance, now = ZonedDateTime.now().minusMonths(1))
+        val autoTargets = settingRepository.loadAutoTargets()
+        val monthlyGoal = settingRepository.loadMonthlyGoal()
+        val monthlyTrainGoal = settingRepository.loadMonthlyTrainingGoal()
+        val effectiveDistGoal = if (autoTargets) distT.autoDistanceTarget(fallbackKm = monthlyGoal) else monthlyGoal
+        val effectiveFreqGoal = if (autoTargets) freqT.autoTrainingTarget(fallbackCount = monthlyTrainGoal) else monthlyTrainGoal
+        val projectedCumDist = distT.cumulativeDaysTrend()
+        val ofMonth = noneT.ofMonth()
+        return Computed(
+            totalDistance = distT.overMonth(),
+            totalFrequency = freqT.overMonth(),
+            totalDuration = durT.overMonth(),
+            cumulativeDuration = durT.cumulativeDays(),
+            cumulativeDistance = distT.cumulativeDays(),
+            pastCumulativeDistance = pastDistT.cumulativeDays(),
+            maxElevationGain = Trainings(newTrainings, provider = Provider.Elevation).maxOfMonth(),
+            maxAltitude = Trainings(newTrainings, provider = Provider.Altitude).maxOfMonth(),
+            maxHeartRate = Trainings(newTrainings, provider = Provider.HeartRate).maxOfMonth(),
+            topTrainings = ofMonth.groupBy { it.sportType ?: it.type ?: "Unknown" },
+            currentStreak = noneT.currentStreak(),
+            bestStreak = noneT.bestStreak(),
+            projectedCumulativeDistance = projectedCumDist,
+            activityHeatmap = distT.heatmapByDay(),
+            bestEfforts = Trainings(ofMonth, provider = Provider.None).bestEfforts(),
+            hrZoneDistribution = noneT.hrZoneDistribution(),
+            effectiveMonthlyDistanceGoal = effectiveDistGoal,
+            effectiveMonthlyTrainingGoal = effectiveFreqGoal,
+        )
     }
 
     private fun checkGoalAchievement() {
@@ -71,7 +130,6 @@ class DashboardViewModel(
         val currentTraining = trainingGoalPercentage()
 
         if (isFirstEmission) {
-            // On first load, just initialise baselines without triggering celebrations
             previousDistancePercentage = currentDistance
             previousTrainingGoalPercentage = currentTraining
             isFirstEmission = false
@@ -109,7 +167,6 @@ class DashboardViewModel(
         )
 
         if (suggestion == null) {
-            // Nothing meaningful to suggest — mark as seen so we don't check again this month
             settingRepository.saveLastSuggestedYearMonth(currentYearMonth)
             return
         }
@@ -151,25 +208,16 @@ class DashboardViewModel(
     }
 
     fun snoozeTargetSuggestion() {
-        // Close the dialog but do NOT mark the month as handled — it will re-appear next launch
         targetSuggestion = null
     }
 
     fun distancePercentage(): Float {
-        return totalDistance().toFloat() / effectiveMonthlyDistanceGoal()
+        return computed.totalDistance.toFloat() / computed.effectiveMonthlyDistanceGoal
     }
 
-    fun totalDistance(): Double {
-        return Trainings(trainings, provider = Provider.Distance).overMonth()
-    }
-
-    fun totalFrequency(): Double {
-        return Trainings(trainings, provider = Provider.Frequency).overMonth()
-    }
-
-    fun totalFrequencyInt(): Int {
-        return totalFrequency().toInt()
-    }
+    fun totalDistance(): Double = computed.totalDistance
+    fun totalFrequency(): Double = computed.totalFrequency
+    fun totalFrequencyInt(): Int = computed.totalFrequency.toInt()
 
     fun trainingGoalPercentage(): Float {
         val goal = effectiveMonthlyTrainingGoal()
@@ -177,91 +225,27 @@ class DashboardViewModel(
         return totalFrequencyInt().toFloat() / goal.toFloat()
     }
 
-    fun monthlyTrainingGoal(): Int {
-        return effectiveMonthlyTrainingGoal()
-    }
+    fun monthlyTrainingGoal(): Int = effectiveMonthlyTrainingGoal()
 
-    fun effectiveMonthlyDistanceGoal(): Int {
-        return if (settingRepository.loadAutoTargets()) {
-            Trainings(trainings, provider = Provider.Distance)
-                .autoDistanceTarget(fallbackKm = settingRepository.loadMonthlyGoal())
-        } else {
-            settingRepository.loadMonthlyGoal()
-        }
-    }
+    fun effectiveMonthlyDistanceGoal(): Int = computed.effectiveMonthlyDistanceGoal
+    fun effectiveMonthlyTrainingGoal(): Int = computed.effectiveMonthlyTrainingGoal
 
-    fun effectiveMonthlyTrainingGoal(): Int {
-        return if (settingRepository.loadAutoTargets()) {
-            Trainings(trainings, provider = Provider.Frequency)
-                .autoTrainingTarget(fallbackCount = settingRepository.loadMonthlyTrainingGoal())
-        } else {
-            settingRepository.loadMonthlyTrainingGoal()
-        }
-    }
-
-    fun totalDuration(): Double {
-        return Trainings(trainings, provider = Provider.Duration).overMonth()
-    }
-
-    fun cumulativeDuration(): Map<Int, Double> {
-        return Trainings(trainings, provider = Provider.Duration).cumulativeDays()
-    }
-
-    fun cumulativeDistance(): Map<Int, Double> {
-        return Trainings(trainings, provider = Provider.Distance).cumulativeDays()
-    }
-
-    fun pastCumulativeDistance(): Map<Int, Double> {
-        return Trainings(trainings, provider = Provider.Distance, now = ZonedDateTime.now().minusMonths(1)).cumulativeDays()
-    }
-
-    fun maxElevationGain(): Double {
-        return Trainings(trainings, provider = Provider.Elevation).maxOfMonth()
-    }
-
-    fun maxAltitude(): Double {
-        return Trainings(trainings, provider = Provider.Altitude).maxOfMonth()
-    }
-
-    fun maxHeartRate(): Double {
-        return Trainings(trainings, provider = Provider.HeartRate).maxOfMonth()
-    }
-
-    fun monthlyDistanceGoal() = effectiveMonthlyDistanceGoal().toFloat()
-
-    fun topTrainings(): Map<String, List<Training>> {
-        return Trainings(trainings, provider = Provider.None).ofMonth().groupBy { it.sportType ?: it.type ?: "Unknown" }
-    }
-
-    fun currentStreak(): Int {
-        return Trainings(trainings, provider = Provider.None).currentStreak()
-    }
-
-    fun bestStreak(): Int {
-        return Trainings(trainings, provider = Provider.None).bestStreak()
-    }
-
-    fun projectedDistanceEndOfMonth(): Double {
-        return Trainings(trainings, provider = Provider.Distance).cumulativeDaysTrend().values.lastOrNull() ?: 0.0
-    }
-
-    fun projectedCumulativeDistance(): Map<Int, Double> {
-        return Trainings(trainings, provider = Provider.Distance).cumulativeDaysTrend()
-    }
-
-    fun activityHeatmap(): Map<LocalDate, Double> {
-        return Trainings(trainings, provider = Provider.Distance).heatmapByDay()
-    }
-
-    fun bestEfforts(): List<BestEffort> {
-        return Trainings(trainings, provider = Provider.None).ofMonth().let {
-            Trainings(it, provider = Provider.None).bestEfforts()
-        }
-    }
-
-    fun hrZoneDistribution(): Map<Int, Int> {
-        return Trainings(trainings, provider = Provider.None).hrZoneDistribution()
-    }
+    fun totalDuration(): Double = computed.totalDuration
+    fun cumulativeDuration(): Map<Int, Double> = computed.cumulativeDuration
+    fun cumulativeDistance(): Map<Int, Double> = computed.cumulativeDistance
+    fun pastCumulativeDistance(): Map<Int, Double> = computed.pastCumulativeDistance
+    fun maxElevationGain(): Double = computed.maxElevationGain
+    fun maxAltitude(): Double = computed.maxAltitude
+    fun maxHeartRate(): Double = computed.maxHeartRate
+    fun monthlyDistanceGoal(): Float = computed.effectiveMonthlyDistanceGoal.toFloat()
+    fun topTrainings(): Map<String, List<Training>> = computed.topTrainings
+    fun currentStreak(): Int = computed.currentStreak
+    fun bestStreak(): Int = computed.bestStreak
+    fun projectedDistanceEndOfMonth(): Double = computed.projectedCumulativeDistance.values.lastOrNull() ?: 0.0
+    fun projectedCumulativeDistance(): Map<Int, Double> = computed.projectedCumulativeDistance
+    fun activityHeatmap(): Map<LocalDate, Double> = computed.activityHeatmap
+    fun bestEfforts(): List<BestEffort> = computed.bestEfforts
+    fun hrZoneDistribution(): Map<Int, Int> = computed.hrZoneDistribution
 
     fun streakPercentage(): Float {
         val best = bestStreak()

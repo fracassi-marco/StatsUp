@@ -20,7 +20,27 @@ class StravaTrainingApi : TrainingApi {
     }
 
     override suspend fun download(token: String, latest: Training?): List<Training> {
-        return download(1, token, latest)
+        val size = 100
+        val allTrainings = mutableListOf<Training>()
+        var page = 1
+        while (true) {
+            val params = mutableMapOf("page" to page.toString(), "per_page" to size.toString())
+            if (latest != null) {
+                params["after"] = latest.date.toEpochSecond().toString()
+            }
+            val response = Http().get(
+                url = "https://www.strava.com/api/v3/athlete/activities",
+                params = params,
+                auth = Bearer(token),
+                headers = mapOf("Accept" to "application/json")
+            )
+            val typeRef: TypeReference<List<Training>> = object : TypeReference<List<Training>>() {}
+            val trainings = jsonMapper.readValue(response.body, typeRef)
+            allTrainings.addAll(trainings)
+            if (trainings.size < size) break
+            page++
+        }
+        return allTrainings
     }
 
     override suspend fun athlete(token: String): Athlete {
@@ -32,25 +52,4 @@ class StravaTrainingApi : TrainingApi {
         return jsonMapper.readValue(response.body)
     }
 
-    private fun download(page: Int, token: String, latest: Training?): List<Training> {
-        val size = 100
-        val params = mutableMapOf("page" to page.toString(), "per_page" to size.toString())
-        if (latest != null) {
-            params["after"] = latest.date.toEpochSecond().toString()
-        }
-        val response = Http().get(
-            url = "https://www.strava.com/api/v3/athlete/activities",
-            params = params,
-            auth = Bearer(token),
-            headers = mapOf("Accept" to "application/json")
-        )
-        val typeRef: TypeReference<List<Training>> = object : TypeReference<List<Training>>() {}
-        val trainings = jsonMapper.readValue(response.body, typeRef)
-
-        if (trainings.size == size) {
-            return trainings.plus(download(page + 1, token, latest))
-        }
-
-        return trainings
-    }
 }

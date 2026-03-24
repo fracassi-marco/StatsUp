@@ -14,7 +14,7 @@ object MapSnapshotCache {
     private fun cacheFile(context: Context, trainingId: Long): File {
         val dir = File(context.cacheDir, DIR)
         if (!dir.exists()) dir.mkdirs()
-        return File(dir, "$trainingId.png")
+        return File(dir, "$trainingId.jpg")
     }
 
     fun load(context: Context, trainingId: Long): Bitmap? {
@@ -31,7 +31,7 @@ object MapSnapshotCache {
         try {
             val file = cacheFile(context, trainingId)
             file.outputStream().use { out ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out)
             }
             Log.d(TAG, "Snapshot saved for training $trainingId")
         } catch (t: Throwable) {

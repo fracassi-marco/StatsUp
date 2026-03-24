@@ -51,15 +51,20 @@ class ProfileViewModel(
             trainingRepository.all().collect { trainings ->
                 val monthlyDistGoal = settingRepository.loadMonthlyGoal()
                 val monthlyTrainGoal = settingRepository.loadMonthlyTrainingGoal()
-                badges = evaluateBadges(
-                    trainings = trainings,
-                    monthlyDistanceGoalKm = monthlyDistGoal,
-                    monthlyTrainingGoal = monthlyTrainGoal,
-                    strings = buildBadgeStringMap(context, monthlyDistGoal, monthlyTrainGoal)
-                )
-                val t = Trainings(trainings, provider = Provider.Distance)
-                bestEfforts = t.bestEfforts()
-                personalRecords = t.personalRecords(recordLabels)
+                val strings = buildBadgeStringMap(context, monthlyDistGoal, monthlyTrainGoal)
+                val (computedBadges, computedBestEfforts, computedRecords) = withContext(Dispatchers.Default) {
+                    val b = evaluateBadges(
+                        trainings = trainings,
+                        monthlyDistanceGoalKm = monthlyDistGoal,
+                        monthlyTrainingGoal = monthlyTrainGoal,
+                        strings = strings
+                    )
+                    val t = Trainings(trainings, provider = Provider.Distance)
+                    Triple(b, t.bestEfforts(), t.personalRecords(recordLabels))
+                }
+                badges = computedBadges
+                bestEfforts = computedBestEfforts
+                personalRecords = computedRecords
             }
         }
     }
