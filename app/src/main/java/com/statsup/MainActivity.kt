@@ -18,6 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -70,7 +71,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         authService = AuthorizationService(this)
         setContent {
-            val settingRepository = SharedPreferencesSettingRepository(applicationContext)
+            val settingRepository = remember { SharedPreferencesSettingRepository(applicationContext) }
             val dataExportImportService = remember {
                 DataExportImportService(
                     applicationContext,
@@ -78,25 +79,25 @@ class MainActivity : ComponentActivity() {
                     settingRepository
                 )
             }
-            val updateActivitiesUseCase = UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi())
-            val fullImportUseCase = FullImportUseCase(db.trainingRepository, db.athleteRepository, db.bookmarkedTrainingRepository, StravaTrainingApi())
+            val updateActivitiesUseCase = remember { UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi()) }
+            val fullImportUseCase = remember { FullImportUseCase(db.trainingRepository, db.athleteRepository, db.bookmarkedTrainingRepository, StravaTrainingApi()) }
             val navController = rememberNavController()
-            val mainViewModel = remember { MainViewModel(updateActivitiesUseCase, fullImportUseCase) }
-            val settingsViewModel = remember { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService, applicationContext) }
-            val historyViewModel = remember { HistoryViewModel(db.trainingRepository) }
-            val dashboardViewModel = remember { DashboardViewModel(db.trainingRepository, settingRepository, applicationContext) }
-            val statsViewModel = remember { StatsViewModel(db.trainingRepository) }
-            val allRoutesViewModel = remember { AllRoutesViewModel(db.trainingRepository) }
-            val bookmarksViewModel = remember { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
-            val profileViewModel = remember { ProfileViewModel(db.trainingRepository, db.athleteRepository, settingRepository, applicationContext) }
+            val mainViewModel: MainViewModel = viewModel { MainViewModel(updateActivitiesUseCase, fullImportUseCase) }
+            val settingsViewModel: SettingsViewModel = viewModel { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService, applicationContext) }
+            val historyViewModel: HistoryViewModel = viewModel { HistoryViewModel(db.trainingRepository) }
+            val dashboardViewModel: DashboardViewModel = viewModel { DashboardViewModel(db.trainingRepository, settingRepository, applicationContext) }
+            val statsViewModel: StatsViewModel = viewModel { StatsViewModel(db.trainingRepository) }
+            val allRoutesViewModel: AllRoutesViewModel = viewModel { AllRoutesViewModel(db.trainingRepository) }
+            val bookmarksViewModel: BookmarksViewModel = viewModel { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
+            val profileViewModel: ProfileViewModel = viewModel { ProfileViewModel(db.trainingRepository, db.athleteRepository, settingRepository, applicationContext) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
-                onResult = { mainViewModel.onStravaResult(it, authService!!) }
+                onResult = { result -> authService?.let { mainViewModel.onStravaResult(result, it) } }
             )
             val fullImportLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
-                onResult = { mainViewModel.onStravaResult(it, authService!!) }
+                onResult = { result -> authService?.let { mainViewModel.onStravaResult(result, it) } }
             )
 
             // Osserva il numero di allenamenti e lo stato di caricamento
@@ -116,7 +117,7 @@ class MainActivity : ComponentActivity() {
                                     // Menu sempre visibile, ma disabilitato se non ci sono allenamenti
                                     BottomMenuBar(navController, enabled = hasTrainings)
                                 },
-                                floatingActionButton = { ImportButton(launcher, mainViewModel, authService!!) },
+                                floatingActionButton = { authService?.let { service -> ImportButton(launcher, mainViewModel, service) } },
                                 floatingActionButtonPosition = FabPosition.Center,
                                 snackbarHost = { SnackbarHost(snackBarHostState) },
                             ) { innerPadding ->
@@ -155,7 +156,9 @@ class MainActivity : ComponentActivity() {
                                             }
                                         },
                                         onFullImportFromStrava = {
-                                            fullImportLauncher.launch(mainViewModel.startFullImport(authService!!))
+                                            authService?.let { service ->
+                                                fullImportLauncher.launch(mainViewModel.startFullImport(service))
+                                            }
                                         }
                                     )
                                 }
@@ -168,7 +171,7 @@ class MainActivity : ComponentActivity() {
                                     val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
                                     val context = LocalContext.current
                                     val scope = rememberCoroutineScope()
-                                    val detailViewModel = remember {
+                                    val detailViewModel: TrainingDetailViewModel = viewModel(backStackEntry) {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
                                             db.bookmarkedTrainingRepository,
@@ -215,7 +218,7 @@ class MainActivity : ComponentActivity() {
                                     arguments = listOf(navArgument("trainingId") { type = NavType.LongType })
                                 ) { backStackEntry ->
                                     val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
-                                    val detailViewModel = remember {
+                                    val detailViewModel: TrainingDetailViewModel = viewModel(backStackEntry) {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
                                             db.bookmarkedTrainingRepository,

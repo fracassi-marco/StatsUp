@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +31,7 @@ import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import android.util.Log
+import com.google.android.gms.maps.GoogleMap
 import com.statsup.domain.Trip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -129,6 +131,15 @@ fun MapListItemPreview(
                 )
             }
 
+            var googleMapRef by remember { mutableStateOf<GoogleMap?>(null) }
+
+            DisposableEffect(Unit) {
+                onDispose {
+                    googleMapRef?.setOnCameraIdleListener(null)
+                    googleMapRef = null
+                }
+            }
+
             Log.d("MapSnapshotCache", "Rendering GoogleMap for training $trainingId (no cache found)")
 
             GoogleMap(
@@ -168,6 +179,7 @@ fun MapListItemPreview(
 
                 // Scatta lo snapshot quando la camera è ferma sulla posizione corretta
                 MapEffect(Unit) { googleMap ->
+                    googleMapRef = googleMap
                     googleMap.setOnCameraIdleListener {
                         googleMap.snapshot { bitmap ->
                             if (bitmap != null) {
