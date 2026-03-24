@@ -181,7 +181,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "v${BuildConfig.VERSION_NAME}",
-                style = TextStyle(fontSize = 11.sp),
+                style = TextStyle(fontSize = 13.sp),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
