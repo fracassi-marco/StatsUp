@@ -45,7 +45,7 @@ jobs:
           echo "Type: $(file keystore.jks)"
           keytool -list -keystore keystore.jks -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -storetype PKCS12 2>/dev/null || \
           keytool -list -keystore keystore.jks -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -storetype JKS 2>/dev/null || \
-          echo "keytool could not read keystore — file may be corrupt or password wrong"
+          { echo "ERROR: keytool could not read keystore — check KEYSTORE_PASSWORD secret"; exit 1; }
 
       - name: Build release APK
         run: ./gradlew assembleRelease
