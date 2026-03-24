@@ -36,7 +36,15 @@ jobs:
       - name: Decode keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-        run: echo "$KEYSTORE_BASE64" | tr -d '\n' | base64 --decode > keystore.jks
+        run: echo "$KEYSTORE_BASE64" | tr -d '[:space:]' | base64 --decode > keystore.jks
+
+      - name: Verify keystore
+        run: |
+          echo "Size: $(wc -c < keystore.jks) bytes"
+          echo "Type: $(file keystore.jks)"
+          keytool -list -keystore keystore.jks -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -storetype PKCS12 2>/dev/null || \
+          keytool -list -keystore keystore.jks -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -storetype JKS 2>/dev/null || \
+          echo "keytool could not read keystore — file may be corrupt or password wrong"
 
       - name: Build release APK
         run: ./gradlew assembleRelease
