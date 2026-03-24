@@ -194,6 +194,7 @@ fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
         if (training.trip != null) {
             MapListItemPreview(
                 trip = training.trip!!,
+                trainingId = training.id,
                 modifier = Modifier.fillMaxWidth(),
                 height = 180,
                 onClick = { onTrainingClick(training.id) }

@@ -141,6 +141,7 @@ fun BookmarkedTrainingListItem(
         if (training.trip != null) {
             MapListItemPreview(
                 trip = training.trip!!,
+                trainingId = training.id,
                 modifier = Modifier.fillMaxWidth(),
                 height = 180,
                 onClick = { onTrainingClick() }
