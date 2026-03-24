@@ -41,8 +41,8 @@ fun YearBarChart(viewModel: StatsViewModel) {
         animation = fadeInAnimation(1000),
         xAxisDrawer = BarXAxisDrawer(),
         yAxisDrawer = BarEmptyYAxisDrawer(),
-        labelDrawer = SimpleBarLabelDrawer(),
-        valueDrawer = SimpleBarValueDrawer(drawLocation = Outside, formatter = barValueFormatter()),
+        labelDrawer = SimpleBarLabelDrawer(labelTextColor = MaterialTheme.colorScheme.onSurface),
+        valueDrawer = SimpleBarValueDrawer(drawLocation = Outside, valueTextColor = MaterialTheme.colorScheme.onSurface, formatter = barValueFormatter()),
         barHorizontalMargin = 3.dp
     )
 }

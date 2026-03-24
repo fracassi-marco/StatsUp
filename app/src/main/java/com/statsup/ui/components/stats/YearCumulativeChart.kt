@@ -51,9 +51,10 @@ fun YearCumulativeChart(viewModel: StatsViewModel) {
             .fillMaxWidth()
             .height(120.dp),
         animation = fadeInAnimation(3000),
-        xAxisDrawer = LineXAxisDrawer(axisLineThickness = 0.dp),
+        xAxisDrawer = LineXAxisDrawer(axisLineThickness = 0.dp, labelTextColor = MaterialTheme.colorScheme.onSurface),
         yAxisDrawer = LineYAxisWithValueDrawer(
             labelValueFormatter = { value -> "%.0f".format(value) },
+            labelTextColor = MaterialTheme.colorScheme.onSurface,
             axisLineThickness = 0.dp,
             axisLineColor = Transparent,
             minRightPadding = 25.dp

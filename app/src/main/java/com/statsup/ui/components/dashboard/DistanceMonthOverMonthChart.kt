@@ -64,6 +64,7 @@ fun DistanceMonthOverMonthChart(viewModel: DashboardViewModel) {
         xAxisDrawer = LineEmptyXAxisDrawer(),
         yAxisDrawer = LineYAxisWithValueDrawer(
             labelValueFormatter = { value -> "%.0f".format(value) },
+            labelTextColor = MaterialTheme.colorScheme.onSurface,
             axisLineThickness = 0.dp,
             axisLineColor = Transparent,
             minRightPadding = 25.dp

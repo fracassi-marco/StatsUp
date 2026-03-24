@@ -41,6 +41,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chargemap.compose.numberpicker.NumberPicker
+import com.statsup.BuildConfig
 import com.statsup.R
 import com.statsup.ui.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
@@ -176,6 +177,14 @@ fun SettingsScreen(
                     Text(message)
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "v${BuildConfig.VERSION_NAME}",
+                style = TextStyle(fontSize = 11.sp),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
     }
 

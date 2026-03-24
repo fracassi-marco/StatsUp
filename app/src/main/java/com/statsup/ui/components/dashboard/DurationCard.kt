@@ -27,7 +27,6 @@ import io.jetchart.line.renderer.line.GradientLineShader
 import io.jetchart.line.renderer.line.SolidLineDrawer
 import io.jetchart.line.renderer.point.FilledPointDrawer
 import io.jetchart.line.renderer.point.IndexesPointDrawer
-import io.jetchart.line.renderer.point.NoPointDrawer
 import io.jetchart.line.renderer.xaxis.LineEmptyXAxisDrawer
 import io.jetchart.line.renderer.yaxis.LineYAxisWithValueDrawer
 import java.time.ZonedDateTime
@@ -55,6 +54,7 @@ fun DurationCard(viewModel: DashboardViewModel) {
                 xAxisDrawer = LineEmptyXAxisDrawer(),
                 yAxisDrawer = LineYAxisWithValueDrawer(
                     labelValueFormatter = { value -> "%.0f".format(value) },
+                    labelTextColor = MaterialTheme.colorScheme.onSurface,
                     axisLineThickness = 0.dp,
                     axisLineColor = Transparent
                 ),

@@ -54,10 +54,12 @@ fun MonthCumulativeChart(viewModel: StatsViewModel) {
         animation = fadeInAnimation(3000),
         xAxisDrawer = LineXAxisDrawer(
             axisLineThickness = 0.dp,
-            labelRatio = 5
+            labelRatio = 5,
+            labelTextColor = MaterialTheme.colorScheme.onSurface
         ),
         yAxisDrawer = LineYAxisWithValueDrawer(
             labelValueFormatter = { value -> "%.0f".format(value) },
+            labelTextColor = MaterialTheme.colorScheme.onSurface,
             axisLineThickness = 0.dp,
             axisLineColor = Transparent,
             minRightPadding = 25.dp
