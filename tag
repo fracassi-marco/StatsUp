@@ -22,8 +22,8 @@ VERSION_CODE=$(( MAJOR * 10000 + MINOR * 100 + PATCH ))
 
 GRADLE="app/build.gradle.kts"
 
-sed -i '' "s/versionCode = [0-9]*/versionCode = ${VERSION_CODE}/" "$GRADLE"
-sed -i '' "s/versionName = \"[^\"]*\"/versionName = \"${VERSION}\"/" "$GRADLE"
+perl -i -pe "s/versionCode = \d+/versionCode = ${VERSION_CODE}/" "$GRADLE"
+perl -i -pe "s/versionName = \"[^\"]+\"/versionName = \"${VERSION}\"/" "$GRADLE"
 
 echo "Updated $GRADLE: versionCode=$VERSION_CODE, versionName=$VERSION"
 
