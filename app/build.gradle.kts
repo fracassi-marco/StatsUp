@@ -32,10 +32,6 @@ android {
         buildConfigField("String", "STRAVA_CLIENT_SECRET", """"${properties.getProperty("strava.clientSecret")}"""")
     }
 
-    ksp {
-        arg("room.schemaLocation", "$projectDir/schemas")
-    }
-
     signingConfigs {
         create("release") {
             val keystorePath = properties.getProperty("signing.keystoreFile")
@@ -63,11 +59,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
-        }
-    }
     buildFeatures {
         compose = true
     }
@@ -80,6 +71,16 @@ android {
     buildFeatures {
         buildConfig = true
     }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
