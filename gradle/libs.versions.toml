@@ -1,6 +1,6 @@
 [versions]
 agp = "9.1.0"
-benManesVersions = "0.52.0"
+benManesVersions = "0.53.0"
 androidMapsUtils = "4.1.1"
 appauth = "0.11.1"
 gson = "2.13.2"
