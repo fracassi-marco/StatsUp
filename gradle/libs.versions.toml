@@ -1,5 +1,6 @@
 [versions]
 agp = "9.1.0"
+benManesVersions = "0.52.0"
 androidMapsUtils = "4.1.1"
 appauth = "0.11.1"
 gson = "2.13.2"
@@ -65,4 +66,5 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "benManesVersions" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
