@@ -4,6 +4,8 @@ Android app for tracking and analyzing training activities imported from Strava.
 
 Built with Kotlin, Jetpack Compose, Room, and Google Maps.
 
+**[https://fracassi-marco.github.io/StatsUp](https://fracassi-marco.github.io/StatsUp)**
+
 ---
 
 ## Requirements
