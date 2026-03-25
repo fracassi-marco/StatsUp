@@ -654,7 +654,7 @@
       <img src="assets/images/logo.png" alt="StatsUp logo" />
       Stats<span>Up</span>
     </a>
-    <a href="#download" class="nav-cta">Download</a>
+    <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="nav-cta">Download APK</a>
   </nav>
 
   <!-- HERO -->
@@ -668,12 +668,12 @@
     <p>Import your Strava activities and unlock powerful analytics, personal records, achievement badges, and beautiful insights — all in your pocket.</p>
 
     <div class="hero-actions">
-      <a href="#download" class="btn-primary">
-        <!-- Google Play icon SVG -->
+      <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="btn-primary">
+        <!-- Download icon SVG -->
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M3.18 23.8a1.5 1.5 0 0 0 .92-.31L15.48 12 4.1.51A1.5 1.5 0 0 0 3 1.5v21a1.5 1.5 0 0 0 .18.3zm14.62-8.34-2.94-2.94-2.22 2.22 3.72 2.15c.41.24.9.18 1.24-.09l.2-.18a1.28 1.28 0 0 0 0-1.16zm-2.94-5.92 2.94-2.94a1.28 1.28 0 0 0 0-1.16l-.2-.18a1.25 1.25 0 0 0-1.24-.09L12.64 8.3zm-1.8 1.8L12 10.28 5.44 3.72l7.74 4.48z"/>
+          <path d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 2h14v2H5v-2z"/>
         </svg>
-        Get it on Google Play
+        Download APK
       </a>
       <a href="#features" class="btn-secondary">
         Explore features →
@@ -917,11 +917,11 @@
       <p class="reveal">Join athletes who use StatsUp to understand their performance like never before. Free to download.</p>
 
       <div class="play-badge reveal">
-        <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" target="_blank" rel="noopener">
-          <img
-            src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-            alt="Download APK"
-          />
+        <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 2h14v2H5v-2z"/>
+          </svg>
+          Download APK
         </a>
       </div>
 
@@ -960,6 +960,22 @@
     );
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Fetch latest release version from GitHub
+    fetch('https://api.github.com/repos/fracassi-marco/StatsUp/releases/latest')
+      .then(r => r.json())
+      .then(data => {
+        const version = data.tag_name;
+        if (!version) return;
+        document.querySelectorAll('a.btn-primary, a.nav-cta').forEach(btn => {
+          if (btn.href.includes('statsup.apk')) {
+            const label = btn.querySelector('span') || btn;
+            const textNode = [...btn.childNodes].find(n => n.nodeType === 3 && n.textContent.trim());
+            if (textNode) textNode.textContent = ` Download APK ${version} `;
+          }
+        });
+      })
+      .catch(() => {});
   </script>
 
 </body>
