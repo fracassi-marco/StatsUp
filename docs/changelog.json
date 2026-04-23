@@ -1,0 +1,52 @@
+[
+  {
+    "version": "1.3.2",
+    "date": "2026-04-23",
+    "message": "Added Recovery Time feature to Dashboard"
+  },
+  {
+    "version": "1.3.1",
+    "date": "2026-04-23",
+    "message": "Minor improvements and bug fixes"
+  },
+  {
+    "version": "1.3.0",
+    "date": "2026-04-23",
+    "message": "Dashboard enhancements"
+  },
+  {
+    "version": "1.2.1",
+    "date": "2026-04-23",
+    "message": "Library updates and website improvements"
+  },
+  {
+    "version": "1.1.2",
+    "date": "2026-03-25",
+    "message": "Dependency updates"
+  },
+  {
+    "version": "1.1.1",
+    "date": "2026-03-24",
+    "message": "Performance improvements and refactoring"
+  },
+  {
+    "version": "1.1.0",
+    "date": "2026-03-24",
+    "message": "Map snapshot caching and UI improvements"
+  },
+  {
+    "version": "1.0.9",
+    "date": "2026-03-24",
+    "message": "Various improvements"
+  },
+  {
+    "version": "1.0.8",
+    "date": "2026-03-24",
+    "message": "Bug fixes"
+  },
+  {
+    "version": "1.0.7",
+    "date": "2026-03-24",
+    "message": "Bug fixes"
+  }
+]

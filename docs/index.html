@@ -76,6 +76,22 @@
 
     .nav-logo span { color: var(--orange); }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover { color: var(--text); }
+
     .nav-cta {
       background: var(--orange);
       color: white;
@@ -654,7 +670,10 @@
       <img src="assets/images/logo.png" alt="StatsUp logo" />
       Stats<span>Up</span>
     </a>
-    <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="nav-cta">Download APK</a>
+    <div class="nav-links">
+      <a href="changelog.html" class="nav-link">Changelog</a>
+      <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="nav-cta">Download APK</a>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -940,6 +959,8 @@
     <p style="margin-bottom:0.5rem">Built with ❤️ for athletes who love their data.</p>
     <p>
       <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a>
+      &nbsp;·&nbsp;
+      <a href="changelog.html">Changelog</a>
       &nbsp;·&nbsp;
       <a href="mailto:fracassi.marco@gmail.com">Contact</a>
       &nbsp;·&nbsp;
