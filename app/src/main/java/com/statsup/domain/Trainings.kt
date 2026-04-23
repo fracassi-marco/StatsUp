@@ -8,6 +8,7 @@ import java.time.Month.DECEMBER
 import java.time.Year
 import java.time.ZonedDateTime
 import java.time.ZonedDateTime.now
+import java.time.temporal.ChronoUnit
 
 class Trainings(
     private val trainings: List<Training>,
@@ -332,6 +333,45 @@ class Trainings(
             }
 
         return records
+    }
+
+    fun recoveryTime(): Double {
+        val windowHours = 7 * 24L
+        val recent = trainings.filter {
+            val h = ChronoUnit.HOURS.between(it.date, now)
+            h in 0..windowHours
+        }
+        if (recent.isEmpty()) return 0.0
+        val weightedLoad = recent.sumOf { t ->
+            val hoursSince = ChronoUnit.HOURS.between(t.date, now).toDouble()
+            val recencyWeight = maxOf(0.0, 1.0 - hoursSince / windowHours)
+            activityLoad(t) * recencyWeight
+        }
+        return minOf(72.0, weightedLoad * 0.15)
+    }
+
+    private fun activityLoad(training: Training): Double {
+        val score = training.sufferScore
+        if (score != null && score > 0) return score
+
+        val durationMin = training.movingTime / 60.0
+        val distanceKm = training.distance / 1000.0
+        val zoneWeight = if (training.hasHeartrate == true &&
+            training.averageHeartrate != null &&
+            training.averageHeartrate!! > 0
+        ) {
+            val pct = training.averageHeartrate!! / 190.0
+            when {
+                pct < 0.60 -> 1.0
+                pct < 0.70 -> 1.5
+                pct < 0.80 -> 2.5
+                pct < 0.90 -> 4.0
+                else -> 6.0
+            }
+        } else {
+            2.0
+        }
+        return (zoneWeight * durationMin * 0.6) + (distanceKm * 0.8)
     }
 
     private fun median(values: List<Double>): Double {

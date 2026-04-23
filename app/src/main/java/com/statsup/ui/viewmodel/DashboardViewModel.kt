@@ -54,6 +54,7 @@ class DashboardViewModel(
         val hrZoneDistribution: Map<Int, Int> = emptyMap(),
         val effectiveMonthlyDistanceGoal: Int = 0,
         val effectiveMonthlyTrainingGoal: Int = 0,
+        val recoveryTime: Double = 0.0,
     )
 
     private var trainings: List<Training> = emptyList()
@@ -122,6 +123,7 @@ class DashboardViewModel(
             hrZoneDistribution = noneT.hrZoneDistribution(),
             effectiveMonthlyDistanceGoal = effectiveDistGoal,
             effectiveMonthlyTrainingGoal = effectiveFreqGoal,
+            recoveryTime = noneT.recoveryTime(),
         )
     }
 
@@ -246,6 +248,7 @@ class DashboardViewModel(
     fun activityHeatmap(): Map<LocalDate, Double> = computed.activityHeatmap
     fun bestEfforts(): List<BestEffort> = computed.bestEfforts
     fun hrZoneDistribution(): Map<Int, Int> = computed.hrZoneDistribution
+    fun recoveryTime(): Double = computed.recoveryTime
 
     fun streakPercentage(): Float {
         val best = bestStreak()

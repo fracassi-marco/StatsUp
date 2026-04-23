@@ -47,6 +47,7 @@ import com.statsup.domain.GoalAchievement
 import com.statsup.ui.components.dashboard.ActivityHeatmap
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
 import com.statsup.ui.components.dashboard.HeartRateZonesCard
+import com.statsup.ui.components.dashboard.RecoveryTimeCard
 import com.statsup.ui.components.dashboard.StreakCard
 import com.statsup.ui.components.dashboard.DurationCard
 import com.statsup.ui.components.dashboard.MaxAltitudeCard
@@ -134,6 +135,8 @@ fun DashboardScreen(viewModel: DashboardViewModel, onProfileClick: () -> Unit = 
             MonthlyTrainingGoalCard(viewModel)
             Spacer(modifier = Modifier.height(10.dp))
             StreakCard(viewModel)
+            Spacer(modifier = Modifier.height(10.dp))
+            RecoveryTimeCard(viewModel)
             Row(
                 modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)

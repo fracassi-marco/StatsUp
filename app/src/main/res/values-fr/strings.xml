@@ -10,6 +10,10 @@
     <string name="performance_predictions_formula">Basé sur la formule de Riegel (T₂ = T₁ × (D₂/D₁)^1.06)</string>
     <string name="best_efforts_time">Temps</string>
     <string name="best_efforts_pace">Allure</string>
+    <string name="recovery_time">Récupération</string>
+    <string name="recovery_ready">Prêt !</string>
+    <string name="recovery_hours">%1$dh %2$dm</string>
+    <string name="recovery_hours_only">%1$dh</string>
     <string name="streak_days">Série</string>
     <string name="streak_current_days">%1$d jours</string>
     <string name="streak_best">Meilleur : %1$d jours</string>
