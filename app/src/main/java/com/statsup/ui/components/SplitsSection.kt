@@ -102,9 +102,9 @@ private fun SplitRow(
 ) {
     val lapPace = lap.pace()
     val paceColor = when {
-        averagePace > 0 && lapPace < averagePace * 0.97 -> MaterialTheme.colorScheme.primary
-        averagePace > 0 && lapPace > averagePace * 1.03 -> Color(0xFFE65100)
-        else -> MaterialTheme.colorScheme.onSurface
+        averagePace > 0 && lapPace < averagePace * 0.97 -> Color(0xFF4CAF50) // green = fast
+        averagePace > 0 && lapPace > averagePace * 1.03 -> Color(0xFFF44336) // red = slow
+        else -> MaterialTheme.colorScheme.onSurface                          // neutro = normal
     }
 
     Row(
