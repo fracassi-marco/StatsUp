@@ -1,6 +1,11 @@
 [
   {
     "version": "1.4.1",
+    "date": "2026-04-24",
+    "message": "Add laps"
+  },
+  {
+    "version": "1.4.1",
     "date": "2026-04-23",
     "message": "Add Google site verification"
   },
