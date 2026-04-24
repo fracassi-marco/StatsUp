@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
             val updateActivitiesUseCase = remember { UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi()) }
             val fullImportUseCase = remember { FullImportUseCase(db.trainingRepository, db.athleteRepository, db.bookmarkedTrainingRepository, StravaTrainingApi()) }
             val navController = rememberNavController()
-            val mainViewModel: MainViewModel = viewModel { MainViewModel(updateActivitiesUseCase, fullImportUseCase) }
+            val mainViewModel: MainViewModel = viewModel { MainViewModel(updateActivitiesUseCase, fullImportUseCase, settingRepository) }
             val settingsViewModel: SettingsViewModel = viewModel { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService, applicationContext) }
             val historyViewModel: HistoryViewModel = viewModel { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel: DashboardViewModel = viewModel { DashboardViewModel(db.trainingRepository, settingRepository, applicationContext) }
@@ -175,6 +175,8 @@ class MainActivity : ComponentActivity() {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
                                             db.bookmarkedTrainingRepository,
+                                            settingRepository,
+                                            StravaTrainingApi(),
                                             trainingId
                                         )
                                     }
@@ -185,6 +187,7 @@ class MainActivity : ComponentActivity() {
                                         bookmarkNote = detailViewModel.bookmarkNote.value,
                                         customTitle = detailViewModel.customTitle.value,
                                         difficulty = detailViewModel.difficulty.value,
+                                        laps = detailViewModel.laps.value,
                                         showBookmarkDialog = detailViewModel.showBookmarkDialog.value,
                                         onNavigateBack = { navController.popBackStack() },
                                         onOpenFullscreenMap = { navController.navigate(Screens.mapFullscreenRoute(trainingId)) },
@@ -222,6 +225,8 @@ class MainActivity : ComponentActivity() {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
                                             db.bookmarkedTrainingRepository,
+                                            settingRepository,
+                                            StravaTrainingApi(),
                                             trainingId
                                         )
                                     }

@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.statsup.BuildConfig
 import com.statsup.domain.Athlete
+import com.statsup.domain.Lap
+import com.statsup.domain.StravaToken
 import com.statsup.domain.Training
 import com.statsup.domain.TrainingApi
 import topinambur.Bearer
@@ -52,4 +55,42 @@ class StravaTrainingApi : TrainingApi {
         return jsonMapper.readValue(response.body)
     }
 
+    override suspend fun laps(token: String, activityId: Long): List<Lap> {
+        val response = Http().get(
+            url = "https://www.strava.com/api/v3/activities/$activityId",
+            auth = Bearer(token),
+            headers = mapOf("Accept" to "application/json")
+        )
+        val detail: ActivityDetail = jsonMapper.readValue(response.body)
+        return detail.splitsMetric ?: emptyList()
+    }
+
+    override suspend fun refreshToken(refreshToken: String): StravaToken {
+        val response = Http().post(
+            url = "https://www.strava.com/api/v3/oauth/token",
+            body = mapOf(
+                "client_id" to BuildConfig.STRAVA_CLIENT_ID,
+                "client_secret" to BuildConfig.STRAVA_CLIENT_SECRET,
+                "refresh_token" to refreshToken,
+                "grant_type" to "refresh_token"
+            ),
+            headers = mapOf("Accept" to "application/json")
+        )
+        val result: TokenRefreshResult = jsonMapper.readValue(response.body)
+        return StravaToken(
+            accessToken = result.accessToken,
+            refreshToken = result.refreshToken,
+            expiresAt = result.expiresAt
+        )
+    }
+
+    private data class ActivityDetail(
+        val splitsMetric: List<Lap>? = null
+    )
+
+    private data class TokenRefreshResult(
+        val accessToken: String,
+        val refreshToken: String,
+        val expiresAt: Long
+    )
 }

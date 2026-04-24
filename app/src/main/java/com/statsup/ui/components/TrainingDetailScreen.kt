@@ -60,6 +60,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.statsup.R
+import com.statsup.domain.Lap
 import com.statsup.domain.Measure
 import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
@@ -78,6 +79,7 @@ fun TrainingDetailScreen(
     bookmarkNote: String,
     customTitle: String,
     difficulty: String,
+    laps: List<Lap>,
     showBookmarkDialog: Boolean,
     onNavigateBack: () -> Unit,
     onOpenFullscreenMap: () -> Unit,
@@ -394,6 +396,23 @@ fun TrainingDetailScreen(
                                     }
                                 }
                             }
+                        }
+
+                        // Sezione Splits per km
+                        if (laps.isNotEmpty()) {
+                            val hasPreviousSections =
+                                (training.distance > 0 || training.movingTime > 0) ||
+                                        (training.totalElevationGain > 0 || training.elevHigh > 0 || training.elevLow > 0) ||
+                                        hasPerformanceData
+                            if (hasPreviousSections) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+                            }
+                            SplitsSection(
+                                laps = laps,
+                                averagePace = training.averagePace(),
+                                hasHeartrate = training.hasHeartrate == true
+                            )
                         }
 
                         // Sezione Nota (se bookmarkato e c'è una nota)

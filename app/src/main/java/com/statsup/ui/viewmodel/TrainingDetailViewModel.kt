@@ -4,8 +4,16 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.module.kotlin.jsonMapper
+import com.fasterxml.jackson.module.kotlin.kotlinModule
+import com.statsup.domain.Lap
 import com.statsup.domain.ManageBookmarkUseCase
 import com.statsup.domain.Training
+import com.statsup.domain.TrainingApi
+import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
 import kotlinx.coroutines.Dispatchers
@@ -15,8 +23,15 @@ import kotlinx.coroutines.withContext
 class TrainingDetailViewModel(
     private val trainingRepository: TrainingRepository,
     private val bookmarkedTrainingRepository: DbBookmarkedTrainingRepository,
+    private val settingRepository: SettingRepository,
+    private val trainingApi: TrainingApi,
     private val trainingId: Long
 ) : ViewModel() {
+
+    private val jsonMapper = jsonMapper { addModule(kotlinModule()) }.apply {
+        propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    }
 
     private val _training = mutableStateOf<Training?>(null)
     val training: State<Training?> = _training
@@ -39,6 +54,9 @@ class TrainingDetailViewModel(
     private val _showBookmarkDialog = mutableStateOf(false)
     val showBookmarkDialog: State<Boolean> = _showBookmarkDialog
 
+    private val _laps = mutableStateOf<List<Lap>>(emptyList())
+    val laps: State<List<Lap>> = _laps
+
     private val manageBookmark = ManageBookmarkUseCase(bookmarkedTrainingRepository)
 
     init {
@@ -50,14 +68,64 @@ class TrainingDetailViewModel(
         viewModelScope.launch {
             try {
                 _isLoading.value = true
-                _training.value = withContext(Dispatchers.IO) {
+                val training = withContext(Dispatchers.IO) {
                     trainingRepository.byId(trainingId)
+                }
+                _training.value = training
+                if (training.lapsJson != null) {
+                    val typeRef: TypeReference<List<Lap>> = object : TypeReference<List<Lap>>() {}
+                    _laps.value = jsonMapper.readValue(training.lapsJson, typeRef)
+                } else {
+                    fetchAndCacheLaps(training)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
             }
+        }
+    }
+
+    private fun fetchAndCacheLaps(training: Training) {
+        viewModelScope.launch {
+            val token = getValidToken() ?: return@launch
+            try {
+                val fetchedLaps = withContext(Dispatchers.IO) {
+                    trainingApi.laps(token, trainingId)
+                }
+                if (fetchedLaps.isNotEmpty()) {
+                    _laps.value = fetchedLaps
+                    val lapsJson = jsonMapper.writeValueAsString(fetchedLaps)
+                    val updated = training.copy(lapsJson = lapsJson)
+                    withContext(Dispatchers.IO) {
+                        trainingRepository.add(updated)
+                    }
+                    _training.value = updated
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private suspend fun getValidToken(): String? {
+        val token = settingRepository.loadStravaToken() ?: return null
+        val expiry = settingRepository.loadStravaTokenExpiry()
+        val nowSecs = System.currentTimeMillis() / 1000
+        if (expiry == 0L || nowSecs < expiry - 60) return token
+
+        val savedRefreshToken = settingRepository.loadStravaRefreshToken() ?: return null
+        return try {
+            val newTokenData = withContext(Dispatchers.IO) {
+                trainingApi.refreshToken(savedRefreshToken)
+            }
+            settingRepository.saveStravaToken(newTokenData.accessToken)
+            settingRepository.saveStravaRefreshToken(newTokenData.refreshToken)
+            settingRepository.saveStravaTokenExpiry(newTokenData.expiresAt)
+            newTokenData.accessToken
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 

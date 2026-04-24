@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">StatsUp</string>
 
+    <string name="splits_section_title">Splits per km</string>
+    <string name="splits_col_split">#</string>
+    <string name="splits_col_pace">Pace</string>
+    <string name="splits_col_hr">HR</string>
+    <string name="splits_col_elev">Elev</string>
+
     <string name="settings_title">Settings</string>
     <string name="activity_heatmap_title">Activity</string>
     <string name="best_efforts_title">Best Efforts</string>

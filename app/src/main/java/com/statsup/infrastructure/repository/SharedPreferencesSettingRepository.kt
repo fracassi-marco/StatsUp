@@ -6,6 +6,30 @@ import com.statsup.domain.ExportSettings
 import com.statsup.domain.repository.SettingRepository
 
 class SharedPreferencesSettingRepository(private val context: Context) : SettingRepository {
+    override fun saveStravaToken(token: String) {
+        sharedPreferences().edit { putString("strava.access_token", token) }
+    }
+
+    override fun loadStravaToken(): String? {
+        return sharedPreferences().getString("strava.access_token", null)
+    }
+
+    override fun saveStravaRefreshToken(token: String) {
+        sharedPreferences().edit { putString("strava.refresh_token", token) }
+    }
+
+    override fun loadStravaRefreshToken(): String? {
+        return sharedPreferences().getString("strava.refresh_token", null)
+    }
+
+    override fun saveStravaTokenExpiry(expiresAt: Long) {
+        sharedPreferences().edit { putLong("strava.token_expiry", expiresAt) }
+    }
+
+    override fun loadStravaTokenExpiry(): Long {
+        return sharedPreferences().getLong("strava.token_expiry", 0L)
+    }
+
     override fun saveTheme(value: Int) {
         sharedPreferences().edit { putInt("settings.theme", value) }
     }

@@ -5,13 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.statsup.domain.Athlete
 import com.statsup.domain.BookmarkedTraining
 import com.statsup.domain.Training
 
 @Database(
     entities = [Training::class, Athlete::class, BookmarkedTraining::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -22,6 +24,12 @@ abstract class TrainingDatabase: RoomDatabase() {
 
     companion object {
         private const val DATABASE_NAME = "training_db"
+
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE training ADD COLUMN lapsJson TEXT")
+            }
+        }
 
         @Volatile
         private var INSTANCE: TrainingDatabase? = null
@@ -36,9 +44,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    // WARNING: add a proper Migration object before bumping the DB version,
-                    // otherwise user data will be permanently lost on update.
-                    // .fallbackToDestructiveMigration(dropAllTables = true)
+                    .addMigrations(MIGRATION_4_5)
                     .build()
 
                     INSTANCE = instance

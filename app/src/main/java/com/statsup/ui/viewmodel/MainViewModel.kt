@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.statsup.BuildConfig
 import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
+import com.statsup.domain.repository.SettingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -26,7 +27,8 @@ import net.openid.appauth.ResponseTypeValues.CODE
 
 class MainViewModel(
     private val updateActivitiesUseCase: UpdateTrainingsUseCase,
-    private val fullImportUseCase: FullImportUseCase
+    private val fullImportUseCase: FullImportUseCase,
+    private val settingRepository: SettingRepository
 ) : ViewModel() {
 
     private val _loading = mutableStateOf(false)
@@ -83,8 +85,13 @@ class MainViewModel(
                         Log.e("StatsUp", "launcher: ${exception.cause?.message}")
                         stopLoading()
                     } else {
-                        val token = res?.accessToken
-                        updateActivities(token!!)
+                        val token = res?.accessToken!!
+                        val refreshToken = res.refreshToken
+                        val expiry = (res.accessTokenExpirationTime ?: 0L) / 1000L
+                        settingRepository.saveStravaToken(token)
+                        if (refreshToken != null) settingRepository.saveStravaRefreshToken(refreshToken)
+                        if (expiry > 0L) settingRepository.saveStravaTokenExpiry(expiry)
+                        updateActivities(token)
                     }
                 }
             }
