@@ -132,8 +132,8 @@
 
     .timeline-entry {
       display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 0 2rem;
+      grid-template-columns: 150px 1fr;
+      gap: 0 2.5rem;
       position: relative;
       padding-bottom: 2.5rem;
     }
@@ -141,7 +141,7 @@
     .timeline-entry::before {
       content: '';
       position: absolute;
-      left: 139px;
+      left: 161px;
       top: 28px;
       bottom: 0;
       width: 1px;
@@ -153,6 +153,7 @@
     .timeline-meta {
       text-align: right;
       padding-top: 0.2rem;
+      padding-right: 1.5rem;
     }
 
     .version-tag {
@@ -172,7 +173,7 @@
 
     .timeline-dot {
       position: absolute;
-      left: 132px;
+      left: 154px;
       top: 8px;
       width: 15px;
       height: 15px;
@@ -186,7 +187,7 @@
     .timeline-dot.latest {
       width: 18px;
       height: 18px;
-      left: 131px;
+      left: 153px;
       top: 5px;
       animation: pulse 2s infinite;
     }
@@ -216,7 +217,7 @@
     }
 
     .latest-badge {
-      display: inline-block;
+      display: block;
       background: rgba(76,175,80,0.15);
       border: 1px solid rgba(76,175,80,0.35);
       color: var(--green);
@@ -226,8 +227,8 @@
       text-transform: uppercase;
       padding: 0.2rem 0.55rem;
       border-radius: 100px;
-      margin-left: 0.6rem;
-      vertical-align: middle;
+      margin-bottom: 0.3rem;
+      text-align: right;
     }
 
     /* ── LOADING / EMPTY ── */
@@ -345,8 +346,8 @@
         container.innerHTML = entries.map((entry, i) => `
           <div class="timeline-entry">
             <div class="timeline-meta">
-              <span class="version-tag">v${entry.version}</span>
               ${i === 0 ? '<span class="latest-badge">Latest</span>' : ''}
+              <span class="version-tag">v${entry.version}</span>
               <span class="release-date">${formatDate(entry.date)}</span>
             </div>
             <div class="timeline-dot ${i === 0 ? 'latest' : ''}"></div>
