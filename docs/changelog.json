@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.4.3",
+    "date": "2026-04-24",
+    "message": "Improve lap pace color coding and adjust layout in training detail screen"
+  },
+  {
     "version": "1.4.2",
     "date": "2026-04-24",
     "message": "Minor fix"
