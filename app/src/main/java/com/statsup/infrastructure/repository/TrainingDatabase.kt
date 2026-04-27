@@ -13,7 +13,7 @@ import com.statsup.domain.Training
 
 @Database(
     entities = [Training::class, Athlete::class, BookmarkedTraining::class],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -31,6 +31,13 @@ abstract class TrainingDatabase: RoomDatabase() {
             }
         }
 
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE training ADD COLUMN centerLat REAL")
+                database.execSQL("ALTER TABLE training ADD COLUMN centerLng REAL")
+            }
+        }
+
         @Volatile
         private var INSTANCE: TrainingDatabase? = null
 
@@ -44,7 +51,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    .addMigrations(MIGRATION_4_5)
+                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6)
                     .build()
 
                     INSTANCE = instance

@@ -65,7 +65,9 @@ data class Training(
     var totalPhotoCount: Int? = null,
     var hasKudoed: Boolean? = null,
     var sufferScore: Double?,
-    var lapsJson: String? = null
+    var lapsJson: String? = null,
+    var centerLat: Double? = null,
+    var centerLng: Double? = null
 ) {
     val date: ZonedDateTime by lazy { ZonedDateTime.parse(startDate) }
 

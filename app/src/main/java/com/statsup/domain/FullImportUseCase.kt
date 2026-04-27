@@ -17,7 +17,13 @@ class FullImportUseCase(
         trainingRepository.deleteAll()
 
         val trainings = trainingApi.download(token, latest = null)
-        trainings.forEach { trainingRepository.add(it) }
+        trainings.forEach { training ->
+            val center = training.trip?.centerPoint()
+            trainingRepository.add(
+                if (center != null) training.copy(centerLat = center.latitude, centerLng = center.longitude)
+                else training
+            )
+        }
 
         val importedIds = trainings.map { it.id }.toSet()
         savedBookmarks

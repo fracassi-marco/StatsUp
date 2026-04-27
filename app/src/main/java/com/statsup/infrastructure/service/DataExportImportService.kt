@@ -122,7 +122,12 @@ class DataExportImportService(
 
             // Import new data
             exportData.trainings.forEach { training ->
-                database.trainingRepository.add(training)
+                val withCenter = if (training.centerLat == null) {
+                    val center = training.trip?.centerPoint()
+                    if (center != null) training.copy(centerLat = center.latitude, centerLng = center.longitude)
+                    else training
+                } else training
+                database.trainingRepository.add(withCenter)
             }
 
             exportData.bookmarkedTrainings.forEach { bookmark ->

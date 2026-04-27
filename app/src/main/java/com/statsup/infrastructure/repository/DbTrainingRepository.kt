@@ -27,5 +27,8 @@ interface DbTrainingRepository : TrainingRepository {
 
     @Query("SELECT * FROM training ORDER BY startDate DESC")
     override suspend fun getAllTrainings(): List<Training>
+
+    @Query("UPDATE training SET centerLat = :lat, centerLng = :lng WHERE id = :id")
+    override suspend fun updateCenter(id: Long, lat: Double, lng: Double)
 }
 

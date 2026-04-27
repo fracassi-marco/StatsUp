@@ -10,4 +10,5 @@ interface TrainingRepository {
     fun byId(id: Long): Training
     suspend fun deleteAll()
     suspend fun getAllTrainings(): List<Training>
+    suspend fun updateCenter(id: Long, lat: Double, lng: Double)
 }

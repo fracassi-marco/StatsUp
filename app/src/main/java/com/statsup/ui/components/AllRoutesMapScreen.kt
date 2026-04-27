@@ -50,7 +50,9 @@ private fun clusterRoutes(trainings: List<Training>, zoom: Float): List<RouteClu
     val grid = mutableMapOf<Pair<Long, Long>, MutableList<LatLng>>()
 
     trainings.forEach { training ->
-        val center = training.trip?.centerPoint() ?: return@forEach
+        val lat = training.centerLat ?: training.trip?.centerPoint()?.latitude ?: return@forEach
+        val lng = training.centerLng ?: training.trip?.centerPoint()?.longitude ?: return@forEach
+        val center = LatLng(lat, lng)
         val key = Pair(
             floor(center.longitude / gridSize).toLong(),
             floor(center.latitude / gridSize).toLong()

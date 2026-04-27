@@ -19,6 +19,8 @@ class AllRoutesViewModel(
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private var backfillDone = false
+
     init {
         loadAllTrainingsWithRoutes()
     }
@@ -28,10 +30,16 @@ class AllRoutesViewModel(
             _isLoading.value = true
             try {
                 trainingRepository.all().collect { allTrainings ->
-                    _trainings.value = allTrainings
+                    val withRoutes = allTrainings
                         .filter { it.map?.summaryPolyline?.isNotBlank() == true }
                         .sortedByDescending { it.date }
+                    _trainings.value = withRoutes
                     _isLoading.value = false
+
+                    if (!backfillDone) {
+                        backfillDone = true
+                        launch { backfillMissingCenters(withRoutes) }
+                    }
                 }
             } catch (_: Exception) {
                 _trainings.value = emptyList()
@@ -40,8 +48,17 @@ class AllRoutesViewModel(
         }
     }
 
+    private suspend fun backfillMissingCenters(trainings: List<Training>) {
+        trainings
+            .filter { it.centerLat == null }
+            .forEach { training ->
+                val center = training.trip?.centerPoint() ?: return@forEach
+                trainingRepository.updateCenter(training.id, center.latitude, center.longitude)
+            }
+    }
+
     fun refresh() {
+        backfillDone = false
         loadAllTrainingsWithRoutes()
     }
 }
-
