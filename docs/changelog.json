@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.5.2",
+    "date": "2026-04-27",
+    "message": "Minor fix"
+  },
+  {
     "version": "1.5.1",
     "date": "2026-04-27",
     "message": "Add center latitude and longitude to training data and backfill missing values"
