@@ -19,10 +19,6 @@ class AllRoutesViewModel(
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    companion object {
-        private const val MAX_ROUTES = 50 // Limita a max 50 percorsi per evitare OOM
-    }
-
     init {
         loadAllTrainingsWithRoutes()
     }
@@ -32,14 +28,9 @@ class AllRoutesViewModel(
             _isLoading.value = true
             try {
                 trainingRepository.all().collect { allTrainings ->
-                    // Filtra solo gli allenamenti che hanno un percorso valido
-                    // e limita il numero per evitare OutOfMemoryError
                     _trainings.value = allTrainings
-                        .filter { training ->
-                            training.trip != null && training.trip!!.steps().isNotEmpty()
-                        }
-                        .sortedByDescending { it.date } // Più recenti prima
-                        .take(MAX_ROUTES) // Limita a MAX_ROUTES percorsi
+                        .filter { it.map?.summaryPolyline?.isNotBlank() == true }
+                        .sortedByDescending { it.date }
                     _isLoading.value = false
                 }
             } catch (_: Exception) {

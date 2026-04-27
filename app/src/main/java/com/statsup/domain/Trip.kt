@@ -23,6 +23,12 @@ class Trip(private val map: String) {
 
     fun end() = _list.lastOrNull() ?: LatLng(0.0, 0.0)
 
+    fun centerPoint(): LatLng {
+        val centerLat = (boundaries.northeast.latitude + boundaries.southwest.latitude) / 2
+        val centerLng = (boundaries.northeast.longitude + boundaries.southwest.longitude) / 2
+        return LatLng(centerLat, centerLng)
+    }
+
     fun steps() = _list
 
     /**

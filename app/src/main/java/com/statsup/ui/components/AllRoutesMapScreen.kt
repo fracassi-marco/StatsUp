@@ -1,9 +1,13 @@
 package com.statsup.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -11,22 +15,59 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.MarkerComposable
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.statsup.R
 import com.statsup.domain.Training
 import com.statsup.ui.viewmodel.AllRoutesViewModel
+import kotlin.math.floor
+import kotlin.math.pow
+
+private const val INDIVIDUAL_ROUTE_ZOOM = 13f
+
+private data class RouteCluster(val center: LatLng, val count: Int)
+
+private fun clusterRoutes(trainings: List<Training>, zoom: Float): List<RouteCluster> {
+    val gridSize = 360.0 / 2.0.pow(zoom.toDouble()) / 4.0
+    val grid = mutableMapOf<Pair<Long, Long>, MutableList<LatLng>>()
+
+    trainings.forEach { training ->
+        val center = training.trip?.centerPoint() ?: return@forEach
+        val key = Pair(
+            floor(center.longitude / gridSize).toLong(),
+            floor(center.latitude / gridSize).toLong()
+        )
+        grid.getOrPut(key) { mutableListOf() }.add(center)
+    }
+
+    return grid.map { (_, centers) ->
+        RouteCluster(
+            center = LatLng(
+                centers.map { it.latitude }.average(),
+                centers.map { it.longitude }.average()
+            ),
+            count = centers.size
+        )
+    }
+}
 
 @Composable
 fun AllRoutesMapScreen(
@@ -44,10 +85,8 @@ fun AllRoutesMapScreen(
                 Box(modifier = Modifier.fillMaxSize()) {
                     AllRoutesMap(trainings = trainings)
 
-                    // Info card in alto con numero di percorsi
                     Card(
-                        modifier = Modifier
-                            .padding(16.dp),
+                        modifier = Modifier.padding(16.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
                         )
@@ -75,28 +114,29 @@ fun AllRoutesMapScreen(
 fun AllRoutesMap(trainings: List<Training>) {
     val cameraPositionState = rememberCameraPositionState()
 
-    // Calcola i bounds per includere tutti i percorsi
+    // Quantize zoom to 0.5 steps to avoid recomputing clusters on every animation frame
+    val quantizedZoom by remember { derivedStateOf { (cameraPositionState.position.zoom * 2f).toInt() / 2f } }
+    val showClusters = quantizedZoom < INDIVIDUAL_ROUTE_ZOOM
+    val clusters = remember(trainings, quantizedZoom) {
+        if (showClusters) clusterRoutes(trainings, quantizedZoom) else emptyList()
+    }
+
     LaunchedEffect(trainings) {
         if (trainings.isNotEmpty()) {
             val boundsBuilder = LatLngBounds.Builder()
             var hasPoints = false
 
-            // Includi più punti rappresentativi per ogni percorso per un centraggio migliore
             trainings.forEach { training ->
                 training.trip?.let { trip ->
                     val steps = trip.steps()
                     if (steps.isNotEmpty()) {
-                        // Includi primo, ultimo e alcuni punti intermedi
                         boundsBuilder.include(steps.first())
                         boundsBuilder.include(steps.last())
-
-                        // Aggiungi punti al 25%, 50% e 75% del percorso
                         if (steps.size > 3) {
                             boundsBuilder.include(steps[steps.size / 4])
                             boundsBuilder.include(steps[steps.size / 2])
                             boundsBuilder.include(steps[steps.size * 3 / 4])
                         }
-
                         hasPoints = true
                     }
                 }
@@ -104,20 +144,13 @@ fun AllRoutesMap(trainings: List<Training>) {
 
             if (hasPoints) {
                 try {
-                    val bounds = boundsBuilder.build()
-                    // Padding minimo di 20px per zoom massimo mantenendo i percorsi visibili
-                    val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 20)
-                    cameraPositionState.move(cameraUpdate)
+                    cameraPositionState.move(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 20))
                 } catch (_: Exception) {
-                    // Fallback: centra sulla prima posizione
                     try {
                         trainings.firstOrNull()?.trip?.steps()?.firstOrNull()?.let { firstPoint ->
-                            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(firstPoint, 12f)
-                            cameraPositionState.move(cameraUpdate)
+                            cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(firstPoint, 12f))
                         }
-                    } catch (_: Exception) {
-                        // Ignora se CameraUpdateFactory non è ancora inizializzato
-                    }
+                    } catch (_: Exception) { }
                 }
             }
         }
@@ -136,24 +169,58 @@ fun AllRoutesMap(trainings: List<Training>) {
             compassEnabled = true
         )
     ) {
-        // Disegna ogni percorso con un colore diverso usando percorsi semplificati
-        trainings.forEachIndexed { index, training ->
-            training.trip?.let { trip ->
-                val routeColor = getRouteColor(index)
-                // Usa simplifiedSteps con tolleranza di 20m per ridurre i punti
-                val simplifiedPoints = trip.simplifiedSteps(tolerance = 20.0)
-                Polyline(
-                    points = simplifiedPoints,
-                    width = 3f, // Ridotto da 5f a 3f per migliori prestazioni
-                    color = routeColor,
-                    geodesic = true
-                )
+        if (showClusters) {
+            clusters.forEach { cluster ->
+                MarkerComposable(
+                    keys = arrayOf(cluster.center, cluster.count),
+                    state = MarkerState(position = cluster.center),
+                    anchor = Offset(0.5f, 0.5f)
+                ) {
+                    ClusterMarker(count = cluster.count)
+                }
+            }
+        } else {
+            trainings.forEachIndexed { index, training ->
+                training.trip?.let { trip ->
+                    Polyline(
+                        points = trip.simplifiedSteps(tolerance = 20.0),
+                        width = 3f,
+                        color = getRouteColor(index),
+                        geodesic = true
+                    )
+                }
             }
         }
     }
 }
 
-// Genera colori diversi per ogni percorso
+@Composable
+private fun ClusterMarker(count: Int) {
+    val size = when {
+        count <= 5 -> 40.dp
+        count <= 20 -> 48.dp
+        else -> 56.dp
+    }
+    val bgColor = when {
+        count <= 5 -> Color(0xFF2196F3)  // Blue
+        count <= 20 -> Color(0xFFFF9800) // Orange
+        else -> Color(0xFFF44336)        // Red
+    }
+    Box(
+        modifier = Modifier
+            .size(size)
+            .background(bgColor.copy(alpha = 0.85f), CircleShape)
+            .border(2.dp, Color.White, CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = count.toString(),
+            color = Color.White,
+            style = MaterialTheme.typography.labelLarge
+        )
+    }
+}
+
 private fun getRouteColor(index: Int): Color {
     val colors = listOf(
         Color(0xFF2196F3), // Blue
@@ -175,7 +242,5 @@ private fun getRouteColor(index: Int): Color {
         Color(0xFF795548), // Brown
         Color(0xFF607D8B)  // Blue Grey
     )
-
     return colors[index % colors.size]
 }
-
