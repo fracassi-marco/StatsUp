@@ -123,7 +123,7 @@ fun AllRoutesMap(trainings: List<Training>) {
         if (showClusters) clusterRoutes(trainings, quantizedZoom) else emptyList()
     }
 
-    LaunchedEffect(trainings) {
+    LaunchedEffect(trainings.map { it.id }) {
         if (trainings.isNotEmpty()) {
             val boundsBuilder = LatLngBounds.Builder()
             var hasPoints = false
@@ -173,9 +173,10 @@ fun AllRoutesMap(trainings: List<Training>) {
     ) {
         if (showClusters) {
             clusters.forEach { cluster ->
+                val markerState = remember(cluster.center) { MarkerState(position = cluster.center) }
                 MarkerComposable(
                     keys = arrayOf(cluster.center, cluster.count),
-                    state = MarkerState(position = cluster.center),
+                    state = markerState,
                     anchor = Offset(0.5f, 0.5f)
                 ) {
                     ClusterMarker(count = cluster.count)
