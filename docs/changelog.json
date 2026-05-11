@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.6.0",
+    "date": "2026-05-11",
+    "message": "You can delete a training and re-import it from Strava"
+  },
+  {
     "version": "1.5.2",
     "date": "2026-04-27",
     "message": "Minor fix"
