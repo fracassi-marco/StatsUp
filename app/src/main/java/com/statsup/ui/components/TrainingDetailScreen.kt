@@ -22,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.FitnessCenter
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.filled.Terrain
 import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material.icons.filled.ZoomOutMap
 import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -53,6 +55,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -90,8 +93,14 @@ fun TrainingDetailScreen(
     onExportTcx: () -> Unit,
     onDismissDialog: () -> Unit,
     onConfirmBookmark: (String, String, String) -> Unit,
-    onRemoveBookmark: () -> Unit
+    onRemoveBookmark: () -> Unit,
+    showDeleteDialog: Boolean,
+    onRequestDelete: () -> Unit,
+    onDismissDeleteDialog: () -> Unit,
+    onConfirmDelete: () -> Unit
 ) {
+    val locale = LocalConfiguration.current.locales[0]
+
     if (isLoading) {
         LoadingBox(isLoading = true) { }
     } else if (training != null) {
@@ -210,11 +219,11 @@ fun TrainingDetailScreen(
                                     StatItemWithIcon(
                                         icon = Icons.Default.Route,
                                         label = stringResource(id = R.string.distance),
-                                        value = String.format(
-                                            Locale.getDefault(),
-                                            "%.2f",
-                                            training.distanceInKilometers()
-                                        ),
+                                         value = String.format(
+                                             locale,
+                                             "%.2f",
+                                             training.distanceInKilometers()
+                                         ),
                                         unit = stringResource(id = R.string.km),
                                         modifier = Modifier.weight(1f)
                                     )
@@ -258,11 +267,11 @@ fun TrainingDetailScreen(
                                         StatItemWithIcon(
                                             icon = Icons.AutoMirrored.Filled.TrendingUp,
                                             label = stringResource(id = R.string.elevation_gain),
-                                            value = String.format(
-                                                Locale.getDefault(),
-                                                "%.0f",
-                                                training.totalElevationGain
-                                            ),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.0f",
+                                                 training.totalElevationGain
+                                             ),
                                             unit = stringResource(id = R.string.m),
                                             modifier = Modifier.fillMaxWidth()
                                         )
@@ -271,11 +280,11 @@ fun TrainingDetailScreen(
                                         StatItemWithIcon(
                                             icon = Icons.Default.Terrain,
                                             label = stringResource(id = R.string.elevation_per_km),
-                                            value = String.format(
-                                                Locale.getDefault(),
-                                                "%.1f",
-                                                training.elevationPerKm()
-                                            ),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.1f",
+                                                 training.elevationPerKm()
+                                             ),
                                             unit = stringResource(id = R.string.m_per_km),
                                             modifier = Modifier.fillMaxWidth()
                                         )
@@ -289,11 +298,11 @@ fun TrainingDetailScreen(
                                         StatItemWithIcon(
                                             icon = Icons.Default.Landscape,
                                             label = stringResource(id = R.string.max_altitude),
-                                            value = String.format(
-                                                Locale.getDefault(),
-                                                "%.0f",
-                                                training.elevHigh
-                                            ),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.0f",
+                                                 training.elevHigh
+                                             ),
                                             unit = stringResource(id = R.string.m),
                                             modifier = Modifier.fillMaxWidth()
                                         )
@@ -302,11 +311,11 @@ fun TrainingDetailScreen(
                                         StatItemWithIcon(
                                             icon = Icons.Default.Landscape,
                                             label = stringResource(id = R.string.min_altitude),
-                                            value = String.format(
-                                                Locale.getDefault(),
-                                                "%.0f",
-                                                training.elevLow
-                                            ),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.0f",
+                                                 training.elevLow
+                                             ),
                                             unit = stringResource(id = R.string.m),
                                             modifier = Modifier.fillMaxWidth()
                                         )
@@ -346,7 +355,7 @@ fun TrainingDetailScreen(
                                         StatItemWithIcon(
                                             icon = Icons.Default.Speed,
                                             label = stringResource(id = R.string.average_pace),
-                                            value = formatPaceFromMinutes(training.averagePace()),
+                                             value = formatPaceFromMinutes(training.averagePace(), locale),
                                             unit = stringResource(id = R.string.pace_unit),
                                             modifier = Modifier.weight(1f)
                                         )
@@ -355,11 +364,11 @@ fun TrainingDetailScreen(
                                         StatItemWithIcon(
                                             icon = Icons.Default.Speed,
                                             label = stringResource(id = R.string.average_speed),
-                                            value = String.format(
-                                                Locale.getDefault(),
-                                                "%.1f",
-                                                training.averageSpeedKmh()
-                                            ),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.1f",
+                                                 training.averageSpeedKmh()
+                                             ),
                                             unit = stringResource(id = R.string.speed_unit),
                                             modifier = Modifier.weight(1f)
                                         )
@@ -375,11 +384,11 @@ fun TrainingDetailScreen(
                                             StatItemWithIcon(
                                                 icon = Icons.AutoMirrored.Filled.TrendingUp,
                                                 label = stringResource(id = R.string.vam),
-                                                value = String.format(
-                                                    Locale.getDefault(),
-                                                    "%.0f",
-                                                    training.vam()
-                                                ),
+                                                 value = String.format(
+                                                     locale,
+                                                     "%.0f",
+                                                     training.vam()
+                                                 ),
                                                 unit = stringResource(id = R.string.m_per_hour),
                                                 modifier = Modifier.weight(1f)
                                             )
@@ -388,11 +397,11 @@ fun TrainingDetailScreen(
                                             StatItemWithIcon(
                                                 icon = Icons.Default.Favorite,
                                                 label = stringResource(id = R.string.average),
-                                                value = String.format(
-                                                    Locale.getDefault(),
-                                                    "%.0f",
-                                                    training.averageHeartrate
-                                                ),
+                                                 value = String.format(
+                                                     locale,
+                                                     "%.0f",
+                                                     training.averageHeartrate
+                                                 ),
                                                 unit = stringResource(id = R.string.bpm),
                                                 modifier = Modifier.weight(1f)
                                             )
@@ -507,6 +516,15 @@ fun TrainingDetailScreen(
                             modifier = Modifier.size(24.dp)
                         )
                     }
+                    // Pulsante elimina allenamento
+                    IconButton(onClick = onRequestDelete) {
+                        Icon(
+                            Icons.Filled.Delete,
+                            contentDescription = stringResource(id = R.string.delete_training),
+                            tint = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
         }
@@ -521,6 +539,29 @@ fun TrainingDetailScreen(
                 onDismiss = onDismissDialog,
                 onConfirm = onConfirmBookmark,
                 onRemove = onRemoveBookmark
+            )
+        }
+
+        if (showDeleteDialog) {
+            AlertDialog(
+                onDismissRequest = onDismissDeleteDialog,
+                title = { Text(stringResource(id = R.string.delete_training_confirm_title)) },
+                text = { Text(stringResource(id = R.string.delete_training_confirm_body)) },
+                confirmButton = {
+                    Button(
+                        onClick = onConfirmDelete,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        )
+                    ) {
+                        Text(stringResource(id = R.string.delete_training_confirm_action))
+                    }
+                },
+                dismissButton = {
+                    androidx.compose.material3.TextButton(onClick = onDismissDeleteDialog) {
+                        Text(stringResource(id = R.string.cancel))
+                    }
+                }
             )
         }
     }
@@ -602,13 +643,13 @@ fun StatItemWithIcon(
 }
 
 
-private fun formatPaceFromMinutes(paceInMinutes: Double): String {
+private fun formatPaceFromMinutes(paceInMinutes: Double, locale: Locale): String {
     if (paceInMinutes == 0.0) return "0:00"
 
     val minutes = paceInMinutes.toInt()
     val seconds = ((paceInMinutes - minutes) * 60).toInt()
 
-    return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
+    return String.format(locale, "%d:%02d", minutes, seconds)
 }
 
 private fun getActivityBackground(sportType: String?): Int {

@@ -211,7 +211,15 @@ class MainActivity : ComponentActivity() {
                                         onConfirmBookmark = { note, customTitle, difficulty ->
                                             detailViewModel.addBookmarkWithNote(note, customTitle, difficulty)
                                         },
-                                        onRemoveBookmark = { detailViewModel.removeBookmark() }
+                                        onRemoveBookmark = { detailViewModel.removeBookmark() },
+                                        showDeleteDialog = detailViewModel.showDeleteDialog.value,
+                                        onRequestDelete = { detailViewModel.requestDeleteTraining() },
+                                        onDismissDeleteDialog = { detailViewModel.dismissDeleteDialog() },
+                                        onConfirmDelete = {
+                                            detailViewModel.confirmDeleteTraining {
+                                                navController.popBackStack()
+                                            }
+                                        }
                                     )
                                 }
 

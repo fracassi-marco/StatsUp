@@ -2,6 +2,12 @@
 <resources>
     <string name="app_name">StatsUp</string>
 
+    <string name="splits_section_title">Por km</string>
+    <string name="splits_col_split">#</string>
+    <string name="splits_col_pace">Ritmo</string>
+    <string name="splits_col_hr">FC</string>
+    <string name="splits_col_elev">Desn.</string>
+
     <string name="settings_title">Ajustes</string>
     <string name="activity_heatmap_title">Actividad</string>
     <string name="best_efforts_title">Mejores marcas</string>
@@ -247,4 +253,8 @@
     <string name="record_top_speed">Velocidad máxima</string>
     <string name="record_max_heart_rate">Frecuencia cardíaca máxima</string>
     <string name="record_best_pace">Mejor ritmo</string>
+    <string name="delete_training">Eliminar actividad</string>
+    <string name="delete_training_confirm_title">Eliminar actividad</string>
+    <string name="delete_training_confirm_body">Esta actividad será eliminada de la app. Puedes volver a importarla desde Strava en cualquier momento.</string>
+    <string name="delete_training_confirm_action">Eliminar</string>
 </resources>

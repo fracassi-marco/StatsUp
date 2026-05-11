@@ -252,5 +252,9 @@
     <string name="record_top_speed">Top speed</string>
     <string name="record_max_heart_rate">Max heart rate</string>
     <string name="record_best_pace">Best pace</string>
+    <string name="delete_training">Delete activity</string>
+    <string name="delete_training_confirm_title">Delete activity</string>
+    <string name="delete_training_confirm_body">This activity will be deleted from the app. You can re-import it from Strava at any time.</string>
+    <string name="delete_training_confirm_action">Delete</string>
 </resources>
 

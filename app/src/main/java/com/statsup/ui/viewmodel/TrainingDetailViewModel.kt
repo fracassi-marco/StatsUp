@@ -22,7 +22,7 @@ import kotlinx.coroutines.withContext
 
 class TrainingDetailViewModel(
     private val trainingRepository: TrainingRepository,
-    private val bookmarkedTrainingRepository: DbBookmarkedTrainingRepository,
+    bookmarkedTrainingRepository: DbBookmarkedTrainingRepository,
     private val settingRepository: SettingRepository,
     private val trainingApi: TrainingApi,
     private val trainingId: Long
@@ -53,6 +53,9 @@ class TrainingDetailViewModel(
 
     private val _showBookmarkDialog = mutableStateOf(false)
     val showBookmarkDialog: State<Boolean> = _showBookmarkDialog
+
+    private val _showDeleteDialog = mutableStateOf(false)
+    val showDeleteDialog: State<Boolean> = _showDeleteDialog
 
     private val _laps = mutableStateOf<List<Lap>>(emptyList())
     val laps: State<List<Lap>> = _laps
@@ -179,6 +182,28 @@ class TrainingDetailViewModel(
                 _bookmarkNote.value = ""
                 _customTitle.value = ""
                 _difficulty.value = ""
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun requestDeleteTraining() {
+        _showDeleteDialog.value = true
+    }
+
+    fun dismissDeleteDialog() {
+        _showDeleteDialog.value = false
+    }
+
+    fun confirmDeleteTraining(onDeleted: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    manageBookmark.remove(trainingId)
+                    trainingRepository.deleteById(trainingId)
+                }
+                onDeleted()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
