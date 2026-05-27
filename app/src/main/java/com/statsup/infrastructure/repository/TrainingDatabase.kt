@@ -26,15 +26,15 @@ abstract class TrainingDatabase: RoomDatabase() {
         private const val DATABASE_NAME = "training_db"
 
         private val MIGRATION_4_5 = object : Migration(4, 5) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE training ADD COLUMN lapsJson TEXT")
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE training ADD COLUMN lapsJson TEXT")
             }
         }
 
         private val MIGRATION_5_6 = object : Migration(5, 6) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE training ADD COLUMN centerLat REAL")
-                database.execSQL("ALTER TABLE training ADD COLUMN centerLng REAL")
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE training ADD COLUMN centerLat REAL")
+                db.execSQL("ALTER TABLE training ADD COLUMN centerLng REAL")
             }
         }
 

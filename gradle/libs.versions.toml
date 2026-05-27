@@ -26,6 +26,7 @@ roomRuntime = "2.8.4"
 roomCompiler = "2.8.4"
 roomKtx = "2.8.4"
 topinambur = "1.14.1"
+leakcanary = "2.14"
 lottie = "6.7.1"
 
 [libraries]
@@ -62,6 +63,7 @@ maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = 
 numberpicker = { module = "com.chargemap.compose:numberpicker", version.ref = "numberpicker" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 topinambur = { module = "com.github.daikonweb:topinambur", version.ref = "topinambur" }
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 [plugins]
