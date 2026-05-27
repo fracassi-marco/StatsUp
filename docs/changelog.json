@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.6.2",
+    "date": "2026-05-27",
+    "message": "Update library versions"
+  },
+  {
     "version": "1.6.1",
     "date": "2026-05-27",
     "message": "Enable resource shrinking and minification in build configuration; add LeakCanary for memory leak detection"
