@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.7.3",
+    "date": "2026-05-27",
+    "message": "Add recovery detail screen"
+  },
+  {
     "version": "1.7.2",
     "date": "2026-05-27",
     "message": "Minor improvements"
