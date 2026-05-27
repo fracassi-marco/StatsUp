@@ -25,8 +25,6 @@
     <string name="recovery_detail_chart_title">Daily contribution (last 7 days)</string>
     <string name="recovery_detail_load">Load: %s</string>
     <string name="recovery_detail_recency">Recency: %s%%</string>
-    <string name="recovery_detail_contribution">+%1$dh %2$dm</string>
-    <string name="recovery_detail_contribution_minutes">+%1$dm</string>
     <string name="recovery_detail_hours_ago">%dh ago</string>
     <string name="recovery_detail_days_ago">%dd ago</string>
     <string name="recovery_detail_no_activities">No recent activities in the last 7 days.</string>
@@ -68,7 +66,6 @@
     <string name="elevation_gain">Elevation Gain</string>
     <string name="elevation">Elevation</string>
     <string name="max_elevation_gain">Max + elev.</string>
-    <string name="max_heart_rate">Max HR</string>
     <string name="max_altitude">Max altit.</string>
     <string name="max">Max</string>
     <string name="average">Average</string>
@@ -103,7 +100,6 @@
     <string name="trainings_completed">trainings completed</string>
     <string name="bookmarked_trainings">Bookmarked Trainings</string>
     <string name="no_bookmarked_trainings">No bookmarked trainings yet.\nTap the bookmark icon on any training to save it here.</string>
-    <string name="note">Note</string>
     <string name="add_note_placeholder">Add a note about this training…</string>
 
     <string name="add_to_bookmarks">Add to Bookmarks</string>
@@ -115,7 +111,6 @@
     <string name="difficulty_easy">Easy</string>
     <string name="difficulty_medium">Medium</string>
     <string name="difficulty_hard">Hard</string>
-    <string name="select_difficulty">Select difficulty</string>
     <string name="remove_bookmark">Remove</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>

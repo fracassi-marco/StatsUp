@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Dead code / unused resources -->
+    <issue id="UnusedResources" severity="error" />
+    <issue id="UnusedIds" severity="error" />
+</lint>

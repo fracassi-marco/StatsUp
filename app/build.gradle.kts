@@ -72,6 +72,14 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    lint {
+        abortOnError = true
+        warningsAsErrors = false
+        lintConfig = file("lint.xml")
+        htmlReport = true
+        xmlReport = true
+    }
 }
 
 kotlin {

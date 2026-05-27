@@ -32,8 +32,22 @@ jobs:
           echo "strava.clientId=${{ secrets.STRAVA_CLIENT_ID }}" >> local.properties
           echo "strava.clientSecret=${{ secrets.STRAVA_CLIENT_SECRET }}" >> local.properties
 
+      - name: Check translations
+        run: bash scripts/check_translations.sh
+
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
+
+      - name: Run lint
+        run: ./gradlew lintDebug
+
+      - name: Upload lint results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-results
+          path: app/build/reports/lint-results-debug.*
+          retention-days: 7
 
       - name: Upload test results
         if: always()

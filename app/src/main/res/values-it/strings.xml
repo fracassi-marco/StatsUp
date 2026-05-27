@@ -26,8 +26,6 @@
     <string name="recovery_detail_chart_title">Contributo per giorno (ultimi 7 giorni)</string>
     <string name="recovery_detail_load">Carico: %s</string>
     <string name="recovery_detail_recency">Freschezza: %s%%</string>
-    <string name="recovery_detail_contribution">+%1$dh %2$dm</string>
-    <string name="recovery_detail_contribution_minutes">+%1$dm</string>
     <string name="recovery_detail_hours_ago">%dh fa</string>
     <string name="recovery_detail_days_ago">%dg fa</string>
     <string name="recovery_detail_no_activities">Nessuna attività recente negli ultimi 7 giorni.</string>
@@ -69,7 +67,6 @@
     <string name="elevation_gain">Dislivello</string>
     <string name="elevation">Elevazione</string>
     <string name="max_elevation_gain">Dis. massimo +</string>
-    <string name="max_heart_rate">FC max</string>
     <string name="max_altitude">Quota max</string>
     <string name="max">Max</string>
     <string name="average">Media</string>
@@ -104,7 +101,6 @@
     <string name="trainings_completed">allenamenti completati</string>
     <string name="bookmarked_trainings">Allenamenti salvati</string>
     <string name="no_bookmarked_trainings">Nessun allenamento salvato.\nTocca l\'icona segnalibro su qualsiasi allenamento per salvarlo qui.</string>
-    <string name="note">Nota</string>
     <string name="add_note_placeholder">Aggiungi una nota su questo allenamento…</string>
 
     <string name="add_to_bookmarks">Aggiungi ai preferiti</string>
@@ -116,7 +112,6 @@
     <string name="difficulty_easy">Facile</string>
     <string name="difficulty_medium">Medio</string>
     <string name="difficulty_hard">Difficile</string>
-    <string name="select_difficulty">Seleziona difficoltà</string>
     <string name="remove_bookmark">Rimuovi</string>
     <string name="save">Salva</string>
     <string name="cancel">Annulla</string>
