@@ -1,5 +1,6 @@
 package com.statsup.ui.components.dashboard
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,12 +24,12 @@ import com.statsup.R
 import com.statsup.ui.viewmodel.DashboardViewModel
 
 @Composable
-fun RecoveryTimeCard(viewModel: DashboardViewModel) {
+fun RecoveryTimeCard(viewModel: DashboardViewModel, onClick: () -> Unit = {}) {
     val recoveryHours = viewModel.recoveryTime()
     val isReady = recoveryHours <= 0.0
     val progress = if (isReady) 1f else (1f - (recoveryHours / 72.0).coerceIn(0.0, 1.0)).toFloat()
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,

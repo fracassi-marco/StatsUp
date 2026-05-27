@@ -65,7 +65,8 @@ import com.statsup.domain.TargetSuggestion
 fun DashboardScreen(
     viewModel: DashboardViewModel,
     onProfileClick: () -> Unit = {},
-    onLevelClick: () -> Unit = {}
+    onLevelClick: () -> Unit = {},
+    onRecoveryClick: () -> Unit = {}
 ) {
     var celebrationAchievement by remember { mutableStateOf<GoalAchievement?>(null) }
     var badgeQueue by remember { mutableStateOf<List<Badge>>(emptyList()) }
@@ -158,7 +159,7 @@ fun DashboardScreen(
             Spacer(modifier = Modifier.height(10.dp))
             StreakCard(viewModel)
             Spacer(modifier = Modifier.height(10.dp))
-            RecoveryTimeCard(viewModel)
+            RecoveryTimeCard(viewModel, onClick = onRecoveryClick)
             Row(
                 modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)

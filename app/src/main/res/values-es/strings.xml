@@ -20,6 +20,17 @@
     <string name="recovery_ready">¡Listo!</string>
     <string name="recovery_hours">%1$dh %2$dm</string>
     <string name="recovery_hours_only">%1$dh</string>
+    <string name="recovery_detail_title">Detalle recuperación</string>
+    <string name="recovery_detail_explanation">La recuperación se calcula en base a la carga de tus actividades en los últimos 7 días. Las actividades más recientes pesan más.</string>
+    <string name="recovery_detail_contributions_title">Actividades contribuyentes</string>
+    <string name="recovery_detail_chart_title">Contribución diaria (últimos 7 días)</string>
+    <string name="recovery_detail_load">Carga: %s</string>
+    <string name="recovery_detail_recency">Recencia: %s%%</string>
+    <string name="recovery_detail_contribution">+%1$dh %2$dm</string>
+    <string name="recovery_detail_contribution_minutes">+%1$dm</string>
+    <string name="recovery_detail_hours_ago">hace %dh</string>
+    <string name="recovery_detail_days_ago">hace %dd</string>
+    <string name="recovery_detail_no_activities">Sin actividades recientes en los últimos 7 días.</string>
     <string name="streak_days">Racha</string>
     <string name="streak_current_days">%1$d días</string>
     <string name="streak_best">Mejor: %1$d días</string>

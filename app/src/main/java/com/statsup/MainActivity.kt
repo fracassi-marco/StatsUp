@@ -44,6 +44,7 @@ import com.statsup.ui.components.ImportButton
 import com.statsup.ui.components.LoadingBox
 import com.statsup.ui.components.MapFullscreenScreen
 import com.statsup.ui.components.LevelsScreen
+import com.statsup.ui.components.RecoveryDetailScreen
 import com.statsup.ui.components.ProfileScreen
 import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.components.SplashScreen
@@ -131,7 +132,8 @@ class MainActivity : ComponentActivity() {
                                     DashboardScreen(
                                         viewModel = dashboardViewModel,
                                         onProfileClick = { navController.navigate(Screens.PROFILE) },
-                                        onLevelClick = { navController.navigate(Screens.LEVELS) }
+                                        onLevelClick = { navController.navigate(Screens.LEVELS) },
+                                        onRecoveryClick = { navController.navigate(Screens.RECOVERY_DETAIL) }
                                     )
                                 }
                                 composable(Screens.PROFILE) {
@@ -139,6 +141,9 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(Screens.LEVELS) {
                                     LevelsScreen(dashboardViewModel) { navController.popBackStack() }
+                                }
+                                composable(Screens.RECOVERY_DETAIL) {
+                                    RecoveryDetailScreen(dashboardViewModel) { navController.popBackStack() }
                                 }
                                 composable(Screens.History.route) {
                                     HistoryScreen(historyViewModel) { trainingId ->

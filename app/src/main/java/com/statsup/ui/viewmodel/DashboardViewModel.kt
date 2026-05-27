@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.domain.Badge
 import com.statsup.domain.BestEffort
+import com.statsup.domain.RecoveryContribution
 import com.statsup.domain.CheckGoalAchievementUseCase
 import com.statsup.domain.EvaluateBadgesUseCase
 import com.statsup.domain.EvaluateLevelUseCase
@@ -58,6 +59,7 @@ class DashboardViewModel(
         val effectiveMonthlyDistanceGoal: Int = 0,
         val effectiveMonthlyTrainingGoal: Int = 0,
         val recoveryTime: Double = 0.0,
+        val recoveryBreakdown: List<RecoveryContribution> = emptyList(),
         val level: Level = Level(1, R.string.level_name_1, "🌱", 0, 0, 200, false, 0, 0),
     )
 
@@ -134,6 +136,7 @@ class DashboardViewModel(
             effectiveMonthlyDistanceGoal = effectiveDistGoal,
             effectiveMonthlyTrainingGoal = effectiveFreqGoal,
             recoveryTime = noneT.recoveryTime(),
+            recoveryBreakdown = noneT.recoveryBreakdown(),
             level = evaluateLevel(newTrainings),
         )
     }
@@ -238,7 +241,6 @@ class DashboardViewModel(
     }
 
     fun totalDistance(): Double = computed.totalDistance
-    fun totalFrequency(): Double = computed.totalFrequency
     fun totalFrequencyInt(): Int = computed.totalFrequency.toInt()
 
     fun trainingGoalPercentage(): Float {
@@ -258,7 +260,6 @@ class DashboardViewModel(
     fun pastCumulativeDistance(): Map<Int, Double> = computed.pastCumulativeDistance
     fun maxElevationGain(): Double = computed.maxElevationGain
     fun maxAltitude(): Double = computed.maxAltitude
-    fun maxHeartRate(): Double = computed.maxHeartRate
     fun monthlyDistanceGoal(): Float = computed.effectiveMonthlyDistanceGoal.toFloat()
     fun topTrainings(): Map<String, List<Training>> = computed.topTrainings
     fun currentStreak(): Int = computed.currentStreak
@@ -269,6 +270,7 @@ class DashboardViewModel(
     fun bestEfforts(): List<BestEffort> = computed.bestEfforts
     fun hrZoneDistribution(): Map<Int, Int> = computed.hrZoneDistribution
     fun recoveryTime(): Double = computed.recoveryTime
+    fun recoveryBreakdown(): List<RecoveryContribution> = computed.recoveryBreakdown
 
     fun streakPercentage(): Float {
         val best = bestStreak()

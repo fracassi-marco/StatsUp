@@ -24,6 +24,7 @@ enum class Screens(val route: String, val icon: ImageVector) {
         const val MAP_FULLSCREEN = "map_fullscreen/{trainingId}"
         const val PROFILE = "athlete_profile"
         const val LEVELS = "levels"
+        const val RECOVERY_DETAIL = "recovery_detail"
 
         fun trainingDetailRoute(trainingId: Long) = "training_detail/$trainingId"
         fun mapFullscreenRoute(trainingId: Long) = "map_fullscreen/$trainingId"

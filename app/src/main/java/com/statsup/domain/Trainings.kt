@@ -10,6 +10,13 @@ import java.time.ZonedDateTime
 import java.time.ZonedDateTime.now
 import java.time.temporal.ChronoUnit
 
+data class RecoveryContribution(
+    val training: Training,
+    val load: Double,
+    val recencyWeight: Double,
+    val contributionHours: Double
+)
+
 class Trainings(
     private val trainings: List<Training>,
     private val now: ZonedDateTime = now(),
@@ -348,6 +355,20 @@ class Trainings(
             activityLoad(t) * recencyWeight
         }
         return minOf(72.0, weightedLoad * 0.15)
+    }
+
+    fun recoveryBreakdown(): List<RecoveryContribution> {
+        val windowHours = 7 * 24L
+        val recent = trainings.filter {
+            val h = ChronoUnit.HOURS.between(it.date, now)
+            h in 0..windowHours
+        }
+        return recent.map { t ->
+            val hoursSince = ChronoUnit.HOURS.between(t.date, now).toDouble()
+            val recencyWeight = maxOf(0.0, 1.0 - hoursSince / windowHours)
+            val load = activityLoad(t)
+            RecoveryContribution(t, load, recencyWeight, load * recencyWeight * 0.15)
+        }.sortedByDescending { it.contributionHours }
     }
 
     private fun activityLoad(training: Training): Double {
