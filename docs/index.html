@@ -107,6 +107,41 @@
 
     .nav-cta:hover { background: var(--orange-dark); transform: scale(1.03); }
 
+    /* ── LANG SWITCHER ── */
+    .lang-switcher {
+      display: flex;
+      gap: 0.15rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.2rem;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.45rem;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+
+    .lang-btn:hover { color: var(--text); }
+
+    .lang-btn.active {
+      background: var(--orange);
+      color: white;
+    }
+
+    @media (max-width: 640px) {
+      .lang-switcher { display: none; }
+    }
+
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
@@ -673,8 +708,11 @@
       Stats<span>Up</span>
     </a>
     <div class="nav-links">
-      <a href="changelog.html" class="nav-link">Changelog</a>
-      <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="nav-cta">Download APK</a>
+      <a href="changelog.html" class="nav-link" data-i18n="nav.changelog">Changelog</a>
+      <span class="lang-switcher-slot"></span>
+      <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="nav-cta">
+        <span data-i18n="nav.download_apk">Download APK</span>
+      </a>
     </div>
   </nav>
 
@@ -683,20 +721,19 @@
     <div class="hero-bg"></div>
     <div class="hero-grid"></div>
 
-    <div class="hero-badge">Strava Analytics for Android</div>
+    <div class="hero-badge" data-i18n="hero.badge">Strava Analytics for Android</div>
 
-    <h1>Your training,<br /><span>deeper than ever.</span></h1>
-    <p>Import your Strava activities and unlock powerful analytics, personal records, achievement badges, and beautiful insights — all in your pocket.</p>
+    <h1 data-i18n-html="hero.h1">Your training,<br /><span>deeper than ever.</span></h1>
+    <p data-i18n="hero.p">Import your Strava activities and unlock powerful analytics, personal records, achievement badges, and beautiful insights — all in your pocket.</p>
 
     <div class="hero-actions">
       <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="btn-primary">
-        <!-- Download icon SVG -->
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 2h14v2H5v-2z"/>
         </svg>
-        Download APK
+        <span data-i18n="hero.btn_download">Download APK</span>
       </a>
-      <a href="#features" class="btn-secondary">
+      <a href="#features" class="btn-secondary" data-i18n="hero.btn_explore">
         Explore features →
       </a>
     </div>
@@ -730,19 +767,19 @@
     <div class="stats-grid">
       <div class="stat-item reveal">
         <span>30+</span>
-        <p>Achievement Badges</p>
+        <p data-i18n="stats.badges">Achievement Badges</p>
       </div>
       <div class="stat-item reveal">
         <span>5</span>
-        <p>Heart Rate Zones</p>
+        <p data-i18n="stats.hr_zones">Heart Rate Zones</p>
       </div>
       <div class="stat-item reveal">
         <span>8</span>
-        <p>Sport Types</p>
+        <p data-i18n="stats.sport_types">Sport Types</p>
       </div>
       <div class="stat-item reveal">
         <span>4</span>
-        <p>Languages</p>
+        <p data-i18n="stats.languages">Languages</p>
       </div>
     </div>
   </div>
@@ -750,55 +787,55 @@
   <!-- FEATURES -->
   <section id="features">
     <div class="container">
-      <div class="section-label reveal">Features</div>
-      <h2 class="section-title reveal">Everything Strava doesn't show you</h2>
-      <p class="section-sub reveal">StatsUp goes beyond the basics — giving you the analytics tools that serious athletes need, without the subscription.</p>
+      <div class="section-label reveal" data-i18n="features.label">Features</div>
+      <h2 class="section-title reveal" data-i18n="features.title">Everything Strava doesn't show you</h2>
+      <p class="section-sub reveal" data-i18n="features.sub">StatsUp goes beyond the basics — giving you the analytics tools that serious athletes need, without the subscription.</p>
 
       <div class="features-grid">
         <div class="feature-card reveal">
           <div class="feature-icon">📊</div>
-          <h3>Deep Statistics</h3>
-          <p>Monthly and annual breakdowns of distance, elevation, duration, and pace. See trends over time with beautiful charts.</p>
+          <h3 data-i18n="features.deep_stats.title">Deep Statistics</h3>
+          <p data-i18n="features.deep_stats.desc">Monthly and annual breakdowns of distance, elevation, duration, and pace. See trends over time with beautiful charts.</p>
         </div>
         <div class="feature-card reveal">
           <div class="feature-icon">🏅</div>
-          <h3>Achievement Badges</h3>
-          <p>Earn 30+ badges for milestones like running 100km in a month, completing the Everest challenge, or your first marathon.</p>
+          <h3 data-i18n="features.badges.title">Achievement Badges</h3>
+          <p data-i18n="features.badges.desc">Earn 30+ badges for milestones like running 100km in a month, completing the Everest challenge, or your first marathon.</p>
         </div>
         <div class="feature-card reveal">
           <div class="feature-icon blue">⚡</div>
-          <h3>Personal Records</h3>
-          <p>Track your all-time bests: max distance, top speed, highest elevation, best pace, and race predictions using Riegel's formula.</p>
+          <h3 data-i18n="features.records.title">Personal Records</h3>
+          <p data-i18n="features.records.desc">Track your all-time bests: max distance, top speed, highest elevation, best pace, and race predictions using Riegel's formula.</p>
         </div>
         <div class="feature-card reveal">
           <div class="feature-icon green">❤️</div>
-          <h3>HR Zone Analysis</h3>
-          <p>Visualize how you distribute your effort across 5 heart rate zones. Understand if you're training at the right intensity.</p>
+          <h3 data-i18n="features.hr.title">HR Zone Analysis</h3>
+          <p data-i18n="features.hr.desc">Visualize how you distribute your effort across 5 heart rate zones. Understand if you're training at the right intensity.</p>
         </div>
         <div class="feature-card reveal">
           <div class="feature-icon purple">🗺️</div>
-          <h3>Route Maps</h3>
-          <p>View your activity routes on interactive Google Maps. See all your routes on a single map to visualize your training geography.</p>
+          <h3 data-i18n="features.maps.title">Route Maps</h3>
+          <p data-i18n="features.maps.desc">View your activity routes on interactive Google Maps. See all your routes on a single map to visualize your training geography.</p>
         </div>
         <div class="feature-card reveal">
           <div class="feature-icon">🎯</div>
-          <h3>Goal Tracking</h3>
-          <p>Set monthly distance and frequency goals. Get smart suggestions based on your historical performance. Never miss a target.</p>
+          <h3 data-i18n="features.goals.title">Goal Tracking</h3>
+          <p data-i18n="features.goals.desc">Set monthly distance and frequency goals. Get smart suggestions based on your historical performance. Never miss a target.</p>
         </div>
         <div class="feature-card reveal">
           <div class="feature-icon blue">🔖</div>
-          <h3>Bookmarks</h3>
-          <p>Save your favorite workouts with custom notes and difficulty ratings. Build a personal library of memorable activities.</p>
+          <h3 data-i18n="features.bookmarks.title">Bookmarks</h3>
+          <p data-i18n="features.bookmarks.desc">Save your favorite workouts with custom notes and difficulty ratings. Build a personal library of memorable activities.</p>
         </div>
         <div class="feature-card reveal">
           <div class="feature-icon green">📤</div>
-          <h3>Data Export & Backup</h3>
-          <p>Export all your data to JSON for full portability. Restore anytime. Your data is always yours — stored locally on your device.</p>
+          <h3 data-i18n="features.export.title">Data Export & Backup</h3>
+          <p data-i18n="features.export.desc">Export all your data to JSON for full portability. Restore anytime. Your data is always yours — stored locally on your device.</p>
         </div>
         <div class="feature-card reveal">
           <div class="feature-icon">🌙</div>
-          <h3>Light, Dark & System Theme</h3>
-          <p>Beautiful in any light. Switch between themes manually or let the system decide. Available in English, Italian, Spanish, and French.</p>
+          <h3 data-i18n="features.theme.title">Light, Dark & System Theme</h3>
+          <p data-i18n="features.theme.desc">Beautiful in any light. Switch between themes manually or let the system decide. Available in English, Italian, Spanish, and French.</p>
         </div>
       </div>
     </div>
@@ -807,9 +844,9 @@
   <!-- SCREENSHOTS -->
   <section class="screenshots-section" id="screenshots">
     <div class="container">
-      <div class="section-label reveal">Screenshots</div>
-      <h2 class="section-title reveal">See it in action</h2>
-      <p class="section-sub reveal">A clean, focused interface designed for athletes who care about their data.</p>
+      <div class="section-label reveal" data-i18n="screenshots.label">Screenshots</div>
+      <h2 class="section-title reveal" data-i18n="screenshots.title">See it in action</h2>
+      <p class="section-sub reveal" data-i18n="screenshots.sub">A clean, focused interface designed for athletes who care about their data.</p>
 
       <div class="screens-scroll">
 
@@ -817,61 +854,61 @@
           <div class="screen-card">
             <img src="assets/images/screenshots/dashboard_1.jpg" alt="Dashboard" />
           </div>
-          <div class="screen-label">Dashboard</div>
+          <div class="screen-label" data-i18n="screenshots.dashboard">Dashboard</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
             <img src="assets/images/screenshots/dashboard_2.jpg" alt="Dashboard 2" />
           </div>
-          <div class="screen-label">Dashboard</div>
+          <div class="screen-label" data-i18n="screenshots.dashboard">Dashboard</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
             <img src="assets/images/screenshots/details_1.jpg" alt="Activity Details" />
           </div>
-          <div class="screen-label">Activity Details</div>
+          <div class="screen-label" data-i18n="screenshots.details">Activity Details</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
             <img src="assets/images/screenshots/list_1.jpg" alt="Activity List" />
           </div>
-          <div class="screen-label">Activity List</div>
+          <div class="screen-label" data-i18n="screenshots.list">Activity List</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
             <img src="assets/images/screenshots/records_1.jpg" alt="Personal Records" />
           </div>
-          <div class="screen-label">Personal Records</div>
+          <div class="screen-label" data-i18n="screenshots.records">Personal Records</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
             <img src="assets/images/screenshots/stats_1.jpg" alt="Statistics" />
           </div>
-          <div class="screen-label">Statistics</div>
+          <div class="screen-label" data-i18n="screenshots.stats">Statistics</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
             <img src="assets/images/screenshots/stats_2.jpg" alt="Statistics 2" />
           </div>
-          <div class="screen-label">Statistics</div>
+          <div class="screen-label" data-i18n="screenshots.stats">Statistics</div>
         </div>
 
         <div class="screen-item">
           <div class="screen-card">
             <img src="assets/images/screenshots/badges_1.jpg" alt="Achievements" />
           </div>
-          <div class="screen-label">Achievements</div>
+          <div class="screen-label" data-i18n="screenshots.achievements">Achievements</div>
         </div>
 
       </div>
 
-      <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:0.5rem">
+      <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:0.5rem" data-i18n="screenshots.scroll">
         ← Scroll to see more →
       </p>
     </div>
@@ -880,9 +917,9 @@
   <!-- BADGES SHOWCASE -->
   <section>
     <div class="container" style="text-align:center">
-      <div class="section-label reveal">Achievements</div>
-      <h2 class="section-title reveal">Earn badges, stay motivated</h2>
-      <p class="section-sub reveal" style="margin:0 auto">30+ challenges designed to push your limits — from your very first activity to conquering the equivalent of Everest in elevation gain.</p>
+      <div class="section-label reveal" data-i18n="achievements.label">Achievements</div>
+      <h2 class="section-title reveal" data-i18n="achievements.title">Earn badges, stay motivated</h2>
+      <p class="section-sub reveal" style="margin:0 auto" data-i18n="achievements.sub">30+ challenges designed to push your limits — from your very first activity to conquering the equivalent of Everest in elevation gain.</p>
 
       <div class="badges-showcase reveal">
         <span class="badge-pill">🏃 First Step</span>
@@ -904,27 +941,27 @@
   <!-- HOW IT WORKS -->
   <section style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
     <div class="container strava-section">
-      <div class="section-label reveal">Setup</div>
-      <h2 class="section-title reveal">Up and running in 3 steps</h2>
-      <p class="section-sub reveal" style="margin:0 auto">StatsUp connects to your existing Strava account. No new accounts, no new tracking — just better insights.</p>
+      <div class="section-label reveal" data-i18n="setup.label">Setup</div>
+      <h2 class="section-title reveal" data-i18n="setup.title">Up and running in 3 steps</h2>
+      <p class="section-sub reveal" style="margin:0 auto" data-i18n="setup.sub">StatsUp connects to your existing Strava account. No new accounts, no new tracking — just better insights.</p>
 
       <div class="strava-steps reveal">
         <div class="step">
           <div class="step-num">1</div>
-          <h4>Install StatsUp</h4>
-          <p>Download the app from Google Play — free to install.</p>
+          <h4 data-i18n="setup.step1.title">Install StatsUp</h4>
+          <p data-i18n="setup.step1.desc">Download the app from Google Play — free to install.</p>
         </div>
         <div class="step-arrow">→</div>
         <div class="step">
           <div class="step-num">2</div>
-          <h4>Connect Strava</h4>
-          <p>Sign in with your Strava account via secure OAuth. StatsUp never sees your password.</p>
+          <h4 data-i18n="setup.step2.title">Connect Strava</h4>
+          <p data-i18n="setup.step2.desc">Sign in with your Strava account via secure OAuth. StatsUp never sees your password.</p>
         </div>
         <div class="step-arrow">→</div>
         <div class="step">
           <div class="step-num">3</div>
-          <h4>Explore your data</h4>
-          <p>Your activities sync automatically. Start discovering insights immediately.</p>
+          <h4 data-i18n="setup.step3.title">Explore your data</h4>
+          <p data-i18n="setup.step3.desc">Your activities sync automatically. Start discovering insights immediately.</p>
         </div>
       </div>
     </div>
@@ -933,20 +970,20 @@
   <!-- CTA / DOWNLOAD -->
   <section class="cta-section" id="download">
     <div class="container">
-      <div class="section-label reveal" style="display:block;margin-bottom:1rem">Download</div>
-      <h2 class="reveal">Ready to level up<br />your training?</h2>
-      <p class="reveal">Join athletes who use StatsUp to understand their performance like never before. Free to download.</p>
+      <div class="section-label reveal" style="display:block;margin-bottom:1rem" data-i18n="cta.label">Download</div>
+      <h2 class="reveal" data-i18n-html="cta.title">Ready to level up<br />your training?</h2>
+      <p class="reveal" data-i18n="cta.sub">Join athletes who use StatsUp to understand their performance like never before. Free to download.</p>
 
       <div class="play-badge reveal">
         <a href="https://github.com/fracassi-marco/StatsUp/releases/latest/download/statsup.apk" class="btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 2h14v2H5v-2z"/>
           </svg>
-          Download APK
+          <span data-i18n="cta.download">Download APK</span>
         </a>
       </div>
 
-      <p style="font-size:0.8rem;color:var(--text-muted);margin-top:1.5rem">
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-top:1.5rem" data-i18n="cta.note">
         Requires Android 14+. Free download. Your data stays on your device.
       </p>
     </div>
@@ -958,21 +995,22 @@
       <img src="assets/images/logo.png" alt="StatsUp" />
       Stats<span>Up</span>
     </a>
-    <p style="margin-bottom:0.5rem">Built with ❤️ for athletes who love their data.</p>
+    <p style="margin-bottom:0.5rem" data-i18n="footer.tagline">Built with ❤️ for athletes who love their data.</p>
     <p>
       <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a>
       &nbsp;·&nbsp;
-      <a href="changelog.html">Changelog</a>
+      <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
       &nbsp;·&nbsp;
-      <a href="mailto:fracassi.marco@gmail.com">Contact</a>
+      <a href="mailto:fracassi.marco@gmail.com" data-i18n="footer.contact">Contact</a>
       &nbsp;·&nbsp;
-      <a href="privacy.html">Privacy Policy</a>
+      <a href="privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
     </p>
-    <p style="margin-top:1rem;font-size:0.7rem;opacity:0.4">
+    <p style="margin-top:1rem;font-size:0.7rem;opacity:0.4" data-i18n="footer.not_affiliated">
       StatsUp is not affiliated with Strava Inc.
     </p>
   </footer>
 
+  <script src="i18n.js"></script>
   <script>
     // Intersection Observer for reveal animations
     const observer = new IntersectionObserver(
@@ -992,9 +1030,8 @@
         if (!version) return;
         document.querySelectorAll('a.btn-primary, a.nav-cta').forEach(btn => {
           if (btn.href.includes('statsup.apk')) {
-            const label = btn.querySelector('span') || btn;
-            const textNode = [...btn.childNodes].find(n => n.nodeType === 3 && n.textContent.trim());
-            if (textNode) textNode.textContent = ` Download APK ${version} `;
+            const span = btn.querySelector('[data-i18n]');
+            if (span) span.textContent = 'Download APK ' + version;
           }
         });
       })

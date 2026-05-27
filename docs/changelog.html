@@ -73,6 +73,12 @@
 
     .nav-logo span { color: var(--orange); }
 
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
     .nav-back {
       display: inline-flex;
       align-items: center;
@@ -85,6 +91,41 @@
     }
 
     .nav-back:hover { color: var(--text); }
+
+    /* ── LANG SWITCHER ── */
+    .lang-switcher {
+      display: flex;
+      gap: 0.15rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.2rem;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.45rem;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+
+    .lang-btn:hover { color: var(--text); }
+
+    .lang-btn.active {
+      background: var(--orange);
+      color: white;
+    }
+
+    @media (max-width: 540px) {
+      .lang-switcher { display: none; }
+    }
 
     /* ── HEADER ── */
     .page-header {
@@ -290,22 +331,25 @@
       <img src="assets/images/logo.png" alt="StatsUp logo" />
       Stats<span>Up</span>
     </a>
-    <a href="index.html" class="nav-back">
-      ← Back to home
-    </a>
+    <div class="nav-right">
+      <span class="lang-switcher-slot"></span>
+      <a href="index.html" class="nav-back" data-i18n="changelog.nav_back">
+        ← Back to home
+      </a>
+    </div>
   </nav>
 
   <!-- HEADER -->
   <div class="page-header">
     <div class="page-header-bg"></div>
-    <div class="label">Release History</div>
-    <h1>Changelog</h1>
-    <p>What's new in each version of StatsUp</p>
+    <div class="label" data-i18n="changelog.label">Release History</div>
+    <h1 data-i18n="changelog.h1">Changelog</h1>
+    <p data-i18n="changelog.sub">What's new in each version of StatsUp</p>
   </div>
 
   <!-- TIMELINE -->
   <div class="timeline" id="timeline">
-    <div class="state-msg">Loading changelog…</div>
+    <div class="state-msg" data-i18n="changelog.loading">Loading changelog…</div>
   </div>
 
   <!-- FOOTER -->
@@ -314,19 +358,20 @@
       <img src="assets/images/logo.png" alt="StatsUp" />
       Stats<span>Up</span>
     </a>
-    <p style="margin-bottom:0.5rem">Built with ❤️ for athletes who love their data.</p>
+    <p style="margin-bottom:0.5rem" data-i18n="footer.tagline">Built with ❤️ for athletes who love their data.</p>
     <p>
       <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a>
       &nbsp;·&nbsp;
-      <a href="mailto:fracassi.marco@gmail.com">Contact</a>
+      <a href="mailto:fracassi.marco@gmail.com" data-i18n="footer.contact">Contact</a>
       &nbsp;·&nbsp;
-      <a href="privacy.html">Privacy Policy</a>
+      <a href="privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
     </p>
-    <p style="margin-top:1rem;font-size:0.7rem;opacity:0.4">
+    <p style="margin-top:1rem;font-size:0.7rem;opacity:0.4" data-i18n="footer.not_affiliated">
       StatsUp is not affiliated with Strava Inc.
     </p>
   </footer>
 
+  <script src="i18n.js"></script>
   <script>
     function formatDate(iso) {
       const [y, m, d] = iso.split('-');
@@ -334,19 +379,29 @@
       return `${months[parseInt(m,10)-1]} ${parseInt(d,10)}, ${y}`;
     }
 
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
     fetch('changelog.json?t=' + Date.now())
       .then(r => r.json())
       .then(entries => {
         const container = document.getElementById('timeline');
         if (!entries || entries.length === 0) {
-          container.innerHTML = '<div class="state-msg">No releases yet.</div>';
+          container.innerHTML = '<div class="state-msg">' + (window.i18nT ? window.i18nT('changelog.no_releases') : 'No releases yet.') + '</div>';
           return;
         }
+
+        const latestLabel = window.i18nT ? window.i18nT('changelog.latest') : 'Latest';
 
         container.innerHTML = entries.map((entry, i) => `
           <div class="timeline-entry">
             <div class="timeline-meta">
-              ${i === 0 ? '<span class="latest-badge">Latest</span>' : ''}
+              ${i === 0 ? '<span class="latest-badge">' + latestLabel + '</span>' : ''}
               <span class="version-tag">v${entry.version}</span>
               <span class="release-date">${formatDate(entry.date)}</span>
             </div>
@@ -359,16 +414,8 @@
       })
       .catch(() => {
         document.getElementById('timeline').innerHTML =
-          '<div class="state-msg">Could not load changelog.</div>';
+          '<div class="state-msg">' + (window.i18nT ? window.i18nT('changelog.error') : 'Could not load changelog.') + '</div>';
       });
-
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
   </script>
 
 </body>
