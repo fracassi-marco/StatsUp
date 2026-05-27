@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.statsup.R
 import com.statsup.ui.components.SecondaryCard
 import com.statsup.ui.components.Title
+import androidx.compose.ui.platform.LocalLocale
 import com.statsup.ui.viewmodel.DashboardViewModel
 import io.jetchart.common.animation.fadeInAnimation
 import io.jetchart.line.Line
@@ -30,7 +31,6 @@ import io.jetchart.line.renderer.point.IndexesPointDrawer
 import io.jetchart.line.renderer.xaxis.LineEmptyXAxisDrawer
 import io.jetchart.line.renderer.yaxis.LineYAxisWithValueDrawer
 import java.time.ZonedDateTime
-import java.util.Locale
 
 @Composable
 fun DurationCard(viewModel: DashboardViewModel) {
@@ -70,7 +70,7 @@ fun DurationCard(viewModel: DashboardViewModel) {
                 overflow = TextOverflow.Ellipsis,
             )
             Title(
-                text = "${String.format(Locale.getDefault(), "%.0f", viewModel.totalDuration())} ${stringResource(R.string.h)}",
+                text = "${String.format(LocalLocale.current.platformLocale, "%.0f", viewModel.totalDuration())} ${stringResource(R.string.h)}",
             )
         }
     }

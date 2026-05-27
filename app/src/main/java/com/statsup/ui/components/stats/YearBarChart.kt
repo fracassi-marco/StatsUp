@@ -20,8 +20,8 @@ import io.jetchart.bar.renderer.label.SimpleBarValueDrawer.ValueDrawLocation.Out
 import io.jetchart.bar.renderer.xaxis.BarXAxisDrawer
 import io.jetchart.bar.renderer.yaxis.BarEmptyYAxisDrawer
 import io.jetchart.common.animation.fadeInAnimation
+import androidx.compose.ui.platform.LocalLocale
 import java.time.format.TextStyle.SHORT
-import java.util.Locale
 
 
 @Composable
@@ -29,10 +29,11 @@ fun YearBarChart(viewModel: StatsViewModel) {
     if (viewModel.hideYearChart())
         return
 
+    val locale = LocalLocale.current.platformLocale
     Title(text = stringResource(R.string.month_by_month), marginTop = 40.dp)
     BarChart(
         bars = Bars(bars = viewModel.groupByMonth().map {
-            Bar(label = it.key.getDisplayName(SHORT, Locale.getDefault()), value = it.value.toFloat(), color = MaterialTheme.colorScheme.primary)
+            Bar(label = it.key.getDisplayName(SHORT, locale), value = it.value.toFloat(), color = MaterialTheme.colorScheme.primary)
         }),
         modifier = Modifier
             .padding(0.dp, 10.dp, 0.dp, 0.dp)

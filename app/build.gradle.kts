@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.statsup"
-    compileSdk = 36
+    compileSdk = 37
 
     val properties = Properties()
     if (project.rootProject.file("local.properties").canRead()) {
@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId = "com.statsup"
         minSdk = 34
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 10701
         versionName = "1.7.1"
 
@@ -77,6 +77,13 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("androidx.concurrent:concurrent-futures:1.2.0")
+        force("androidx.concurrent:concurrent-futures-ktx:1.2.0")
     }
 }
 

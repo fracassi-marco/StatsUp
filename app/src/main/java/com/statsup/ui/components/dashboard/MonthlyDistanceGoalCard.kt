@@ -2,7 +2,6 @@ package com.statsup.ui.components.dashboard
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.EmojiEvents
@@ -11,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import com.statsup.R
 import com.statsup.ui.components.PrimaryCard
 import com.statsup.ui.viewmodel.DashboardViewModel
-import java.util.Locale
 
 @Composable
 fun MonthlyDistanceGoalCard(viewModel: DashboardViewModel) {
@@ -34,7 +33,7 @@ fun MonthlyDistanceGoalCard(viewModel: DashboardViewModel) {
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "${String.format(Locale.getDefault(), "%.0f", viewModel.totalDistance())} ${stringResource(R.string.km)} → ~${String.format(Locale.getDefault(), "%.0f", viewModel.projectedDistanceEndOfMonth())} ${stringResource(R.string.km)} / ${String.format(Locale.getDefault(), "%.0f", viewModel.monthlyDistanceGoal())} ${stringResource(R.string.km)}",
+                text = "${String.format(LocalLocale.current.platformLocale, "%.0f", viewModel.totalDistance())} ${stringResource(R.string.km)} → ~${String.format(LocalLocale.current.platformLocale, "%.0f", viewModel.projectedDistanceEndOfMonth())} ${stringResource(R.string.km)} / ${String.format(LocalLocale.current.platformLocale, "%.0f", viewModel.monthlyDistanceGoal())} ${stringResource(R.string.km)}",
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp

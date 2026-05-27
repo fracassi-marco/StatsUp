@@ -37,8 +37,8 @@ import com.statsup.R
 import com.statsup.domain.BookmarkedTrainingWithDetails
 import com.statsup.domain.Measure
 import com.statsup.domain.formatLocal
+import androidx.compose.ui.platform.LocalLocale
 import com.statsup.ui.viewmodel.BookmarksViewModel
-import java.util.Locale
 
 @Composable
 fun BookmarksScreen(
@@ -127,11 +127,11 @@ fun BookmarkedTrainingListItem(
         ) {
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.distance))
-                Text(text = String.format(Locale.getDefault(), "%.2f %s", training.distanceInKilometers(), stringResource(R.string.km)))
+                Text(text = String.format(LocalLocale.current.platformLocale, "%.2f %s", training.distanceInKilometers(), stringResource(R.string.km)))
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.elevation_gain))
-                Text(text = String.format(Locale.getDefault(), "%.0f %s", training.totalElevationGain, stringResource(R.string.m)))
+                Text(text = String.format(LocalLocale.current.platformLocale, "%.0f %s", training.totalElevationGain, stringResource(R.string.m)))
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.duration))

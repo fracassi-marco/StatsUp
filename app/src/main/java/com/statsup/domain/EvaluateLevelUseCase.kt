@@ -8,7 +8,7 @@ import kotlin.math.max
 
 class EvaluateLevelUseCase {
 
-    private data class LevelDef(val number: Int, @StringRes val nameResId: Int, val emoji: String, val threshold: Int)
+    private data class LevelDef(val number: Int, @param:StringRes val nameResId: Int, val emoji: String, val threshold: Int)
 
     private val thresholds = listOf(
         LevelDef(1,  R.string.level_name_1,  "🌱", 0),

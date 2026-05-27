@@ -40,8 +40,8 @@ import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
 import com.statsup.ui.viewmodel.HistoryViewModel
+import androidx.compose.ui.platform.LocalLocale
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 
 @Composable
@@ -60,8 +60,8 @@ fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (Long) -> Unit) 
                 )
             }
 
-            // Raggruppa i training filtrati per mese
-            val monthYearFormatter = remember { DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault()) }
+            val locale = LocalLocale.current.platformLocale
+            val monthYearFormatter = remember(locale) { DateTimeFormatter.ofPattern("MMMM yyyy", locale) }
             val groupedTrainings = state.filteredActivities.groupBy { training ->
                 training.date.format(monthYearFormatter)
             }
@@ -181,11 +181,11 @@ fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
         ) {
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.distance))
-                Text(text = String.format(Locale.getDefault(), "%.2f %s", training.distanceInKilometers(), stringResource(R.string.km)))
+                Text(text = String.format(LocalLocale.current.platformLocale, "%.2f %s", training.distanceInKilometers(), stringResource(R.string.km)))
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.elevation_gain))
-                Text(text = String.format(Locale.getDefault(), "%.0f %s", training.totalElevationGain, stringResource(R.string.m)))
+                Text(text = String.format(LocalLocale.current.platformLocale, "%.0f %s", training.totalElevationGain, stringResource(R.string.m)))
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.duration))

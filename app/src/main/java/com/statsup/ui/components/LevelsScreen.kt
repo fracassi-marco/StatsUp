@@ -38,7 +38,7 @@ import com.statsup.ui.viewmodel.DashboardViewModel
 
 private data class LevelDef(
     val number: Int,
-    @androidx.annotation.StringRes val nameResId: Int,
+    @param:androidx.annotation.StringRes val nameResId: Int,
     val emoji: String,
     val thresholdXp: Int
 )

@@ -7,13 +7,13 @@ import androidx.compose.material.icons.outlined.Compress
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.statsup.R
 import com.statsup.ui.components.SecondaryCard
 import com.statsup.ui.components.Title
-import java.util.Locale
 
 @Composable
 fun AverageCard(average: Double) {
@@ -27,7 +27,7 @@ fun AverageCard(average: Double) {
             )
             Row {
                 Title(
-                    text = String.format(Locale.getDefault(), "%.0f", average),
+                    text = String.format(LocalLocale.current.platformLocale, "%.0f", average),
                 )
             }
         }

@@ -6,13 +6,13 @@ import androidx.compose.material.icons.outlined.ArrowCircleUp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.statsup.R
 import com.statsup.ui.components.SecondaryCard
 import com.statsup.ui.components.Title
-import java.util.Locale
 
 @Composable
 fun MaxCard(max: Double) {
@@ -25,7 +25,7 @@ fun MaxCard(max: Double) {
                 overflow = TextOverflow.Ellipsis,
             )
             Title(
-                text = String.format(Locale.getDefault(), "%.0f", max),
+                text = String.format(LocalLocale.current.platformLocale, "%.0f", max),
             )
         }
     }
@@ -42,7 +42,7 @@ fun SmallCard(value: Double, label: String) {
                 overflow = TextOverflow.Ellipsis,
             )
             Title(
-                text = String.format(Locale.getDefault(), "%.0f", value),
+                text = String.format(LocalLocale.current.platformLocale, "%.0f", value),
             )
         }
     }

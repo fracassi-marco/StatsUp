@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 
 data class Level(
     val number: Int,
-    @StringRes val nameResId: Int,
+    @param:StringRes val nameResId: Int,
     val emoji: String,
     val totalXp: Int,
     val currentLevelXp: Int,

@@ -11,9 +11,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.statsup.R
 import com.statsup.ui.components.SecondaryCard
+import androidx.compose.ui.platform.LocalLocale
 import com.statsup.ui.components.Title
 import com.statsup.ui.viewmodel.DashboardViewModel
-import java.util.Locale
 
 @Composable
 fun MaxAltitudeCard(viewModel: DashboardViewModel) {
@@ -26,7 +26,7 @@ fun MaxAltitudeCard(viewModel: DashboardViewModel) {
                 overflow = TextOverflow.Ellipsis,
             )
             Title(
-                text = String.format(Locale.getDefault(), "%.0f ${stringResource(id = R.string.m)}", viewModel.maxAltitude()),
+                text = String.format(LocalLocale.current.platformLocale, "%.0f ${stringResource(id = R.string.m)}", viewModel.maxAltitude()),
             )
         }
     }
