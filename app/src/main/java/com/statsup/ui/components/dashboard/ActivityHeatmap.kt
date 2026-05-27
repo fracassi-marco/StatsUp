@@ -20,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.statsup.R
 import com.statsup.ui.viewmodel.DashboardViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -53,8 +55,8 @@ fun ActivityHeatmap(viewModel: DashboardViewModel) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ) {
-        Text(text = "Recent", fontSize = 10.sp, color = labelColor, textAlign = TextAlign.Start)
-        Text(text = "Old", fontSize = 10.sp, color = labelColor, textAlign = TextAlign.End)
+        Text(text = stringResource(R.string.heatmap_recent), fontSize = 10.sp, color = labelColor, textAlign = TextAlign.Start)
+        Text(text = stringResource(R.string.heatmap_old), fontSize = 10.sp, color = labelColor, textAlign = TextAlign.End)
     }
     Row {
         Column(verticalArrangement = Arrangement.spacedBy(CELL_GAP)) {

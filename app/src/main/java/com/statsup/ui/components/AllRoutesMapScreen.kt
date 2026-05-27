@@ -94,7 +94,7 @@ fun AllRoutesMapScreen(
                         )
                     ) {
                         Text(
-                            text = "${trainings.size} routes displayed",
+                            text = stringResource(R.string.all_routes_displayed, trainings.size),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )

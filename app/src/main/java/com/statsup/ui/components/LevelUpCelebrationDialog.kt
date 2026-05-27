@@ -75,7 +75,7 @@ fun LevelUpCelebrationDialog(level: Level, onDismiss: () -> Unit) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = stringResource(R.string.level_up_description, level.name),
+                    text = stringResource(R.string.level_up_description, stringResource(level.nameResId)),
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center

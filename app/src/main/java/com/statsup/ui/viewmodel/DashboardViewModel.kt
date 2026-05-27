@@ -1,6 +1,7 @@
 package com.statsup.ui.viewmodel
 
 import android.content.Context
+import com.statsup.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -57,7 +58,7 @@ class DashboardViewModel(
         val effectiveMonthlyDistanceGoal: Int = 0,
         val effectiveMonthlyTrainingGoal: Int = 0,
         val recoveryTime: Double = 0.0,
-        val level: Level = Level(1, "Principiante", "🌱", 0, 0, 200, false, 0, 0),
+        val level: Level = Level(1, R.string.level_name_1, "🌱", 0, 0, 200, false, 0, 0),
     )
 
     private var trainings: List<Training> = emptyList()

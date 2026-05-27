@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import com.statsup.R
 
 @Composable
@@ -25,7 +26,7 @@ fun SplashScreen() {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = "StatsUp Logo",
+                contentDescription = stringResource(R.string.cd_app_logo),
                 modifier = Modifier.size(200.dp)
             )
         }

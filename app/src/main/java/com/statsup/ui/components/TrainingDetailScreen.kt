@@ -148,7 +148,7 @@ fun TrainingDetailScreen(
                     ) {
                         Icon(
                             Icons.Default.ZoomOutMap,
-                            contentDescription = "Full screen map",
+                            contentDescription = stringResource(R.string.view_fullscreen_map),
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.padding(3.dp))
@@ -466,7 +466,7 @@ fun TrainingDetailScreen(
                 IconButton(onClick = onNavigateBack) {
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.cd_back),
                         tint = Color.White,
                         modifier = Modifier.size(24.dp)
                     )
@@ -479,7 +479,7 @@ fun TrainingDetailScreen(
                         IconButton(onClick = { showExportMenu = true }) {
                             Icon(
                                 Icons.Filled.FileDownload,
-                                contentDescription = "Export",
+                                contentDescription = stringResource(R.string.cd_export),
                                 tint = Color.White,
                                 modifier = Modifier.size(24.dp)
                             )
@@ -489,11 +489,11 @@ fun TrainingDetailScreen(
                             onDismissRequest = { showExportMenu = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Export GPX") },
+                                text = { Text(stringResource(R.string.export_gpx)) },
                                 onClick = { showExportMenu = false; onExportGpx() }
                             )
                             DropdownMenuItem(
-                                text = { Text("Export TCX") },
+                                text = { Text(stringResource(R.string.export_tcx)) },
                                 onClick = { showExportMenu = false; onExportTcx() }
                             )
                         }
@@ -502,7 +502,7 @@ fun TrainingDetailScreen(
                     IconButton(onClick = onShare) {
                         Icon(
                             Icons.Filled.Share,
-                            contentDescription = "Share",
+                            contentDescription = stringResource(R.string.share),
                             tint = Color.White,
                             modifier = Modifier.size(24.dp)
                         )
@@ -511,7 +511,7 @@ fun TrainingDetailScreen(
                     IconButton(onClick = onToggleBookmark) {
                         Icon(
                             if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
-                            contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
+                            contentDescription = if (isBookmarked) stringResource(R.string.cd_remove_bookmark) else stringResource(R.string.cd_add_bookmark),
                             tint = if (isBookmarked) MaterialTheme.colorScheme.primary else Color.White,
                             modifier = Modifier.size(24.dp)
                         )

@@ -107,7 +107,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, onNavigateBack: () -> Unit) {
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(
-                        text = "${viewModel.earnedCount()}/${viewModel.totalCount()} badge",
+                        text = stringResource(R.string.profile_badges_count, viewModel.earnedCount(), viewModel.totalCount()),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )

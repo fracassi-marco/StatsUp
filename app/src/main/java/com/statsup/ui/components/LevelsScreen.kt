@@ -38,22 +38,32 @@ import com.statsup.ui.viewmodel.DashboardViewModel
 
 private data class LevelDef(
     val number: Int,
-    val name: String,
+    @androidx.annotation.StringRes val nameResId: Int,
     val emoji: String,
     val thresholdXp: Int
 )
 
 private val ALL_LEVELS = listOf(
-    LevelDef(1,  "Principiante", "🌱", 0),
-    LevelDef(2,  "Allenato",     "🏃", 200),
-    LevelDef(3,  "Resistente",   "💪", 500),
-    LevelDef(4,  "Atleta",       "⚡", 1_000),
-    LevelDef(5,  "Esperto",      "🔥", 2_000),
-    LevelDef(6,  "Elite",        "🌟", 4_000),
-    LevelDef(7,  "Campione",     "🏅", 7_000),
-    LevelDef(8,  "Maestro",      "🥇", 11_000),
-    LevelDef(9,  "Leggenda",     "🏆", 16_000),
-    LevelDef(10, "Immortale",    "👑", 25_000)
+    LevelDef(1,  R.string.level_name_1,  "🌱", 0),
+    LevelDef(2,  R.string.level_name_2,  "🏃", 200),
+    LevelDef(3,  R.string.level_name_3,  "💪", 500),
+    LevelDef(4,  R.string.level_name_4,  "⚡", 1_000),
+    LevelDef(5,  R.string.level_name_5,  "🔥", 2_000),
+    LevelDef(6,  R.string.level_name_6,  "🌟", 4_000),
+    LevelDef(7,  R.string.level_name_7,  "🏅", 7_000),
+    LevelDef(8,  R.string.level_name_8,  "🥇", 11_000),
+    LevelDef(9,  R.string.level_name_9,  "🏆", 16_000),
+    LevelDef(10, R.string.level_name_10, "👑", 25_000),
+    LevelDef(11, R.string.level_name_11, "🔱", 36_000),
+    LevelDef(12, R.string.level_name_12, "⭐", 52_000),
+    LevelDef(13, R.string.level_name_13, "🦁", 73_000),
+    LevelDef(14, R.string.level_name_14, "🌩️", 100_000),
+    LevelDef(15, R.string.level_name_15, "🛡️", 135_000),
+    LevelDef(16, R.string.level_name_16, "🚀", 180_000),
+    LevelDef(17, R.string.level_name_17, "🦅", 240_000),
+    LevelDef(18, R.string.level_name_18, "✨", 320_000),
+    LevelDef(19, R.string.level_name_19, "🌌", 420_000),
+    LevelDef(20, R.string.level_name_20, "♾️", 550_000)
 )
 
 @Composable
@@ -133,7 +143,7 @@ private fun LevelRow(def: LevelDef, currentLevel: Level) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Lv. ${def.number} · ${def.name}",
+                        text = "Lv. ${def.number} · ${stringResource(def.nameResId)}",
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                         color = textColor
                     )

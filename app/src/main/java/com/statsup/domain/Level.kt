@@ -1,8 +1,10 @@
 package com.statsup.domain
 
+import androidx.annotation.StringRes
+
 data class Level(
     val number: Int,
-    val name: String,
+    @StringRes val nameResId: Int,
     val emoji: String,
     val totalXp: Int,
     val currentLevelXp: Int,
@@ -12,5 +14,5 @@ data class Level(
     val daysSinceLastActivity: Int
 ) {
     val progress: Float get() = if (nextLevelXp > 0) currentLevelXp.toFloat() / nextLevelXp else 1f
-    val isMaxLevel: Boolean get() = number == 10
+    val isMaxLevel: Boolean get() = number == 20
 }

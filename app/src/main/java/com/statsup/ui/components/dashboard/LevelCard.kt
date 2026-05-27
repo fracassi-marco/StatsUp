@@ -42,7 +42,7 @@ fun LevelCard(viewModel: DashboardViewModel, onClick: () -> Unit = {}) {
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = stringResource(R.string.level_card_label, level.number, level.name),
+                    text = stringResource(R.string.level_card_label, level.number, stringResource(level.nameResId)),
                     style = MaterialTheme.typography.bodySmall
                 )
             }

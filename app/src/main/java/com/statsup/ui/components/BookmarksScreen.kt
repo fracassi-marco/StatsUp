@@ -127,11 +127,11 @@ fun BookmarkedTrainingListItem(
         ) {
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.distance))
-                Text(text = String.format(Locale.getDefault(), "%.2f Km", training.distanceInKilometers()))
+                Text(text = String.format(Locale.getDefault(), "%.2f %s", training.distanceInKilometers(), stringResource(R.string.km)))
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.elevation_gain))
-                Text(text = String.format(Locale.getDefault(), "%.0f m", training.totalElevationGain))
+                Text(text = String.format(Locale.getDefault(), "%.0f %s", training.totalElevationGain, stringResource(R.string.m)))
             }
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = stringResource(id = R.string.duration))
@@ -153,7 +153,7 @@ fun BookmarkedTrainingListItem(
                     .height(180.dp)
                     .clickable { onTrainingClick() },
                 painter = painterResource(id = R.drawable.bg),
-                contentDescription = "background",
+                contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
         }

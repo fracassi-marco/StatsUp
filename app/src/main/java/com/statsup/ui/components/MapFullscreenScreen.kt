@@ -143,7 +143,7 @@ fun MapFullscreenScreen(
             ) {
                 Icon(
                     imageVector = if (isLocationEnabled) Icons.Filled.MyLocation else Icons.Filled.LocationDisabled,
-                    contentDescription = if (isLocationEnabled) "Disable my location" else "Show my location",
+                    contentDescription = if (isLocationEnabled) stringResource(R.string.cd_location_disable) else stringResource(R.string.cd_location_enable),
                     tint = if (isLocationEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -161,7 +161,7 @@ fun MapFullscreenScreen(
             IconButton(onClick = onNavigateBack) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.cd_back),
                     tint = Color.White
                 )
             }

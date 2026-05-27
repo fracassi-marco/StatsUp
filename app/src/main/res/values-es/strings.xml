@@ -267,4 +267,49 @@
     <string name="delete_training_confirm_title">Eliminar actividad</string>
     <string name="delete_training_confirm_body">Esta actividad será eliminada de la app. Puedes volver a importarla desde Strava en cualquier momento.</string>
     <string name="delete_training_confirm_action">Eliminar</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Atrás</string>
+    <string name="cd_export">Exportar</string>
+    <string name="cd_remove_bookmark">Eliminar marcador</string>
+    <string name="cd_add_bookmark">Añadir marcador</string>
+    <string name="cd_location_disable">Desactivar ubicación</string>
+    <string name="cd_location_enable">Mostrar ubicación</string>
+    <string name="cd_app_logo">StatsUp Logo</string>
+
+    <!-- Export formats -->
+    <string name="export_gpx">Exportar GPX</string>
+    <string name="export_tcx">Exportar TCX</string>
+
+    <!-- Map / routes -->
+    <string name="all_routes_displayed">%1$d rutas mostradas</string>
+
+    <!-- Profile -->
+    <string name="profile_badges_count">%1$d/%2$d insignias</string>
+
+    <!-- Activity heatmap -->
+    <string name="heatmap_recent">Reciente</string>
+    <string name="heatmap_old">Antiguo</string>
+
+    <!-- Level names -->
+    <string name="level_name_1">Principiante</string>
+    <string name="level_name_2">Entrenado</string>
+    <string name="level_name_3">Resistente</string>
+    <string name="level_name_4">Atleta</string>
+    <string name="level_name_5">Experto</string>
+    <string name="level_name_6">Élite</string>
+    <string name="level_name_7">Campeón</string>
+    <string name="level_name_8">Maestro</string>
+    <string name="level_name_9">Leyenda</string>
+    <string name="level_name_10">Inmortal</string>
+    <string name="level_name_11">Veterano</string>
+    <string name="level_name_12">Profesional</string>
+    <string name="level_name_13">Dominador</string>
+    <string name="level_name_14">Titán</string>
+    <string name="level_name_15">Invencible</string>
+    <string name="level_name_16">Fenómeno</string>
+    <string name="level_name_17">Mito</string>
+    <string name="level_name_18">Divino</string>
+    <string name="level_name_19">Absoluto</string>
+    <string name="level_name_20">Eterno</string>
 </resources>

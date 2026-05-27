@@ -267,4 +267,49 @@
     <string name="delete_training_confirm_title">Supprimer l\'activité</string>
     <string name="delete_training_confirm_body">Cette activité sera supprimée de l\'application. Vous pouvez la ré-importer depuis Strava à tout moment.</string>
     <string name="delete_training_confirm_action">Supprimer</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Retour</string>
+    <string name="cd_export">Exporter</string>
+    <string name="cd_remove_bookmark">Supprimer le favori</string>
+    <string name="cd_add_bookmark">Ajouter aux favoris</string>
+    <string name="cd_location_disable">Désactiver ma position</string>
+    <string name="cd_location_enable">Afficher ma position</string>
+    <string name="cd_app_logo">StatsUp Logo</string>
+
+    <!-- Export formats -->
+    <string name="export_gpx">Exporter GPX</string>
+    <string name="export_tcx">Exporter TCX</string>
+
+    <!-- Map / routes -->
+    <string name="all_routes_displayed">%1$d itinéraires affichés</string>
+
+    <!-- Profile -->
+    <string name="profile_badges_count">%1$d/%2$d badges</string>
+
+    <!-- Activity heatmap -->
+    <string name="heatmap_recent">Récent</string>
+    <string name="heatmap_old">Ancien</string>
+
+    <!-- Level names -->
+    <string name="level_name_1">Débutant</string>
+    <string name="level_name_2">Entraîné</string>
+    <string name="level_name_3">Résistant</string>
+    <string name="level_name_4">Athlète</string>
+    <string name="level_name_5">Expert</string>
+    <string name="level_name_6">Élite</string>
+    <string name="level_name_7">Champion</string>
+    <string name="level_name_8">Maître</string>
+    <string name="level_name_9">Légende</string>
+    <string name="level_name_10">Immortel</string>
+    <string name="level_name_11">Vétéran</string>
+    <string name="level_name_12">Professionnel</string>
+    <string name="level_name_13">Dominateur</string>
+    <string name="level_name_14">Titan</string>
+    <string name="level_name_15">Invincible</string>
+    <string name="level_name_16">Phénomène</string>
+    <string name="level_name_17">Mythe</string>
+    <string name="level_name_18">Divin</string>
+    <string name="level_name_19">Absolu</string>
+    <string name="level_name_20">Éternel</string>
 </resources>
