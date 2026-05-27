@@ -74,10 +74,10 @@ fun PrimaryCard(
                 if (onClick != null) {
                     Icon(
                         Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         contentDescription = null,
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surfaceTint, CircleShape)
+                            .background(MaterialTheme.colorScheme.primary, CircleShape)
                             .size(24.dp)
                     )
                 } else
