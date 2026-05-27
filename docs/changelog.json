@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.7.5",
+    "date": "2026-05-27",
+    "message": "Fix settings color with dark background"
+  },
+  {
     "version": "1.7.4",
     "date": "2026-05-27",
     "message": "Fix settings color with dark background"
