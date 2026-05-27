@@ -22,6 +22,16 @@
     <string name="streak_days">Streak</string>
     <string name="streak_current_days">%1$d days</string>
     <string name="streak_best">Best: %1$d days</string>
+    <string name="level_card_label">Lv. %1$d · %2$s</string>
+    <string name="level_card_total_xp">%1$d XP</string>
+    <string name="level_card_xp_to_next">%1$d XP to next level</string>
+    <string name="level_card_max_level">Max level reached!</string>
+    <string name="level_card_decay_warning">-%1$d XP/day — train to stop it!</string>
+    <string name="level_up_title">Level up!</string>
+    <string name="level_up_description">You reached %1$s!</string>
+    <string name="level_up_close">Let\'s go!</string>
+    <string name="levels_title">Levels</string>
+    <string name="levels_xp_progress">%1$d / %2$d XP in current level</string>
     <string name="dashboard_title">Dashboard</string>
     <string name="stats_title">Statistics</string>
     <string name="history_title">History</string>

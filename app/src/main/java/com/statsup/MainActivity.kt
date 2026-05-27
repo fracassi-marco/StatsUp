@@ -43,6 +43,7 @@ import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
 import com.statsup.ui.components.LoadingBox
 import com.statsup.ui.components.MapFullscreenScreen
+import com.statsup.ui.components.LevelsScreen
 import com.statsup.ui.components.ProfileScreen
 import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.components.SplashScreen
@@ -127,12 +128,17 @@ class MainActivity : ComponentActivity() {
                             } else {
                                 NavHost(navController = navController, startDestination = Screens.Dashboard.route, Modifier.padding(innerPadding)) {
                                 composable(Screens.Dashboard.route) {
-                                    DashboardScreen(dashboardViewModel) {
-                                        navController.navigate(Screens.PROFILE)
-                                    }
+                                    DashboardScreen(
+                                        viewModel = dashboardViewModel,
+                                        onProfileClick = { navController.navigate(Screens.PROFILE) },
+                                        onLevelClick = { navController.navigate(Screens.LEVELS) }
+                                    )
                                 }
                                 composable(Screens.PROFILE) {
                                     ProfileScreen(profileViewModel) { navController.popBackStack() }
+                                }
+                                composable(Screens.LEVELS) {
+                                    LevelsScreen(dashboardViewModel) { navController.popBackStack() }
                                 }
                                 composable(Screens.History.route) {
                                     HistoryScreen(historyViewModel) { trainingId ->

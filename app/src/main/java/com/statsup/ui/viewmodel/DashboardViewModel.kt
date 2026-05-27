@@ -10,7 +10,9 @@ import com.statsup.domain.Badge
 import com.statsup.domain.BestEffort
 import com.statsup.domain.CheckGoalAchievementUseCase
 import com.statsup.domain.EvaluateBadgesUseCase
+import com.statsup.domain.EvaluateLevelUseCase
 import com.statsup.domain.GoalAchievement
+import com.statsup.domain.Level
 import com.statsup.domain.Provider
 import com.statsup.domain.SuggestAutoTargetsUseCase
 import com.statsup.domain.TargetSuggestion
@@ -55,6 +57,7 @@ class DashboardViewModel(
         val effectiveMonthlyDistanceGoal: Int = 0,
         val effectiveMonthlyTrainingGoal: Int = 0,
         val recoveryTime: Double = 0.0,
+        val level: Level = Level(1, "Principiante", "🌱", 0, 0, 200, false, 0, 0),
     )
 
     private var trainings: List<Training> = emptyList()
@@ -73,11 +76,16 @@ class DashboardViewModel(
     private val checkAchievement = CheckGoalAchievementUseCase()
     private val suggestTargets = SuggestAutoTargetsUseCase()
     private val evaluateBadges = EvaluateBadgesUseCase()
+    private val evaluateLevel = EvaluateLevelUseCase()
 
     private val _badgesEarned = MutableSharedFlow<List<Badge>>(extraBufferCapacity = 10)
     val badgesEarned: SharedFlow<List<Badge>> = _badgesEarned.asSharedFlow()
 
+    private val _levelUp = MutableSharedFlow<Level>(extraBufferCapacity = 1)
+    val levelUp: SharedFlow<Level> = _levelUp.asSharedFlow()
+
     private var previousEarnedBadgeIds: Set<String>? = null
+    private var previousLevel: Int? = null
 
     init {
         viewModelScope.launch {
@@ -86,6 +94,7 @@ class DashboardViewModel(
                 computed = withContext(Dispatchers.Default) { computeAll(newTrainings) }
                 checkGoalAchievement()
                 checkBadgeEarning()
+                checkLevelUp()
                 if (!isFirstEmission) checkTargetSuggestion()
             }
         }
@@ -124,6 +133,7 @@ class DashboardViewModel(
             effectiveMonthlyDistanceGoal = effectiveDistGoal,
             effectiveMonthlyTrainingGoal = effectiveFreqGoal,
             recoveryTime = noneT.recoveryTime(),
+            level = evaluateLevel(newTrainings),
         )
     }
 
@@ -196,6 +206,15 @@ class DashboardViewModel(
         previousEarnedBadgeIds = earnedIds
     }
 
+    private fun checkLevelUp() {
+        val current = computed.level.number
+        val prev = previousLevel
+        if (prev != null && current > prev) {
+            viewModelScope.launch { _levelUp.emit(computed.level) }
+        }
+        previousLevel = current
+    }
+
     fun acceptTargetSuggestion() {
         val suggestion = targetSuggestion ?: return
         settingRepository.saveMonthlyGoal(suggestion.distanceKm)
@@ -255,4 +274,6 @@ class DashboardViewModel(
         if (best == 0) return 0f
         return currentStreak().toFloat() / best.toFloat()
     }
+
+    fun level(): Level = computed.level
 }

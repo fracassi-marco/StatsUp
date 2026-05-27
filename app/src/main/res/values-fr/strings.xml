@@ -23,6 +23,16 @@
     <string name="streak_days">Série</string>
     <string name="streak_current_days">%1$d jours</string>
     <string name="streak_best">Meilleur : %1$d jours</string>
+    <string name="level_card_label">Nv. %1$d · %2$s</string>
+    <string name="level_card_total_xp">%1$d XP</string>
+    <string name="level_card_xp_to_next">%1$d XP pour le niveau suivant</string>
+    <string name="level_card_max_level">Niveau maximum atteint !</string>
+    <string name="level_card_decay_warning">-%1$d XP/jour — entraîne-toi pour l\'arrêter !</string>
+    <string name="level_up_title">Niveau supérieur !</string>
+    <string name="level_up_description">Tu as atteint %1$s !</string>
+    <string name="level_up_close">Allons-y !</string>
+    <string name="levels_title">Niveaux</string>
+    <string name="levels_xp_progress">%1$d / %2$d XP dans le niveau actuel</string>
     <string name="dashboard_title">Tableau de bord</string>
     <string name="stats_title">Statistiques</string>
     <string name="history_title">Historique</string>

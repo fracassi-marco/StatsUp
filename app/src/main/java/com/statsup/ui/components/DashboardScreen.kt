@@ -44,7 +44,9 @@ import androidx.compose.ui.window.DialogProperties
 import com.statsup.R
 import com.statsup.domain.Badge
 import com.statsup.domain.GoalAchievement
+import com.statsup.domain.Level
 import com.statsup.ui.components.dashboard.ActivityHeatmap
+import com.statsup.ui.components.dashboard.LevelCard
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
 import com.statsup.ui.components.dashboard.HeartRateZonesCard
 import com.statsup.ui.components.dashboard.RecoveryTimeCard
@@ -60,10 +62,15 @@ import com.statsup.ui.viewmodel.DashboardViewModel
 import com.statsup.domain.TargetSuggestion
 
 @Composable
-fun DashboardScreen(viewModel: DashboardViewModel, onProfileClick: () -> Unit = {}) {
+fun DashboardScreen(
+    viewModel: DashboardViewModel,
+    onProfileClick: () -> Unit = {},
+    onLevelClick: () -> Unit = {}
+) {
     var celebrationAchievement by remember { mutableStateOf<GoalAchievement?>(null) }
     var badgeQueue by remember { mutableStateOf<List<Badge>>(emptyList()) }
     var currentBadge by remember { mutableStateOf<Badge?>(null) }
+    var currentLevelUp by remember { mutableStateOf<Level?>(null) }
 
     fun showNextBadge() {
         currentBadge = badgeQueue.firstOrNull()
@@ -87,6 +94,12 @@ fun DashboardScreen(viewModel: DashboardViewModel, onProfileClick: () -> Unit = 
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.levelUp.collect { level ->
+            currentLevelUp = level
+        }
+    }
+
     celebrationAchievement?.let { achievement ->
         CelebrationDialog(
             achievement = achievement,
@@ -104,6 +117,13 @@ fun DashboardScreen(viewModel: DashboardViewModel, onProfileClick: () -> Unit = 
                 currentBadge = null
                 showNextBadge()
             }
+        )
+    }
+
+    currentLevelUp?.let { level ->
+        LevelUpCelebrationDialog(
+            level = level,
+            onDismiss = { }
         )
     }
 
@@ -130,6 +150,8 @@ fun DashboardScreen(viewModel: DashboardViewModel, onProfileClick: () -> Unit = 
         )
         Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(start = 20.dp, end = 20.dp, bottom = 20.dp)) {
 
+            LevelCard(viewModel, onClick = onLevelClick)
+            Spacer(modifier = Modifier.height(10.dp))
             MonthlyDistanceGoalCard(viewModel)
             Spacer(modifier = Modifier.height(10.dp))
             MonthlyTrainingGoalCard(viewModel)

@@ -23,6 +23,16 @@
     <string name="streak_days">Racha</string>
     <string name="streak_current_days">%1$d días</string>
     <string name="streak_best">Mejor: %1$d días</string>
+    <string name="level_card_label">Nv. %1$d · %2$s</string>
+    <string name="level_card_total_xp">%1$d XP</string>
+    <string name="level_card_xp_to_next">%1$d XP para el siguiente nivel</string>
+    <string name="level_card_max_level">¡Nivel máximo alcanzado!</string>
+    <string name="level_card_decay_warning">-%1$d XP/día — ¡entrena para detenerlo!</string>
+    <string name="level_up_title">¡Subiste de nivel!</string>
+    <string name="level_up_description">¡Has alcanzado %1$s!</string>
+    <string name="level_up_close">¡Vamos!</string>
+    <string name="levels_title">Niveles</string>
+    <string name="levels_xp_progress">%1$d / %2$d XP en el nivel actual</string>
     <string name="dashboard_title">Panel</string>
     <string name="stats_title">Estadísticas</string>
     <string name="history_title">Historial</string>
@@ -39,7 +49,7 @@
     <string name="settings_screen_set_language">Establecer idioma</string>
     <string name="settings_screen_language_system">Sistema</string>
 
-    <string name="km">Km</string>
+    <string name="km">km</string>
     <string name="m">m</string>
     <string name="bpm">bpm</string>
     <string name="h">H</string>
@@ -149,7 +159,7 @@
 
     <string name="target_suggestion_title">¿Nuevo mes, nuevos objetivos?</string>
     <string name="target_suggestion_message">Basado en tu historial de entrenamiento, aquí están los objetivos sugeridos para este mes:</string>
-    <string name="target_suggestion_distance">Distancia: %1$d Km</string>
+    <string name="target_suggestion_distance">Distancia: %1$d km</string>
     <string name="target_suggestion_trainings">Entrenamientos: %1$d</string>
     <string name="target_suggestion_accept">Usar estos objetivos</string>
     <string name="target_suggestion_dismiss">Mantener objetivos actuales</string>
