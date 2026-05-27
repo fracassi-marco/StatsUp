@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEFAULT="$ROOT/app/src/main/res/values/strings.xml"
-LOCALES=("values-it" "values-es" "values-fr")
+LOCALES=("values-it" "values-es" "values-fr" "values-de")
 FAILED=0
 
 get_keys() {
@@ -40,7 +40,7 @@ for locale in "${LOCALES[@]}"; do
 done
 
 if [ "$FAILED" -eq 0 ]; then
-  echo "✓ All translations complete ($(echo "$DEFAULT_KEYS" | wc -l | tr -d ' ') strings across en/it/es/fr)"
+  echo "✓ All translations complete ($(echo "$DEFAULT_KEYS" | wc -l | tr -d ' ') strings across en/it/es/fr/de)"
 fi
 
 exit "$FAILED"
