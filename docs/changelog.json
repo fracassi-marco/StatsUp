@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.7.0",
+    "date": "2026-05-27",
+    "message": "Add level system with level evaluation and celebration dialogs"
+  },
+  {
     "version": "1.6.2",
     "date": "2026-05-27",
     "message": "Update library versions"
