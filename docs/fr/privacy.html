@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Politique de Confidentialité — StatsUp</title>
+  <meta name="description" content="Politique de confidentialité pour StatsUp, l'app Android d'analyses Strava." />
+  <link rel="icon" type="image/png" href="https://fracassi-marco.github.io/StatsUp/assets/images/logo.png" />
+  <link rel="shortcut icon" href="https://fracassi-marco.github.io/StatsUp/assets/images/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #FF5722;
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --surface: #1e1e1e;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f0f0;
+      --text-muted: #888;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(10,10,10,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-logo img { width: 28px; height: 28px; border-radius: 8px; }
+    .nav-logo span { color: var(--orange); }
+
+    .nav-sep { color: var(--text-muted); }
+    .nav-page { color: var(--text-muted); font-size: 0.9rem; }
+
+    .nav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ── LANG SWITCHER ── */
+    .lang-switcher {
+      display: flex;
+      gap: 0.15rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.2rem;
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.45rem;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+
+    .lang-btn:hover { color: var(--text); }
+
+    .lang-btn.active {
+      background: var(--orange);
+      color: white;
+    }
+
+    @media (max-width: 640px) {
+      .nav-right { display: none; }
+    }
+
+    main {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .page-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-box {
+      background: rgba(255,87,34,0.07);
+      border: 1px solid rgba(255,87,34,0.2);
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 3rem;
+    }
+
+    .summary-box p {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .summary-box strong { color: var(--orange); }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 1.1em;
+      background: var(--orange);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.85rem; }
+
+    ul {
+      margin: 0.5rem 0 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    li { font-size: 0.95rem; color: var(--text-muted); }
+
+    a { color: var(--orange); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .chip {
+      display: inline-block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.8rem;
+      font-family: monospace;
+      color: var(--text);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    footer a { color: var(--orange); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/images/logo.png" alt="StatsUp" />
+      Stats<span>Up</span>
+    </a>
+    <span class="nav-sep">/</span>
+    <span class="nav-page">Confidentialité</span>
+    <div class="nav-right">
+      <span class="lang-switcher-slot"></span>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-label">Légal</div>
+    <h1>Politique de Confidentialité</h1>
+    <p class="meta">Dernière mise à jour : 20 mars 2026 · S'applique à : StatsUp pour Android</p>
+
+    <div class="summary-box">
+      <p><strong>En bref :</strong> StatsUp stocke toutes vos données <strong>uniquement sur votre appareil</strong>. Nous ne collectons, ne transmettons ni ne vendons aucune information personnelle. Nous ne gérons pas de serveurs. Nous n'utilisons pas de SDK d'analyse ou de publicité. Les seuls services externes contactés par StatsUp sont <strong>Strava</strong> (pour importer vos activités) et <strong>Google Maps</strong> (pour afficher les parcours).</p>
+    </div>
+
+    <h2>1. Qui nous sommes</h2>
+    <p>StatsUp est une application Android développée et maintenue par Marco Fracassi (<a href="mailto:fracassi.marco@gmail.com">fracassi.marco@gmail.com</a>). L'application est open source et disponible sur <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a>.</p>
+
+    <h2>2. Données auxquelles nous accédons</h2>
+    <p>StatsUp demande un accès en lecture seule à votre compte Strava afin d'importer vos activités d'entraînement. L'application lit notamment :</p>
+    <ul>
+      <li>Données d'activité : distance, durée, dénivelé, allure, vitesse, fréquence cardiaque, type, date</li>
+      <li>Coordonnées GPS/parcours associées aux activités</li>
+      <li>Votre nom de profil Strava et photo de profil (affichés localement dans l'application)</li>
+    </ul>
+    <p>StatsUp ne demande jamais l'accès en écriture à Strava. Elle ne peut créer, modifier ou supprimer aucune donnée sur votre compte Strava.</p>
+
+    <h2>3. Où vos données sont stockées</h2>
+    <p>Toutes les données importées depuis Strava sont stockées exclusivement dans une base de données SQLite locale sur votre appareil (via la bibliothèque <span class="chip">Room</span>). Ces données ne quittent jamais votre appareil sauf si vous les exportez explicitement via la fonctionnalité de sauvegarde intégrée.</p>
+    <p>StatsUp n'a pas de serveurs backend. Il n'y a pas de système de compte, pas de synchronisation cloud et pas de base de données distante.</p>
+
+    <h2>4. Partage des données</h2>
+    <p>Nous ne partageons pas vos données avec des tiers, avec les exceptions techniques suivantes :</p>
+    <ul>
+      <li><strong>API Strava</strong> — lorsque vous connectez votre compte ou déclenchez une synchronisation, l'application communique avec les serveurs de Strava pour récupérer vos données d'activité. Ceci est régi par la <a href="https://www.strava.com/legal/privacy" target="_blank" rel="noopener">Politique de Confidentialité de Strava</a>.</li>
+      <li><strong>Google Maps</strong> — lorsque vous visualisez une carte de parcours, les coordonnées GPS sont envoyées à Google Maps pour afficher les tuiles de carte. Ceci est régi par la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Politique de Confidentialité de Google</a>.</li>
+    </ul>
+
+    <h2>5. Analyses et publicité</h2>
+    <p>StatsUp ne contient <strong>aucun SDK d'analyse</strong>, aucun service de rapport de plantage, aucun SDK publicitaire ni aucun type de suivi. Nous n'avons aucune visibilité sur la façon dont vous utilisez l'application.</p>
+
+    <h2>6. Autorisations</h2>
+    <p>StatsUp demande les autorisations Android suivantes :</p>
+    <ul>
+      <li><span class="chip">INTERNET</span> — nécessaire pour communiquer avec l'API de Strava et Google Maps.</li>
+      <li><span class="chip">READ_EXTERNAL_STORAGE</span> / <span class="chip">WRITE_EXTERNAL_STORAGE</span> — utilisés uniquement si vous choisissez d'exporter ou d'importer un fichier de sauvegarde.</li>
+    </ul>
+
+    <h2>7. Conservation et suppression des données</h2>
+    <p>Vos données existent uniquement sur votre appareil. Vous pouvez supprimer toutes les données à tout moment en utilisant l'option "Resynchroniser depuis Strava" (qui remplace toutes les données locales) ou en désinstallant l'application, ce qui supprime complètement la base de données locale.</p>
+    <p>Pour révoquer l'accès de StatsUp à votre compte Strava, visitez <a href="https://www.strava.com/settings/apps" target="_blank" rel="noopener">Strava → Paramètres → Mes applications</a> et déconnectez StatsUp.</p>
+
+    <h2>8. Confidentialité des enfants</h2>
+    <p>StatsUp n'est pas destinée aux enfants de moins de 13 ans. Nous ne collectons pas sciemment d'informations auprès des enfants. Si vous pensez qu'un enfant a utilisé cette application et avez des préoccupations, veuillez nous contacter.</p>
+
+    <h2>9. Modifications de cette politique</h2>
+    <p>Si nous apportons des modifications importantes à cette politique, nous mettrons à jour la date en haut de cette page et, le cas échéant, noterons les modifications dans les notes de version de l'application.</p>
+
+    <h2>10. Contact</h2>
+    <p>Pour toute question ou demande relative à la confidentialité, contactez-nous à : <a href="mailto:fracassi.marco@gmail.com">fracassi.marco@gmail.com</a></p>
+  </main>
+
+  <footer>
+    <p>
+      <a href="../index.html">← Retour à StatsUp</a>
+      &nbsp;·&nbsp;
+      <span>StatsUp n'est pas affilié à Strava Inc.</span>
+    </p>
+  </footer>
+
+  <script src="../i18n.js"></script>
+
+</body>
+</html>

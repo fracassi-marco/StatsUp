@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Privacy Policy — StatsUp</title>
-  <meta name="description" content="Privacy Policy for the StatsUp Android app." />
+  <title>Política de Privacidad — StatsUp</title>
+  <meta name="description" content="Política de privacidad para StatsUp, la app Android de análisis de Strava." />
   <link rel="icon" type="image/png" href="https://fracassi-marco.github.io/StatsUp/assets/images/logo.png" />
   <link rel="shortcut icon" href="https://fracassi-marco.github.io/StatsUp/assets/images/logo.png" />
 
@@ -209,12 +209,12 @@
 <body>
 
   <nav>
-    <a href="index.html" class="nav-logo">
-      <img src="assets/images/logo.png" alt="StatsUp" />
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/images/logo.png" alt="StatsUp" />
       Stats<span>Up</span>
     </a>
     <span class="nav-sep">/</span>
-    <span class="nav-page">Privacy Policy</span>
+    <span class="nav-page">Privacidad</span>
     <div class="nav-right">
       <span class="lang-switcher-slot"></span>
     </div>
@@ -222,110 +222,69 @@
 
   <main>
     <div class="page-label">Legal</div>
-    <h1>Privacy Policy</h1>
-    <p class="meta">Last updated: March 20, 2026 &nbsp;·&nbsp; Applies to: StatsUp for Android</p>
+    <h1>Política de Privacidad</h1>
+    <p class="meta">Última actualización: 20 de marzo de 2026 · Aplicable a: StatsUp para Android</p>
 
     <div class="summary-box">
-      <p>
-        <strong>The short version:</strong> StatsUp stores all your data <strong>locally on your device only</strong>.
-        We do not collect, transmit, or sell any personal information. We do not run servers.
-        We do not use analytics or advertising SDKs. The only external service StatsUp contacts is
-        <strong>Strava</strong> (to import your activities) and <strong>Google Maps</strong> (to display routes).
-      </p>
+      <p><strong>La versión breve:</strong> StatsUp almacena todos tus datos <strong>exclusivamente en tu dispositivo</strong>. No recopilamos, transmitimos ni vendemos ninguna información personal. No gestionamos servidores. No usamos SDK de análisis ni publicidad. Los únicos servicios externos que StatsUp contacta son <strong>Strava</strong> (para importar tus actividades) y <strong>Google Maps</strong> (para mostrar rutas).</p>
     </div>
 
-    <h2>1. Who we are</h2>
-    <p>
-      StatsUp is an Android application developed and maintained by Marco Fracassi
-      (<a href="mailto:fracassi.marco@gmail.com">fracassi.marco@gmail.com</a>).
-      The app is open source and available on <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a>.
-    </p>
+    <h2>1. Quiénes somos</h2>
+    <p>StatsUp es una aplicación Android desarrollada y mantenida por Marco Fracassi (<a href="mailto:fracassi.marco@gmail.com">fracassi.marco@gmail.com</a>). La app es de código abierto y está disponible en <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a>.</p>
 
-    <h2>2. Data we access</h2>
-    <p>StatsUp requests read-only access to your Strava account in order to import your training activities. Specifically, the app reads:</p>
+    <h2>2. Datos a los que accedemos</h2>
+    <p>StatsUp solicita acceso de solo lectura a tu cuenta de Strava para importar tus actividades de entrenamiento. Concretamente, la app lee:</p>
     <ul>
-      <li>Activity data: distance, duration, elevation, pace, speed, heart rate, type, date</li>
-      <li>Route/GPS coordinates associated with activities</li>
-      <li>Your Strava profile name and profile picture (displayed locally in the app)</li>
+      <li>Datos de actividad: distancia, duración, desnivel, ritmo, velocidad, frecuencia cardíaca, tipo, fecha</li>
+      <li>Coordenadas GPS/ruta asociadas a las actividades</li>
+      <li>Tu nombre de perfil de Strava y foto de perfil (mostrados localmente en la app)</li>
     </ul>
-    <p>StatsUp never requests write access to Strava. It cannot create, modify, or delete any data on your Strava account.</p>
+    <p>StatsUp nunca solicita acceso de escritura a Strava. No puede crear, modificar ni eliminar ningún dato en tu cuenta de Strava.</p>
 
-    <h2>3. Where your data is stored</h2>
-    <p>
-      All data imported from Strava is stored exclusively in a local SQLite database on your device
-      (using the <span class="chip">Room</span> library). This data never leaves your device unless you
-      explicitly export it using the built-in backup feature.
-    </p>
-    <p>StatsUp has no backend servers. There is no account system, no cloud sync, and no remote database.</p>
+    <h2>3. Dónde se almacenan tus datos</h2>
+    <p>Todos los datos importados desde Strava se almacenan exclusivamente en una base de datos SQLite local en tu dispositivo (usando la biblioteca <span class="chip">Room</span>). Estos datos nunca salen de tu dispositivo a menos que los exportes explícitamente mediante la función de copia de seguridad integrada.</p>
+    <p>StatsUp no tiene servidores backend. No hay sistema de cuentas, ni sincronización en la nube, ni base de datos remota.</p>
 
-    <h2>4. Data sharing</h2>
-    <p>We do not share your data with any third party, with the following technical exceptions:</p>
+    <h2>4. Compartición de datos</h2>
+    <p>No compartimos tus datos con ningún tercero, con las siguientes excepciones técnicas:</p>
     <ul>
-      <li>
-        <strong>Strava API</strong> — when you connect your account or trigger a sync, the app communicates
-        with Strava's servers to retrieve your activity data. This is governed by
-        <a href="https://www.strava.com/legal/privacy" target="_blank" rel="noopener">Strava's Privacy Policy</a>.
-      </li>
-      <li>
-        <strong>Google Maps</strong> — when you view a route map, GPS coordinates are sent to Google Maps
-        to render the map tiles. This is governed by
-        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.
-      </li>
+      <li><strong>API de Strava</strong> — cuando conectas tu cuenta o activas una sincronización, la app se comunica con los servidores de Strava para recuperar tus datos de actividad. Esto se rige por la <a href="https://www.strava.com/legal/privacy" target="_blank" rel="noopener">Política de Privacidad de Strava</a>.</li>
+      <li><strong>Google Maps</strong> — cuando visualizas un mapa de ruta, las coordenadas GPS se envían a Google Maps para renderizar los tiles del mapa. Esto se rige por la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política de Privacidad de Google</a>.</li>
     </ul>
 
-    <h2>5. Analytics and advertising</h2>
-    <p>
-      StatsUp contains <strong>no analytics SDKs</strong>, no crash reporting services, no advertising SDKs,
-      and no tracking of any kind. We have no visibility into how you use the app.
-    </p>
+    <h2>5. Análisis y publicidad</h2>
+    <p>StatsUp no contiene <strong>ningún SDK de análisis</strong>, servicios de informes de fallos, SDK publicitarios ni ningún tipo de seguimiento. No tenemos visibilidad sobre cómo usas la app.</p>
 
-    <h2>6. Permissions</h2>
-    <p>StatsUp requests the following Android permissions:</p>
+    <h2>6. Permisos</h2>
+    <p>StatsUp solicita los siguientes permisos de Android:</p>
     <ul>
-      <li><span class="chip">INTERNET</span> — required to communicate with Strava's API and Google Maps.</li>
-      <li><span class="chip">READ_EXTERNAL_STORAGE</span> / <span class="chip">WRITE_EXTERNAL_STORAGE</span> — used only if you choose to export or import a backup file.</li>
+      <li><span class="chip">INTERNET</span> — necesario para comunicarse con la API de Strava y Google Maps.</li>
+      <li><span class="chip">READ_EXTERNAL_STORAGE</span> / <span class="chip">WRITE_EXTERNAL_STORAGE</span> — usados solo si decides exportar o importar un archivo de copia de seguridad.</li>
     </ul>
 
-    <h2>7. Data retention and deletion</h2>
-    <p>
-      Your data exists solely on your device. You can delete all data at any time by using the
-      "Re-sync from Strava" option (which replaces all local data) or by uninstalling the app,
-      which removes the local database entirely.
-    </p>
-    <p>
-      To revoke StatsUp's access to your Strava account, visit
-      <a href="https://www.strava.com/settings/apps" target="_blank" rel="noopener">Strava → Settings → My Apps</a>
-      and disconnect StatsUp.
-    </p>
+    <h2>7. Retención y eliminación de datos</h2>
+    <p>Tus datos existen únicamente en tu dispositivo. Puedes eliminar todos los datos en cualquier momento usando la opción "Resincronizar desde Strava" (que reemplaza todos los datos locales) o desinstalando la app, lo que elimina completamente la base de datos local.</p>
+    <p>Para revocar el acceso de StatsUp a tu cuenta de Strava, visita <a href="https://www.strava.com/settings/apps" target="_blank" rel="noopener">Strava → Configuración → Mis aplicaciones</a> y desconecta StatsUp.</p>
 
-    <h2>8. Children's privacy</h2>
-    <p>
-      StatsUp is not directed at children under 13. We do not knowingly collect any information
-      from children. If you believe a child has used this app and you have concerns, please contact us.
-    </p>
+    <h2>8. Privacidad de los niños</h2>
+    <p>StatsUp no está dirigida a niños menores de 13 años. No recopilamos conscientemente información de niños. Si crees que un niño ha usado esta app y tienes dudas, por favor contáctanos.</p>
 
-    <h2>9. Changes to this policy</h2>
-    <p>
-      If we make material changes to this policy, we will update the date at the top of this page
-      and, where appropriate, note the changes in the app's release notes.
-    </p>
+    <h2>9. Cambios en esta política</h2>
+    <p>Si realizamos cambios importantes en esta política, actualizaremos la fecha en la parte superior de esta página y, cuando corresponda, anotaremos los cambios en las notas de la versión de la app.</p>
 
-    <h2>10. Contact</h2>
-    <p>
-      For any privacy-related questions or requests, contact us at:
-      <a href="mailto:fracassi.marco@gmail.com">fracassi.marco@gmail.com</a>
-    </p>
+    <h2>10. Contacto</h2>
+    <p>Para cualquier pregunta o solicitud relacionada con la privacidad, contáctanos en: <a href="mailto:fracassi.marco@gmail.com">fracassi.marco@gmail.com</a></p>
   </main>
 
   <footer>
     <p>
-      <a href="index.html">← Back to StatsUp</a>
+      <a href="../index.html">← Volver a StatsUp</a>
       &nbsp;·&nbsp;
-      <span>StatsUp is not affiliated with Strava Inc.</span>
+      <span>StatsUp no está afiliado con Strava Inc.</span>
     </p>
   </footer>
 
-  <script src="i18n.js"></script>
+  <script src="../i18n.js"></script>
 
 </body>
 </html>

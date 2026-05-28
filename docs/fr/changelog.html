@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Changelog — StatsUp</title>
-  <meta name="description" content="Release history and changelog for StatsUp — Your Strava Analytics Companion." />
+  <meta name="description" content="Historique des versions et changelog pour StatsUp — Votre compagnon Strava Analytics." />
+
+  <link rel="alternate" hreflang="x-default" href="https://fracassi-marco.github.io/StatsUp/changelog.html" />
+  <link rel="alternate" hreflang="en" href="https://fracassi-marco.github.io/StatsUp/changelog.html" />
+  <link rel="alternate" hreflang="it" href="https://fracassi-marco.github.io/StatsUp/it/changelog.html" />
+  <link rel="alternate" hreflang="de" href="https://fracassi-marco.github.io/StatsUp/de/changelog.html" />
+  <link rel="alternate" hreflang="es" href="https://fracassi-marco.github.io/StatsUp/es/changelog.html" />
+  <link rel="alternate" hreflang="fr" href="https://fracassi-marco.github.io/StatsUp/fr/changelog.html" />
 
   <link rel="icon" type="image/png" href="https://fracassi-marco.github.io/StatsUp/assets/images/logo.png" />
   <link rel="shortcut icon" href="https://fracassi-marco.github.io/StatsUp/assets/images/logo.png" />
@@ -328,54 +335,53 @@
   <!-- NAV -->
   <nav>
     <a href="index.html" class="nav-logo">
-      <img src="assets/images/logo.png" alt="StatsUp logo" />
+      <img src="../assets/images/logo.png" alt="StatsUp logo" />
       Stats<span>Up</span>
     </a>
     <div class="nav-right">
       <span class="lang-switcher-slot"></span>
-      <a href="index.html" class="nav-back">
-        ← Back to home
-      </a>
+      <a href="index.html" class="nav-back">← Retour à l'accueil</a>
     </div>
   </nav>
 
   <!-- HEADER -->
   <div class="page-header">
     <div class="page-header-bg"></div>
-    <div class="label">Release History</div>
+    <div class="label">Historique des versions</div>
     <h1>Changelog</h1>
-    <p>What's new in each version of StatsUp</p>
+    <p>Les nouveautés de chaque version de StatsUp</p>
   </div>
 
   <!-- TIMELINE -->
   <div class="timeline" id="timeline">
-    <div class="state-msg">Loading changelog…</div>
+    <div class="state-msg">Chargement du changelog…</div>
   </div>
 
   <!-- FOOTER -->
   <footer>
     <a href="index.html" class="footer-logo">
-      <img src="assets/images/logo.png" alt="StatsUp" />
+      <img src="../assets/images/logo.png" alt="StatsUp" />
       Stats<span>Up</span>
     </a>
-    <p style="margin-bottom:0.5rem">Built with ❤️ for athletes who love their data.</p>
+    <p style="margin-bottom:0.5rem">Fait avec ❤️ pour les athlètes qui aiment leurs données.</p>
     <p>
       <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a>
       &nbsp;·&nbsp;
       <a href="mailto:fracassi.marco@gmail.com">Contact</a>
       &nbsp;·&nbsp;
-      <a href="privacy.html">Privacy Policy</a>
+      <a href="privacy.html">Confidentialité</a>
     </p>
-    <p style="margin-top:1rem;font-size:0.7rem;opacity:0.4">
-      StatsUp is not affiliated with Strava Inc.
-    </p>
+    <p style="margin-top:1rem;font-size:0.7rem;opacity:0.4">StatsUp n'est pas affilié à Strava Inc.</p>
   </footer>
 
-  <script src="i18n.js"></script>
+  <script>
+    window.langUrls = {en:'../changelog.html',it:'../it/changelog.html',de:'../de/changelog.html',es:'../es/changelog.html',fr:'./changelog.html'};
+  </script>
+  <script src="../i18n.js"></script>
   <script>
     function formatDate(iso) {
       const [y, m, d] = iso.split('-');
-      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const months = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
       return `${months[parseInt(m,10)-1]} ${parseInt(d,10)}, ${y}`;
     }
 
@@ -387,16 +393,16 @@
         .replace(/"/g, '&quot;');
     }
 
-    fetch('changelog.json?t=' + Date.now())
+    fetch('../changelog.json?t=' + Date.now())
       .then(r => r.json())
       .then(entries => {
         const container = document.getElementById('timeline');
         if (!entries || entries.length === 0) {
-          container.innerHTML = '<div class="state-msg">' + ('No releases yet.') + '</div>';
+          container.innerHTML = '<div class="state-msg">' + 'Aucune version pour l\'instant.' + '</div>';
           return;
         }
 
-        const latestLabel = 'Latest';
+        const latestLabel = 'Dernière';
 
         container.innerHTML = entries.map((entry, i) => `
           <div class="timeline-entry">
@@ -414,7 +420,7 @@
       })
       .catch(() => {
         document.getElementById('timeline').innerHTML =
-          '<div class="state-msg">' + ('Could not load changelog.') + '</div>';
+          '<div class="state-msg">' + 'Impossible de charger le changelog.' + '</div>';
       });
   </script>
 
