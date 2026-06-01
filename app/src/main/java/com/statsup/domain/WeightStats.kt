@@ -11,6 +11,7 @@ data class WeightStats(
     val bmiCategory: BmiCategory = BmiCategory.NORMAL,
     val weightLostFromMax: Double = 0.0,
     val personalBest: Double? = null,
+    val maxWeight: Double? = null,
     val predictedTargetDate: LocalDate? = null,
     val canReachTarget: Boolean = true,
     val weeklyRate: Double = 0.0,

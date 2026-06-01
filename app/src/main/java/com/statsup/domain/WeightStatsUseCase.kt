@@ -46,6 +46,7 @@ class WeightStatsUseCase {
             bmiCategory = bmiCategory,
             weightLostFromMax = weightLostFromMax,
             personalBest = personalBest,
+            maxWeight = maxWeight,
             predictedTargetDate = predictedTargetDate,
             canReachTarget = canReachTarget,
             weeklyRate = weeklyRate,

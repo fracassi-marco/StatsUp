@@ -280,8 +280,8 @@
     <string name="weight_import_libra">Gewicht importieren</string>
     <string name="weight_import_libra_description">Libra CSV</string>
     <string name="weight_no_entries">Noch keine Messungen</string>
-    <string name="weight_personal_best">Rekord: %s</string>
     <string name="weight_personal_best_label">persönlicher Rekord</string>
+    <string name="weight_max_label">Maximum</string>
     <string name="weight_measurements_count">%d Messungen insgesamt</string>
     <string name="weight_bmi">BMI</string>
     <string name="weight_bmi_value">BMI: %s</string>

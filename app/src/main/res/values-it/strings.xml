@@ -280,8 +280,8 @@
     <string name="weight_import_libra">Importa peso</string>
     <string name="weight_import_libra_description">Libra CSV</string>
     <string name="weight_no_entries">Nessuna pesata ancora</string>
-    <string name="weight_personal_best">Record: %s</string>
-    <string name="weight_personal_best_label">record personale</string>
+    <string name="weight_personal_best_label">minimo</string>
+    <string name="weight_max_label">massimo</string>
     <string name="weight_measurements_count">%d pesate totali</string>
     <string name="weight_bmi">BMI</string>
     <string name="weight_bmi_value">BMI: %s</string>

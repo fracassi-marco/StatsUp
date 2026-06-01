@@ -279,8 +279,8 @@
     <string name="weight_import_libra">Import weight</string>
         <string name="weight_import_libra_description">Libra CSV</string>
     <string name="weight_no_entries">No measurements yet</string>
-    <string name="weight_personal_best">Personal best: %s</string>
-    <string name="weight_personal_best_label">personal best</string>
+    <string name="weight_personal_best_label">min</string>
+    <string name="weight_max_label">max</string>
     <string name="weight_measurements_count">%d total measurements</string>
     <string name="weight_bmi">BMI</string>
     <string name="weight_bmi_value">BMI: %s</string>
