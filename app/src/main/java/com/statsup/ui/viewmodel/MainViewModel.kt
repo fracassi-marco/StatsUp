@@ -39,14 +39,20 @@ class MainViewModel(
 
     private fun updateActivities(token: String) {
         viewModelScope.launch {
-            val count = withContext(Dispatchers.IO) {
-                val trainings = if (fullImportPending) {
-                    fullImportPending = false
-                    fullImportUseCase(token)
-                } else {
-                    updateActivitiesUseCase(token)
+            val count = try {
+                withContext(Dispatchers.IO) {
+                    val trainings = if (fullImportPending) {
+                        fullImportPending = false
+                        fullImportUseCase(token)
+                    } else {
+                        updateActivitiesUseCase(token)
+                    }
+                    trainings.count()
                 }
-                trainings.count()
+            } catch (e: Exception) {
+                Log.e("StatsUp", "Crash durante il download attività", e)
+                stopLoading()
+                return@launch
             }
             newTrainingsCounter.emit(count)
             stopLoading()
@@ -80,7 +86,13 @@ class MainViewModel(
                     stopLoading()
                     return
                 }
-                val tokenRequest = result.createTokenExchangeRequest(mapOf("client_secret" to BuildConfig.STRAVA_CLIENT_SECRET))
+                val tokenRequest = try {
+                    result.createTokenExchangeRequest(mapOf("client_secret" to BuildConfig.STRAVA_CLIENT_SECRET))
+                } catch (e: Exception) {
+                    Log.e("StatsUp", "Crash in createTokenExchangeRequest", e)
+                    stopLoading()
+                    return
+                }
                 authService.performTokenRequest(tokenRequest, NoClientAuthentication.INSTANCE) { res, exception ->
                     if (exception != null) {
                         Log.e("StatsUp", "launcher: ${exception.cause?.message}")
@@ -92,11 +104,21 @@ class MainViewModel(
                             stopLoading()
                             return@performTokenRequest
                         }
-                        val refreshToken = res.refreshToken
-                        val expiry = (res.accessTokenExpirationTime ?: 0L) / 1000L
-                        settingRepository.saveStravaToken(token)
-                        if (refreshToken != null) settingRepository.saveStravaRefreshToken(refreshToken)
-                        if (expiry > 0L) settingRepository.saveStravaTokenExpiry(expiry)
+                        try {
+                            settingRepository.saveStravaToken(token)
+                            val refreshToken = res.refreshToken
+                            if (refreshToken != null) {
+                                settingRepository.saveStravaRefreshToken(refreshToken)
+                            }
+                            val expiry = (res.accessTokenExpirationTime ?: 0L) / 1000L
+                            if (expiry > 0L) {
+                                settingRepository.saveStravaTokenExpiry(expiry)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("StatsUp", "Crash durante salvataggio token in SharedPreferences", e)
+                            stopLoading()
+                            return@performTokenRequest
+                        }
                         updateActivities(token)
                     }
                 }

@@ -122,11 +122,15 @@ class DataExportImportService(
 
             // Import new data
             exportData.trainings.forEach { training ->
-                val withCenter = if (training.centerLat == null) {
-                    val center = training.trip?.centerPoint()
-                    if (center != null) training.copy(centerLat = center.latitude, centerLng = center.longitude)
-                    else training
-                } else training
+                // Gson uses Unsafe.allocateInstance() which bypasses the constructor, leaving
+                // lazy delegate fields (date$delegate, trip$delegate) as null. Re-create each
+                // Training through the constructor via copy() so lazy delegates are initialised.
+                val safeTraining = training.copy()
+                val withCenter = if (safeTraining.centerLat == null) {
+                    val center = safeTraining.trip?.centerPoint()
+                    if (center != null) safeTraining.copy(centerLat = center.latitude, centerLng = center.longitude)
+                    else safeTraining
+                } else safeTraining
                 database.trainingRepository.add(withCenter)
             }
 

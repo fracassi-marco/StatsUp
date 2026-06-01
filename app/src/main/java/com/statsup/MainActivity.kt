@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
@@ -107,6 +108,7 @@ class MainActivity : ComponentActivity() {
 
             StatsUpTheme(settingsViewModel) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                     // Mostra SplashScreen durante il caricamento iniziale
                     if (isInitialLoading) {
                         SplashScreen()
@@ -268,6 +270,7 @@ class MainActivity : ComponentActivity() {
                         }
                         }  // chiude LoadingBox
                     }  // chiude else (isInitialLoading)
+                    }  // chiude Box
                 }  // chiude Surface
             }  // chiude StatsUpTheme
         }  // chiude setContent
