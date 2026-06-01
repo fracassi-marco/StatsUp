@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.7.7",
+    "date": "2026-06-01",
+    "message": "Fix import from Strava"
+  },
+  {
     "version": "1.7.6",
     "date": "2026-06-01",
     "message": "Fix import from Strava bug"
