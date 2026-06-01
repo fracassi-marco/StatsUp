@@ -39,16 +39,17 @@ class MainViewModel(
 
     private fun updateActivities(token: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            val count = withContext(Dispatchers.IO) {
                 val trainings = if (fullImportPending) {
                     fullImportPending = false
                     fullImportUseCase(token)
                 } else {
                     updateActivitiesUseCase(token)
                 }
-                newTrainingsCounter.emit(trainings.count())
-                stopLoading()
+                trainings.count()
             }
+            newTrainingsCounter.emit(count)
+            stopLoading()
         }
     }
 
@@ -85,7 +86,12 @@ class MainViewModel(
                         Log.e("StatsUp", "launcher: ${exception.cause?.message}")
                         stopLoading()
                     } else {
-                        val token = res?.accessToken!!
+                        val token = res?.accessToken
+                        if (token == null) {
+                            Log.e("StatsUp", "launcher: accessToken is null")
+                            stopLoading()
+                            return@performTokenRequest
+                        }
                         val refreshToken = res.refreshToken
                         val expiry = (res.accessTokenExpirationTime ?: 0L) / 1000L
                         settingRepository.saveStravaToken(token)
