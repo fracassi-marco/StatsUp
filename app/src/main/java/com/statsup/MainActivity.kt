@@ -51,6 +51,7 @@ import com.statsup.ui.components.SettingsScreen
 import com.statsup.ui.components.SplashScreen
 import com.statsup.ui.components.StatsScreen
 import com.statsup.ui.components.TrainingDetailScreen
+import com.statsup.ui.components.WeightScreen
 import com.statsup.ui.components.WelcomeScreen
 import com.statsup.ui.theme.StatsUpTheme
 import com.statsup.ui.viewmodel.AllRoutesViewModel
@@ -62,6 +63,8 @@ import com.statsup.ui.viewmodel.ProfileViewModel
 import com.statsup.ui.viewmodel.SettingsViewModel
 import com.statsup.ui.viewmodel.StatsViewModel
 import com.statsup.ui.viewmodel.TrainingDetailViewModel
+import com.statsup.ui.viewmodel.WeightViewModel
+import com.statsup.infrastructure.repository.DbWeightRepository
 import net.openid.appauth.AuthorizationService
 
 class MainActivity : ComponentActivity() {
@@ -93,6 +96,7 @@ class MainActivity : ComponentActivity() {
             val allRoutesViewModel: AllRoutesViewModel = viewModel { AllRoutesViewModel(db.trainingRepository) }
             val bookmarksViewModel: BookmarksViewModel = viewModel { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
             val profileViewModel: ProfileViewModel = viewModel { ProfileViewModel(db.trainingRepository, db.athleteRepository, settingRepository, applicationContext) }
+            val weightViewModel: WeightViewModel = viewModel { WeightViewModel(DbWeightRepository(db.weightRepository), settingRepository, applicationContext) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
@@ -132,9 +136,17 @@ class MainActivity : ComponentActivity() {
                                 composable(Screens.Dashboard.route) {
                                     DashboardScreen(
                                         viewModel = dashboardViewModel,
+                                        weightViewModel = weightViewModel,
                                         onProfileClick = { navController.navigate(Screens.PROFILE) },
                                         onLevelClick = { navController.navigate(Screens.LEVELS) },
-                                        onRecoveryClick = { navController.navigate(Screens.RECOVERY_DETAIL) }
+                                        onRecoveryClick = { navController.navigate(Screens.RECOVERY_DETAIL) },
+                                        onWeightClick = { navController.navigate(Screens.WEIGHT) }
+                                    )
+                                }
+                                composable(Screens.WEIGHT) {
+                                    WeightScreen(
+                                        viewModel = weightViewModel,
+                                        onNavigateBack = { navController.popBackStack() }
                                     )
                                 }
                                 composable(Screens.PROFILE) {
@@ -161,6 +173,7 @@ class MainActivity : ComponentActivity() {
                                 composable(Screens.Settings.route) {
                                     SettingsScreen(
                                         viewModel = settingsViewModel,
+                                        weightViewModel = weightViewModel,
                                         onImportSuccess = {
                                             // Navigate to dashboard after successful import
                                             navController.navigate(Screens.Dashboard.route) {

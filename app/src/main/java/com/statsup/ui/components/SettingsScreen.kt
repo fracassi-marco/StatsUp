@@ -44,12 +44,14 @@ import com.chargemap.compose.numberpicker.NumberPicker
 import com.statsup.BuildConfig
 import com.statsup.R
 import com.statsup.ui.viewmodel.SettingsViewModel
+import com.statsup.ui.viewmodel.WeightViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
+    weightViewModel: WeightViewModel,
     onImportSuccess: () -> Unit = {},
     onFullImportFromStrava: () -> Unit = {}
 ) {
@@ -57,7 +59,15 @@ fun SettingsScreen(
     val monthlyTrainingGoalSheetState = rememberModalBottomSheetState()
     val themeSheetState = rememberModalBottomSheetState()
     val languageSheetState = rememberModalBottomSheetState()
+    val heightSheetState = rememberModalBottomSheetState()
+    val weightTargetSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
+
+    val weightImportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { weightViewModel.importFromUri(it) }
+    }
 
     // Handle successful import - navigate to dashboard
     LaunchedEffect(viewModel.importSuccessful) {
@@ -89,6 +99,22 @@ fun SettingsScreen(
                 .padding(20.dp, 16.dp)
         ) {
             Title(text = stringResource(R.string.settings_screen_goals))
+            SettingsClickableComponent(
+                icon = Icons.Outlined.EmojiEvents,
+                name = R.string.settings_weight_height,
+                value = if (weightViewModel.heightCm > 0) "${weightViewModel.heightCm} cm"
+                        else stringResource(R.string.settings_weight_not_set),
+                onClick = { viewModel.showHeightSheet() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            SettingsClickableComponent(
+                icon = Icons.Outlined.EmojiEvents,
+                name = R.string.settings_weight_target,
+                value = if (weightViewModel.weightTargetKg > 0) "%.1f kg".format(weightViewModel.weightTargetKg)
+                        else stringResource(R.string.settings_weight_not_set),
+                onClick = { viewModel.showWeightTargetSheet() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             SettingsToggleComponent(
                 icon = Icons.Outlined.AutoMode,
                 name = R.string.settings_screen_goals_auto_targets,
@@ -151,6 +177,13 @@ fun SettingsScreen(
                 name = R.string.settings_full_import_strava,
                 value = stringResource(R.string.settings_full_import_strava_description),
                 onClick = { viewModel.showFullImportFromStravaConfirmDialog() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            SettingsClickableComponent(
+                icon = Icons.Outlined.Download,
+                name = R.string.weight_import_libra,
+                value = stringResource(R.string.weight_import_libra_description),
+                onClick = { weightImportLauncher.launch("*/*") }
             )
 
             // Loading indicator
@@ -325,6 +358,86 @@ fun SettingsScreen(
                         }) {
                         Text(text = stringResource(R.string.settings_screen_set_language))
                     }
+                }
+            }
+        }
+
+        if (viewModel.showHeightSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { viewModel.hideHeightSheet() },
+                sheetState = heightSheetState,
+                containerColor = MaterialTheme.colorScheme.background,
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        NumberPicker(
+                            value = viewModel.heightCm,
+                            range = 100..230,
+                            onValueChange = { value -> viewModel.heightCm(value) },
+                            dividersColor = MaterialTheme.colorScheme.primary,
+                            textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp),
+                        )
+                        Text(text = "cm")
+                    }
+                    Button(
+                        onClick = {
+                            scope.launch { heightSheetState.hide() }.invokeOnCompletion {
+                                if (!heightSheetState.isVisible) {
+                                    viewModel.saveHeight(weightViewModel)
+                                }
+                            }
+                        }) {
+                        Text(text = stringResource(R.string.save))
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+        }
+
+        if (viewModel.showWeightTargetSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { viewModel.hideWeightTargetSheet() },
+                sheetState = weightTargetSheetState,
+                containerColor = MaterialTheme.colorScheme.background,
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        NumberPicker(
+                            value = viewModel.weightTargetInt,
+                            range = 30..300,
+                            onValueChange = { value -> viewModel.weightTargetInt(value) },
+                            dividersColor = MaterialTheme.colorScheme.primary,
+                            textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp),
+                        )
+                        Text(text = ".")
+                        NumberPicker(
+                            value = viewModel.weightTargetDec,
+                            range = 0..9,
+                            onValueChange = { value -> viewModel.weightTargetDec(value) },
+                            dividersColor = MaterialTheme.colorScheme.primary,
+                            textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp),
+                        )
+                        Text(text = " kg")
+                    }
+                    Button(
+                        onClick = {
+                            scope.launch { weightTargetSheetState.hide() }.invokeOnCompletion {
+                                if (!weightTargetSheetState.isVisible) {
+                                    viewModel.saveWeightTarget(weightViewModel)
+                                }
+                            }
+                        }) {
+                        Text(text = stringResource(R.string.save))
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

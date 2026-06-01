@@ -274,6 +274,37 @@
     <string name="delete_training_confirm_body">Questa attività verrà eliminata dall\'app. Puoi re-importarla da Strava in qualsiasi momento.</string>
     <string name="delete_training_confirm_action">Elimina</string>
 
+    <!-- Weight tracking -->
+    <string name="weight_screen_title">Peso</string>
+    <string name="weight_add_entry">Aggiungi pesata</string>
+    <string name="weight_import_libra">Importa Libra</string>
+    <string name="weight_import_libra_description">Importa da file CSV Libra</string>
+    <string name="weight_no_entries">Nessuna pesata ancora</string>
+    <string name="weight_personal_best">Record: %s</string>
+    <string name="weight_personal_best_label">record personale</string>
+    <string name="weight_measurements_count">%d pesate totali</string>
+    <string name="weight_bmi">BMI</string>
+    <string name="weight_bmi_value">BMI: %s</string>
+    <string name="weight_bmi_underweight">Sottopeso</string>
+    <string name="weight_bmi_normal">Normale</string>
+    <string name="weight_bmi_overweight">Sovrappeso</string>
+    <string name="weight_bmi_obese1">Obeso I</string>
+    <string name="weight_bmi_obese2">Obeso II</string>
+    <string name="weight_bmi_obese3">Obeso III</string>
+    <string name="weight_chart_title">Andamento</string>
+    <string name="weight_target">Target: %s</string>
+    <string name="weight_prediction_date">Previsto entro: %s</string>
+    <string name="weight_prediction_never">Andamento non sufficiente per raggiungere il target</string>
+    <string name="weight_prediction_insufficient_data">Dati insufficienti per la previsione</string>
+    <string name="weight_weekly_rate">Variazione settimanale: %s</string>
+    <string name="weight_gamification_title">Progressi</string>
+    <string name="weight_streak_weeks">%d settimane</string>
+    <string name="weight_streak_label">settimane consecutive</string>
+    <string name="weight_recent_entries">Pesate recenti</string>
+    <string name="settings_weight_height">Altezza</string>
+    <string name="settings_weight_target">Peso target</string>
+    <string name="settings_weight_not_set">Non impostato</string>
+
     <!-- Content descriptions -->
     <string name="cd_back">Indietro</string>
     <string name="cd_export">Esporta</string>

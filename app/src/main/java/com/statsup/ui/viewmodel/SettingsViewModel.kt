@@ -16,6 +16,7 @@ import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.service.DataExportImportService
+import com.statsup.ui.viewmodel.WeightViewModel
 import kotlinx.coroutines.launch
 
 
@@ -59,6 +60,18 @@ class SettingsViewModel(
     var isExportImportLoading by mutableStateOf(false)
         private set
     var importSuccessful by mutableStateOf(false)
+        private set
+    var showHeightSheet by mutableStateOf(false)
+        private set
+    var heightCm by mutableIntStateOf(settingRepository.loadHeightCm())
+        private set
+    var showWeightTargetSheet by mutableStateOf(false)
+        private set
+    var weightTargetInt by mutableIntStateOf(settingRepository.loadWeightTargetKg().toInt().coerceAtLeast(30))
+        private set
+    var weightTargetDec by mutableIntStateOf(
+        ((settingRepository.loadWeightTargetKg() * 10).toInt() % 10).coerceAtLeast(0)
+    )
         private set
 
     init {
@@ -246,6 +259,24 @@ class SettingsViewModel(
 
     fun resetImportSuccessful() {
         importSuccessful = false
+    }
+
+    fun showHeightSheet() { showHeightSheet = true }
+    fun hideHeightSheet() { showHeightSheet = false }
+    fun heightCm(value: Int) { heightCm = value }
+    fun saveHeight(weightViewModel: WeightViewModel) {
+        weightViewModel.saveHeight(heightCm)
+        hideHeightSheet()
+    }
+
+    fun showWeightTargetSheet() { showWeightTargetSheet = true }
+    fun hideWeightTargetSheet() { showWeightTargetSheet = false }
+    fun weightTargetInt(value: Int) { weightTargetInt = value }
+    fun weightTargetDec(value: Int) { weightTargetDec = value }
+    fun saveWeightTarget(weightViewModel: WeightViewModel) {
+        val kg = weightTargetInt + weightTargetDec / 10.0
+        weightViewModel.saveWeightTarget(kg)
+        hideWeightTargetSheet()
     }
 }
 

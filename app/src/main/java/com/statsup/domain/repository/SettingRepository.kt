@@ -19,6 +19,10 @@ interface SettingRepository {
     fun loadMonthlyTrainingGoal(): Int
     fun loadAutoTargets(): Boolean
     fun loadLastSuggestedYearMonth(): String
+    fun saveHeightCm(value: Int)
+    fun loadHeightCm(): Int
+    fun saveWeightTargetKg(value: Double)
+    fun loadWeightTargetKg(): Double
     fun exportSettings(): ExportSettings
     fun importSettings(settings: ExportSettings)
     fun clearAllSettings()

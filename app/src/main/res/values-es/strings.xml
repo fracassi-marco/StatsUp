@@ -274,6 +274,37 @@
     <string name="delete_training_confirm_body">Esta actividad será eliminada de la app. Puedes volver a importarla desde Strava en cualquier momento.</string>
     <string name="delete_training_confirm_action">Eliminar</string>
 
+    <!-- Weight tracking -->
+    <string name="weight_screen_title">Peso</string>
+    <string name="weight_add_entry">Añadir medición</string>
+    <string name="weight_import_libra">Importar Libra</string>
+    <string name="weight_import_libra_description">Importar desde archivo CSV de Libra</string>
+    <string name="weight_no_entries">Sin mediciones aún</string>
+    <string name="weight_personal_best">Récord: %s</string>
+    <string name="weight_personal_best_label">récord personal</string>
+    <string name="weight_measurements_count">%d mediciones totales</string>
+    <string name="weight_bmi">IMC</string>
+    <string name="weight_bmi_value">IMC: %s</string>
+    <string name="weight_bmi_underweight">Bajo peso</string>
+    <string name="weight_bmi_normal">Normal</string>
+    <string name="weight_bmi_overweight">Sobrepeso</string>
+    <string name="weight_bmi_obese1">Obeso I</string>
+    <string name="weight_bmi_obese2">Obeso II</string>
+    <string name="weight_bmi_obese3">Obeso III</string>
+    <string name="weight_chart_title">Tendencia</string>
+    <string name="weight_target">Objetivo: %s</string>
+    <string name="weight_prediction_date">Estimado para: %s</string>
+    <string name="weight_prediction_never">Tendencia insuficiente para alcanzar el objetivo</string>
+    <string name="weight_prediction_insufficient_data">Datos insuficientes para la predicción</string>
+    <string name="weight_weekly_rate">Variación semanal: %s</string>
+    <string name="weight_gamification_title">Progreso</string>
+    <string name="weight_streak_weeks">%d semanas</string>
+    <string name="weight_streak_label">semanas consecutivas</string>
+    <string name="weight_recent_entries">Mediciones recientes</string>
+    <string name="settings_weight_height">Altura</string>
+    <string name="settings_weight_target">Peso objetivo</string>
+    <string name="settings_weight_not_set">No establecido</string>
+
     <!-- Content descriptions -->
     <string name="cd_back">Atrás</string>
     <string name="cd_export">Exportar</string>

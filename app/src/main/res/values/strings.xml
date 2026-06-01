@@ -273,6 +273,37 @@
     <string name="delete_training_confirm_body">This activity will be deleted from the app. You can re-import it from Strava at any time.</string>
     <string name="delete_training_confirm_action">Delete</string>
 
+    <!-- Weight tracking -->
+    <string name="weight_screen_title">Weight</string>
+    <string name="weight_add_entry">Add measurement</string>
+    <string name="weight_import_libra">Import Libra</string>
+    <string name="weight_import_libra_description">Import from Libra CSV file</string>
+    <string name="weight_no_entries">No measurements yet</string>
+    <string name="weight_personal_best">Personal best: %s</string>
+    <string name="weight_personal_best_label">personal best</string>
+    <string name="weight_measurements_count">%d total measurements</string>
+    <string name="weight_bmi">BMI</string>
+    <string name="weight_bmi_value">BMI: %s</string>
+    <string name="weight_bmi_underweight">Underweight</string>
+    <string name="weight_bmi_normal">Normal</string>
+    <string name="weight_bmi_overweight">Overweight</string>
+    <string name="weight_bmi_obese1">Obese I</string>
+    <string name="weight_bmi_obese2">Obese II</string>
+    <string name="weight_bmi_obese3">Obese III</string>
+    <string name="weight_chart_title">Trend</string>
+    <string name="weight_target">Target: %s</string>
+    <string name="weight_prediction_date">Estimated by: %s</string>
+    <string name="weight_prediction_never">Trend not sufficient to reach target</string>
+    <string name="weight_prediction_insufficient_data">Not enough data for prediction</string>
+    <string name="weight_weekly_rate">Weekly rate: %s</string>
+    <string name="weight_gamification_title">Progress</string>
+    <string name="weight_streak_weeks">%d weeks</string>
+    <string name="weight_streak_label">consecutive weeks</string>
+    <string name="weight_recent_entries">Recent measurements</string>
+    <string name="settings_weight_height">Height</string>
+    <string name="settings_weight_target">Weight target</string>
+    <string name="settings_weight_not_set">Not set</string>
+
     <!-- Content descriptions -->
     <string name="cd_back">Back</string>
     <string name="cd_export">Export</string>

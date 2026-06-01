@@ -274,6 +274,37 @@
     <string name="delete_training_confirm_body">Cette activité sera supprimée de l\'application. Vous pouvez la ré-importer depuis Strava à tout moment.</string>
     <string name="delete_training_confirm_action">Supprimer</string>
 
+    <!-- Weight tracking -->
+    <string name="weight_screen_title">Poids</string>
+    <string name="weight_add_entry">Ajouter mesure</string>
+    <string name="weight_import_libra">Importer Libra</string>
+    <string name="weight_import_libra_description">Importer depuis un fichier CSV Libra</string>
+    <string name="weight_no_entries">Aucune mesure pour l\'instant</string>
+    <string name="weight_personal_best">Record : %s</string>
+    <string name="weight_personal_best_label">record personnel</string>
+    <string name="weight_measurements_count">%d mesures au total</string>
+    <string name="weight_bmi">IMC</string>
+    <string name="weight_bmi_value">IMC : %s</string>
+    <string name="weight_bmi_underweight">Insuffisance pondérale</string>
+    <string name="weight_bmi_normal">Normal</string>
+    <string name="weight_bmi_overweight">Surpoids</string>
+    <string name="weight_bmi_obese1">Obèse I</string>
+    <string name="weight_bmi_obese2">Obèse II</string>
+    <string name="weight_bmi_obese3">Obèse III</string>
+    <string name="weight_chart_title">Tendance</string>
+    <string name="weight_target">Objectif : %s</string>
+    <string name="weight_prediction_date">Estimé pour : %s</string>
+    <string name="weight_prediction_never">Tendance insuffisante pour atteindre l\'objectif</string>
+    <string name="weight_prediction_insufficient_data">Données insuffisantes pour la prédiction</string>
+    <string name="weight_weekly_rate">Variation hebdomadaire : %s</string>
+    <string name="weight_gamification_title">Progrès</string>
+    <string name="weight_streak_weeks">%d semaines</string>
+    <string name="weight_streak_label">semaines consécutives</string>
+    <string name="weight_recent_entries">Mesures récentes</string>
+    <string name="settings_weight_height">Taille</string>
+    <string name="settings_weight_target">Poids cible</string>
+    <string name="settings_weight_not_set">Non défini</string>
+
     <!-- Content descriptions -->
     <string name="cd_back">Retour</string>
     <string name="cd_export">Exporter</string>

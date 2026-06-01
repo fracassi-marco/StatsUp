@@ -10,10 +10,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.statsup.domain.Athlete
 import com.statsup.domain.BookmarkedTraining
 import com.statsup.domain.Training
+import com.statsup.domain.WeightEntry
 
 @Database(
-    entities = [Training::class, Athlete::class, BookmarkedTraining::class],
-    version = 6,
+    entities = [Training::class, Athlete::class, BookmarkedTraining::class, WeightEntry::class],
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -21,6 +22,7 @@ abstract class TrainingDatabase: RoomDatabase() {
     abstract val trainingRepository: DbTrainingRepository
     abstract val athleteRepository: DbAthleteRepository
     abstract val bookmarkedTrainingRepository: DbBookmarkedTrainingRepository
+    abstract val weightRepository: WeightEntryDao
 
     companion object {
         private const val DATABASE_NAME = "training_db"
@@ -38,6 +40,20 @@ abstract class TrainingDatabase: RoomDatabase() {
             }
         }
 
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS weight_entry (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "date INTEGER NOT NULL, " +
+                    "weightKg REAL NOT NULL)"
+                )
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS index_weight_entry_date ON weight_entry (date)"
+                )
+            }
+        }
+
         @Volatile
         private var INSTANCE: TrainingDatabase? = null
 
@@ -51,7 +67,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6)
+                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                     .build()
 
                     INSTANCE = instance

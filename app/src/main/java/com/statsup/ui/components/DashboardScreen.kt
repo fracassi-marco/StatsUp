@@ -57,15 +57,19 @@ import com.statsup.ui.components.dashboard.MonthlyDistanceGoalCard
 import com.statsup.ui.components.dashboard.MonthlyTrainingGoalCard
 import com.statsup.ui.components.dashboard.BestEffortsCard
 import com.statsup.ui.components.dashboard.TopTrainingTypes
+import com.statsup.ui.components.dashboard.WeightDashboardCard
 import com.statsup.ui.viewmodel.DashboardViewModel
+import com.statsup.ui.viewmodel.WeightViewModel
 import com.statsup.domain.TargetSuggestion
 
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
+    weightViewModel: WeightViewModel,
     onProfileClick: () -> Unit = {},
     onLevelClick: () -> Unit = {},
-    onRecoveryClick: () -> Unit = {}
+    onRecoveryClick: () -> Unit = {},
+    onWeightClick: () -> Unit = {}
 ) {
     var celebrationAchievement by remember { mutableStateOf<GoalAchievement?>(null) }
     var badgeQueue by remember { mutableStateOf<List<Badge>>(emptyList()) }
@@ -151,6 +155,12 @@ fun DashboardScreen(
             MonthlyTrainingGoalCard(viewModel)
             Spacer(modifier = Modifier.height(10.dp))
             StreakCard(viewModel)
+            Spacer(modifier = Modifier.height(10.dp))
+            WeightDashboardCard(
+                stats = weightViewModel.stats,
+                targetKg = weightViewModel.weightTargetKg,
+                onClick = onWeightClick
+            )
             Spacer(modifier = Modifier.height(10.dp))
             RecoveryTimeCard(viewModel, onClick = onRecoveryClick)
             Row(

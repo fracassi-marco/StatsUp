@@ -70,6 +70,22 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         return sharedPreferences().getInt("settings.monthlyTrainingGoal", 12)
     }
 
+    override fun saveHeightCm(value: Int) {
+        sharedPreferences().edit { putInt("settings.heightCm", value) }
+    }
+
+    override fun loadHeightCm(): Int {
+        return sharedPreferences().getInt("settings.heightCm", 0)
+    }
+
+    override fun saveWeightTargetKg(value: Double) {
+        sharedPreferences().edit { putFloat("settings.weightTargetKg", value.toFloat()) }
+    }
+
+    override fun loadWeightTargetKg(): Double {
+        return sharedPreferences().getFloat("settings.weightTargetKg", 0f).toDouble()
+    }
+
     override fun exportSettings(): ExportSettings {
         return ExportSettings(
             theme = loadTheme(),
