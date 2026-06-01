@@ -1,11 +1,11 @@
 package com.statsup.ui.viewmodel
 
-import android.content.Context
+import android.app.Application
 import com.statsup.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.domain.Badge
 import com.statsup.domain.BestEffort
@@ -34,10 +34,10 @@ import java.time.YearMonth
 import java.time.ZonedDateTime
 
 class DashboardViewModel(
+    application: Application,
     private val trainingRepository: TrainingRepository,
     private val settingRepository: SettingRepository,
-    private val context: Context
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private data class Computed(
         val totalDistance: Double = 0.0,
@@ -84,8 +84,8 @@ class DashboardViewModel(
     private val _badgesEarned = MutableSharedFlow<List<Badge>>(extraBufferCapacity = 10)
     val badgesEarned: SharedFlow<List<Badge>> = _badgesEarned.asSharedFlow()
 
-    private val _levelUp = MutableSharedFlow<Level>(extraBufferCapacity = 1)
-    val levelUp: SharedFlow<Level> = _levelUp.asSharedFlow()
+    var currentLevelUp: Level? by mutableStateOf(null)
+        private set
 
     private var previousEarnedBadgeIds: Set<String>? = null
     private var previousLevel: Int? = null
@@ -197,7 +197,7 @@ class DashboardViewModel(
             trainings = trainings,
             monthlyDistanceGoalKm = distGoal,
             monthlyTrainingGoal = trainGoal,
-            strings = buildBadgeStringMap(context, distGoal, trainGoal)
+            strings = buildBadgeStringMap(getApplication(), distGoal, trainGoal)
         )
         val earnedIds = badges.filter { it.earned }.map { it.id }.toSet()
         val prev = previousEarnedBadgeIds
@@ -214,9 +214,13 @@ class DashboardViewModel(
         val current = computed.level.number
         val prev = previousLevel
         if (prev != null && current > prev) {
-            viewModelScope.launch { _levelUp.emit(computed.level) }
+            currentLevelUp = computed.level
         }
         previousLevel = current
+    }
+
+    fun dismissLevelUp() {
+        currentLevelUp = null
     }
 
     fun acceptTargetSuggestion() {

@@ -87,7 +87,7 @@ class MainActivity : ComponentActivity() {
             val mainViewModel: MainViewModel = viewModel { MainViewModel(updateActivitiesUseCase, fullImportUseCase, settingRepository) }
             val settingsViewModel: SettingsViewModel = viewModel { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService, applicationContext) }
             val historyViewModel: HistoryViewModel = viewModel { HistoryViewModel(db.trainingRepository) }
-            val dashboardViewModel: DashboardViewModel = viewModel { DashboardViewModel(db.trainingRepository, settingRepository, applicationContext) }
+            val dashboardViewModel: DashboardViewModel = viewModel { DashboardViewModel(application, db.trainingRepository, settingRepository) }
             val statsViewModel: StatsViewModel = viewModel { StatsViewModel(db.trainingRepository) }
             val allRoutesViewModel: AllRoutesViewModel = viewModel { AllRoutesViewModel(db.trainingRepository) }
             val bookmarksViewModel: BookmarksViewModel = viewModel { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
@@ -102,7 +102,6 @@ class MainActivity : ComponentActivity() {
                 onResult = { result -> authService?.let { mainViewModel.onStravaResult(result, it) } }
             )
 
-            // Osserva il numero di allenamenti e lo stato di caricamento
             val isInitialLoading = historyViewModel.isInitialLoading.value
             val hasTrainings = historyViewModel.state.value.show
 

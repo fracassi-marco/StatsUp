@@ -44,7 +44,6 @@ import androidx.compose.ui.window.DialogProperties
 import com.statsup.R
 import com.statsup.domain.Badge
 import com.statsup.domain.GoalAchievement
-import com.statsup.domain.Level
 import com.statsup.ui.components.dashboard.ActivityHeatmap
 import com.statsup.ui.components.dashboard.LevelCard
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
@@ -71,7 +70,6 @@ fun DashboardScreen(
     var celebrationAchievement by remember { mutableStateOf<GoalAchievement?>(null) }
     var badgeQueue by remember { mutableStateOf<List<Badge>>(emptyList()) }
     var currentBadge by remember { mutableStateOf<Badge?>(null) }
-    var currentLevelUp by remember { mutableStateOf<Level?>(null) }
 
     fun showNextBadge() {
         currentBadge = badgeQueue.firstOrNull()
@@ -95,11 +93,6 @@ fun DashboardScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.levelUp.collect { level ->
-            currentLevelUp = level
-        }
-    }
 
     celebrationAchievement?.let { achievement ->
         CelebrationDialog(
@@ -121,10 +114,10 @@ fun DashboardScreen(
         )
     }
 
-    currentLevelUp?.let { level ->
+    viewModel.currentLevelUp?.let { level ->
         LevelUpCelebrationDialog(
             level = level,
-            onDismiss = { }
+            onDismiss = { viewModel.dismissLevelUp() }
         )
     }
 
