@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.8.1",
+    "date": "2026-06-01",
+    "message": "Add weight tracking feature"
+  },
+  {
     "version": "1.8.0",
     "date": "2026-06-01",
     "message": "Add weight tracking feature"
