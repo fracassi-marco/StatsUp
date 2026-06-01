@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.7.6",
+    "date": "2026-06-01",
+    "message": "Fix import from Strava bug"
+  },
+  {
     "version": "1.7.5",
     "date": "2026-05-27",
     "message": "Fix settings color with dark background"
