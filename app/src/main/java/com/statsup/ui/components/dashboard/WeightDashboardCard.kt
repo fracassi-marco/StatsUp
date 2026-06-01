@@ -52,6 +52,7 @@ fun WeightDashboardCard(
                     .weight(1f)
                     .padding(start = 12.dp)
             ) {
+                val kgUnit = stringResource(R.string.weight_unit_kg)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -59,14 +60,14 @@ fun WeightDashboardCard(
                 ) {
                     if (stats.latestWeight != null) {
                         Text(
-                            text = "%.1f kg".format(stats.latestWeight),
+                            text = "%.1f $kgUnit".format(stats.latestWeight),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
                         )
                         val delta = stats.previousWeight?.let { stats.latestWeight - it }
                         if (delta != null) {
                             val sign = if (delta >= 0) "+" else ""
                             Text(
-                                text = "$sign%.1f kg".format(delta),
+                                text = "$sign%.1f $kgUnit".format(delta),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = if (delta <= 0) MaterialTheme.colorScheme.primary
                                 else MaterialTheme.colorScheme.error
@@ -102,7 +103,7 @@ fun WeightDashboardCard(
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = stringResource(R.string.weight_target, "%.1f kg".format(targetKg)),
+                        text = stringResource(R.string.weight_target, "%.1f $kgUnit".format(targetKg)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )

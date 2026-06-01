@@ -156,13 +156,13 @@ fun DashboardScreen(
             Spacer(modifier = Modifier.height(10.dp))
             StreakCard(viewModel)
             Spacer(modifier = Modifier.height(10.dp))
+            RecoveryTimeCard(viewModel, onClick = onRecoveryClick)
+            Spacer(modifier = Modifier.height(10.dp))
             WeightDashboardCard(
                 stats = weightViewModel.stats,
                 targetKg = weightViewModel.weightTargetKg,
                 onClick = onWeightClick
             )
-            Spacer(modifier = Modifier.height(10.dp))
-            RecoveryTimeCard(viewModel, onClick = onRecoveryClick)
             Row(
                 modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)

@@ -98,7 +98,7 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp, 16.dp)
         ) {
-            Title(text = stringResource(R.string.settings_screen_goals))
+            Title(text = stringResource(R.string.settings_personal_data))
             SettingsClickableComponent(
                 icon = Icons.Outlined.EmojiEvents,
                 name = R.string.settings_weight_height,
@@ -106,7 +106,7 @@ fun SettingsScreen(
                         else stringResource(R.string.settings_weight_not_set),
                 onClick = { viewModel.showHeightSheet() }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Title(text = stringResource(R.string.settings_screen_goals), marginTop = 22.dp)
             SettingsClickableComponent(
                 icon = Icons.Outlined.EmojiEvents,
                 name = R.string.settings_weight_target,
@@ -185,6 +185,23 @@ fun SettingsScreen(
                 value = stringResource(R.string.weight_import_libra_description),
                 onClick = { weightImportLauncher.launch("*/*") }
             )
+            if (weightViewModel.isImporting) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            weightViewModel.importMessage?.let { message ->
+                LaunchedEffect(message) {
+                    kotlinx.coroutines.delay(5000)
+                    weightViewModel.clearImportMessage()
+                }
+                Snackbar(modifier = Modifier.padding(16.dp)) { Text(message) }
+            }
 
             // Loading indicator
             if (viewModel.isExportImportLoading) {

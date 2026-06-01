@@ -4,6 +4,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,10 +36,10 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,7 +57,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chargemap.compose.numberpicker.NumberPicker
@@ -71,7 +71,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeightScreen(
     viewModel: WeightViewModel,
@@ -79,27 +78,22 @@ fun WeightScreen(
 ) {
     var showAddDialog by remember { mutableStateOf(false) }
     var entryToDelete by remember { mutableStateOf<WeightEntry?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val importLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri -> uri?.let { viewModel.importFromUri(it) } }
 
+    LaunchedEffect(viewModel.importMessage) {
+        viewModel.importMessage?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            viewModel.clearImportMessage()
+        }
+    }
+
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.weight_screen_title)) },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { importLauncher.launch("*/*") }) {
-                        Icon(Icons.Outlined.Download, contentDescription = stringResource(R.string.weight_import_libra))
-                    }
-                }
-            )
-        },
+        contentWindowInsets = WindowInsets(0),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddDialog = true }) {
                 Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.weight_add_entry))
@@ -114,7 +108,28 @@ fun WeightScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item { Spacer(modifier = Modifier.height(4.dp)) }
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 4.dp, end = 4.dp, top = 16.dp, bottom = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
+                    }
+                    Text(
+                        text = stringResource(R.string.weight_screen_title),
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 4.dp)
+                    )
+                    IconButton(onClick = { importLauncher.launch("*/*") }) {
+                        Icon(Icons.Outlined.Download, contentDescription = stringResource(R.string.weight_import_libra))
+                    }
+                }
+            }
 
             item { WeightHeaderCard(stats) }
 
@@ -142,14 +157,12 @@ fun WeightScreen(
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
-                val recent = stats.chartPoints.takeLast(10).reversed()
-                items(recent) { (dateMillis, kg) ->
+                val recent = viewModel.entries.sortedByDescending { it.date }.take(10)
+                items(recent) { entry ->
                     WeightEntryRow(
-                        dateMillis = dateMillis,
-                        kg = kg,
-                        onDeleteRequest = {
-                            // find entry by date
-                        }
+                        dateMillis = entry.date,
+                        kg = entry.weightKg,
+                        onDeleteRequest = { entryToDelete = entry }
                     )
                 }
             }
@@ -162,23 +175,11 @@ fun WeightScreen(
                 CircularProgressIndicator()
             }
         }
-
-        viewModel.importMessage?.let { message ->
-            LaunchedEffect(message) {
-                kotlinx.coroutines.delay(4000)
-                viewModel.clearImportMessage()
-            }
-            Box(
-                modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Snackbar { Text(message) }
-            }
-        }
     }
 
     if (showAddDialog) {
         AddWeightDialog(
+            initialWeight = viewModel.stats.latestWeight ?: 70.0,
             onDismiss = { showAddDialog = false },
             onConfirm = { kg ->
                 viewModel.addWeight(kg)
@@ -186,10 +187,32 @@ fun WeightScreen(
             }
         )
     }
+
+    entryToDelete?.let { entry ->
+        AlertDialog(
+            onDismissRequest = { entryToDelete = null },
+            title = { Text(stringResource(R.string.weight_delete_confirm_title)) },
+            text = { Text(stringResource(R.string.weight_delete_confirm_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.deleteEntry(entry.id)
+                    entryToDelete = null
+                }) {
+                    Text(stringResource(R.string.delete_training_confirm_action))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { entryToDelete = null }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
 }
 
 @Composable
 private fun WeightHeaderCard(stats: WeightStats) {
+    val kgUnit = stringResource(R.string.weight_unit_kg)
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
@@ -197,7 +220,7 @@ private fun WeightHeaderCard(stats: WeightStats) {
         Column(modifier = Modifier.padding(16.dp)) {
             if (stats.latestWeight != null) {
                 Text(
-                    text = "%.1f kg".format(stats.latestWeight),
+                    text = "%.1f $kgUnit".format(stats.latestWeight),
                     style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.ExtraBold),
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -205,7 +228,7 @@ private fun WeightHeaderCard(stats: WeightStats) {
                 if (delta != null) {
                     val sign = if (delta >= 0) "+" else ""
                     Text(
-                        text = "$sign%.1f kg".format(delta),
+                        text = "$sign%.1f $kgUnit".format(delta),
                         style = MaterialTheme.typography.bodyMedium,
                         color = if (delta <= 0) MaterialTheme.colorScheme.primary
                         else MaterialTheme.colorScheme.error
@@ -250,7 +273,7 @@ private fun BmiCard(stats: WeightStats) {
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold)
                 )
                 Text(
-                    text = "%.1f — %s".format(bmi, bmiLabel(stats.bmiCategory)),
+                    text = stringResource(R.string.weight_bmi_display, bmi, bmiLabel(stats.bmiCategory)),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     color = bmiColor(stats.bmiCategory)
                 )
@@ -354,6 +377,7 @@ private fun WeightChartCard(stats: WeightStats, targetKg: Double) {
 
 @Composable
 private fun WeightTargetCard(stats: WeightStats, targetKg: Double) {
+    val kgUnit = stringResource(R.string.weight_unit_kg)
     val latest = stats.latestWeight ?: return
     val startWeight = if (stats.weightLostFromMax > 0) latest + stats.weightLostFromMax else latest
     val progress = if (startWeight > targetKg) {
@@ -367,7 +391,7 @@ private fun WeightTargetCard(stats: WeightStats, targetKg: Double) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(R.string.weight_target, "%.1f kg".format(targetKg)),
+                    text = stringResource(R.string.weight_target, "%.1f $kgUnit".format(targetKg)),
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold)
                 )
                 Text(
@@ -400,7 +424,7 @@ private fun WeightTargetCard(stats: WeightStats, targetKg: Double) {
             if (stats.weeklyRate != 0.0) {
                 val sign = if (stats.weeklyRate >= 0) "+" else ""
                 Text(
-                    text = stringResource(R.string.weight_weekly_rate, "$sign%.2f kg".format(stats.weeklyRate)),
+                    text = stringResource(R.string.weight_weekly_rate, "$sign%.2f $kgUnit".format(stats.weeklyRate)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
@@ -434,9 +458,10 @@ private fun WeightGamificationCard(stats: WeightStats) {
                     )
                 }
                 if (stats.personalBest != null) {
+                    val kgUnit = stringResource(R.string.weight_unit_kg)
                     Column(horizontalAlignment = Alignment.End) {
                         Text(
-                            text = "%.1f kg".format(stats.personalBest),
+                            text = "%.1f $kgUnit".format(stats.personalBest),
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                         )
                         Text(
@@ -466,6 +491,7 @@ private fun WeightEntryRow(
     kg: Double,
     onDeleteRequest: () -> Unit
 ) {
+    val kgUnit = stringResource(R.string.weight_unit_kg)
     val date = Instant.ofEpochMilli(dateMillis)
         .atZone(ZoneId.systemDefault())
         .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
@@ -479,9 +505,16 @@ private fun WeightEntryRow(
         Text(text = date, style = MaterialTheme.typography.bodyMedium)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "%.1f kg".format(kg),
+                text = "%.1f $kgUnit".format(kg),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
+            IconButton(onClick = onDeleteRequest) {
+                Icon(
+                    Icons.Outlined.Delete,
+                    contentDescription = stringResource(R.string.weight_delete_confirm_title),
+                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+                )
+            }
         }
     }
 }
@@ -489,14 +522,15 @@ private fun WeightEntryRow(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWeightDialog(
+    initialWeight: Double = 70.0,
     onDismiss: () -> Unit,
     onConfirm: (Double) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
-    var integerPart by remember { mutableIntStateOf(80) }
-    var decimalPart by remember { mutableIntStateOf(0) }
+    var integerPart by remember { mutableIntStateOf(initialWeight.toInt().coerceIn(30, 300)) }
+    var decimalPart by remember { mutableIntStateOf(((initialWeight * 10).toInt() % 10).coerceIn(0, 9)) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -547,7 +581,7 @@ fun AddWeightDialog(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "kg",
+                    text = stringResource(R.string.weight_unit_kg),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )

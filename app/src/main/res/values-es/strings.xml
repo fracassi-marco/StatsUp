@@ -277,8 +277,8 @@
     <!-- Weight tracking -->
     <string name="weight_screen_title">Peso</string>
     <string name="weight_add_entry">Añadir medición</string>
-    <string name="weight_import_libra">Importar Libra</string>
-    <string name="weight_import_libra_description">Importar desde archivo CSV de Libra</string>
+    <string name="weight_import_libra">Importar peso</string>
+    <string name="weight_import_libra_description">Libra CSV</string>
     <string name="weight_no_entries">Sin mediciones aún</string>
     <string name="weight_personal_best">Récord: %s</string>
     <string name="weight_personal_best_label">récord personal</string>
@@ -301,6 +301,13 @@
     <string name="weight_streak_weeks">%d semanas</string>
     <string name="weight_streak_label">semanas consecutivas</string>
     <string name="weight_recent_entries">Mediciones recientes</string>
+    <string name="weight_delete_confirm_title">Eliminar medición</string>
+    <string name="weight_delete_confirm_body">Esta medición se eliminará permanentemente.</string>
+    <string name="weight_unit_kg">kg</string>
+    <string name="weight_bmi_display">%1$.1f — %2$s</string>
+    <string name="weight_import_success">%1$d mediciones importadas</string>
+    <string name="weight_import_error">Error al importar</string>
+    <string name="settings_personal_data">Datos personales</string>
     <string name="settings_weight_height">Altura</string>
     <string name="settings_weight_target">Peso objetivo</string>
     <string name="settings_weight_not_set">No establecido</string>

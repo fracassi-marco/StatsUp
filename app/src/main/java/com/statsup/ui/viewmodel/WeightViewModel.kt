@@ -12,8 +12,8 @@ import com.statsup.domain.WeightStats
 import com.statsup.domain.WeightStatsUseCase
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.WeightRepository
+import com.statsup.R
 import com.statsup.infrastructure.service.WeightImportService
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class WeightViewModel(
@@ -23,6 +23,9 @@ class WeightViewModel(
 ) : ViewModel() {
 
     var stats by mutableStateOf(WeightStats())
+        private set
+
+    var entries by mutableStateOf(emptyList<WeightEntry>())
         private set
 
     var heightCm by mutableStateOf(settingRepository.loadHeightCm())
@@ -42,6 +45,7 @@ class WeightViewModel(
     init {
         viewModelScope.launch {
             weightRepository.all().collect { entries ->
+                this@WeightViewModel.entries = entries
                 stats = useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg)
             }
         }
@@ -63,11 +67,13 @@ class WeightViewModel(
         viewModelScope.launch {
             isImporting = true
             runCatching {
-                val entries = WeightImportService(context).parseLibraCsv(uri)
-                weightRepository.insertAll(entries)
-                importMessage = "Importate ${entries.size} pesate"
+                val parsed = WeightImportService(context).parseLibraCsv(uri)
+                val existingDates = weightRepository.getAllSync().map { it.date }.toSet()
+                val newEntries = parsed.filter { it.date !in existingDates }
+                weightRepository.insertAll(newEntries)
+                importMessage = context.getString(R.string.weight_import_success, newEntries.size)
             }.onFailure {
-                importMessage = "Errore import: ${it.message}"
+                importMessage = context.getString(R.string.weight_import_error)
             }
             isImporting = false
         }
