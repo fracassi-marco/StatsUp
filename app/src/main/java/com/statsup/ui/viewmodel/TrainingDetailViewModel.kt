@@ -4,11 +4,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.statsup.domain.Lap
 import com.statsup.domain.ManageBookmarkUseCase
 import com.statsup.domain.Training
@@ -75,9 +75,9 @@ class TrainingDetailViewModel(
                     trainingRepository.byId(trainingId)
                 }
                 _training.value = training
-                if (training.lapsJson != null) {
-                    val typeRef: TypeReference<List<Lap>> = object : TypeReference<List<Lap>>() {}
-                    _laps.value = jsonMapper.readValue(training.lapsJson, typeRef)
+                val lapsJson = training.lapsJson
+                if (lapsJson != null) {
+                    _laps.value = jsonMapper.readValue(lapsJson)
                 } else {
                     fetchAndCacheLaps(training)
                 }

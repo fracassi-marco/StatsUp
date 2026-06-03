@@ -1,5 +1,5 @@
 # Keep line numbers for readable crash stack traces
--keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable,Signature
 -renamesourcefileattribute SourceFile
 
 # Room - keep entity/DAO classes
