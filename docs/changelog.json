@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.9.0",
+    "date": "2026-06-03",
+    "message": "Improve weight chart, now is scrollable"
+  },
+  {
     "version": "1.8.12",
     "date": "2026-06-03",
     "message": "Fix strava import"
