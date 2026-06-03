@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PRO
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.statsup.BuildConfig
 import com.statsup.domain.Athlete
 import com.statsup.domain.Lap
@@ -58,7 +57,7 @@ class StravaTrainingApi : TrainingApi {
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        val dto: AthleteResponse = jsonMapper.readValue(response.body)
+        val dto = jsonMapper.readValue(response.body, AthleteResponse::class.java)
         return Athlete(
             id = dto.id,
             username = dto.username ?: "",
@@ -75,7 +74,7 @@ class StravaTrainingApi : TrainingApi {
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        val detail: ActivityDetail = jsonMapper.readValue(response.body)
+        val detail = jsonMapper.readValue(response.body, ActivityDetail::class.java)
         return detail.splitsMetric ?: emptyList()
     }
 
@@ -90,7 +89,7 @@ class StravaTrainingApi : TrainingApi {
             ),
             headers = mapOf("Accept" to "application/json")
         )
-        val result: TokenRefreshResult = jsonMapper.readValue(response.body)
+        val result = jsonMapper.readValue(response.body, TokenRefreshResult::class.java)
         return StravaToken(
             accessToken = result.accessToken,
             refreshToken = result.refreshToken,
