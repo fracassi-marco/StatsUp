@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.8.3",
+    "date": "2026-06-03",
+    "message": "Improve Strava import"
+  },
+  {
     "version": "1.8.2",
     "date": "2026-06-01",
     "message": "Improve weight tracking"
