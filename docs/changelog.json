@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.8.11",
+    "date": "2026-06-03",
+    "message": "Improve weight screen"
+  },
+  {
     "version": "1.8.10",
     "date": "2026-06-03",
     "message": "Fix error after import"

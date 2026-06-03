@@ -19,8 +19,8 @@ android {
         applicationId = "com.statsup"
         minSdk = 34
         targetSdk = 37
-        versionCode = 10810
-        versionName = "1.8.10"
+        versionCode = 10811
+        versionName = "1.8.11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -28,8 +28,8 @@ android {
         }
 
         manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("maps.apiKey")
-        buildConfigField("String", "STRAVA_CLIENT_ID", """"${properties.getProperty("strava.clientId")}"""")
-        buildConfigField("String", "STRAVA_CLIENT_SECRET", """"${properties.getProperty("strava.clientSecret")}"""")
+        buildConfigField("String", "INTERVALS_ICU_CLIENT_ID", """"${properties.getProperty("intervals.icu.clientId")}"""")
+        buildConfigField("String", "INTERVALS_ICU_CLIENT_SECRET", """"${properties.getProperty("intervals.icu.clientSecret")}"""")
     }
 
     signingConfigs {
