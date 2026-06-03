@@ -42,7 +42,8 @@ class StravaTrainingApi : TrainingApi {
                 headers = mapOf("Accept" to "application/json")
             )
             checkStatus(response.statusCode)
-            val trainings: List<Training> = jsonMapper.readValue(response.body)
+            val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, Training::class.java)
+            val trainings: List<Training> = jsonMapper.readValue(response.body, listType)
             allTrainings.addAll(trainings)
             if (trainings.size < size) break
             page++

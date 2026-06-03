@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.statsup.domain.Lap
 import com.statsup.domain.ManageBookmarkUseCase
 import com.statsup.domain.Training
@@ -77,7 +76,8 @@ class TrainingDetailViewModel(
                 _training.value = training
                 val lapsJson = training.lapsJson
                 if (lapsJson != null) {
-                    _laps.value = jsonMapper.readValue(lapsJson)
+                    val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, Lap::class.java)
+                    _laps.value = jsonMapper.readValue(lapsJson, listType)
                 } else {
                     fetchAndCacheLaps(training)
                 }
