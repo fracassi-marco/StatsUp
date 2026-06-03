@@ -9,6 +9,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.statsup.BuildConfig
 import com.statsup.domain.Athlete
 import com.statsup.domain.Lap
+import com.statsup.domain.StravaApiException
 import com.statsup.domain.StravaToken
 import com.statsup.domain.Training
 import com.statsup.domain.TrainingApi
@@ -20,6 +21,10 @@ class StravaTrainingApi : TrainingApi {
     private val jsonMapper = jsonMapper { addModule(kotlinModule()) }.apply {
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
         configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
+    }
+
+    private fun checkStatus(statusCode: Int) {
+        if (statusCode !in 200..299) throw StravaApiException(statusCode)
     }
 
     override suspend fun download(token: String, latest: Training?): List<Training> {
@@ -37,6 +42,7 @@ class StravaTrainingApi : TrainingApi {
                 auth = Bearer(token),
                 headers = mapOf("Accept" to "application/json")
             )
+            checkStatus(response.statusCode)
             val typeRef: TypeReference<List<Training>> = object : TypeReference<List<Training>>() {}
             val trainings = jsonMapper.readValue(response.body, typeRef)
             allTrainings.addAll(trainings)
@@ -52,6 +58,7 @@ class StravaTrainingApi : TrainingApi {
             auth = Bearer(token),
             headers = mapOf("Accept" to "application/json")
         )
+        checkStatus(response.statusCode)
         return jsonMapper.readValue(response.body)
     }
 
@@ -61,6 +68,7 @@ class StravaTrainingApi : TrainingApi {
             auth = Bearer(token),
             headers = mapOf("Accept" to "application/json")
         )
+        checkStatus(response.statusCode)
         val detail: ActivityDetail = jsonMapper.readValue(response.body)
         return detail.splitsMetric ?: emptyList()
     }

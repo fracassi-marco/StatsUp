@@ -281,6 +281,14 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        LaunchedEffect(Unit) {
+                            mainViewModel.importError.collect { error ->
+                                snackBarHostState.showSnackbar(
+                                    message = error,
+                                    duration = SnackbarDuration.Long
+                                )
+                            }
+                        }
                         }  // chiude LoadingBox
                     }  // chiude else (isInitialLoading)
                     }  // chiude Box

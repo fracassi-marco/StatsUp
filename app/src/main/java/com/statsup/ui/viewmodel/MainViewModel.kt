@@ -34,6 +34,7 @@ class MainViewModel(
     private val _loading = mutableStateOf(false)
     val loading: State<Boolean> = _loading
     val newTrainingsCounter = MutableSharedFlow<Int>()
+    val importError = MutableSharedFlow<String>()
 
     private var fullImportPending = false
 
@@ -51,6 +52,7 @@ class MainViewModel(
                 }
             } catch (e: Exception) {
                 Log.e("StatsUp", "Crash durante il download attività", e)
+                importError.emit(e.message ?: "Import failed. Try again.")
                 stopLoading()
                 return@launch
             }
