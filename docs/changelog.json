@@ -1,5 +1,10 @@
 [
   {
+    "version": "1.8.12",
+    "date": "2026-06-03",
+    "message": "Fix strava import"
+  },
+  {
     "version": "1.8.11",
     "date": "2026-06-03",
     "message": "Improve weight screen"
