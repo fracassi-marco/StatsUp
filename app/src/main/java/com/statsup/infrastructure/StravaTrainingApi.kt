@@ -1,6 +1,5 @@
 package com.statsup.infrastructure
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
@@ -43,8 +42,7 @@ class StravaTrainingApi : TrainingApi {
                 headers = mapOf("Accept" to "application/json")
             )
             checkStatus(response.statusCode)
-            val typeRef: TypeReference<List<Training>> = object : TypeReference<List<Training>>() {}
-            val trainings = jsonMapper.readValue(response.body, typeRef)
+            val trainings: List<Training> = jsonMapper.readValue(response.body)
             allTrainings.addAll(trainings)
             if (trainings.size < size) break
             page++
