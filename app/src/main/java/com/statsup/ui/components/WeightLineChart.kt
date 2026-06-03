@@ -1,11 +1,20 @@
 package com.statsup.ui.components
 
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.unit.dp
@@ -22,6 +31,8 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+private const val VISIBLE_DAYS = 365
+
 @Composable
 fun WeightLineChart(
     points: List<Pair<Long, Double>>,
@@ -32,10 +43,11 @@ fun WeightLineChart(
     val primaryColor = MaterialTheme.colorScheme.primary
     val errorColor = MaterialTheme.colorScheme.error
     val fmt = remember { DateTimeFormatter.ofPattern("MM/yy").withZone(ZoneId.systemDefault()) }
-    val step = remember(points) { maxOf(1, points.size / 6) }
+    val step = 180
     val lines = remember(points, targetKg, primaryColor, errorColor) {
+        val lastIndex = points.size - 1
         val labeledPoints = points.mapIndexed { i, (ts, kg) ->
-            val label = if (i % step == 0) fmt.format(Instant.ofEpochMilli(ts)) else ""
+            val label = if (i % step == 0 || i == lastIndex) fmt.format(Instant.ofEpochMilli(ts)) else ""
             Point(kg.toFloat(), label)
         }
         val result = mutableListOf(
@@ -65,25 +77,47 @@ fun WeightLineChart(
         result
     }
 
-    LineChart(
-        lines = lines,
+    val scrollState = rememberScrollState()
+    var initialScrollDone by remember { mutableStateOf(false) }
+    LaunchedEffect(scrollState.maxValue) {
+        if (!initialScrollDone && scrollState.maxValue > 0) {
+            scrollState.scrollTo(scrollState.maxValue)
+            initialScrollDone = true
+        }
+    }
+
+    BoxWithConstraints(
         modifier = Modifier
             .padding(vertical = 8.dp)
             .fillMaxWidth()
-            .height(160.dp),
-        animation = fadeInAnimation(1500),
-        xAxisDrawer = LineXAxisDrawer(
-            axisLineThickness = 0.dp,
-            labelRatio = 1,
-            labelTextColor = MaterialTheme.colorScheme.onSurface
-        ),
-        yAxisDrawer = LineYAxisWithValueDrawer(
-            labelValueFormatter = { value -> "%.0f".format(value) },
-            labelTextColor = MaterialTheme.colorScheme.onSurface,
-            axisLineThickness = 0.dp,
-            axisLineColor = Transparent,
-            minRightPadding = 30.dp
-        ),
-        horizontalOffsetPercentage = 1f
-    )
+    ) {
+        val chartWidth = if (points.size > VISIBLE_DAYS) {
+            maxWidth * (points.size.toFloat() / VISIBLE_DAYS.toFloat())
+        } else {
+            maxWidth
+        }
+
+        Row(modifier = Modifier.horizontalScroll(scrollState)) {
+            LineChart(
+                lines = lines,
+                modifier = Modifier
+                    .width(chartWidth)
+                    .height(160.dp),
+                animation = fadeInAnimation(1500),
+                xAxisDrawer = LineXAxisDrawer(
+                    axisLineThickness = 0.dp,
+                    labelRatio = 1,
+                    labelTextColor = MaterialTheme.colorScheme.onSurface
+                ),
+                yAxisDrawer = LineYAxisWithValueDrawer(
+                    labelValueFormatter = { value -> "%.0f".format(value) },
+                    labelTextColor = MaterialTheme.colorScheme.onSurface,
+                    axisLineThickness = 0.dp,
+                    axisLineColor = Transparent,
+                    minRightPadding = 30.dp
+                ),
+                horizontalOffsetPercentage = 0f
+            )
+        }
+    }
 }

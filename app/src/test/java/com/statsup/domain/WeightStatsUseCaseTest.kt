@@ -162,4 +162,21 @@ class WeightStatsUseCaseTest {
         val dates = stats.chartPoints.map { it.first }
         assertEquals(dates.sorted(), dates)
     }
+
+    @Test
+    fun `chart points include one entry per day with interpolated values`() {
+        val today = LocalDate.now()
+        val entries = listOf(
+            entry(today.minusDays(4), 100.0),
+            entry(today, 80.0)
+        )
+        val stats = useCase(entries, 175, 0.0)
+        // 4 days span → 5 daily points (day 0..4)
+        assertEquals(5, stats.chartPoints.size)
+        // First and last match actual measurements
+        assertEquals(100.0, stats.chartPoints.first().second, 0.01)
+        assertEquals(80.0, stats.chartPoints.last().second, 0.01)
+        // Midpoint (day 2 of 4) should be interpolated: 100 + (80-100)*(2/4) = 90
+        assertEquals(90.0, stats.chartPoints[2].second, 0.01)
+    }
 }

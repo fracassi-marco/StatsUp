@@ -25,7 +25,7 @@ class WeightStatsUseCase {
 
         val bmiCategory = bmi?.let { bmiCategory(it) } ?: BmiCategory.NORMAL
 
-        val chartPoints = sorted.map { Pair(it.date, it.weightKg) }
+        val chartPoints = generateDailyPoints(sorted)
 
         val regressionWindow = sorted.takeLast(60)
         val (slope, _) = linearRegression(regressionWindow)
@@ -109,6 +109,36 @@ class WeightStatsUseCase {
             }
         }
         return streak
+    }
+
+    private fun generateDailyPoints(sorted: List<WeightEntry>): List<Pair<Long, Double>> {
+        if (sorted.size < 2) return sorted.map { Pair(it.date, it.weightKg) }
+        val zone = ZoneId.systemDefault()
+        val entries = sorted.map {
+            Instant.ofEpochMilli(it.date).atZone(zone).toLocalDate() to it.weightKg
+        }
+        val firstDate = entries.first().first
+        val totalDays = ChronoUnit.DAYS.between(firstDate, entries.last().first).toInt()
+        val result = ArrayList<Pair<Long, Double>>(totalDays + 1)
+        var seg = 0
+        for (day in 0..totalDays) {
+            val current = firstDate.plusDays(day.toLong())
+            val millis = current.atStartOfDay(zone).toInstant().toEpochMilli()
+            while (seg + 1 < entries.size - 1 && entries[seg + 1].first <= current) seg++
+            val (prevDate, prevKg) = entries[seg]
+            val (nextDate, nextKg) = entries[seg + 1]
+            val weight = if (current <= prevDate) {
+                prevKg
+            } else if (current >= nextDate) {
+                nextKg
+            } else {
+                val span = ChronoUnit.DAYS.between(prevDate, nextDate).toDouble()
+                val offset = ChronoUnit.DAYS.between(prevDate, current).toDouble()
+                prevKg + (nextKg - prevKg) * (offset / span)
+            }
+            result.add(Pair(millis, weight))
+        }
+        return result
     }
 
     private fun weekOf(epochMillis: Long): Long {
