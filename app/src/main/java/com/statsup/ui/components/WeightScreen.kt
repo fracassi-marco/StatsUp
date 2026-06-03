@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -99,64 +99,63 @@ fun WeightScreen(
         }
     ) { innerPadding ->
         val stats = viewModel.stats
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item {
-                Row(
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp, end = 4.dp, top = 16.dp, bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onNavigateBack) {
+                    Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
+                }
+                Text(
+                    text = stringResource(R.string.weight_screen_title),
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 4.dp, end = 4.dp, top = 16.dp, bottom = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
-                    }
-                    Text(
-                        text = stringResource(R.string.weight_screen_title),
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 4.dp)
-                    )
-                    IconButton(onClick = { importLauncher.launch("*/*") }) {
-                        Icon(Icons.Outlined.Download, contentDescription = stringResource(R.string.weight_import_libra))
-                    }
+                        .weight(1f)
+                        .padding(start = 4.dp)
+                )
+                IconButton(onClick = { importLauncher.launch("*/*") }) {
+                    Icon(Icons.Outlined.Download, contentDescription = stringResource(R.string.weight_import_libra))
                 }
             }
 
-            item { WeightHeaderCard(stats) }
+            WeightHeaderCard(stats)
 
             if (stats.bmi != null) {
-                item { BmiCard(stats) }
+                BmiCard(stats)
             }
 
             if (stats.chartPoints.size >= 2) {
-                item { WeightChartCard(stats, viewModel.weightTargetKg) }
+                WeightChartCard(stats, viewModel.weightTargetKg)
             }
 
             if (viewModel.weightTargetKg > 0 && stats.latestWeight != null) {
-                item { WeightTargetCard(stats, viewModel.weightTargetKg) }
+                WeightTargetCard(stats, viewModel.weightTargetKg)
             }
 
             if (stats.totalMeasurements > 0) {
-                item { WeightGamificationCard(stats) }
+                WeightGamificationCard(stats)
             }
 
+            val recent = remember(viewModel.entries) {
+                viewModel.entries.sortedByDescending { it.date }.take(10)
+            }
             if (stats.chartPoints.isNotEmpty()) {
-                item {
-                    Text(
-                        text = stringResource(R.string.weight_recent_entries),
-                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-                val recent = viewModel.entries.sortedByDescending { it.date }.take(10)
-                items(recent) { entry ->
+                Text(
+                    text = stringResource(R.string.weight_recent_entries),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+                recent.forEach { entry ->
                     WeightEntryRow(
                         dateMillis = entry.date,
                         kg = entry.weightKg,
@@ -165,7 +164,7 @@ fun WeightScreen(
                 }
             }
 
-            item { Spacer(modifier = Modifier.height(80.dp)) }
+            Spacer(modifier = Modifier.height(80.dp))
         }
 
         if (viewModel.isImporting) {
