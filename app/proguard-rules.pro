@@ -19,8 +19,8 @@
 }
 
 # Kotlin data classes used with Jackson / Room
--keepclassmembers class com.statsup.domain.** { *; }
--keepclassmembers class com.statsup.infrastructure.** { *; }
+-keep class com.statsup.domain.** { *; }
+-keep class com.statsup.infrastructure.** { *; }
 
 # AppAuth
 -keep class net.openid.appauth.** { *; }
