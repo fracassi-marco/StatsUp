@@ -58,7 +58,14 @@ class StravaTrainingApi : TrainingApi {
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        return jsonMapper.readValue(response.body)
+        val dto: AthleteResponse = jsonMapper.readValue(response.body)
+        return Athlete(
+            id = dto.id,
+            username = dto.username ?: "",
+            resourceState = dto.resourceState,
+            profileMedium = dto.profileMedium,
+            profile = dto.profile
+        )
     }
 
     override suspend fun laps(token: String, activityId: Long): List<Lap> {
@@ -90,6 +97,14 @@ class StravaTrainingApi : TrainingApi {
             expiresAt = result.expiresAt
         )
     }
+
+    private data class AthleteResponse(
+        val id: Long,
+        val username: String? = null,
+        val resourceState: Int? = null,
+        val profileMedium: String? = null,
+        val profile: String? = null
+    )
 
     private data class ActivityDetail(
         val splitsMetric: List<Lap>? = null
