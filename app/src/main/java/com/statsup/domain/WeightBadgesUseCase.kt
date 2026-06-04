@@ -1,8 +1,5 @@
 package com.statsup.domain
 
-import java.time.Instant
-import java.time.ZoneId
-
 class WeightBadgesUseCase {
 
     operator fun invoke(
@@ -14,21 +11,17 @@ class WeightBadgesUseCase {
         bmi: Double?
     ): List<Badge> {
         if (entries.isEmpty()) return emptyList()
-        val sorted = entries.sortedBy { it.date }
-        val maxWeight = sorted.maxOf { it.weightKg }
+        // entries is already sorted by WeightStatsUseCase
+        val maxWeight = entries.maxOf { it.weightKg }
         val lostFromMax = maxWeight - latestWeight
-        val totalMeasurements = sorted.size
+        val totalMeasurements = entries.size
 
         val now = System.currentTimeMillis()
-        val daysSinceFirst = (now - sorted.first().date) / 86_400_000.0
+        val daysSinceFirst = (now - entries.first().date) / 86_400_000.0
         val monthsSinceFirst = daysSinceFirst / 30.44
 
         val thirtyDaysAgo = now - 30L * 24 * 60 * 60 * 1000
-        val zone = ZoneId.systemDefault()
-        val recentEntries = sorted.filter { entry ->
-            Instant.ofEpochMilli(entry.date).atZone(zone).toLocalDate()
-                .isAfter(Instant.ofEpochMilli(thirtyDaysAgo).atZone(zone).toLocalDate().minusDays(1))
-        }
+        val recentEntries = entries.filter { it.date >= thirtyDaysAgo }
         val stableWeight = recentEntries.size >= 4 &&
             recentEntries.maxOf { it.weightKg } - recentEntries.minOf { it.weightKg } <= 1.0
 

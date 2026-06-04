@@ -102,6 +102,17 @@ fun WeightScreen(
             }
         }
     ) { innerPadding ->
+        if (viewModel.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+            return@Scaffold
+        }
         val stats = viewModel.stats
         Column(
             modifier = Modifier

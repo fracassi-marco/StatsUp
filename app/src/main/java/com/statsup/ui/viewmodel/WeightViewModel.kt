@@ -36,6 +36,9 @@ class WeightViewModel(
     var weightTargetKg by mutableStateOf(settingRepository.loadWeightTargetKg())
         private set
 
+    var isLoading by mutableStateOf(true)
+        private set
+
     var isImporting by mutableStateOf(false)
         private set
 
@@ -51,6 +54,7 @@ class WeightViewModel(
                 stats = withContext(Dispatchers.Default) {
                     useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg)
                 }
+                isLoading = false
             }
         }
     }
