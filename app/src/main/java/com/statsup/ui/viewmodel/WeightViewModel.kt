@@ -14,7 +14,9 @@ import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.WeightRepository
 import com.statsup.R
 import com.statsup.infrastructure.service.WeightImportService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WeightViewModel(
     private val weightRepository: WeightRepository,
@@ -46,7 +48,9 @@ class WeightViewModel(
         viewModelScope.launch {
             weightRepository.all().collect { entries ->
                 this@WeightViewModel.entries = entries
-                stats = useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg)
+                stats = withContext(Dispatchers.Default) {
+                    useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg)
+                }
             }
         }
     }
@@ -97,8 +101,10 @@ class WeightViewModel(
 
     private fun refreshStats() {
         viewModelScope.launch {
-            val entries = weightRepository.getAllSync()
-            stats = useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg)
+            val entries = withContext(Dispatchers.IO) { weightRepository.getAllSync() }
+            stats = withContext(Dispatchers.Default) {
+                useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg)
+            }
         }
     }
 }

@@ -2,7 +2,9 @@ package com.statsup.ui.components
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +24,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -51,6 +54,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -373,20 +377,34 @@ private fun WeightTargetCard(stats: WeightStats, targetKg: Double) {
         ((startWeight - latest) / (startWeight - targetKg)).toFloat().coerceIn(0f, 1f)
     } else 1f
 
-    Card(modifier = Modifier.fillMaxWidth()) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded }
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = stringResource(R.string.weight_target, "%.1f $kgUnit".format(targetKg)),
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold)
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+                    modifier = Modifier.weight(1f)
                 )
                 Text(
                     text = "%.0f%%".format(progress * 100),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.primary
+                )
+                Icon(
+                    imageVector = Icons.Outlined.ExpandMore,
+                    contentDescription = null,
+                    modifier = Modifier.rotate(if (expanded) 180f else 0f),
+                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -418,18 +436,86 @@ private fun WeightTargetCard(stats: WeightStats, targetKg: Double) {
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
             }
+            AnimatedVisibility(visible = expanded) {
+                Column(modifier = Modifier.padding(top = 12.dp)) {
+                    Text(
+                        text = stringResource(R.string.weight_target_expand_hint),
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    WeightTargetDetailRow(
+                        label = stringResource(R.string.weight_target_detail_peak),
+                        value = "%.1f $kgUnit".format(startWeight)
+                    )
+                    WeightTargetDetailRow(
+                        label = stringResource(R.string.weight_target_detail_lost),
+                        value = "%.1f $kgUnit".format(stats.weightLostFromMax)
+                    )
+                    val remaining = (latest - targetKg).coerceAtLeast(0.0)
+                    WeightTargetDetailRow(
+                        label = stringResource(R.string.weight_target_detail_remaining),
+                        value = "%.1f $kgUnit".format(remaining)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(R.string.weight_target_detail_formula),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
+private fun WeightTargetDetailRow(label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
+        )
+    }
+}
+
+@Composable
 private fun WeightGamificationCard(stats: WeightStats) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded }
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = stringResource(R.string.weight_gamification_title),
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(R.string.weight_gamification_title),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+                    modifier = Modifier.weight(1f)
+                )
+                Icon(
+                    imageVector = Icons.Outlined.ExpandMore,
+                    contentDescription = null,
+                    modifier = Modifier.rotate(if (expanded) 180f else 0f),
+                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -484,6 +570,118 @@ private fun WeightGamificationCard(stats: WeightStats) {
                         Text(text = badge.emoji, style = MaterialTheme.typography.titleLarge)
                     }
                 }
+            }
+            AnimatedVisibility(visible = expanded) {
+                Column(modifier = Modifier.padding(top = 12.dp)) {
+                    stats.earnedBadges.forEach { badge ->
+                        BadgeDetailRow(badge)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun badgeName(id: String): String = when (id) {
+    "weight_first" -> stringResource(R.string.badge_weight_first_name)
+    "weight_minus1" -> stringResource(R.string.badge_weight_minus1_name)
+    "weight_minus2" -> stringResource(R.string.badge_weight_minus2_name)
+    "weight_minus5" -> stringResource(R.string.badge_weight_minus5_name)
+    "weight_minus10" -> stringResource(R.string.badge_weight_minus10_name)
+    "weight_minus20" -> stringResource(R.string.badge_weight_minus20_name)
+    "weight_target" -> stringResource(R.string.badge_weight_target_name)
+    "weight_streak3" -> stringResource(R.string.badge_weight_streak3_name)
+    "weight_streak7" -> stringResource(R.string.badge_weight_streak7_name)
+    "weight_streak30" -> stringResource(R.string.badge_weight_streak30_name)
+    "weight_6months" -> stringResource(R.string.badge_weight_6months_name)
+    "weight_1year" -> stringResource(R.string.badge_weight_1year_name)
+    "weight_100" -> stringResource(R.string.badge_weight_100_name)
+    "weight_bmi_normal" -> stringResource(R.string.badge_weight_bmi_normal_name)
+    "weight_bmi_below30" -> stringResource(R.string.badge_weight_bmi_below30_name)
+    "weight_stable" -> stringResource(R.string.badge_weight_stable_name)
+    else -> id
+}
+
+@Composable
+private fun badgeDesc(id: String): String = when (id) {
+    "weight_first" -> stringResource(R.string.badge_weight_first_desc)
+    "weight_minus1" -> stringResource(R.string.badge_weight_minus1_desc)
+    "weight_minus2" -> stringResource(R.string.badge_weight_minus2_desc)
+    "weight_minus5" -> stringResource(R.string.badge_weight_minus5_desc)
+    "weight_minus10" -> stringResource(R.string.badge_weight_minus10_desc)
+    "weight_minus20" -> stringResource(R.string.badge_weight_minus20_desc)
+    "weight_target" -> stringResource(R.string.badge_weight_target_desc)
+    "weight_streak3" -> stringResource(R.string.badge_weight_streak3_desc)
+    "weight_streak7" -> stringResource(R.string.badge_weight_streak7_desc)
+    "weight_streak30" -> stringResource(R.string.badge_weight_streak30_desc)
+    "weight_6months" -> stringResource(R.string.badge_weight_6months_desc)
+    "weight_1year" -> stringResource(R.string.badge_weight_1year_desc)
+    "weight_100" -> stringResource(R.string.badge_weight_100_desc)
+    "weight_bmi_normal" -> stringResource(R.string.badge_weight_bmi_normal_desc)
+    "weight_bmi_below30" -> stringResource(R.string.badge_weight_bmi_below30_desc)
+    "weight_stable" -> stringResource(R.string.badge_weight_stable_desc)
+    else -> ""
+}
+
+@Composable
+private fun BadgeDetailRow(badge: com.statsup.domain.Badge) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Text(
+            text = badge.emoji,
+            style = MaterialTheme.typography.titleMedium,
+            color = if (badge.earned) MaterialTheme.colorScheme.onSurface
+                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f)
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = badgeName(badge.id),
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                    color = if (badge.earned) MaterialTheme.colorScheme.onSurface
+                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
+                if (badge.earned) {
+                    Text(
+                        text = stringResource(R.string.weight_badge_earned),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                } else if (badge.currentValue != null && badge.targetValue != null && badge.unit != null) {
+                    Text(
+                        text = stringResource(
+                            R.string.weight_badge_progress_of,
+                            badge.currentValue,
+                            badge.targetValue,
+                            badge.unit
+                        ),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    )
+                }
+            }
+            Text(
+                text = badgeDesc(badge.id),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            )
+            if (!badge.earned) {
+                Spacer(modifier = Modifier.height(4.dp))
+                LinearProgressIndicator(
+                    progress = { badge.progress },
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                )
             }
         }
     }
