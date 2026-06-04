@@ -337,6 +337,14 @@
     <string name="badge_weight_bmi_below30_desc">IMC passé sous 30 — une étape importante pour la santé</string>
     <string name="badge_weight_stable_name">Poids stable</string>
     <string name="badge_weight_stable_desc">Le poids a varié de moins de 1 kg sur les 30 derniers jours</string>
+    <string name="badge_weight_week_1kg_name">−1 kg en une semaine</string>
+    <string name="badge_weight_week_1kg_desc">Perdu au moins 1 kg au cours des 7 derniers jours</string>
+    <string name="badge_weight_month_2kg_name">−2 kg en un mois</string>
+    <string name="badge_weight_month_2kg_desc">Perdu au moins 2 kg au cours des 30 derniers jours</string>
+    <string name="badge_weight_month_4kg_name">−4 kg en un mois</string>
+    <string name="badge_weight_month_4kg_desc">Perdu au moins 4 kg au cours des 30 derniers jours</string>
+    <string name="badge_weight_quarter_5kg_name">−5 kg en 3 mois</string>
+    <string name="badge_weight_quarter_5kg_desc">Perdu au moins 5 kg au cours des 90 derniers jours</string>
     <string name="weight_badge_earned">Obtenu</string>
     <string name="weight_badge_progress_of">%1$.1f / %2$.1f %3$s</string>
     <string name="weight_recent_entries">Mesures récentes</string>

@@ -299,7 +299,7 @@
     <string name="weight_weekly_rate">Wöchentliche Änderung: %s</string>
     <string name="weight_target_detail_peak">Höchstgewicht: %s</string>
     <string name="weight_target_detail_remaining">Noch abzunehmen: %s</string>
-    <string name="weight_target_detail_lost">Abgenommen seit dem Maximum: %s</string>
+    <string name="weight_target_detail_lost">Abgenommen seitdem Maximum: %s</string>
     <string name="weight_target_detail_formula">Fortschritt = (Maximum − Aktuell) ÷ (Maximum − Ziel) × 100</string>
     <string name="weight_target_expand_hint">Wie wird das berechnet</string>
     <string name="weight_gamification_title">Fortschritt</string>
@@ -337,6 +337,14 @@
     <string name="badge_weight_bmi_below30_desc">BMI unter 30 gesunken — ein wichtiger Gesundheitsmeilenstein</string>
     <string name="badge_weight_stable_name">Stabiles Gewicht</string>
     <string name="badge_weight_stable_desc">Gewicht hat in den letzten 30 Tagen weniger als 1 kg variiert</string>
+    <string name="badge_weight_week_1kg_name">−1 kg in einer Woche</string>
+    <string name="badge_weight_week_1kg_desc">In den letzten 7 Tagen mindestens 1 kg abgenommen</string>
+    <string name="badge_weight_month_2kg_name">−2 kg in einem Monat</string>
+    <string name="badge_weight_month_2kg_desc">In den letzten 30 Tagen mindestens 2 kg abgenommen</string>
+    <string name="badge_weight_month_4kg_name">−4 kg in einem Monat</string>
+    <string name="badge_weight_month_4kg_desc">In den letzten 30 Tagen mindestens 4 kg abgenommen</string>
+    <string name="badge_weight_quarter_5kg_name">−5 kg in 3 Monaten</string>
+    <string name="badge_weight_quarter_5kg_desc">In den letzten 90 Tagen mindestens 5 kg abgenommen</string>
     <string name="weight_badge_earned">Erreicht</string>
     <string name="weight_badge_progress_of">%1$.1f / %2$.1f %3$s</string>
     <string name="weight_recent_entries">Letzte Messungen</string>

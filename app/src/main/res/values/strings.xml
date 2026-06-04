@@ -336,6 +336,14 @@
     <string name="badge_weight_bmi_below30_desc">BMI dropped below 30 — a major health milestone</string>
     <string name="badge_weight_stable_name">Stable weight</string>
     <string name="badge_weight_stable_desc">Weight varied less than 1 kg over the last 30 days</string>
+    <string name="badge_weight_week_1kg_name">−1 kg in a week</string>
+    <string name="badge_weight_week_1kg_desc">Lost at least 1 kg in the last 7 days</string>
+    <string name="badge_weight_month_2kg_name">−2 kg in a month</string>
+    <string name="badge_weight_month_2kg_desc">Lost at least 2 kg in the last 30 days</string>
+    <string name="badge_weight_month_4kg_name">−4 kg in a month</string>
+    <string name="badge_weight_month_4kg_desc">Lost at least 4 kg in the last 30 days</string>
+    <string name="badge_weight_quarter_5kg_name">−5 kg in 3 months</string>
+    <string name="badge_weight_quarter_5kg_desc">Lost at least 5 kg in the last 90 days</string>
     <string name="weight_badge_earned">Earned</string>
     <string name="weight_badge_progress_of">%1$.1f / %2$.1f %3$s</string>
     <string name="weight_recent_entries">Recent measurements</string>

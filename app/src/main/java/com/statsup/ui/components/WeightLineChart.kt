@@ -45,8 +45,11 @@ fun WeightLineChart(
     val fmt = remember { DateTimeFormatter.ofPattern("MM/yy").withZone(ZoneId.systemDefault()) }
     val step = 180
     val lines = remember(points, targetKg, primaryColor, errorColor) {
-        val lastIndex = points.size - 1
-        val labeledPoints = points.mapIndexed { i, (ts, kg) ->
+        val sampleStep = (points.size / VISIBLE_DAYS).coerceAtLeast(1)
+        val sampled = if (sampleStep == 1) points
+            else points.filterIndexed { i, _ -> i % sampleStep == 0 || i == points.size - 1 }
+        val lastIndex = sampled.size - 1
+        val labeledPoints = sampled.mapIndexed { i, (ts, kg) ->
             val label = if (i % step == 0 || i == lastIndex) fmt.format(Instant.ofEpochMilli(ts)) else ""
             Point(kg.toFloat(), label)
         }
@@ -103,7 +106,7 @@ fun WeightLineChart(
                 modifier = Modifier
                     .width(chartWidth)
                     .height(160.dp),
-                animation = fadeInAnimation(1500),
+                animation = fadeInAnimation(400),
                 xAxisDrawer = LineXAxisDrawer(
                     axisLineThickness = 0.dp,
                     labelRatio = 1,

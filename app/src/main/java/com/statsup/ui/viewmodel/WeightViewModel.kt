@@ -75,7 +75,7 @@ class WeightViewModel(
         viewModelScope.launch {
             isImporting = true
             runCatching {
-                val parsed = WeightImportService(context).parseLibraCsv(uri)
+                val parsed = withContext(Dispatchers.IO) { WeightImportService(context).parseLibraCsv(uri) }
                 val existingDates = weightRepository.getAllSync().map { it.date }.toSet()
                 val newEntries = parsed.filter { it.date !in existingDates }
                 weightRepository.insertAll(newEntries)

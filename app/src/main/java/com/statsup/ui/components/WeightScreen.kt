@@ -170,12 +170,14 @@ fun WeightScreen(
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
                     modifier = Modifier.padding(top = 8.dp)
                 )
-                recent.forEach { entry ->
-                    WeightEntryRow(
-                        dateMillis = entry.date,
-                        kg = entry.weightKg,
-                        onDeleteRequest = { entryToDelete = entry }
-                    )
+                Column {
+                    recent.forEach { entry ->
+                        WeightEntryRow(
+                            dateMillis = entry.date,
+                            kg = entry.weightKg,
+                            onDeleteRequest = { entryToDelete = entry }
+                        )
+                    }
                 }
             }
 
@@ -612,6 +614,10 @@ private fun badgeName(id: String): String = when (id) {
     "weight_bmi_normal" -> stringResource(R.string.badge_weight_bmi_normal_name)
     "weight_bmi_below30" -> stringResource(R.string.badge_weight_bmi_below30_name)
     "weight_stable" -> stringResource(R.string.badge_weight_stable_name)
+    "weight_week_1kg" -> stringResource(R.string.badge_weight_week_1kg_name)
+    "weight_month_2kg" -> stringResource(R.string.badge_weight_month_2kg_name)
+    "weight_month_4kg" -> stringResource(R.string.badge_weight_month_4kg_name)
+    "weight_quarter_5kg" -> stringResource(R.string.badge_weight_quarter_5kg_name)
     else -> id
 }
 
@@ -633,6 +639,10 @@ private fun badgeDesc(id: String): String = when (id) {
     "weight_bmi_normal" -> stringResource(R.string.badge_weight_bmi_normal_desc)
     "weight_bmi_below30" -> stringResource(R.string.badge_weight_bmi_below30_desc)
     "weight_stable" -> stringResource(R.string.badge_weight_stable_desc)
+    "weight_week_1kg" -> stringResource(R.string.badge_weight_week_1kg_desc)
+    "weight_month_2kg" -> stringResource(R.string.badge_weight_month_2kg_desc)
+    "weight_month_4kg" -> stringResource(R.string.badge_weight_month_4kg_desc)
+    "weight_quarter_5kg" -> stringResource(R.string.badge_weight_quarter_5kg_desc)
     else -> ""
 }
 
@@ -711,7 +721,7 @@ private fun WeightEntryRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(vertical = 2.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
