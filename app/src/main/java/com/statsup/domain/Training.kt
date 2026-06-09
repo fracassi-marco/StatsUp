@@ -72,7 +72,10 @@ data class Training(
     var middleware: String? = null,
     var middlewareId: String? = null,
     var sourceId: String? = null,
-    var deviceName: String? = null
+    var deviceName: String? = null,
+    var calories: Int? = null,
+    var hrZoneTimes: List<Int>? = null,
+    var hrZones: List<Int>? = null
 ) {
     val date: ZonedDateTime by lazy { ZonedDateTime.parse(startDate) }
 

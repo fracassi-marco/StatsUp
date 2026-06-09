@@ -5,6 +5,13 @@ import com.statsup.domain.Route
 
 class Converters {
     @TypeConverter
+    fun intListToString(value: List<Int>?): String? = value?.joinToString(",")
+
+    @TypeConverter
+    fun stringToIntList(value: String?): List<Int>? =
+        value?.split(",")?.mapNotNull { it.toIntOrNull() }
+
+    @TypeConverter
     fun routeToString(value: Route?): String? {
         if (value == null) return null
         // Format: "id|resourceState|summaryPolyline" — pipes are safe since polylines use only Base64 chars

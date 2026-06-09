@@ -404,4 +404,6 @@
     <string name="level_name_19">Absoluto</string>
     <string name="level_name_20">Eterno</string>
     <string name="activity_source">%1$s &gt; %2$s</string>
+    <string name="calories">Calorías</string>
+    <string name="kcal">kcal</string>
 </resources>

@@ -241,7 +241,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val minAltitude: Double? = null,
         val source: String? = null,
         val externalId: String? = null,
-        val deviceName: String? = null
+        val deviceName: String? = null,
+        val calories: Int? = null,
+        val icuHrZoneTimes: List<Int>? = null,
+        val icuHrZones: List<Int>? = null
     ) {
         fun toTraining(): Training {
             val localDateStr = startDateLocal ?: ""
@@ -288,7 +291,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
                 middleware = "INTERVALS",
                 middlewareId = id,
                 sourceId = externalId,
-                deviceName = deviceName?.trim()?.takeIf { it.isNotEmpty() }
+                deviceName = deviceName?.trim()?.takeIf { it.isNotEmpty() },
+                calories = calories,
+                hrZoneTimes = icuHrZoneTimes,
+                hrZones = icuHrZones
             )
         }
     }

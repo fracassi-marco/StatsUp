@@ -1,6 +1,7 @@
 package com.statsup.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -328,7 +329,8 @@ fun TrainingDetailScreen(
                         val hasPerformanceData = training.averagePace() > 0 ||
                                 training.vam() > 0 ||
                                 training.averageSpeedKmh() > 0 ||
-                                (training.averageHeartrate != null && training.averageHeartrate!! > 0)
+                                (training.averageHeartrate != null && training.averageHeartrate!! > 0) ||
+                                (training.calories != null && training.calories!! > 0)
 
                         if (hasPerformanceData) {
                             val hasPreviousSections =
@@ -408,6 +410,21 @@ fun TrainingDetailScreen(
                                         }
                                     }
                                 }
+                                if (training.calories != null && training.calories!! > 0) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                    ) {
+                                        StatItemWithIcon(
+                                            icon = Icons.Default.Whatshot,
+                                            label = stringResource(id = R.string.calories),
+                                            value = training.calories.toString(),
+                                            unit = stringResource(id = R.string.kcal),
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
+                                }
                             }
                         }
 
@@ -426,6 +443,19 @@ fun TrainingDetailScreen(
                                 averagePace = training.averagePace(),
                                 hasHeartrate = training.hasHeartrate == true
                             )
+                        }
+
+                        // Sezione Zone HR
+                        val zoneTimes = training.hrZoneTimes
+                        if (!zoneTimes.isNullOrEmpty() && zoneTimes.any { it > 0 }) {
+                            val hasPreviousSections =
+                                (training.distance > 0 || training.movingTime > 0) ||
+                                        hasElevationData || hasPerformanceData || laps.isNotEmpty()
+                            if (hasPreviousSections) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+                            }
+                            HrZonesSection(zoneTimes = zoneTimes)
                         }
 
                         // Sezione Nota (se bookmarkato e c'è una nota)
@@ -672,6 +702,75 @@ private fun formatPaceFromMinutes(paceInMinutes: Double, locale: Locale): String
     val seconds = ((paceInMinutes - minutes) * 60).toInt()
 
     return String.format(locale, "%d:%02d", minutes, seconds)
+}
+
+@Composable
+private fun HrZonesSection(zoneTimes: List<Int>) {
+    val zoneColors = listOf(
+        Color(0xFF9E9E9E),
+        Color(0xFF42A5F5),
+        Color(0xFF66BB6A),
+        Color(0xFFFFCA28),
+        Color(0xFFFFA726),
+        Color(0xFFEF5350),
+        Color(0xFFB71C1C)
+    )
+    val totalSeconds = zoneTimes.sum().takeIf { it > 0 } ?: return
+
+    StatSection(
+        title = stringResource(id = R.string.hr_zones_title),
+        icon = Icons.Default.Favorite
+    )
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        zoneTimes.forEachIndexed { index, seconds ->
+            if (seconds <= 0) return@forEachIndexed
+            val fraction = seconds.toFloat() / totalSeconds.toFloat()
+            val hours = seconds / 3600
+            val minutes = (seconds % 3600) / 60
+            val secs = seconds % 60
+            val timeLabel = if (hours > 0) {
+                String.format(Locale.ROOT, "%d:%02d:%02d", hours, minutes, secs)
+            } else {
+                String.format(Locale.ROOT, "%d:%02d", minutes, secs)
+            }
+            val color = zoneColors.getOrElse(index) { zoneColors.last() }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Z${index + 1}",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = color,
+                    modifier = Modifier.size(24.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(10.dp)
+                        .background(
+                            MaterialTheme.colorScheme.surfaceVariant,
+                            RoundedCornerShape(5.dp)
+                        )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(fraction)
+                            .fillMaxHeight()
+                            .background(color, RoundedCornerShape(5.dp))
+                    )
+                }
+                Text(
+                    text = timeLabel,
+                    fontSize = 11.sp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    modifier = Modifier.size(52.dp)
+                )
+            }
+        }
+    }
 }
 
 private fun getActivityBackground(sportType: String?): Int {

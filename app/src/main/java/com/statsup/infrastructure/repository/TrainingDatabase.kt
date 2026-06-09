@@ -14,7 +14,7 @@ import com.statsup.domain.WeightEntry
 
 @Database(
     entities = [Training::class, Athlete::class, BookmarkedTraining::class, WeightEntry::class],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -168,6 +168,14 @@ abstract class TrainingDatabase: RoomDatabase() {
             }
         }
 
+        private val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE training ADD COLUMN calories INTEGER")
+                db.execSQL("ALTER TABLE training ADD COLUMN hrZoneTimes TEXT")
+                db.execSQL("ALTER TABLE training ADD COLUMN hrZones TEXT")
+            }
+        }
+
         private val MIGRATION_6_7 = object : Migration(6, 7) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL(
@@ -195,7 +203,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11)
+                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12)
                     .build()
 
                     INSTANCE = instance
