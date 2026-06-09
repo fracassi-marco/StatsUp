@@ -89,10 +89,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         if (response.statusCode !in 200..299) return emptyList()
         android.util.Log.d("IntervalsIcu", "laps body=${response.body}")
         return try {
-            val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, IntervalDto::class.java)
-            val intervals: List<IntervalDto> = jsonMapper.readValue(response.body, listType)
-            intervals.mapIndexedNotNull { index, dto -> dto.toLap(index + 1) }
+            val dto = jsonMapper.readValue(response.body, IntervalsResponseDto::class.java)
+            dto.icuIntervals.mapIndexedNotNull { index, interval -> interval.toLap(index + 1) }
         } catch (e: Exception) {
+            android.util.Log.e("IntervalsIcu", "laps parse error", e)
             emptyList()
         }
     }
@@ -284,14 +284,18 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         }
     }
 
+    private data class IntervalsResponseDto(
+        val icuIntervals: List<IntervalDto> = emptyList()
+    )
+
     private data class IntervalDto(
         val label: String? = null,
         val distance: Double? = null,
         val movingTime: Int? = null,
         val elapsedTime: Int? = null,
-        val elevationGain: Double? = null,
+        val totalElevationGain: Double? = null,
         val averageSpeed: Double? = null,
-        @param:JsonProperty("average_hr") val averageHr: Double? = null
+        val averageHeartrate: Double? = null
     ) {
         fun toLap(index: Int): Lap? {
             val dist = distance ?: return null
@@ -300,9 +304,9 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
                 distance = dist,
                 movingTime = movingTime ?: elapsedTime ?: 0,
                 elapsedTime = elapsedTime ?: movingTime ?: 0,
-                elevationDifference = elevationGain,
+                elevationDifference = totalElevationGain,
                 averageSpeed = averageSpeed,
-                averageHeartrate = averageHr
+                averageHeartrate = averageHeartrate
             )
         }
     }

@@ -2,6 +2,7 @@ package com.statsup.domain
 
 import com.statsup.domain.repository.AthleteRepository
 import com.statsup.domain.repository.TrainingRepository
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -29,6 +30,7 @@ class UpdateTrainingsUseCaseTest {
         trainingRepository = mock()
         athleteRepository = mock()
         trainingApi = mock()
+        runBlocking { whenever(trainingApi.laps(any(), any())).thenReturn(emptyList()) }
         useCase = UpdateTrainingsUseCase(trainingRepository, athleteRepository, trainingApi)
     }
 

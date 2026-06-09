@@ -3,6 +3,7 @@ package com.statsup.domain
 import com.statsup.domain.repository.AthleteRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -33,6 +34,7 @@ class FullImportUseCaseTest {
         athleteRepository = mock()
         bookmarkedTrainingRepository = mock()
         trainingApi = mock()
+        runBlocking { whenever(trainingApi.laps(any(), any())).thenReturn(emptyList()) }
         useCase = FullImportUseCase(
             trainingRepository,
             athleteRepository,
