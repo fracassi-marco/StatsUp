@@ -209,8 +209,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val weightedAverageWatts: Int? = null,
         val kilojoules: Double? = null,
         val deviceWatts: Boolean? = null,
-        @param:JsonProperty("average_hr") val averageHr: Double? = null,
-        @param:JsonProperty("max_hr") val maxHr: Double? = null,
+        val averageHeartrate: Double? = null,
+        val maxHeartrate: Double? = null,
         // Strava-synced altitude fields (fallback for activities imported via Strava)
         val elevHigh: Double? = null,
         val elevLow: Double? = null,
@@ -222,8 +222,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val icuElapsedTime: Int? = null,
         val icuTotalElevationGain: Double? = null,
         val icuAverageSpeed: Double? = null,
-        @param:JsonProperty("icu_average_hr") val icuAverageHr: Double? = null,
-        @param:JsonProperty("icu_max_hr") val icuMaxHr: Double? = null,
+        val icuAverageHeartrate: Double? = null,
+        val icuMaxHeartrate: Double? = null,
         // Native intervals.icu altitude fields (preferred — added June 2024)
         val maxAltitude: Double? = null,
         val minAltitude: Double? = null
@@ -238,8 +238,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             val resolvedElapsedTime = icuElapsedTime?.takeIf { it > 0 } ?: elapsedTime
             val resolvedElevationGain = icuTotalElevationGain?.takeIf { it > 0 } ?: totalElevationGain
             val resolvedAverageSpeed = icuAverageSpeed?.takeIf { it > 0 } ?: averageSpeed
-            val resolvedAverageHr = icuAverageHr ?: averageHr
-            val resolvedMaxHr = icuMaxHr ?: maxHr
+            val resolvedAverageHr = icuAverageHeartrate?.takeIf { it > 0 } ?: averageHeartrate
+            val resolvedMaxHr = icuMaxHeartrate?.takeIf { it > 0 } ?: maxHeartrate
             val resolvedElevHigh = maxAltitude?.takeIf { it > 0 } ?: elevHigh
             val resolvedElevLow = minAltitude?.takeIf { it > 0 } ?: elevLow
             return Training(
