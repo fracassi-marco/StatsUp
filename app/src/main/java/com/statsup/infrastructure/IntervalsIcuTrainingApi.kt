@@ -211,6 +211,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val deviceWatts: Boolean? = null,
         @param:JsonProperty("average_hr") val averageHr: Double? = null,
         @param:JsonProperty("max_hr") val maxHr: Double? = null,
+        // Strava-synced altitude fields (fallback for activities imported via Strava)
         val elevHigh: Double? = null,
         val elevLow: Double? = null,
         val polyline: String? = null,
@@ -222,7 +223,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val icuTotalElevationGain: Double? = null,
         val icuAverageSpeed: Double? = null,
         @param:JsonProperty("icu_average_hr") val icuAverageHr: Double? = null,
-        @param:JsonProperty("icu_max_hr") val icuMaxHr: Double? = null
+        @param:JsonProperty("icu_max_hr") val icuMaxHr: Double? = null,
+        // Native intervals.icu altitude fields (preferred — added June 2024)
+        val maxAltitude: Double? = null,
+        val minAltitude: Double? = null
     ) {
         fun toTraining(): Training {
             val localDateStr = startDateLocal ?: ""
@@ -236,6 +240,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             val resolvedAverageSpeed = icuAverageSpeed?.takeIf { it > 0 } ?: averageSpeed
             val resolvedAverageHr = icuAverageHr ?: averageHr
             val resolvedMaxHr = icuMaxHr ?: maxHr
+            val resolvedElevHigh = maxAltitude?.takeIf { it > 0 } ?: elevHigh
+            val resolvedElevLow = minAltitude?.takeIf { it > 0 } ?: elevLow
             return Training(
                 id = id,
                 name = name,
@@ -258,8 +264,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
                 deviceWatts = deviceWatts ?: false,
                 averageHeartrate = resolvedAverageHr,
                 maxHeartrate = resolvedMaxHr ?: 0.0,
-                elevHigh = elevHigh ?: 0.0,
-                elevLow = elevLow ?: 0.0,
+                elevHigh = resolvedElevHigh ?: 0.0,
+                elevLow = resolvedElevLow ?: 0.0,
                 map = if (polyline != null) Route(summaryPolyline = polyline) else Route(),
                 uploadId = 0L,
                 sufferScore = null
