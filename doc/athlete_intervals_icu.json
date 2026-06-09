@@ -1,0 +1,20 @@
+{
+  "athlete": {
+    "id": "i602575",
+    "name": "Marco Fracassi",
+    "profile_medium": "https://storage.googleapis.com/intervals-icu-images/profile_pics/2ac74ebe-df1e-45ae-a0c8-782dd5a1dc88",
+    "city": null,
+    "state": null,
+    "country": null,
+    "timezone": "Europe/Rome",
+    "sex": "M",
+    "bio": null,
+    "website": null,
+    "email": null,
+    "countries": ["IT"],
+    "languages": ["it"],
+    "icu_coach": false
+  },
+  "sharedFolders": [],
+  "customItems": []
+}

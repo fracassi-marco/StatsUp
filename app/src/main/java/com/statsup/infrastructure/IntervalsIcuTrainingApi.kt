@@ -33,6 +33,22 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         if (statusCode !in 200..299) throw ApiException(statusCode)
     }
 
+    private fun logBody(tag: String, body: String) {
+        val chunkSize = 3900
+        if (body.length <= chunkSize) {
+            android.util.Log.d("IntervalsIcu", "$tag: $body")
+            return
+        }
+        var offset = 0
+        var part = 1
+        while (offset < body.length) {
+            val end = minOf(offset + chunkSize, body.length)
+            android.util.Log.d("IntervalsIcu", "$tag [part $part]: ${body.substring(offset, end)}")
+            offset = end
+            part++
+        }
+    }
+
     private fun athleteId(): String {
         val id = settingRepository.loadAthleteId()
         return id?.takeIf { it.isNotBlank() } ?: "0"
@@ -56,7 +72,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        android.util.Log.d("IntervalsIcu", "download body=${response.body}")
+        logBody("download", response.body)
         val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, ActivityDto::class.java)
 
         val dtos: List<ActivityDto> = jsonMapper.readValue(response.body, listType)
@@ -74,9 +90,9 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        android.util.Log.d("IntervalsIcu", "athlete body=${response.body}")
-        val dto = jsonMapper.readValue(response.body, AthleteDto::class.java)
-        return dto.toAthlete()
+        logBody("athlete", response.body)
+        val dto = jsonMapper.readValue(response.body, AthleteProfileResponseDto::class.java)
+        return dto.athlete.toAthlete()
     }
 
     override suspend fun laps(token: String, activityId: String): List<Lap> {
@@ -87,7 +103,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         if (response.statusCode !in 200..299) return emptyList()
-        android.util.Log.d("IntervalsIcu", "laps body=${response.body}")
+        logBody("laps $activityId", response.body)
         return try {
             val dto = jsonMapper.readValue(response.body, IntervalsResponseDto::class.java)
             dto.icuIntervals.mapIndexedNotNull { index, interval -> interval.toLap(index + 1) }
@@ -104,13 +120,12 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             auth = Bearer(token),
             headers = mapOf("Accept" to "application/json")
         )
-        android.util.Log.d("IntervalsIcu", "fetchPolyline $activityId status=${response.statusCode} body=${response.body.take(500)}")
         if (response.statusCode !in 200..299) return null
+        logBody("streams $activityId", response.body)
         return try {
             val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, StreamDto::class.java)
             val streams: List<StreamDto> = jsonMapper.readValue(response.body, listType)
             val data = streams.firstOrNull { it.type == "latlng" }?.data
-            android.util.Log.d("IntervalsIcu", "fetchPolyline $activityId data size=${data?.size}")
             if (data == null) return null
             // Format: [lat0, lat1, ..., latN, lng0, lng1, ..., lngN]
             val m = data.size / 2
@@ -138,7 +153,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        android.util.Log.d("IntervalsIcu", "refreshToken body=${response.body}")
+        logBody("refreshToken", response.body)
         val result = jsonMapper.readValue(response.body, TokenRefreshDto::class.java)
         return OAuthToken(
             accessToken = result.accessToken,
@@ -171,14 +186,13 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             if (statusCode in 200..299) conn.inputStream else conn.errorStream
         } catch (e: Exception) { null }?.bufferedReader()?.readText() ?: ""
         conn.disconnect()
-        android.util.Log.d("IntervalsIcu", "exchangeCode status=$statusCode body=$responseBody")
         if (statusCode !in 200..299) throw ApiException(statusCode)
+        logBody("exchangeCode", responseBody)
         val result = jsonMapper.readValue(responseBody, TokenExchangeDto::class.java)
         // Prefer the top-level athlete_id; fall back to the nested athlete object.
         // Ensure the ID always carries the "i" prefix expected by the REST API.
         val athleteId = (result.athleteId ?: result.athlete?.id)
             ?.let { id -> if (id.startsWith("i")) id else "i$id" }
-        android.util.Log.d("IntervalsIcu", "exchangeCode resolved athleteId=$athleteId")
         return OAuthToken(
             accessToken = result.accessToken,
             refreshToken = "",
@@ -273,19 +287,23 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         }
     }
 
+    private data class AthleteProfileResponseDto(
+        val athlete: AthleteDto = AthleteDto()
+    )
+
     private data class AthleteDto(
         val id: String = "",
         val name: String? = null,
         val email: String? = null,
-        val avatarUrl: String? = null
+        val profileMedium: String? = null
     ) {
         fun toAthlete(): Athlete {
             val numericId = id.removePrefix("i").toLongOrNull() ?: 0L
             return Athlete(
                 id = numericId,
                 username = name ?: id,
-                profileMedium = avatarUrl,
-                profile = avatarUrl
+                profileMedium = profileMedium,
+                profile = profileMedium
             )
         }
     }
