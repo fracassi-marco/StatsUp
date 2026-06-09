@@ -1,6 +1,5 @@
 package com.statsup.infrastructure
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
@@ -96,7 +95,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
     }
 
     override suspend fun laps(token: String, activityId: String): List<Lap> {
-        val id = athleteId()
         val response = Http().get(
             url = "https://intervals.icu/api/v1/activity/$activityId/intervals",
             auth = Bearer(token),
@@ -184,7 +182,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val statusCode = conn.responseCode
         val responseBody = try {
             if (statusCode in 200..299) conn.inputStream else conn.errorStream
-        } catch (e: Exception) { null }?.bufferedReader()?.readText() ?: ""
+        } catch (_: Exception) { null }?.bufferedReader()?.readText() ?: ""
         conn.disconnect()
         if (statusCode !in 200..299) throw ApiException(statusCode)
         logBody("exchangeCode", responseBody)
@@ -377,7 +375,7 @@ private fun String.toZonedIso(): String {
     return try {
         LocalDateTime.parse(this)
         "${this}Z"
-    } catch (e: DateTimeParseException) {
+    } catch (_: DateTimeParseException) {
         "1970-01-01T00:00:00Z"
     }
 }

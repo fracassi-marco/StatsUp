@@ -104,7 +104,7 @@
       "3x 31m24s 101bpm",
       "1x 57m40s 93bpm",
       "1x 1h42m 76bpm",
-      "1x 11m41s 84bpm",
+      "1x 11m41s 84bpm"
     ],
     "skyline_chart_bytes":
     "CAcSKoMJggvIBrAIohXSCMwWlgqzCP4MuhD9D4QbqAr3CagL4A23Dr0KhDC9BRoVMzE6Ny0wLkE3MTM4Njc6QD06PywwIhUBAQEBAQEBAQEBAQEBAQEBAQEBAQEoAg==",
@@ -115,7 +115,7 @@
       "distance",
       "altitude",
       "latlng",
-      "velocity_smooth",
+      "velocity_smooth"
     ],
     "has_weather": false,
     "has_segments": false,
@@ -194,6 +194,6 @@
     "average_stride": 0.52725804,
     "icu_average_watts": null,
     "icu_variability_index": null,
-    "strain_score": null,
+    "strain_score": null
   }
 ]
