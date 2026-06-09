@@ -5,13 +5,13 @@ import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
 class ManageBookmarkUseCase(
     private val repository: DbBookmarkedTrainingRepository
 ) {
-    suspend fun getBookmark(trainingId: Long): BookmarkedTraining? =
+    suspend fun getBookmark(trainingId: String): BookmarkedTraining? =
         repository.getBookmarkByTrainingId(trainingId)
 
     /**
      * Creates a new bookmark or updates the existing one for [trainingId].
      */
-    suspend fun addOrUpdate(trainingId: Long, note: String, customTitle: String, difficulty: String) {
+    suspend fun addOrUpdate(trainingId: String, note: String, customTitle: String, difficulty: String) {
         if (repository.getBookmarkByTrainingId(trainingId) != null) {
             repository.updateBookmark(trainingId, note, customTitle, difficulty)
         } else {
@@ -26,7 +26,7 @@ class ManageBookmarkUseCase(
         }
     }
 
-    suspend fun remove(trainingId: Long) {
+    suspend fun remove(trainingId: String) {
         repository.removeBookmarkByTrainingId(trainingId)
     }
 }

@@ -47,7 +47,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun MapListItemPreview(
     trip: Trip,
-    trainingId: Long,
+    trainingId: String,
     modifier: Modifier = Modifier,
     height: Int = 180,
     onClick: (() -> Unit)? = null

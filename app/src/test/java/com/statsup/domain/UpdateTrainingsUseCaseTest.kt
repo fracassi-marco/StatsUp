@@ -36,7 +36,7 @@ class UpdateTrainingsUseCaseTest {
 
     @Test
     fun `returns trainings downloaded from API`() = runTest {
-        val trainings = listOf(makeTraining(id = 1L), makeTraining(id = 2L))
+        val trainings = listOf(makeTraining(id = "1"), makeTraining(id = "2"))
         whenever(trainingRepository.latest()).thenReturn(null)
         whenever(trainingApi.download(token, null)).thenReturn(trainings)
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -48,7 +48,7 @@ class UpdateTrainingsUseCaseTest {
 
     @Test
     fun `saves each new training to repository`() = runTest {
-        val trainings = listOf(makeTraining(id = 10L), makeTraining(id = 20L))
+        val trainings = listOf(makeTraining(id = "10"), makeTraining(id = "20"))
         whenever(trainingRepository.latest()).thenReturn(null)
         whenever(trainingApi.download(token, null)).thenReturn(trainings)
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -86,8 +86,8 @@ class UpdateTrainingsUseCaseTest {
 
     @Test
     fun `passes latest training to API so only newer ones are fetched`() = runTest {
-        val latest = makeTraining(id = 5L)
-        val newTrainings = listOf(makeTraining(id = 6L))
+        val latest = makeTraining(id = "5")
+        val newTrainings = listOf(makeTraining(id = "6"))
         whenever(trainingRepository.latest()).thenReturn(latest)
         whenever(trainingApi.download(token, latest)).thenReturn(newTrainings)
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -126,7 +126,7 @@ class UpdateTrainingsUseCaseTest {
 
     @Test
     fun `returns empty list when there are no new trainings since latest`() = runTest {
-        val latest = makeTraining(id = 99L)
+        val latest = makeTraining(id = "99")
         whenever(trainingRepository.latest()).thenReturn(latest)
         whenever(trainingApi.download(token, latest)).thenReturn(emptyList())
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -150,7 +150,7 @@ class UpdateTrainingsUseCaseTest {
 
     @Test
     fun `multiple new trainings are all persisted`() = runTest {
-        val newTrainings = (1L..5L).map { makeTraining(id = it) }
+        val newTrainings = (1..5).map { makeTraining(id = it.toString()) }
         whenever(trainingRepository.latest()).thenReturn(null)
         whenever(trainingApi.download(token, null)).thenReturn(newTrainings)
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -163,7 +163,7 @@ class UpdateTrainingsUseCaseTest {
 
     // --- Helper ---
 
-    private fun makeTraining(id: Long = 1L) = Training(
+    private fun makeTraining(id: String = "1") = Training(
         id = id,
         name = "Morning Run",
         distance = 10000.0,
@@ -180,7 +180,7 @@ class UpdateTrainingsUseCaseTest {
         maxHeartrate = 0.0,
         elevHigh = 0.0,
         elevLow = 0.0,
-        uploadId = id * 10,
+        uploadId = 0L,
         sufferScore = null
     )
 }

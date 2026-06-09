@@ -21,10 +21,10 @@ interface DbBookmarkedTrainingRepository {
     suspend fun removeBookmark(bookmark: BookmarkedTraining)
 
     @Query("DELETE FROM bookmarked_training WHERE trainingId = :trainingId")
-    suspend fun removeBookmarkByTrainingId(trainingId: Long)
+    suspend fun removeBookmarkByTrainingId(trainingId: String)
 
     @Query("SELECT * FROM bookmarked_training WHERE trainingId = :trainingId")
-    suspend fun getBookmarkByTrainingId(trainingId: Long): BookmarkedTraining?
+    suspend fun getBookmarkByTrainingId(trainingId: String): BookmarkedTraining?
 
     @Query("SELECT * FROM bookmarked_training ORDER BY bookmarkedAt DESC")
     fun getAllBookmarks(): Flow<List<BookmarkedTraining>>
@@ -41,10 +41,10 @@ interface DbBookmarkedTrainingRepository {
     fun getAllBookmarksFlow(): Flow<List<BookmarkedTraining>>
 
     @Query("UPDATE bookmarked_training SET note = :note WHERE trainingId = :trainingId")
-    suspend fun updateNote(trainingId: Long, note: String)
+    suspend fun updateNote(trainingId: String, note: String)
 
     @Query("UPDATE bookmarked_training SET note = :note, customTitle = :customTitle, difficulty = :difficulty WHERE trainingId = :trainingId")
-    suspend fun updateBookmark(trainingId: Long, note: String, customTitle: String, difficulty: String)
+    suspend fun updateBookmark(trainingId: String, note: String, customTitle: String, difficulty: String)
 
     @Query("SELECT * FROM bookmarked_training ORDER BY bookmarkedAt DESC")
     suspend fun getAllBookmarksList(): List<BookmarkedTraining>

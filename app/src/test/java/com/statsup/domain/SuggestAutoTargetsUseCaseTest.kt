@@ -38,8 +38,8 @@ class SuggestAutoTargetsUseCaseTest {
     fun `returns suggestion when historical data yields a different distance target`() {
         // Past 2 months: 100km each → median = 100 → autoTarget = (100*1.05).toInt() = 105
         val trainings = listOf(
-            run(1, now.minusMonths(1), distanceM = 100_000.0),
-            run(2, now.minusMonths(2), distanceM = 100_000.0)
+            run("1", now.minusMonths(1), distanceM = 100_000.0),
+            run("2", now.minusMonths(2), distanceM = 100_000.0)
         )
         val result = useCase(
             trainings = trainings,
@@ -57,8 +57,8 @@ class SuggestAutoTargetsUseCaseTest {
         // currentTrainingGoal = 1 → same → no training difference
         // 100km/month → autoDistanceTarget = 105, currentDistanceGoal = 50 → differs
         val trainings = listOf(
-            run(1, now.minusMonths(1), distanceM = 100_000.0),
-            run(2, now.minusMonths(2), distanceM = 100_000.0)
+            run("1", now.minusMonths(1), distanceM = 100_000.0),
+            run("2", now.minusMonths(2), distanceM = 100_000.0)
         )
         val result = useCase(
             trainings = trainings,
@@ -74,8 +74,8 @@ class SuggestAutoTargetsUseCaseTest {
         // autoDistanceTarget with 100km history → 105; currentGoal = 105 → same
         // autoTrainingTarget with 1 run/month → 1; currentTrainingGoal = 1 → same
         val trainings = listOf(
-            run(1, now.minusMonths(1), distanceM = 100_000.0),
-            run(2, now.minusMonths(2), distanceM = 100_000.0)
+            run("1", now.minusMonths(1), distanceM = 100_000.0),
+            run("2", now.minusMonths(2), distanceM = 100_000.0)
         )
         val result = useCase(
             trainings = trainings,
@@ -94,8 +94,8 @@ class SuggestAutoTargetsUseCaseTest {
     fun `suggestion distanceKm is median of past months plus 5 percent`() {
         // 2 past months: 100km and 200km → median = 150 → (150*1.05).toInt() = 157
         val trainings = listOf(
-            run(1, now.minusMonths(1), distanceM = 100_000.0),
-            run(2, now.minusMonths(2), distanceM = 200_000.0)
+            run("1", now.minusMonths(1), distanceM = 100_000.0),
+            run("2", now.minusMonths(2), distanceM = 200_000.0)
         )
         val result = useCase(
             trainings = trainings,
@@ -110,8 +110,8 @@ class SuggestAutoTargetsUseCaseTest {
     fun `suggestion trainingCount is median of sessions per month plus 5 percent`() {
         // 4 sessions one month, 4 sessions another → median = 4 → (4*1.05).toInt() = 4
         val trainings = buildList {
-            repeat(4) { i -> add(run((i + 1).toLong(), now.minusMonths(1).withDayOfMonth(i + 1))) }
-            repeat(4) { i -> add(run((i + 10).toLong(), now.minusMonths(2).withDayOfMonth(i + 1))) }
+            repeat(4) { i -> add(run("1" + i.toString(), now.minusMonths(1).withDayOfMonth(i + 1))) }
+            repeat(4) { i -> add(run("10" + i.toString(), now.minusMonths(2).withDayOfMonth(i + 1))) }
         }
         val result = useCase(
             trainings = trainings,
@@ -125,8 +125,8 @@ class SuggestAutoTargetsUseCaseTest {
     @Test
     fun `current month trainings are excluded from the suggestion calculation`() {
         // Huge distance this month should not skew the suggestion
-        val currentMonthRun = run(99, now, distanceM = 9_999_999.0)
-        val pastRun = run(1, now.minusMonths(1), distanceM = 100_000.0)
+        val currentMonthRun = run("99", now, distanceM = 9_999_999.0)
+        val pastRun = run("1", now.minusMonths(1), distanceM = 100_000.0)
         val result = useCase(
             trainings = listOf(currentMonthRun, pastRun),
             currentDistanceGoalKm = 0,
@@ -141,7 +141,7 @@ class SuggestAutoTargetsUseCaseTest {
     // Helper
     // -------------------------------------------------------------------------
 
-    private fun run(id: Long, date: ZonedDateTime, distanceM: Double = 10_000.0) = Training(
+    private fun run(id: String, date: ZonedDateTime, distanceM: Double = 10_000.0) = Training(
         id = id,
         name = "Run $id",
         distance = distanceM,
@@ -160,7 +160,7 @@ class SuggestAutoTargetsUseCaseTest {
         elevHigh = 0.0,
         elevLow = 0.0,
         map = null,
-        uploadId = id * 10,
+        uploadId = 0L,
         sufferScore = null
     )
 }

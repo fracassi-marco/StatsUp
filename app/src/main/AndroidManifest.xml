@@ -38,7 +38,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:host="com-sportshub" android:scheme="oauth" />
+                <data android:host="oauth" android:scheme="statsup" />
             </intent-filter>
         </activity>
         <provider

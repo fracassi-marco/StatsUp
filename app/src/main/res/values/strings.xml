@@ -75,7 +75,7 @@
     <string name="month_by_month">Last 12 months</string>
     <string name="trend">Trend</string>
     <string name="top_training">Top training</string>
-    <string name="load">Syncing from Strava…</string>
+    <string name="load">Syncing from intervals.icu…</string>
     <string name="done">Done</string>
     <string name="past">Past</string>
     <string name="min_altitude">Min altit.</string>
@@ -117,11 +117,11 @@
     <string name="add_bookmark">Add</string>
     <string name="no_trainings_yet">No trainings yet</string>
     <string name="no_trainings_with_filter">No trainings found for this sport type</string>
-    <string name="import_trainings_hint">Tap the import button to sync your trainings from Strava</string>
+    <string name="import_trainings_hint">Tap the import button to sync your trainings from intervals.icu</string>
     <string name="welcome_title">Welcome to StatsUp!</string>
-    <string name="welcome_subtitle">Start tracking your athletic progress by importing your trainings from Strava</string>
+    <string name="welcome_subtitle">Start tracking your athletic progress by importing your trainings from intervals.icu</string>
     <string name="instruction_step_1">Tap the circular import button at the bottom center</string>
-    <string name="instruction_step_2">Sign in with your Strava account</string>
+    <string name="instruction_step_2">Sign in with your intervals.icu account</string>
     <string name="instruction_step_3">Your trainings will be synced automatically</string>
     <string name="share">Share</string>
     <string name="settings_export_data">Export data</string>
@@ -141,10 +141,10 @@
     <string name="settings_import_confirm_body">This will delete all current data and replace it with the imported data. This action cannot be undone. Are you sure you want to continue?</string>
     <string name="settings_import_action">Import</string>
 
-    <string name="settings_full_import_strava">Full re-sync</string>
-    <string name="settings_full_import_strava_description">Strava</string>
-    <string name="settings_full_import_confirm_title">Re-import from Strava</string>
-    <string name="settings_full_import_confirm_body">This will delete all local data and re-download everything from Strava. The operation may take a while. Are you sure?</string>
+    <string name="settings_full_import">Full re-sync</string>
+    <string name="settings_full_import_description">intervals.icu</string>
+    <string name="settings_full_import_confirm_title">Re-import from intervals.icu</string>
+    <string name="settings_full_import_confirm_body">This will delete all local data and re-download everything from intervals.icu. The operation may take a while. Are you sure?</string>
     <string name="settings_full_import_action">Re-import</string>
 
     <string name="span_month">Month</string>
@@ -270,7 +270,7 @@
     <string name="record_best_pace">Best pace</string>
     <string name="delete_training">Delete activity</string>
     <string name="delete_training_confirm_title">Delete activity</string>
-    <string name="delete_training_confirm_body">This activity will be deleted from the app. You can re-import it from Strava at any time.</string>
+    <string name="delete_training_confirm_body">This activity will be deleted from the app. You can re-import it from intervals.icu at any time.</string>
     <string name="delete_training_confirm_action">Delete</string>
 
     <!-- Weight tracking -->

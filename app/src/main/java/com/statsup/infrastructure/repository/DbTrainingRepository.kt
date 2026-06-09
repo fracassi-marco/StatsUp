@@ -20,18 +20,18 @@ interface DbTrainingRepository : TrainingRepository {
     override fun latest(): Training?
 
     @Query("SELECT * FROM training WHERE id = :id")
-    override fun byId(id: Long): Training
+    override fun byId(id: String): Training
 
     @Query("DELETE FROM training")
     override suspend fun deleteAll()
 
     @Query("DELETE FROM training WHERE id = :id")
-    override suspend fun deleteById(id: Long)
+    override suspend fun deleteById(id: String)
 
     @Query("SELECT * FROM training ORDER BY startDate DESC")
     override suspend fun getAllTrainings(): List<Training>
 
     @Query("UPDATE training SET centerLat = :lat, centerLng = :lng WHERE id = :id")
-    override suspend fun updateCenter(id: Long, lat: Double, lng: Double)
+    override suspend fun updateCenter(id: String, lat: Double, lng: Double)
 }
 

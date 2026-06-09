@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
     ]
 )
 data class Training(
-    @PrimaryKey var id: Long,
+    @PrimaryKey var id: String,
     var resourceState: Int? = null,
     var name: String,
     var distance: Double,

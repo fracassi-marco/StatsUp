@@ -7,6 +7,6 @@ data class BestEffort(
     val distanceMeters: Double,
     val timeSeconds: Int,
     val paceMinPerKm: Double,
-    val trainingId: Long,
+    val trainingId: String,
     val date: ZonedDateTime
 )

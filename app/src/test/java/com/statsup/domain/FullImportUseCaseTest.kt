@@ -45,7 +45,7 @@ class FullImportUseCaseTest {
 
     @Test
     fun `returns trainings downloaded from API`() = runTest {
-        val trainings = listOf(makeTraining(id = 1L), makeTraining(id = 2L))
+        val trainings = listOf(makeTraining(id = "1"), makeTraining(id = "2"))
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
         whenever(trainingApi.download(token, null)).thenReturn(trainings)
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -69,7 +69,7 @@ class FullImportUseCaseTest {
 
     @Test
     fun `saves each downloaded training to repository`() = runTest {
-        val trainings = listOf(makeTraining(id = 10L), makeTraining(id = 20L))
+        val trainings = listOf(makeTraining(id = "10"), makeTraining(id = "20"))
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
         whenever(trainingApi.download(token, null)).thenReturn(trainings)
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -107,8 +107,8 @@ class FullImportUseCaseTest {
 
     @Test
     fun `restores bookmarks whose trainingId is still present after import`() = runTest {
-        val training = makeTraining(id = 100L)
-        val bookmark = BookmarkedTraining(id = 5L, trainingId = 100L, note = "great run")
+        val training = makeTraining(id = "100")
+        val bookmark = BookmarkedTraining(id = 5L, trainingId = "100", note = "great run")
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(listOf(bookmark))
         whenever(trainingApi.download(token, null)).thenReturn(listOf(training))
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -119,14 +119,14 @@ class FullImportUseCaseTest {
         val captor = argumentCaptor<BookmarkedTraining>()
         verify(bookmarkedTrainingRepository).addBookmark(captor.capture())
         assertEquals(0L, captor.firstValue.id)
-        assertEquals(100L, captor.firstValue.trainingId)
+        assertEquals("100", captor.firstValue.trainingId)
         assertEquals("great run", captor.firstValue.note)
     }
 
     @Test
     fun `does NOT restore bookmarks whose trainingId is no longer in the import`() = runTest {
-        val training = makeTraining(id = 100L)
-        val orphanBookmark = BookmarkedTraining(id = 3L, trainingId = 999L)
+        val training = makeTraining(id = "100")
+        val orphanBookmark = BookmarkedTraining(id = 3L, trainingId = "999")
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(listOf(orphanBookmark))
         whenever(trainingApi.download(token, null)).thenReturn(listOf(training))
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -139,10 +139,10 @@ class FullImportUseCaseTest {
 
     @Test
     fun `restores only matching bookmarks when list is mixed`() = runTest {
-        val training1 = makeTraining(id = 1L)
-        val training2 = makeTraining(id = 2L)
-        val bookmarkKeep = BookmarkedTraining(id = 1L, trainingId = 1L)
-        val bookmarkDrop = BookmarkedTraining(id = 2L, trainingId = 99L) // not in import
+        val training1 = makeTraining(id = "1")
+        val training2 = makeTraining(id = "2")
+        val bookmarkKeep = BookmarkedTraining(id = 1L, trainingId = "1")
+        val bookmarkDrop = BookmarkedTraining(id = 2L, trainingId = "99") // not in import
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(
             listOf(bookmarkKeep, bookmarkDrop)
         )
@@ -154,7 +154,7 @@ class FullImportUseCaseTest {
         // Only bookmarkKeep should be re-added
         val captor = argumentCaptor<BookmarkedTraining>()
         verify(bookmarkedTrainingRepository, times(1)).addBookmark(captor.capture())
-        assertEquals(1L, captor.firstValue.trainingId)
+        assertEquals("1", captor.firstValue.trainingId)
     }
 
     // --- Edge cases ---
@@ -183,7 +183,7 @@ class FullImportUseCaseTest {
     fun `when API returns empty list all bookmarks are lost`() = runTest {
         // Potential data-loss scenario: if the API returns [] (network glitch?),
         // all trainings are deleted and no bookmarks survive. Test documents this behaviour.
-        val bookmark = BookmarkedTraining(id = 1L, trainingId = 42L)
+        val bookmark = BookmarkedTraining(id = 1L, trainingId = "42")
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(listOf(bookmark))
         whenever(trainingApi.download(token, null)).thenReturn(emptyList())
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -197,7 +197,7 @@ class FullImportUseCaseTest {
 
     @Test
     fun `handles no pre-existing bookmarks gracefully`() = runTest {
-        val trainings = listOf(makeTraining(id = 1L))
+        val trainings = listOf(makeTraining(id = "1"))
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
         whenever(trainingApi.download(token, null)).thenReturn(trainings)
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -212,8 +212,8 @@ class FullImportUseCaseTest {
     fun `bookmark id is always reset to 0 when restoring`() = runTest {
         // If id is NOT reset to 0, Room's autoGenerate will use the old id as explicit PK,
         // potentially conflicting with an existing row.
-        val training = makeTraining(id = 7L)
-        val bookmark = BookmarkedTraining(id = 999L, trainingId = 7L) // large existing id
+        val training = makeTraining(id = "7")
+        val bookmark = BookmarkedTraining(id = 999L, trainingId = "7") // large existing id
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(listOf(bookmark))
         whenever(trainingApi.download(token, null)).thenReturn(listOf(training))
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
@@ -227,7 +227,7 @@ class FullImportUseCaseTest {
 
     // --- Helper ---
 
-    private fun makeTraining(id: Long = 1L) = Training(
+    private fun makeTraining(id: String = "1") = Training(
         id = id,
         name = "Morning Run",
         distance = 10000.0,
@@ -244,7 +244,7 @@ class FullImportUseCaseTest {
         maxHeartrate = 0.0,
         elevHigh = 0.0,
         elevLow = 0.0,
-        uploadId = id * 10,
+        uploadId = 0L,
         sufferScore = null
     )
 }

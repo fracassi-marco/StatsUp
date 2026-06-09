@@ -3,12 +3,14 @@ package com.statsup.domain.repository
 import com.statsup.domain.ExportSettings
 
 interface SettingRepository {
-    fun saveStravaToken(token: String)
-    fun loadStravaToken(): String?
-    fun saveStravaRefreshToken(token: String)
-    fun loadStravaRefreshToken(): String?
-    fun saveStravaTokenExpiry(expiresAt: Long)
-    fun loadStravaTokenExpiry(): Long
+    fun saveApiToken(token: String)
+    fun loadApiToken(): String?
+    fun saveApiRefreshToken(token: String)
+    fun loadApiRefreshToken(): String?
+    fun saveApiTokenExpiry(expiresAt: Long)
+    fun loadApiTokenExpiry(): Long
+    fun saveAthleteId(id: String)
+    fun loadAthleteId(): String?
     fun saveTheme(value: Int)
     fun saveMonthlyGoal(value: Int)
     fun saveMonthlyTrainingGoal(value: Int)

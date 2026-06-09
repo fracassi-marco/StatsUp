@@ -32,7 +32,7 @@ import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.ActivityExportService
 import kotlinx.coroutines.launch
 import com.statsup.infrastructure.TrainingShareService
-import com.statsup.infrastructure.StravaTrainingApi
+import com.statsup.infrastructure.IntervalsIcuTrainingApi
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
 import com.statsup.infrastructure.service.DataExportImportService
@@ -85,10 +85,11 @@ class MainActivity : ComponentActivity() {
                     settingRepository
                 )
             }
-            val updateActivitiesUseCase = remember { UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, StravaTrainingApi()) }
-            val fullImportUseCase = remember { FullImportUseCase(db.trainingRepository, db.athleteRepository, db.bookmarkedTrainingRepository, StravaTrainingApi()) }
+            val api = remember { IntervalsIcuTrainingApi(settingRepository) }
+            val updateActivitiesUseCase = remember { UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api) }
+            val fullImportUseCase = remember { FullImportUseCase(db.trainingRepository, db.athleteRepository, db.bookmarkedTrainingRepository, api) }
             val navController = rememberNavController()
-            val mainViewModel: MainViewModel = viewModel { MainViewModel(updateActivitiesUseCase, fullImportUseCase, settingRepository) }
+            val mainViewModel: MainViewModel = viewModel { MainViewModel(updateActivitiesUseCase, fullImportUseCase, settingRepository, api) }
             val settingsViewModel: SettingsViewModel = viewModel { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService, applicationContext) }
             val historyViewModel: HistoryViewModel = viewModel { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel: DashboardViewModel = viewModel { DashboardViewModel(application, db.trainingRepository, settingRepository) }
@@ -100,11 +101,11 @@ class MainActivity : ComponentActivity() {
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
-                onResult = { result -> authService?.let { mainViewModel.onStravaResult(result, it) } }
+                onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it) } }
             )
             val fullImportLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
-                onResult = { result -> authService?.let { mainViewModel.onStravaResult(result, it) } }
+                onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it) } }
             )
 
             val isInitialLoading = historyViewModel.isInitialLoading.value
@@ -180,7 +181,7 @@ class MainActivity : ComponentActivity() {
                                                 popUpTo(Screens.Dashboard.route) { inclusive = true }
                                             }
                                         },
-                                        onFullImportFromStrava = {
+                                        onFullImport = {
                                             authService?.let { service ->
                                                 fullImportLauncher.launch(mainViewModel.startFullImport(service))
                                             }
@@ -191,9 +192,9 @@ class MainActivity : ComponentActivity() {
                                 // Training Detail Screen
                                 composable(
                                     route = Screens.TRAINING_DETAIL,
-                                    arguments = listOf(navArgument("trainingId") { type = NavType.LongType })
+                                    arguments = listOf(navArgument("trainingId") { type = NavType.StringType })
                                 ) { backStackEntry ->
-                                    val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
+                                    val trainingId = backStackEntry.arguments?.getString("trainingId") ?: ""
                                     val context = LocalContext.current
                                     val scope = rememberCoroutineScope()
                                     val detailViewModel: TrainingDetailViewModel = viewModel(backStackEntry) {
@@ -201,7 +202,7 @@ class MainActivity : ComponentActivity() {
                                             db.trainingRepository,
                                             db.bookmarkedTrainingRepository,
                                             settingRepository,
-                                            StravaTrainingApi(),
+                                            api,
                                             trainingId
                                         )
                                     }
@@ -251,15 +252,15 @@ class MainActivity : ComponentActivity() {
                                 // Map Fullscreen Screen
                                 composable(
                                     route = Screens.MAP_FULLSCREEN,
-                                    arguments = listOf(navArgument("trainingId") { type = NavType.LongType })
+                                    arguments = listOf(navArgument("trainingId") { type = NavType.StringType })
                                 ) { backStackEntry ->
-                                    val trainingId = backStackEntry.arguments?.getLong("trainingId") ?: 0L
+                                    val trainingId = backStackEntry.arguments?.getString("trainingId") ?: ""
                                     val detailViewModel: TrainingDetailViewModel = viewModel(backStackEntry) {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
                                             db.bookmarkedTrainingRepository,
                                             settingRepository,
-                                            StravaTrainingApi(),
+                                            api,
                                             trainingId
                                         )
                                     }

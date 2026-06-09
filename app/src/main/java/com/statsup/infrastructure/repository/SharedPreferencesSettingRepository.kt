@@ -6,28 +6,36 @@ import com.statsup.domain.ExportSettings
 import com.statsup.domain.repository.SettingRepository
 
 class SharedPreferencesSettingRepository(private val context: Context) : SettingRepository {
-    override fun saveStravaToken(token: String) {
-        sharedPreferences().edit { putString("strava.access_token", token) }
+    override fun saveApiToken(token: String) {
+        sharedPreferences().edit { putString("api.access_token", token) }
     }
 
-    override fun loadStravaToken(): String? {
-        return sharedPreferences().getString("strava.access_token", null)
+    override fun loadApiToken(): String? {
+        return sharedPreferences().getString("api.access_token", null)
     }
 
-    override fun saveStravaRefreshToken(token: String) {
-        sharedPreferences().edit { putString("strava.refresh_token", token) }
+    override fun saveApiRefreshToken(token: String) {
+        sharedPreferences().edit { putString("api.refresh_token", token) }
     }
 
-    override fun loadStravaRefreshToken(): String? {
-        return sharedPreferences().getString("strava.refresh_token", null)
+    override fun loadApiRefreshToken(): String? {
+        return sharedPreferences().getString("api.refresh_token", null)
     }
 
-    override fun saveStravaTokenExpiry(expiresAt: Long) {
-        sharedPreferences().edit { putLong("strava.token_expiry", expiresAt) }
+    override fun saveApiTokenExpiry(expiresAt: Long) {
+        sharedPreferences().edit { putLong("api.token_expiry", expiresAt) }
     }
 
-    override fun loadStravaTokenExpiry(): Long {
-        return sharedPreferences().getLong("strava.token_expiry", 0L)
+    override fun loadApiTokenExpiry(): Long {
+        return sharedPreferences().getLong("api.token_expiry", 0L)
+    }
+
+    override fun saveAthleteId(id: String) {
+        sharedPreferences().edit { putString("api.athlete_id", id) }
+    }
+
+    override fun loadAthleteId(): String? {
+        return sharedPreferences().getString("api.athlete_id", null)
     }
 
     override fun saveTheme(value: Int) {

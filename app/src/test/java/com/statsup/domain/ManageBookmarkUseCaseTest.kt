@@ -18,7 +18,7 @@ class ManageBookmarkUseCaseTest {
     private lateinit var repository: DbBookmarkedTrainingRepository
     private lateinit var useCase: ManageBookmarkUseCase
 
-    private val trainingId = 42L
+    private val trainingId = "42"
 
     @Before
     fun setUp() {
@@ -127,7 +127,7 @@ class ManageBookmarkUseCaseTest {
 
     @Test
     fun `remove passes the correct trainingId`() = runTest {
-        val otherId = 99L
+        val otherId = "99"
 
         useCase.remove(otherId)
 
@@ -139,6 +139,6 @@ class ManageBookmarkUseCaseTest {
     // Helper
     // -------------------------------------------------------------------------
 
-    private fun makeBookmark(trainingId: Long = 1L) =
+    private fun makeBookmark(trainingId: String = "1") =
         BookmarkedTraining(id = 1L, trainingId = trainingId, note = "original")
 }

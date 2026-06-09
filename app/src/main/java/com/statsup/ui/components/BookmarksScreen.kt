@@ -43,7 +43,7 @@ import com.statsup.ui.viewmodel.BookmarksViewModel
 @Composable
 fun BookmarksScreen(
     viewModel: BookmarksViewModel,
-    onTrainingClick: (Long) -> Unit
+    onTrainingClick: (String) -> Unit
 ) {
     val trainings by viewModel.bookmarkedTrainings.collectAsState()
 

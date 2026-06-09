@@ -11,13 +11,13 @@ object MapSnapshotCache {
     private const val TAG = "MapSnapshotCache"
     private const val DIR = "map_snapshots"
 
-    private fun cacheFile(context: Context, trainingId: Long): File {
+    private fun cacheFile(context: Context, trainingId: String): File {
         val dir = File(context.cacheDir, DIR)
         if (!dir.exists()) dir.mkdirs()
         return File(dir, "$trainingId.jpg")
     }
 
-    fun load(context: Context, trainingId: Long): Bitmap? {
+    fun load(context: Context, trainingId: String): Bitmap? {
         return try {
             val file = cacheFile(context, trainingId)
             if (file.exists()) BitmapFactory.decodeFile(file.absolutePath) else null
@@ -27,7 +27,7 @@ object MapSnapshotCache {
         }
     }
 
-    fun save(context: Context, trainingId: Long, bitmap: Bitmap) {
+    fun save(context: Context, trainingId: String, bitmap: Bitmap) {
         try {
             val file = cacheFile(context, trainingId)
             file.outputStream().use { out ->

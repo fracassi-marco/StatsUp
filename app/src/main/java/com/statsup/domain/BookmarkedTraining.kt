@@ -24,7 +24,7 @@ data class BookmarkedTraining(
     val id: Long = 0,
 
     @SerializedName("trainingId")
-    val trainingId: Long,
+    val trainingId: String,
 
     @SerializedName("note")
     val note: String = "",

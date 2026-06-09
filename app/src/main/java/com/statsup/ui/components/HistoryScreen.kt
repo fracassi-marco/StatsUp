@@ -45,7 +45,7 @@ import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (Long) -> Unit) {
+fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (String) -> Unit) {
     val state = viewModel.state.value
 
     if (state.show) {
@@ -147,7 +147,7 @@ fun MonthHeader(monthYear: String) {
 
 //@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TrainingListItem(training: Training, onTrainingClick: (Long) -> Unit) {
+fun TrainingListItem(training: Training, onTrainingClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

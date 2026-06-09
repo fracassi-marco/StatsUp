@@ -24,7 +24,7 @@ class TrainingDetailViewModel(
     bookmarkedTrainingRepository: DbBookmarkedTrainingRepository,
     private val settingRepository: SettingRepository,
     private val trainingApi: TrainingApi,
-    private val trainingId: Long
+    private val trainingId: String
 ) : ViewModel() {
 
     private val jsonMapper = jsonMapper { addModule(kotlinModule()) }.apply {
@@ -112,19 +112,19 @@ class TrainingDetailViewModel(
     }
 
     private suspend fun getValidToken(): String? {
-        val token = settingRepository.loadStravaToken() ?: return null
-        val expiry = settingRepository.loadStravaTokenExpiry()
+        val token = settingRepository.loadApiToken()?.takeIf { it.isNotBlank() } ?: return null
+        val expiry = settingRepository.loadApiTokenExpiry()
         val nowSecs = System.currentTimeMillis() / 1000
         if (expiry == 0L || nowSecs < expiry - 60) return token
 
-        val savedRefreshToken = settingRepository.loadStravaRefreshToken() ?: return null
+        val savedRefreshToken = settingRepository.loadApiRefreshToken() ?: return null
         return try {
             val newTokenData = withContext(Dispatchers.IO) {
                 trainingApi.refreshToken(savedRefreshToken)
             }
-            settingRepository.saveStravaToken(newTokenData.accessToken)
-            settingRepository.saveStravaRefreshToken(newTokenData.refreshToken)
-            settingRepository.saveStravaTokenExpiry(newTokenData.expiresAt)
+            settingRepository.saveApiToken(newTokenData.accessToken)
+            settingRepository.saveApiRefreshToken(newTokenData.refreshToken)
+            settingRepository.saveApiTokenExpiry(newTokenData.expiresAt)
             newTokenData.accessToken
         } catch (e: Exception) {
             e.printStackTrace()

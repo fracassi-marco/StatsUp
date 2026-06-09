@@ -7,9 +7,9 @@ interface TrainingRepository {
     fun all(): Flow<List<Training>>
     suspend fun add(training: Training): Long
     fun latest(): Training?
-    fun byId(id: Long): Training
+    fun byId(id: String): Training
     suspend fun deleteAll()
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: String)
     suspend fun getAllTrainings(): List<Training>
-    suspend fun updateCenter(id: Long, lat: Double, lng: Double)
+    suspend fun updateCenter(id: String, lat: Double, lng: Double)
 }
