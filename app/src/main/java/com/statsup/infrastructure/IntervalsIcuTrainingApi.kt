@@ -15,6 +15,8 @@ import com.statsup.domain.Route
 import com.statsup.domain.Training
 import com.statsup.domain.TrainingApi
 import com.statsup.domain.repository.SettingRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import topinambur.Bearer
 import topinambur.Http
 import java.time.LocalDate
@@ -30,22 +32,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
 
     private fun checkStatus(statusCode: Int) {
         if (statusCode !in 200..299) throw ApiException(statusCode)
-    }
-
-    private fun logBody(tag: String, body: String) {
-        val chunkSize = 3900
-        if (body.length <= chunkSize) {
-            android.util.Log.d("IntervalsIcu", "$tag: $body")
-            return
-        }
-        var offset = 0
-        var part = 1
-        while (offset < body.length) {
-            val end = minOf(offset + chunkSize, body.length)
-            android.util.Log.d("IntervalsIcu", "$tag [part $part]: ${body.substring(offset, end)}")
-            offset = end
-            part++
-        }
     }
 
     private fun athleteId(): String {
@@ -71,7 +57,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        logBody("download", response.body)
         val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, ActivityDto::class.java)
 
         val dtos: List<ActivityDto> = jsonMapper.readValue(response.body, listType)
@@ -89,7 +74,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        logBody("athlete", response.body)
         val dto = jsonMapper.readValue(response.body, AthleteProfileResponseDto::class.java)
         return dto.athlete.toAthlete()
     }
@@ -101,7 +85,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         if (response.statusCode !in 200..299) return emptyList()
-        logBody("laps $activityId", response.body)
         return try {
             val dto = jsonMapper.readValue(response.body, IntervalsResponseDto::class.java)
             dto.icuIntervals.mapIndexedNotNull { index, interval -> interval.toLap(index + 1) }
@@ -119,7 +102,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         if (response.statusCode !in 200..299) return null
-        logBody("streams $activityId", response.body)
         return try {
             val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, StreamDto::class.java)
             val streams: List<StreamDto> = jsonMapper.readValue(response.body, listType)
@@ -151,7 +133,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json")
         )
         checkStatus(response.statusCode)
-        logBody("refreshToken", response.body)
         val result = jsonMapper.readValue(response.body, TokenRefreshDto::class.java)
         return OAuthToken(
             accessToken = result.accessToken,
@@ -172,7 +153,9 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             "${java.net.URLEncoder.encode(it.key, "UTF-8")}=${java.net.URLEncoder.encode(it.value, "UTF-8")}"
         }
         val url = java.net.URL("https://intervals.icu/api/oauth/token")
-        val conn = (url.openConnection() as java.net.HttpURLConnection).apply {
+        val conn = (withContext(Dispatchers.IO) {
+            url.openConnection()
+        } as java.net.HttpURLConnection).apply {
             requestMethod = "POST"
             setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
             setRequestProperty("Accept", "application/json")
@@ -185,7 +168,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         } catch (_: Exception) { null }?.bufferedReader()?.readText() ?: ""
         conn.disconnect()
         if (statusCode !in 200..299) throw ApiException(statusCode)
-        logBody("exchangeCode", responseBody)
         val result = jsonMapper.readValue(responseBody, TokenExchangeDto::class.java)
         // Prefer the top-level athlete_id; fall back to the nested athlete object.
         // Ensure the ID always carries the "i" prefix expected by the REST API.

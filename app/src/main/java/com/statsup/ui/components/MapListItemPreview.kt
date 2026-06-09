@@ -32,6 +32,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Componente ottimizzato per visualizzare una mappa in modalità lite nella lista.
@@ -117,7 +118,7 @@ fun MapListItemPreview(
                     )
 
                     // Attendi il tile statico iniziale
-                    withTimeoutOrNull(5_000) {
+                    withTimeoutOrNull(5_000.milliseconds) {
                         suspendCancellableCoroutine { cont ->
                             googleMap.setOnMapLoadedCallback { cont.resume(Unit) }
                         }
@@ -125,7 +126,7 @@ fun MapListItemPreview(
 
                     // Registra la callback PRIMA di spostare la camera per evitare race condition,
                     // poi aggiorna la camera sul percorso e attendi il tile aggiornato.
-                    withTimeoutOrNull(5_000) {
+                    withTimeoutOrNull(5_000.milliseconds) {
                         suspendCancellableCoroutine { cont ->
                             googleMap.setOnMapLoadedCallback { cont.resume(Unit) }
                             try {
