@@ -10,7 +10,13 @@ class UpdateTrainingsUseCase(
 
     suspend operator fun invoke(token: String): List<Training> {
         val latestTraining = trainingRepository.latest()
-        val trainings = trainingApi.download(token, latestTraining)
+        val downloaded = trainingApi.download(token, latestTraining)
+        val trainings = downloaded.map { training ->
+            if (training.trip == null) {
+                val polyline = trainingApi.fetchPolyline(token, training.id)
+                if (polyline != null) training.copy(map = Route(summaryPolyline = polyline)) else training
+            } else training
+        }
         trainings.forEach { training ->
             val center = training.trip?.centerPoint()
             trainingRepository.add(

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PRO
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.PolyUtil
 import com.statsup.BuildConfig
 import com.statsup.domain.ApiException
 import com.statsup.domain.Athlete
@@ -33,9 +35,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
 
     private fun athleteId(): String {
         val id = settingRepository.loadAthleteId()
-        if (id.isNullOrBlank()) {
-            android.util.Log.w("IntervalsIcu", "athleteId not set — API calls will use '0' and will fail with 403. Re-import to fix.")
-        }
         return id?.takeIf { it.isNotBlank() } ?: "0"
     }
 
@@ -95,6 +94,35 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             intervals.mapIndexedNotNull { index, dto -> dto.toLap(index + 1) }
         } catch (e: Exception) {
             emptyList()
+        }
+    }
+
+    override suspend fun fetchPolyline(token: String, activityId: String): String? {
+        val response = Http().get(
+            url = "https://intervals.icu/api/v1/activity/$activityId/streams",
+            params = mapOf("types" to "latlng"),
+            auth = Bearer(token),
+            headers = mapOf("Accept" to "application/json")
+        )
+        android.util.Log.d("IntervalsIcu", "fetchPolyline $activityId status=${response.statusCode} body=${response.body.take(500)}")
+        if (response.statusCode !in 200..299) return null
+        return try {
+            val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, StreamDto::class.java)
+            val streams: List<StreamDto> = jsonMapper.readValue(response.body, listType)
+            val data = streams.firstOrNull { it.type == "latlng" }?.data
+            android.util.Log.d("IntervalsIcu", "fetchPolyline $activityId data size=${data?.size}")
+            if (data == null) return null
+            // Format: [lat0, lat1, ..., latN, lng0, lng1, ..., lngN]
+            val m = data.size / 2
+            val points = (0 until m).mapNotNull { i ->
+                val lat = data.getOrNull(i) ?: return@mapNotNull null
+                val lng = data.getOrNull(m + i) ?: return@mapNotNull null
+                LatLng(lat, lng)
+            }
+            if (points.isEmpty()) null else PolyUtil.encode(points)
+        } catch (e: Exception) {
+            android.util.Log.e("IntervalsIcu", "fetchPolyline $activityId parse error", e)
+            null
         }
     }
 
@@ -278,6 +306,11 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             )
         }
     }
+
+    private data class StreamDto(
+        val type: String = "",
+        val data: List<Double?> = emptyList()
+    )
 
     private data class TokenRefreshDto(
         val accessToken: String = "",

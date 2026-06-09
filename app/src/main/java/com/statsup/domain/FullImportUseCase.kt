@@ -16,7 +16,13 @@ class FullImportUseCase(
 
         trainingRepository.deleteAll()
 
-        val trainings = trainingApi.download(token, latest = null)
+        val downloaded = trainingApi.download(token, latest = null)
+        val trainings = downloaded.map { training ->
+            if (training.trip == null) {
+                val polyline = trainingApi.fetchPolyline(token, training.id)
+                if (polyline != null) training.copy(map = Route(summaryPolyline = polyline)) else training
+            } else training
+        }
         trainings.forEach { training ->
             val center = training.trip?.centerPoint()
             trainingRepository.add(
