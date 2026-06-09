@@ -67,7 +67,12 @@ data class Training(
     var sufferScore: Double?,
     var lapsJson: String? = null,
     var centerLat: Double? = null,
-    var centerLng: Double? = null
+    var centerLng: Double? = null,
+    var source: String? = null,
+    var middleware: String? = null,
+    var middlewareId: String? = null,
+    var sourceId: String? = null,
+    var deviceName: String? = null
 ) {
     val date: ZonedDateTime by lazy { ZonedDateTime.parse(startDate) }
 

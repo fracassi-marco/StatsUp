@@ -450,6 +450,28 @@ fun TrainingDetailScreen(
                                 )
                             }
                         }
+
+                        // Sorgente attività
+                        val trainingMiddleware = training.middleware
+                        val trainingSource = training.source
+                        if (trainingMiddleware != null && trainingSource != null) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+                            val deviceName = training.deviceName
+                            if (deviceName != null) {
+                                Text(
+                                    text = deviceName,
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                    modifier = Modifier.padding(bottom = 2.dp)
+                                )
+                            }
+                            Text(
+                                text = stringResource(R.string.activity_source, trainingMiddleware, trainingSource),
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            )
+                        }
                     }
                 }
             }

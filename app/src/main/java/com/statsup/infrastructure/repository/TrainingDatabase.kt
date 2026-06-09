@@ -14,7 +14,7 @@ import com.statsup.domain.WeightEntry
 
 @Database(
     entities = [Training::class, Athlete::class, BookmarkedTraining::class, WeightEntry::class],
-    version = 8,
+    version = 11,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -148,6 +148,26 @@ abstract class TrainingDatabase: RoomDatabase() {
             }
         }
 
+        private val MIGRATION_8_9 = object : Migration(8, 9) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE training ADD COLUMN source TEXT")
+            }
+        }
+
+        private val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE training ADD COLUMN middleware TEXT")
+                db.execSQL("ALTER TABLE training ADD COLUMN middlewareId TEXT")
+                db.execSQL("ALTER TABLE training ADD COLUMN sourceId TEXT")
+            }
+        }
+
+        private val MIGRATION_10_11 = object : Migration(10, 11) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE training ADD COLUMN deviceName TEXT")
+            }
+        }
+
         private val MIGRATION_6_7 = object : Migration(6, 7) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL(
@@ -175,7 +195,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11)
                     .build()
 
                     INSTANCE = instance

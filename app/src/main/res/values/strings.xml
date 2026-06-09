@@ -402,5 +402,6 @@
     <string name="level_name_18">Divine</string>
     <string name="level_name_19">Absolute</string>
     <string name="level_name_20">Eternal</string>
+    <string name="activity_source">%1$s &gt; %2$s</string>
 </resources>
 

@@ -240,7 +240,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val icuMaxHeartrate: Double? = null,
         // Native intervals.icu altitude fields (preferred — added June 2024)
         val maxAltitude: Double? = null,
-        val minAltitude: Double? = null
+        val minAltitude: Double? = null,
+        val source: String? = null,
+        val externalId: String? = null,
+        val deviceName: String? = null
     ) {
         fun toTraining(): Training {
             val localDateStr = startDateLocal ?: ""
@@ -282,7 +285,12 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
                 elevLow = resolvedElevLow ?: 0.0,
                 map = if (polyline != null) Route(summaryPolyline = polyline) else Route(),
                 uploadId = 0L,
-                sufferScore = null
+                sufferScore = null,
+                source = source,
+                middleware = "INTERVALS",
+                middlewareId = id,
+                sourceId = externalId,
+                deviceName = deviceName?.trim()?.takeIf { it.isNotEmpty() }
             )
         }
     }

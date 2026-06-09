@@ -403,4 +403,5 @@
     <string name="level_name_18">Divino</string>
     <string name="level_name_19">Assoluto</string>
     <string name="level_name_20">Eterno</string>
+    <string name="activity_source">%1$s &gt; %2$s</string>
 </resources>
