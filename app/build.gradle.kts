@@ -2,7 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
 }
 
