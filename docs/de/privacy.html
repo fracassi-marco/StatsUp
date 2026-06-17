@@ -226,29 +226,29 @@
     <p class="meta">Letzte Aktualisierung: 20. März 2026 · Gilt für: StatsUp für Android</p>
 
     <div class="summary-box">
-      <p><strong>Kurzfassung:</strong> StatsUp speichert alle deine Daten <strong>ausschließlich lokal auf deinem Gerät</strong>. Wir erfassen, übertragen oder verkaufen keine persönlichen Informationen. Wir betreiben keine Server. Wir verwenden keine Analyse- oder Werbe-SDKs. Die einzigen externen Dienste, die StatsUp kontaktiert, sind <strong>Strava</strong> (zum Importieren deiner Aktivitäten) und <strong>Google Maps</strong> (zum Anzeigen von Routen).</p>
+      <p><strong>Kurzfassung:</strong> StatsUp speichert alle deine Daten <strong>ausschließlich lokal auf deinem Gerät</strong>. Wir erfassen, übertragen oder verkaufen keine persönlichen Informationen. Wir betreiben keine Server. Wir verwenden keine Analyse- oder Werbe-SDKs. Die einzigen externen Dienste, die StatsUp kontaktiert, sind <strong>Intervals.icu</strong> (zum Importieren deiner Aktivitäten) und <strong>Google Maps</strong> (zum Anzeigen von Routen).</p>
     </div>
 
     <h2>1. Wer wir sind</h2>
     <p>StatsUp ist eine Android-Anwendung, die von Marco Fracassi (<a href="mailto:fracassi.marco@gmail.com">fracassi.marco@gmail.com</a>) entwickelt und gepflegt wird. Die App ist Open Source und auf <a href="https://github.com/fracassi-marco/StatsUp" target="_blank" rel="noopener">GitHub</a> verfügbar.</p>
 
     <h2>2. Daten, auf die wir zugreifen</h2>
-    <p>StatsUp fordert schreibgeschützten Zugriff auf dein Strava-Konto an, um deine Trainingsaktivitäten zu importieren. Konkret liest die App:</p>
+    <p>StatsUp fordert schreibgeschützten Zugriff auf dein Intervals.icu-Konto an, um deine Trainingsaktivitäten zu importieren. Konkret liest die App:</p>
     <ul>
       <li>Aktivitätsdaten: Distanz, Dauer, Höhengewinn, Tempo, Geschwindigkeit, Herzfrequenz, Typ, Datum</li>
       <li>GPS-/Routenkoordinaten der Aktivitäten</li>
-      <li>Deinen Strava-Profilnamen und dein Profilbild (nur lokal in der App angezeigt)</li>
+      <li>Deinen Intervals.icu-Profilnamen und dein Profilbild (nur lokal in der App angezeigt)</li>
     </ul>
-    <p>StatsUp fordert niemals Schreibzugriff auf Strava an. Es kann keine Daten in deinem Strava-Konto erstellen, ändern oder löschen.</p>
+    <p>StatsUp fordert niemals Schreibzugriff auf Intervals.icu an. Es kann keine Daten in deinem Intervals.icu-Konto erstellen, ändern oder löschen.</p>
 
     <h2>3. Wo deine Daten gespeichert werden</h2>
-    <p>Alle von Strava importierten Daten werden ausschließlich in einer lokalen SQLite-Datenbank auf deinem Gerät gespeichert (mit der <span class="chip">Room</span>-Bibliothek). Diese Daten verlassen dein Gerät nie, es sei denn, du exportierst sie explizit über die integrierte Backup-Funktion.</p>
+    <p>Alle von Intervals.icu importierten Daten werden ausschließlich in einer lokalen SQLite-Datenbank auf deinem Gerät gespeichert (mit der <span class="chip">Room</span>-Bibliothek). Diese Daten verlassen dein Gerät nie, es sei denn, du exportierst sie explizit über die integrierte Backup-Funktion.</p>
     <p>StatsUp hat keine Backend-Server. Es gibt kein Kontosystem, keine Cloud-Synchronisierung und keine Remote-Datenbank.</p>
 
     <h2>4. Datenweitergabe</h2>
     <p>Wir geben deine Daten nicht an Dritte weiter, mit folgenden technischen Ausnahmen:</p>
     <ul>
-      <li><strong>Strava API</strong> — wenn du dein Konto verbindest oder eine Synchronisierung auslöst, kommuniziert die App mit Stravas Servern, um deine Aktivitätsdaten abzurufen. Dies unterliegt der <a href="https://www.strava.com/legal/privacy" target="_blank" rel="noopener">Datenschutzrichtlinie von Strava</a>.</li>
+      <li><strong>Intervals.icu API</strong> — wenn du dein Konto verbindest oder eine Synchronisierung auslöst, kommuniziert die App mit Intervals.icus Servern, um deine Aktivitätsdaten abzurufen. Dies unterliegt der <a href="https://intervals.icu/privacy" target="_blank" rel="noopener">Datenschutzrichtlinie von Intervals.icu</a>.</li>
       <li><strong>Google Maps</strong> — wenn du eine Streckenkarte ansiehst, werden GPS-Koordinaten zur Darstellung der Kartenkacheln an Google Maps gesendet. Dies unterliegt der <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Datenschutzrichtlinie von Google</a>.</li>
     </ul>
 
@@ -258,13 +258,13 @@
     <h2>6. Berechtigungen</h2>
     <p>StatsUp fordert folgende Android-Berechtigungen an:</p>
     <ul>
-      <li><span class="chip">INTERNET</span> — erforderlich für die Kommunikation mit der Strava API und Google Maps.</li>
+      <li><span class="chip">INTERNET</span> — erforderlich für die Kommunikation mit der Intervals.icu API und Google Maps.</li>
       <li><span class="chip">READ_EXTERNAL_STORAGE</span> / <span class="chip">WRITE_EXTERNAL_STORAGE</span> — nur verwendet, wenn du eine Backup-Datei exportieren oder importieren möchtest.</li>
     </ul>
 
     <h2>7. Datenspeicherung und -löschung</h2>
-    <p>Deine Daten existieren ausschließlich auf deinem Gerät. Du kannst alle Daten jederzeit löschen, indem du die Option „Neu von Strava synchronisieren" verwendest (die alle lokalen Daten ersetzt) oder die App deinstallierst, wodurch die lokale Datenbank vollständig entfernt wird.</p>
-    <p>Um den Zugriff von StatsUp auf dein Strava-Konto zu widerrufen, besuche <a href="https://www.strava.com/settings/apps" target="_blank" rel="noopener">Strava → Einstellungen → Meine Apps</a> und trenne StatsUp.</p>
+    <p>Deine Daten existieren ausschließlich auf deinem Gerät. Du kannst alle Daten jederzeit löschen, indem du die Option „Neu von Intervals.icu synchronisieren" verwendest (die alle lokalen Daten ersetzt) oder die App deinstallierst, wodurch die lokale Datenbank vollständig entfernt wird.</p>
+    <p>Um den Zugriff von StatsUp auf dein Intervals.icu-Konto zu widerrufen, besuche <a href="https://intervals.icu/settings#developer" target="_blank" rel="noopener">Intervals.icu → Einstellungen → Developer</a> und trenne StatsUp.</p>
 
     <h2>8. Datenschutz für Kinder</h2>
     <p>StatsUp richtet sich nicht an Kinder unter 13 Jahren. Wir erfassen wissentlich keine Informationen von Kindern. Wenn du glaubst, dass ein Kind diese App genutzt hat und du Bedenken hast, kontaktiere uns bitte.</p>
@@ -280,7 +280,7 @@
     <p>
       <a href="../index.html">← Zurück zu StatsUp</a>
       &nbsp;·&nbsp;
-      <span>StatsUp ist nicht mit Strava Inc. verbunden.</span>
+      <span>StatsUp ist nicht mit Intervals.icu verbunden.</span>
     </p>
   </footer>
 

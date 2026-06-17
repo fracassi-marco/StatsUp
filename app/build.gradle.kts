@@ -30,8 +30,6 @@ android {
         manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("maps.apiKey")
         buildConfigField("String", "INTERVALS_ICU_CLIENT_ID", """"${properties.getProperty("intervals.icu.clientId")}"""")
         buildConfigField("String", "INTERVALS_ICU_CLIENT_SECRET", """"${properties.getProperty("intervals.icu.clientSecret")}"""")
-        buildConfigField("String", "STRAVA_CLIENT_ID", """"${properties.getProperty("strava.clientId")}"""")
-        buildConfigField("String", "STRAVA_CLIENT_SECRET", """"${properties.getProperty("strava.clientSecret")}"""")
     }
 
     signingConfigs {

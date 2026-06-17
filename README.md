@@ -1,6 +1,6 @@
 # StatsUp
 
-Android app for tracking and analyzing training activities imported from Strava.
+Android app for tracking and analyzing training activities imported from Intervals.icu.
 
 Built with Kotlin, Jetpack Compose, Room, and Google Maps.
 
@@ -13,7 +13,7 @@ Built with Kotlin, Jetpack Compose, Room, and Google Maps.
 - Android Studio Ladybug or newer
 - JDK 21
 - Android SDK 34+
-- Strava API credentials
+- Intervals.icu API credentials
 - Google Maps API key
 
 ---
@@ -35,8 +35,8 @@ Create a `local.properties` file in the project root (already git-ignored):
 sdk.dir=/path/to/your/Android/sdk
 
 maps.apiKey=YOUR_GOOGLE_MAPS_API_KEY
-strava.clientId=YOUR_STRAVA_CLIENT_ID
-strava.clientSecret=YOUR_STRAVA_CLIENT_SECRET
+intervals.icu.clientId=YOUR_INTERVALS_ICU_CLIENT_ID
+intervals.icu.clientSecret=YOUR_INTERVALS_ICU_CLIENT_SECRET
 ```
 
 **Where to get the keys:**
@@ -44,7 +44,7 @@ strava.clientSecret=YOUR_STRAVA_CLIENT_SECRET
 | Key | Source |
 |-----|--------|
 | `maps.apiKey` | [Google Cloud Console](https://console.cloud.google.com) → APIs & Services → Maps SDK for Android |
-| `strava.clientId` / `strava.clientSecret` | [Strava API Settings](https://www.strava.com/settings/api) |
+| `intervals.icu.clientId` / `intervals.icu.clientSecret` | [Intervals.icu Developer Settings](https://intervals.icu/settings#developer) |
 
 ### 3. Build and run
 
@@ -74,8 +74,8 @@ Go to **GitHub → repository → Settings → Secrets and variables → Actions
 | Secret | Value |
 |--------|-------|
 | `MAPS_API_KEY` | Google Maps API key |
-| `STRAVA_CLIENT_ID` | Strava app client ID |
-| `STRAVA_CLIENT_SECRET` | Strava app client secret |
+| `INTERVALS_ICU_CLIENT_ID` | Intervals.icu app client ID |
+| `INTERVALS_ICU_CLIENT_SECRET` | Intervals.icu app client secret |
 
 #### Signing secrets (required for release only)
 
@@ -124,7 +124,7 @@ The workflow builds a signed AAB and publishes it to the **internal testing trac
 ```
 app/src/main/java/com/statsup/
 ├── domain/          # Models, business logic, use cases
-├── infrastructure/  # Room DB, Strava API, export services
+├── infrastructure/  # Room DB, Intervals.icu API, export services
 └── ui/
     ├── components/  # Compose screens and UI components
     ├── viewmodel/   # ViewModels
@@ -137,5 +137,5 @@ app/src/main/java/com/statsup/
 - **Navigation** — Navigation Compose
 - **Database** — Room
 - **Maps** — Google Maps Compose
-- **Auth** — AppAuth (OAuth 2.0 with Strava)
+- **Auth** — AppAuth (OAuth 2.0 with Intervals.icu)
 - **Build** — Gradle KTS, KSP

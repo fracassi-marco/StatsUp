@@ -29,8 +29,8 @@ jobs:
       - name: Write local.properties
         run: |
           echo "maps.apiKey=${{ secrets.MAPS_API_KEY }}" >> local.properties
-          echo "strava.clientId=${{ secrets.STRAVA_CLIENT_ID }}" >> local.properties
-          echo "strava.clientSecret=${{ secrets.STRAVA_CLIENT_SECRET }}" >> local.properties
+          echo "intervals.icu.clientId=${{ secrets.INTERVALS_ICU_CLIENT_ID }}" >> local.properties
+          echo "intervals.icu.clientSecret=${{ secrets.INTERVALS_ICU_CLIENT_SECRET }}" >> local.properties
 
       - name: Check translations
         run: bash scripts/check_translations.sh
