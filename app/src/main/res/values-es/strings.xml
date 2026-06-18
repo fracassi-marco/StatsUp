@@ -404,6 +404,12 @@
     <string name="level_name_19">Absoluto</string>
     <string name="level_name_20">Eterno</string>
     <string name="activity_source">%1$s &gt; %2$s</string>
-    <string name="calories">Calorías</string>
+    <string name="calories">Caloras</string>
     <string name="kcal">kcal</string>
+    <string name="crash_title">Error inesperado</string>
+    <string name="crash_subtitle">La aplicación se ha cerrado inesperadamente. Comunica este error al desarrollador.</string>
+    <string name="crash_error_label">Error:</string>
+    <string name="crash_stacktrace_label">Traza de pila:</string>
+    <string name="crash_copy_button">Copiar</string>
+    <string name="crash_close_button">Cerrar app</string>
 </resources>

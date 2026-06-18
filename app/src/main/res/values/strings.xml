@@ -405,5 +405,11 @@
     <string name="activity_source">%1$s &gt; %2$s</string>
     <string name="calories">Calories</string>
     <string name="kcal">kcal</string>
+    <string name="crash_title">Unexpected Error</string>
+    <string name="crash_subtitle">The app crashed. Please report this error to the developer.</string>
+    <string name="crash_error_label">Error:</string>
+    <string name="crash_stacktrace_label">Stack trace:</string>
+    <string name="crash_copy_button">Copy</string>
+    <string name="crash_close_button">Close app</string>
 </resources>
 

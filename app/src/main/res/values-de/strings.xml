@@ -406,4 +406,10 @@
     <string name="activity_source">%1$s &gt; %2$s</string>
     <string name="calories">Kalorien</string>
     <string name="kcal">kcal</string>
+    <string name="crash_title">Unerwarteter Fehler</string>
+    <string name="crash_subtitle">Die App ist abgestürzt. Bitte melde diesen Fehler dem Entwickler.</string>
+    <string name="crash_error_label">Fehler:</string>
+    <string name="crash_stacktrace_label">Stack-Trace:</string>
+    <string name="crash_copy_button">Kopieren</string>
+    <string name="crash_close_button">App schließen</string>
 </resources>

@@ -406,4 +406,10 @@
     <string name="activity_source">%1$s &gt; %2$s</string>
     <string name="calories">Calorie</string>
     <string name="kcal">kcal</string>
+    <string name="crash_title">Errore inatteso</string>
+    <string name="crash_subtitle">L\'app è andata in crash. Segnala questo errore allo sviluppatore.</string>
+    <string name="crash_error_label">Errore:</string>
+    <string name="crash_stacktrace_label">Stack trace:</string>
+    <string name="crash_copy_button">Copia</string>
+    <string name="crash_close_button">Chiudi app</string>
 </resources>

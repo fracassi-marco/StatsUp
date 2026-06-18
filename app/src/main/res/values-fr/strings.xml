@@ -406,4 +406,10 @@
     <string name="activity_source">%1$s &gt; %2$s</string>
     <string name="calories">Calories</string>
     <string name="kcal">kcal</string>
+    <string name="crash_title">Erreur inattendue</string>
+    <string name="crash_subtitle">L\'application a planté. Merci de signaler cette erreur au développeur.</string>
+    <string name="crash_error_label">Erreur :</string>
+    <string name="crash_stacktrace_label">Trace de pile :</string>
+    <string name="crash_copy_button">Copier</string>
+    <string name="crash_close_button">Fermer l\'app</string>
 </resources>
