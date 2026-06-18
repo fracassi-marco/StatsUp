@@ -26,6 +26,16 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/master' }}
 
+      - name: Validate required secrets
+        run: |
+          missing=()
+          [ -z "${{ secrets.MAPS_API_KEY }}" ] && missing+=("MAPS_API_KEY")
+          [ -z "${{ secrets.INTERVALS_ICU_CLIENT_ID }}" ] && missing+=("INTERVALS_ICU_CLIENT_ID")
+          [ -z "${{ secrets.INTERVALS_ICU_CLIENT_SECRET }}" ] && missing+=("INTERVALS_ICU_CLIENT_SECRET")
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "WARNING: missing secrets: ${missing[*]} — APK will be built with empty values"
+          fi
+
       - name: Write local.properties
         run: |
           echo "maps.apiKey=${{ secrets.MAPS_API_KEY }}" >> local.properties

@@ -24,6 +24,21 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Validate required secrets
+        run: |
+          missing=()
+          [ -z "${{ secrets.MAPS_API_KEY }}" ] && missing+=("MAPS_API_KEY")
+          [ -z "${{ secrets.INTERVALS_ICU_CLIENT_ID }}" ] && missing+=("INTERVALS_ICU_CLIENT_ID")
+          [ -z "${{ secrets.INTERVALS_ICU_CLIENT_SECRET }}" ] && missing+=("INTERVALS_ICU_CLIENT_SECRET")
+          [ -z "${{ secrets.KEYSTORE_BASE64 }}" ] && missing+=("KEYSTORE_BASE64")
+          [ -z "${{ secrets.KEYSTORE_PASSWORD }}" ] && missing+=("KEYSTORE_PASSWORD")
+          [ -z "${{ secrets.KEY_ALIAS }}" ] && missing+=("KEY_ALIAS")
+          [ -z "${{ secrets.KEY_PASSWORD }}" ] && missing+=("KEY_PASSWORD")
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "ERROR: missing required secrets: ${missing[*]}"
+            exit 1
+          fi
+
       - name: Write local.properties
         run: |
           echo "maps.apiKey=${{ secrets.MAPS_API_KEY }}" >> local.properties

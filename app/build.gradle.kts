@@ -27,9 +27,9 @@ android {
             useSupportLibrary = true
         }
 
-        manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("maps.apiKey")
-        buildConfigField("String", "INTERVALS_ICU_CLIENT_ID", """"${properties.getProperty("intervals.icu.clientId")}"""")
-        buildConfigField("String", "INTERVALS_ICU_CLIENT_SECRET", """"${properties.getProperty("intervals.icu.clientSecret")}"""")
+        manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("maps.apiKey") ?: ""
+        buildConfigField("String", "INTERVALS_ICU_CLIENT_ID", """"${properties.getProperty("intervals.icu.clientId") ?: ""}"""")
+        buildConfigField("String", "INTERVALS_ICU_CLIENT_SECRET", """"${properties.getProperty("intervals.icu.clientSecret") ?: ""}"""")
     }
 
     signingConfigs {
