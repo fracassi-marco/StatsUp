@@ -2,6 +2,7 @@ package com.statsup
 
 import android.app.Application
 import android.content.Intent
+import com.statsup.infrastructure.service.ImportForegroundService
 import com.statsup.ui.components.MapSnapshotCache
 import kotlin.system.exitProcess
 import androidx.core.content.edit
@@ -10,6 +11,7 @@ class StatsUpApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        ImportForegroundService.createChannel(this)
         clearMapSnapshotCacheIfNeeded()
         installCrashHandler()
     }

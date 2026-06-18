@@ -406,6 +406,10 @@
     <string name="activity_source">%1$s &gt; %2$s</string>
     <string name="calories">Calories</string>
     <string name="kcal">kcal</string>
+    <string name="import_notification_channel_name">Importation</string>
+    <string name="import_notification_title">Importation des activités…</string>
+    <string name="import_notification_text">Téléchargement de vos activités en arrière-plan</string>
+
     <string name="crash_title">Erreur inattendue</string>
     <string name="crash_subtitle">L\'application a planté. Merci de signaler cette erreur au développeur.</string>
     <string name="crash_error_label">Erreur :</string>

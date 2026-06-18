@@ -1,6 +1,7 @@
 package com.statsup.ui.viewmodel
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import android.util.Log
@@ -10,11 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.BuildConfig
-import com.statsup.domain.ApiException
-import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.TrainingApi
-import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.domain.repository.SettingRepository
+import com.statsup.infrastructure.service.ImportEventBus
+import com.statsup.infrastructure.service.ImportForegroundService
+import com.statsup.infrastructure.service.ImportResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -27,8 +28,6 @@ import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.ResponseTypeValues.CODE
 
 class MainViewModel(
-    private val updateActivitiesUseCase: UpdateTrainingsUseCase,
-    private val fullImportUseCase: FullImportUseCase,
     private val settingRepository: SettingRepository,
     private val trainingApi: TrainingApi
 ) : ViewModel() {
@@ -40,67 +39,15 @@ class MainViewModel(
 
     private var fullImportPending = false
 
-    private fun updateActivities(token: String) {
+    init {
         viewModelScope.launch {
-            val count = try {
-                withContext(Dispatchers.IO) {
-                    val activeToken = resolveToken(token)
-                    val trainings = if (fullImportPending) {
-                        fullImportPending = false
-                        fullImportUseCase(activeToken)
-                    } else {
-                        updateActivitiesUseCase(activeToken)
-                    }
-                    trainings.count()
+            ImportEventBus.result.collect { result ->
+                when (result) {
+                    is ImportResult.Success -> newTrainingsCounter.emit(result.count)
+                    is ImportResult.Error -> importError.emit(result.message)
                 }
-            } catch (e: ApiException) {
-                Log.e("StatsUp", "API error durante il download attività", e)
-                if (e.isAuthError) {
-                    clearStoredCredentials()
-                }
-                stopLoading()
-                importError.emit(e.message ?: "Import failed. Try again.")
-                return@launch
-            } catch (e: Exception) {
-                Log.e("StatsUp", "Errore durante il download attività", e)
-                stopLoading()
-                importError.emit(e.message ?: "Import failed. Try again.")
-                return@launch
             }
-            stopLoading()
-            newTrainingsCounter.emit(count)
         }
-    }
-
-    /**
-     * Returns a valid access token: if the stored token appears expired, try to refresh it
-     * using the saved refresh token before returning. Falls back to [initialToken] if the
-     * stored value is missing or refresh fails.
-     */
-    private suspend fun resolveToken(initialToken: String): String {
-        val stored = settingRepository.loadApiToken()?.takeIf { it.isNotBlank() } ?: return initialToken
-        val expiry = settingRepository.loadApiTokenExpiry()
-        val nowSecs = System.currentTimeMillis() / 1000
-        if (expiry == 0L || nowSecs < expiry - 60) return stored
-
-        val refreshToken = settingRepository.loadApiRefreshToken()
-        if (refreshToken.isNullOrBlank()) return stored
-        return try {
-            val newToken = trainingApi.refreshToken(refreshToken)
-            settingRepository.saveApiToken(newToken.accessToken)
-            settingRepository.saveApiRefreshToken(newToken.refreshToken)
-            settingRepository.saveApiTokenExpiry(newToken.expiresAt)
-            newToken.accessToken
-        } catch (e: Exception) {
-            Log.w("StatsUp", "Token refresh failed, proceeding with stored token", e)
-            stored
-        }
-    }
-
-    private fun clearStoredCredentials() {
-        settingRepository.saveApiToken("")
-        settingRepository.saveApiRefreshToken("")
-        settingRepository.saveApiTokenExpiry(0L)
     }
 
     private fun startLoading() {
@@ -111,7 +58,7 @@ class MainViewModel(
         _loading.value = false
     }
 
-    fun onOAuthResult(activityResult: ActivityResult, authService: AuthorizationService) {
+    fun onOAuthResult(activityResult: ActivityResult, authService: AuthorizationService, context: Context) {
         if (activityResult.resultCode == RESULT_OK) {
             val data = activityResult.data
             if (data == null) {
@@ -148,7 +95,12 @@ class MainViewModel(
                         settingRepository.saveApiTokenExpiry(oauthToken.expiresAt)
                     }
                     oauthToken.athleteId?.let { settingRepository.saveAthleteId(it) }
-                    updateActivities(oauthToken.accessToken)
+                    val isFullImport = fullImportPending
+                    fullImportPending = false
+                    stopLoading()
+                    context.startForegroundService(
+                        ImportForegroundService.intent(context, oauthToken.accessToken, isFullImport)
+                    )
                 } catch (e: Exception) {
                     Log.e("StatsUp", "Crash durante token exchange", e)
                     stopLoading()

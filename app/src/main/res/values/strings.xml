@@ -405,6 +405,10 @@
     <string name="activity_source">%1$s &gt; %2$s</string>
     <string name="calories">Calories</string>
     <string name="kcal">kcal</string>
+    <string name="import_notification_channel_name">Import</string>
+    <string name="import_notification_title">Importing activities…</string>
+    <string name="import_notification_text">Downloading your activities in the background</string>
+
     <string name="crash_title">Unexpected Error</string>
     <string name="crash_subtitle">The app crashed. Please report this error to the developer.</string>
     <string name="crash_error_label">Error:</string>

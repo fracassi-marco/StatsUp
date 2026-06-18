@@ -27,8 +27,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
-import com.statsup.domain.FullImportUseCase
-import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.ActivityExportService
 import kotlinx.coroutines.launch
 import com.statsup.infrastructure.TrainingShareService
@@ -86,10 +84,8 @@ class MainActivity : ComponentActivity() {
                 )
             }
             val api = remember { IntervalsIcuTrainingApi(settingRepository) }
-            val updateActivitiesUseCase = remember { UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api) }
-            val fullImportUseCase = remember { FullImportUseCase(db.trainingRepository, db.athleteRepository, db.bookmarkedTrainingRepository, api) }
             val navController = rememberNavController()
-            val mainViewModel: MainViewModel = viewModel { MainViewModel(updateActivitiesUseCase, fullImportUseCase, settingRepository, api) }
+            val mainViewModel: MainViewModel = viewModel { MainViewModel(settingRepository, api) }
             val settingsViewModel: SettingsViewModel = viewModel { SettingsViewModel(settingRepository, db.trainingRepository, dataExportImportService, applicationContext) }
             val historyViewModel: HistoryViewModel = viewModel { HistoryViewModel(db.trainingRepository) }
             val dashboardViewModel: DashboardViewModel = viewModel { DashboardViewModel(application, db.trainingRepository, settingRepository) }
@@ -101,11 +97,11 @@ class MainActivity : ComponentActivity() {
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
-                onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it) } }
+                onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
             )
             val fullImportLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
-                onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it) } }
+                onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
             )
 
             val isInitialLoading = historyViewModel.isInitialLoading.value
