@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.0.4",
+    "date": "2026-06-18",
+    "message": "Fix migration"
+  },
+  {
     "version": "2.0.3",
     "date": "2026-06-18",
     "message": "Implement crash handling and reporting"
