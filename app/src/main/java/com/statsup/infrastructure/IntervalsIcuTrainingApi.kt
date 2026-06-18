@@ -107,11 +107,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             val streams: List<StreamDto> = jsonMapper.readValue(response.body, listType)
             val data = streams.firstOrNull { it.type == "latlng" }?.data
             if (data == null) return null
-            // Format: [lat0, lat1, ..., latN, lng0, lng1, ..., lngN]
-            val m = data.size / 2
-            val points = (0 until m).mapNotNull { i ->
-                val lat = data.getOrNull(i) ?: return@mapNotNull null
-                val lng = data.getOrNull(m + i) ?: return@mapNotNull null
+            // Format: [lat0, lng0, lat1, lng1, ...] (interleaved pairs)
+            val points = (0 until data.size / 2).mapNotNull { i ->
+                val lat = data.getOrNull(2 * i) ?: return@mapNotNull null
+                val lng = data.getOrNull(2 * i + 1) ?: return@mapNotNull null
                 LatLng(lat, lng)
             }
             if (points.isEmpty()) null else PolyUtil.encode(points)

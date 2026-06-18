@@ -27,6 +27,16 @@ object MapSnapshotCache {
         }
     }
 
+    fun clearAll(context: Context) {
+        try {
+            val dir = File(context.cacheDir, DIR)
+            dir.listFiles()?.forEach { it.delete() }
+            Log.d(TAG, "All snapshots cleared")
+        } catch (t: Throwable) {
+            Log.e(TAG, "Error clearing all snapshots", t)
+        }
+    }
+
     fun save(context: Context, trainingId: String, bitmap: Bitmap) {
         try {
             val file = cacheFile(context, trainingId)

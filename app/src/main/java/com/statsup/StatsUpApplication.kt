@@ -1,14 +1,26 @@
 package com.statsup
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
+import com.statsup.ui.components.MapSnapshotCache
 import kotlin.system.exitProcess
 
 class StatsUpApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        clearMapSnapshotCacheIfNeeded()
         installCrashHandler()
+    }
+
+    private fun clearMapSnapshotCacheIfNeeded() {
+        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val clearedVersion = prefs.getInt("map_cache_cleared_for_db_version", 0)
+        if (clearedVersion < 15) {
+            MapSnapshotCache.clearAll(this)
+            prefs.edit().putInt("map_cache_cleared_for_db_version", 15).apply()
+        }
     }
 
     private fun installCrashHandler() {
