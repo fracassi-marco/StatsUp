@@ -1,6 +1,6 @@
 # StatsUp
 
-Android app for tracking and analyzing training activities imported from Intervals.icu.
+Android app for tracking and analyzing training activities imported from Intervals.icu ([swagger API](https://intervals.icu/api/v1/docs/swagger-ui/index.html)).
 
 Built with Kotlin, Jetpack Compose, Room, and Google Maps.
 
