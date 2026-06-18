@@ -14,7 +14,7 @@ import com.statsup.domain.WeightEntry
 
 @Database(
     entities = [Training::class, Athlete::class, BookmarkedTraining::class, WeightEntry::class],
-    version = 13,
+    version = 14,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -135,7 +135,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         `customTitle` TEXT NOT NULL,
                         `difficulty` TEXT NOT NULL,
                         `bookmarkedAt` INTEGER NOT NULL,
-                        FOREIGN KEY(`trainingId`) REFERENCES `training`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+                        FOREIGN KEY(`trainingId`) REFERENCES `Training`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
                     )
                 """.trimIndent())
                 db.execSQL("""
@@ -182,20 +182,51 @@ abstract class TrainingDatabase: RoomDatabase() {
                 // Recreate bookmarked_training with the FOREIGN KEY constraint that was
                 // missing from MIGRATION_7_8, causing a schema validation failure on
                 // every subsequent migration.
+                // NOTE: the referenced table name MUST match the entity class name "Training"
+                // (capital T) because Room.@Entity without tableName uses the class name,
+                // and PRAGMA foreign_key_list returns the name exactly as written in the DDL.
+                db.execSQL("DROP TABLE IF EXISTS `bookmarked_training_new`")
                 db.execSQL("""
-                    CREATE TABLE IF NOT EXISTS `bookmarked_training_new` (
+                    CREATE TABLE `bookmarked_training_new` (
                         `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                         `trainingId` TEXT NOT NULL,
                         `note` TEXT NOT NULL,
                         `customTitle` TEXT NOT NULL,
                         `difficulty` TEXT NOT NULL,
                         `bookmarkedAt` INTEGER NOT NULL,
-                        FOREIGN KEY(`trainingId`) REFERENCES `training`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+                        FOREIGN KEY(`trainingId`) REFERENCES `Training`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
                     )
                 """.trimIndent())
                 db.execSQL("""
                     INSERT INTO `bookmarked_training_new`
-                    SELECT `id`, `trainingId`, `note`, `customTitle`, `difficulty`, `bookmarkedAt`
+                    SELECT `id`, CAST(`trainingId` AS TEXT), `note`, `customTitle`, `difficulty`, `bookmarkedAt`
+                    FROM `bookmarked_training`
+                """.trimIndent())
+                db.execSQL("DROP TABLE `bookmarked_training`")
+                db.execSQL("ALTER TABLE `bookmarked_training_new` RENAME TO `bookmarked_training`")
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_bookmarked_training_trainingId` ON `bookmarked_training` (`trainingId`)")
+            }
+        }
+
+        private val MIGRATION_13_14 = object : Migration(13, 14) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Re-run the bookmarked_training fix for devices where MIGRATION_12_13
+                // ran but still had the wrong lowercase "training" in the FK reference.
+                db.execSQL("DROP TABLE IF EXISTS `bookmarked_training_new`")
+                db.execSQL("""
+                    CREATE TABLE `bookmarked_training_new` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `trainingId` TEXT NOT NULL,
+                        `note` TEXT NOT NULL,
+                        `customTitle` TEXT NOT NULL,
+                        `difficulty` TEXT NOT NULL,
+                        `bookmarkedAt` INTEGER NOT NULL,
+                        FOREIGN KEY(`trainingId`) REFERENCES `Training`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+                    )
+                """.trimIndent())
+                db.execSQL("""
+                    INSERT INTO `bookmarked_training_new`
+                    SELECT `id`, CAST(`trainingId` AS TEXT), `note`, `customTitle`, `difficulty`, `bookmarkedAt`
                     FROM `bookmarked_training`
                 """.trimIndent())
                 db.execSQL("DROP TABLE `bookmarked_training`")
@@ -231,7 +262,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13)
+                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14)
                     .build()
 
                     INSTANCE = instance
