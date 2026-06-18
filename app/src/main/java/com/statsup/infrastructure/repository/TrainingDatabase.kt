@@ -14,7 +14,7 @@ import com.statsup.domain.WeightEntry
 
 @Database(
     entities = [Training::class, Athlete::class, BookmarkedTraining::class, WeightEntry::class],
-    version = 12,
+    version = 13,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -134,7 +134,8 @@ abstract class TrainingDatabase: RoomDatabase() {
                         `note` TEXT NOT NULL,
                         `customTitle` TEXT NOT NULL,
                         `difficulty` TEXT NOT NULL,
-                        `bookmarkedAt` INTEGER NOT NULL
+                        `bookmarkedAt` INTEGER NOT NULL,
+                        FOREIGN KEY(`trainingId`) REFERENCES `training`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
                     )
                 """.trimIndent())
                 db.execSQL("""
@@ -176,6 +177,33 @@ abstract class TrainingDatabase: RoomDatabase() {
             }
         }
 
+        private val MIGRATION_12_13 = object : Migration(12, 13) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Recreate bookmarked_training with the FOREIGN KEY constraint that was
+                // missing from MIGRATION_7_8, causing a schema validation failure on
+                // every subsequent migration.
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS `bookmarked_training_new` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `trainingId` TEXT NOT NULL,
+                        `note` TEXT NOT NULL,
+                        `customTitle` TEXT NOT NULL,
+                        `difficulty` TEXT NOT NULL,
+                        `bookmarkedAt` INTEGER NOT NULL,
+                        FOREIGN KEY(`trainingId`) REFERENCES `training`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+                    )
+                """.trimIndent())
+                db.execSQL("""
+                    INSERT INTO `bookmarked_training_new`
+                    SELECT `id`, `trainingId`, `note`, `customTitle`, `difficulty`, `bookmarkedAt`
+                    FROM `bookmarked_training`
+                """.trimIndent())
+                db.execSQL("DROP TABLE `bookmarked_training`")
+                db.execSQL("ALTER TABLE `bookmarked_training_new` RENAME TO `bookmarked_training`")
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_bookmarked_training_trainingId` ON `bookmarked_training` (`trainingId`)")
+            }
+        }
+
         private val MIGRATION_6_7 = object : Migration(6, 7) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL(
@@ -203,7 +231,7 @@ abstract class TrainingDatabase: RoomDatabase() {
                         TrainingDatabase::class.java,
                         DATABASE_NAME
                     )
-                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12)
+                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13)
                     .build()
 
                     INSTANCE = instance
