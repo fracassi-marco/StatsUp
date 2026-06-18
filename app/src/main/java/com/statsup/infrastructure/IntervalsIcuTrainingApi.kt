@@ -96,26 +96,22 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
 
     override suspend fun fetchPolyline(token: String, activityId: String): String? {
         val response = Http().get(
-            url = "https://intervals.icu/api/v1/activity/$activityId/streams",
-            params = mapOf("types" to "latlng"),
-            auth = Bearer(token),
-            headers = mapOf("Accept" to "application/json")
+            url = "https://intervals.icu/api/v1/activity/$activityId/map",
+            auth = Bearer(token)
         )
         if (response.statusCode !in 200..299) return null
         return try {
-            val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, StreamDto::class.java)
-            val streams: List<StreamDto> = jsonMapper.readValue(response.body, listType)
-            val data = streams.firstOrNull { it.type == "latlng" }?.data
-            if (data == null) return null
-            // Format: [lat0, lng0, lat1, lng1, ...] (interleaved pairs)
-            val points = (0 until data.size / 2).mapNotNull { i ->
-                val lat = data.getOrNull(2 * i) ?: return@mapNotNull null
-                val lng = data.getOrNull(2 * i + 1) ?: return@mapNotNull null
+            val root = jsonMapper.readTree(response.body)
+            val latlngs = root.get("latlngs") ?: return null
+            val points = latlngs.mapNotNull { node ->
+                if (node.isNull) return@mapNotNull null
+                val lat = node.get(0)?.asDouble() ?: return@mapNotNull null
+                val lng = node.get(1)?.asDouble() ?: return@mapNotNull null
                 LatLng(lat, lng)
             }
             if (points.isEmpty()) null else PolyUtil.encode(points)
         } catch (e: Exception) {
-            android.util.Log.e("IntervalsIcu", "fetchPolyline $activityId parse error", e)
+            android.util.Log.e("IntervalsIcu", "fetchPolyline $activityId error: ${e.message}")
             null
         }
     }
@@ -327,11 +323,6 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             )
         }
     }
-
-    private data class StreamDto(
-        val type: String = "",
-        val data: List<Double?> = emptyList()
-    )
 
     private data class TokenRefreshDto(
         val accessToken: String = "",

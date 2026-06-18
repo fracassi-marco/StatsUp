@@ -1,10 +1,10 @@
 package com.statsup
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import com.statsup.ui.components.MapSnapshotCache
 import kotlin.system.exitProcess
+import androidx.core.content.edit
 
 class StatsUpApplication : Application() {
 
@@ -15,11 +15,11 @@ class StatsUpApplication : Application() {
     }
 
     private fun clearMapSnapshotCacheIfNeeded() {
-        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val clearedVersion = prefs.getInt("map_cache_cleared_for_db_version", 0)
-        if (clearedVersion < 15) {
+        if (clearedVersion < 16) {
             MapSnapshotCache.clearAll(this)
-            prefs.edit().putInt("map_cache_cleared_for_db_version", 15).apply()
+            prefs.edit { putInt("map_cache_cleared_for_db_version", 16) }
         }
     }
 

@@ -3,9 +3,11 @@ package com.statsup.domain
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
+import kotlinx.coroutines.delay
 import com.statsup.domain.repository.AthleteRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
+import kotlin.time.Duration.Companion.milliseconds
 
 class FullImportUseCase(
     private val trainingRepository: TrainingRepository,
@@ -27,6 +29,7 @@ class FullImportUseCase(
         val trainings = downloaded.map { training ->
             val withPolyline = if (training.trip == null) {
                 val polyline = trainingApi.fetchPolyline(token, training.id)
+                delay(300.milliseconds)
                 if (polyline != null) training.copy(map = Route(summaryPolyline = polyline)) else training
             } else training
             val laps = trainingApi.laps(token, training.id)
