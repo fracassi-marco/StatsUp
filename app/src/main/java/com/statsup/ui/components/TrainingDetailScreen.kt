@@ -85,6 +85,7 @@ fun TrainingDetailScreen(
     customTitle: String,
     difficulty: String,
     laps: List<Lap>,
+    elevationPoints: List<Double>,
     showBookmarkDialog: Boolean,
     onNavigateBack: () -> Unit,
     onOpenFullscreenMap: () -> Unit,
@@ -241,90 +242,6 @@ fun TrainingDetailScreen(
                             }
                         }
 
-                        // Sezione Altimetria
-                        val hasElevationData = training.totalElevationGain > 0 ||
-                                training.elevHigh > 0 ||
-                                training.elevLow > 0
-
-                        if (hasElevationData) {
-                            if (training.distance > 0 || training.movingTime > 0) {
-                                Spacer(modifier = Modifier.height(8.dp))
-                                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-                            }
-
-                            StatSection(
-                                title = stringResource(id = R.string.elevation),
-                                icon = Icons.Default.Landscape
-                            )
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    if (training.totalElevationGain > 0) {
-                                        StatItemWithIcon(
-                                            icon = Icons.AutoMirrored.Filled.TrendingUp,
-                                            label = stringResource(id = R.string.elevation_gain),
-                                             value = String.format(
-                                                 locale,
-                                                 "%.0f",
-                                                 training.totalElevationGain
-                                             ),
-                                            unit = stringResource(id = R.string.m),
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
-                                    if (training.elevationPerKm() > 0) {
-                                        StatItemWithIcon(
-                                            icon = Icons.Default.Terrain,
-                                            label = stringResource(id = R.string.elevation_per_km),
-                                             value = String.format(
-                                                 locale,
-                                                 "%.1f",
-                                                 training.elevationPerKm()
-                                             ),
-                                            unit = stringResource(id = R.string.m_per_km),
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
-                                }
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    if (training.elevHigh > 0) {
-                                        StatItemWithIcon(
-                                            icon = Icons.Default.Landscape,
-                                            label = stringResource(id = R.string.max_altitude),
-                                             value = String.format(
-                                                 locale,
-                                                 "%.0f",
-                                                 training.elevHigh
-                                             ),
-                                            unit = stringResource(id = R.string.m),
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
-                                    if (training.elevLow > 0 || training.elevHigh > 0) {
-                                        StatItemWithIcon(
-                                            icon = Icons.Default.Landscape,
-                                            label = stringResource(id = R.string.min_altitude),
-                                             value = String.format(
-                                                 locale,
-                                                 "%.0f",
-                                                 training.elevLow
-                                             ),
-                                            unit = stringResource(id = R.string.m),
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
-                                }
-                            }
-                        }
-
                         // Sezione Performance
                         val hasPerformanceData = training.averagePace() > 0 ||
                                 training.vam() > 0 ||
@@ -334,7 +251,7 @@ fun TrainingDetailScreen(
 
                         if (hasPerformanceData) {
                             val hasPreviousSections =
-                                (training.distance > 0 || training.movingTime > 0) || hasElevationData
+                                training.distance > 0 || training.movingTime > 0
 
                             if (hasPreviousSections) {
                                 Spacer(modifier = Modifier.height(8.dp))
@@ -425,6 +342,100 @@ fun TrainingDetailScreen(
                                         Spacer(modifier = Modifier.weight(1f))
                                     }
                                 }
+                            }
+                        }
+
+                        // Sezione Altimetria
+                        val hasElevationData = training.totalElevationGain > 0 ||
+                                training.elevHigh > 0 ||
+                                training.elevLow > 0
+
+                        if (hasElevationData) {
+                            val hasPreviousSections =
+                                (training.distance > 0 || training.movingTime > 0) || hasPerformanceData
+
+                            if (hasPreviousSections) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+                            }
+
+                            StatSection(
+                                title = stringResource(id = R.string.elevation),
+                                icon = Icons.Default.Landscape
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    if (training.totalElevationGain > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.AutoMirrored.Filled.TrendingUp,
+                                            label = stringResource(id = R.string.elevation_gain),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.0f",
+                                                 training.totalElevationGain
+                                             ),
+                                            unit = stringResource(id = R.string.m),
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+                                    if (training.elevationPerKm() > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.Default.Terrain,
+                                            label = stringResource(id = R.string.elevation_per_km),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.1f",
+                                                 training.elevationPerKm()
+                                             ),
+                                            unit = stringResource(id = R.string.m_per_km),
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+                                }
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    if (training.elevHigh > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.Default.Landscape,
+                                            label = stringResource(id = R.string.max_altitude),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.0f",
+                                                 training.elevHigh
+                                             ),
+                                            unit = stringResource(id = R.string.m),
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+                                    if (training.elevLow > 0 || training.elevHigh > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.Default.Landscape,
+                                            label = stringResource(id = R.string.min_altitude),
+                                             value = String.format(
+                                                 locale,
+                                                 "%.0f",
+                                                 training.elevLow
+                                             ),
+                                            unit = stringResource(id = R.string.m),
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+                                }
+                            }
+
+                            if (elevationPoints.size >= 2) {
+                                ElevationProfileChart(
+                                    elevationPoints = elevationPoints,
+                                    totalDistanceKm = training.distanceInKilometers()
+                                )
                             }
                         }
 

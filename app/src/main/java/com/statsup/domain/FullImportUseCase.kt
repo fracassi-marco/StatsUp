@@ -33,8 +33,11 @@ class FullImportUseCase(
                 if (polyline != null) training.copy(map = Route(summaryPolyline = polyline)) else training
             } else training
             val laps = trainingApi.laps(token, training.id)
-            if (laps.isNotEmpty()) withPolyline.copy(lapsJson = jsonMapper.writeValueAsString(laps))
-            else withPolyline
+            val withLaps = if (laps.isNotEmpty()) withPolyline.copy(lapsJson = jsonMapper.writeValueAsString(laps))
+                else withPolyline
+            val elevPoints = trainingApi.fetchElevationStream(token, training.id)
+            if (!elevPoints.isNullOrEmpty()) withLaps.copy(elevationPointsJson = jsonMapper.writeValueAsString(elevPoints))
+            else withLaps
         }
         trainings.forEach { training ->
             val center = training.trip?.centerPoint()

@@ -116,6 +116,31 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         }
     }
 
+    override suspend fun fetchElevationStream(token: String, activityId: String): List<Double>? {
+        val response = Http().get(
+            url = "https://intervals.icu/api/v1/activity/$activityId/streams",
+            params = mapOf("types" to "altitude"),
+            auth = Bearer(token),
+            headers = mapOf("Accept" to "application/json")
+        )
+        if (response.statusCode !in 200..299) return null
+        return try {
+            val root = jsonMapper.readTree(response.body)
+            if (!root.isArray) return null
+            // Response: [{"type": "altitude", "data": [val, val, ...], ...}, ...]
+            val altStream = root.firstOrNull { it.get("type")?.asText() == "altitude" } ?: return null
+            val dataNode = altStream.get("data") ?: return null
+            if (!dataNode.isArray) return null
+            val altitudes = dataNode.mapNotNull { node ->
+                if (node.isNull) null else node.asDouble()
+            }
+            altitudes.ifEmpty { null }
+        } catch (e: Exception) {
+            android.util.Log.e("IntervalsIcu", "fetchElevationStream $activityId error: ${e.message}")
+            null
+        }
+    }
+
     override suspend fun refreshToken(refreshToken: String): OAuthToken {
         val response = Http().post(
             url = "https://intervals.icu/api/oauth/token",

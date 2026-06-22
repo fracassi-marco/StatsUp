@@ -75,7 +75,8 @@ data class Training(
     var deviceName: String? = null,
     var calories: Int? = null,
     var hrZoneTimes: List<Int>? = null,
-    var hrZones: List<Int>? = null
+    var hrZones: List<Int>? = null,
+    var elevationPointsJson: String? = null
 ) {
     val date: ZonedDateTime by lazy { ZonedDateTime.parse(startDate) }
 

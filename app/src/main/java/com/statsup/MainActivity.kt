@@ -210,6 +210,7 @@ class MainActivity : ComponentActivity() {
                                         customTitle = detailViewModel.customTitle.value,
                                         difficulty = detailViewModel.difficulty.value,
                                         laps = detailViewModel.laps.value,
+                                        elevationPoints = detailViewModel.elevationPoints.value,
                                         showBookmarkDialog = detailViewModel.showBookmarkDialog.value,
                                         onNavigateBack = { navController.popBackStack() },
                                         onOpenFullscreenMap = { navController.navigate(Screens.mapFullscreenRoute(trainingId)) },

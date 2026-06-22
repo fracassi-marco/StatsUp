@@ -59,6 +59,9 @@ class TrainingDetailViewModel(
     private val _laps = mutableStateOf<List<Lap>>(emptyList())
     val laps: State<List<Lap>> = _laps
 
+    private val _elevationPoints = mutableStateOf<List<Double>>(emptyList())
+    val elevationPoints: State<List<Double>> = _elevationPoints
+
     private val manageBookmark = ManageBookmarkUseCase(bookmarkedTrainingRepository)
 
     init {
@@ -74,12 +77,23 @@ class TrainingDetailViewModel(
                     trainingRepository.byId(trainingId)
                 }
                 _training.value = training
+
                 val lapsJson = training.lapsJson
                 if (lapsJson != null) {
                     val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, Lap::class.java)
                     _laps.value = jsonMapper.readValue(lapsJson, listType)
-                } else {
-                    fetchAndCacheLaps(training)
+                }
+
+                val elevJson = training.elevationPointsJson
+                if (elevJson != null) {
+                    val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, Double::class.java)
+                    _elevationPoints.value = jsonMapper.readValue(elevJson, listType)
+                }
+
+                val needLaps = lapsJson == null
+                val needElev = elevJson == null
+                if (needLaps || needElev) {
+                    fetchAndCacheMissingData(training, needLaps, needElev)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -89,20 +103,31 @@ class TrainingDetailViewModel(
         }
     }
 
-    private fun fetchAndCacheLaps(training: Training) {
+    private fun fetchAndCacheMissingData(training: Training, fetchLaps: Boolean, fetchElev: Boolean) {
         viewModelScope.launch {
             val token = getValidToken() ?: return@launch
+            var updated = training
             try {
-                val fetchedLaps = withContext(Dispatchers.IO) {
-                    trainingApi.laps(token, trainingId)
-                }
-                if (fetchedLaps.isNotEmpty()) {
-                    _laps.value = fetchedLaps
-                    val lapsJson = jsonMapper.writeValueAsString(fetchedLaps)
-                    val updated = training.copy(lapsJson = lapsJson)
-                    withContext(Dispatchers.IO) {
-                        trainingRepository.add(updated)
+                if (fetchLaps) {
+                    val fetchedLaps = withContext(Dispatchers.IO) {
+                        trainingApi.laps(token, trainingId)
                     }
+                    if (fetchedLaps.isNotEmpty()) {
+                        _laps.value = fetchedLaps
+                        updated = updated.copy(lapsJson = jsonMapper.writeValueAsString(fetchedLaps))
+                    }
+                }
+                if (fetchElev) {
+                    val points = withContext(Dispatchers.IO) {
+                        trainingApi.fetchElevationStream(token, trainingId)
+                    }
+                    if (!points.isNullOrEmpty()) {
+                        _elevationPoints.value = points
+                        updated = updated.copy(elevationPointsJson = jsonMapper.writeValueAsString(points))
+                    }
+                }
+                if (updated !== training) {
+                    withContext(Dispatchers.IO) { trainingRepository.add(updated) }
                     _training.value = updated
                 }
             } catch (e: Exception) {

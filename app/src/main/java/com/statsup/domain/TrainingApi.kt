@@ -12,6 +12,7 @@ interface TrainingApi {
     suspend fun athlete(token: String): Athlete
     suspend fun laps(token: String, activityId: String): List<Lap>
     suspend fun fetchPolyline(token: String, activityId: String): String?
+    suspend fun fetchElevationStream(token: String, activityId: String): List<Double>?
     suspend fun refreshToken(refreshToken: String): OAuthToken
     suspend fun exchangeCode(code: String): OAuthToken
 }
