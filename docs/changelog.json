@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.2.0",
+    "date": "2026-06-26",
+    "message": "Improve cumulative data chart visualization"
+  },
+  {
     "version": "2.1.0",
     "date": "2026-06-22",
     "message": "Add elevation visualization"
