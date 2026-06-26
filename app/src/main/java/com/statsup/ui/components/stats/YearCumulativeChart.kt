@@ -23,7 +23,6 @@ import io.jetchart.line.renderer.point.IndexesPointDrawer
 import io.jetchart.line.renderer.point.NoPointDrawer
 import io.jetchart.line.renderer.xaxis.LineXAxisDrawer
 import io.jetchart.line.renderer.yaxis.LineYAxisWithValueDrawer
-import java.time.ZonedDateTime
 
 @Composable
 fun YearCumulativeChart(viewModel: StatsViewModel) {
@@ -35,7 +34,9 @@ fun YearCumulativeChart(viewModel: StatsViewModel) {
             Line(
                 points = viewModel.cumulativeYear().map { Point(it.value.toFloat(), it.key.value.toString()) },
                 lineDrawer = SolidLineDrawer(thickness = 2.dp, color = MaterialTheme.colorScheme.primary),
-                pointDrawer = IndexesPointDrawer(listOf(ZonedDateTime.now().month.value - 1), FilledPointDrawer(color = MaterialTheme.colorScheme.onBackground)),
+                pointDrawer = viewModel.currentMonthIndex()
+                    ?.let { IndexesPointDrawer(listOf(it), FilledPointDrawer(color = MaterialTheme.colorScheme.onBackground)) }
+                    ?: NoPointDrawer,
                 startAtZero = true,
                 shader = GradientLineShader(listOf(MaterialTheme.colorScheme.primary, Transparent))
             ),

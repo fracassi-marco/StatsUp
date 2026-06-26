@@ -197,8 +197,6 @@ class MainActivity : ComponentActivity() {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
                                             db.bookmarkedTrainingRepository,
-                                            settingRepository,
-                                            api,
                                             trainingId
                                         )
                                     }
@@ -256,8 +254,6 @@ class MainActivity : ComponentActivity() {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
                                             db.bookmarkedTrainingRepository,
-                                            settingRepository,
-                                            api,
                                             trainingId
                                         )
                                     }

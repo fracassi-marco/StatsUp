@@ -11,8 +11,6 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.statsup.domain.Lap
 import com.statsup.domain.ManageBookmarkUseCase
 import com.statsup.domain.Training
-import com.statsup.domain.TrainingApi
-import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
 import kotlinx.coroutines.Dispatchers
@@ -22,8 +20,6 @@ import kotlinx.coroutines.withContext
 class TrainingDetailViewModel(
     private val trainingRepository: TrainingRepository,
     bookmarkedTrainingRepository: DbBookmarkedTrainingRepository,
-    private val settingRepository: SettingRepository,
-    private val trainingApi: TrainingApi,
     private val trainingId: String
 ) : ViewModel() {
 
@@ -89,71 +85,11 @@ class TrainingDetailViewModel(
                     val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, Double::class.java)
                     _elevationPoints.value = jsonMapper.readValue(elevJson, listType)
                 }
-
-                val needLaps = lapsJson == null
-                val needElev = elevJson == null
-                if (needLaps || needElev) {
-                    fetchAndCacheMissingData(training, needLaps, needElev)
-                }
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
             }
-        }
-    }
-
-    private fun fetchAndCacheMissingData(training: Training, fetchLaps: Boolean, fetchElev: Boolean) {
-        viewModelScope.launch {
-            val token = getValidToken() ?: return@launch
-            var updated = training
-            try {
-                if (fetchLaps) {
-                    val fetchedLaps = withContext(Dispatchers.IO) {
-                        trainingApi.laps(token, trainingId)
-                    }
-                    if (fetchedLaps.isNotEmpty()) {
-                        _laps.value = fetchedLaps
-                        updated = updated.copy(lapsJson = jsonMapper.writeValueAsString(fetchedLaps))
-                    }
-                }
-                if (fetchElev) {
-                    val points = withContext(Dispatchers.IO) {
-                        trainingApi.fetchElevationStream(token, trainingId)
-                    }
-                    if (!points.isNullOrEmpty()) {
-                        _elevationPoints.value = points
-                        updated = updated.copy(elevationPointsJson = jsonMapper.writeValueAsString(points))
-                    }
-                }
-                if (updated !== training) {
-                    withContext(Dispatchers.IO) { trainingRepository.add(updated) }
-                    _training.value = updated
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    private suspend fun getValidToken(): String? {
-        val token = settingRepository.loadApiToken()?.takeIf { it.isNotBlank() } ?: return null
-        val expiry = settingRepository.loadApiTokenExpiry()
-        val nowSecs = System.currentTimeMillis() / 1000
-        if (expiry == 0L || nowSecs < expiry - 60) return token
-
-        val savedRefreshToken = settingRepository.loadApiRefreshToken() ?: return null
-        return try {
-            val newTokenData = withContext(Dispatchers.IO) {
-                trainingApi.refreshToken(savedRefreshToken)
-            }
-            settingRepository.saveApiToken(newTokenData.accessToken)
-            settingRepository.saveApiRefreshToken(newTokenData.refreshToken)
-            settingRepository.saveApiTokenExpiry(newTokenData.expiresAt)
-            newTokenData.accessToken
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
         }
     }
 

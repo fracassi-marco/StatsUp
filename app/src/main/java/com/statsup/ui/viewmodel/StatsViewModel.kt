@@ -67,15 +67,20 @@ class StatsViewModel(
         }
     }
 
-    fun cumulativeMonth() = trainings().cumulativeDaysTrend()
+    fun cumulativeMonth() =
+        if (isCurrentPeriod()) trainings().cumulativeDaysTrend() else trainings().cumulativeDays()
 
     fun pastCumulativeMonth() = pastMonthTrainings().cumulativeDays()
 
     private fun pastMonthTrainings() = Trainings(trainings, provider = provider(), now = selectedNow.minusMonths(1))
     private fun pastYearTraining() = Trainings(trainings, provider = provider(), now = selectedNow.minusYears(1))
 
-    fun cumulativeYear() = trainings().cumulativeMonthsTrend()
+    fun cumulativeYear() =
+        if (isCurrentPeriod()) trainings().cumulativeMonthsTrend() else trainings().cumulativeMonths()
     fun pastCumulativeYear() = pastYearTraining().cumulativeMonths()
+
+    fun currentDayIndex(): Int? = if (isCurrentPeriod()) ZonedDateTime.now().dayOfMonth - 1 else null
+    fun currentMonthIndex(): Int? = if (isCurrentPeriod()) ZonedDateTime.now().month.value - 1 else null
 
     fun hideMonthChart() = selectedSpan != 0
     fun hideYearChart() = selectedSpan != 1
