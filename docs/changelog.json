@@ -50,16 +50,6 @@
     "message": "Import trainings from Intervals.icu, Strava is deprecated"
   },
   {
-    "version": "2.0.0",
-    "date": "2026-06-17",
-    "message": "Import trainings from Intervals.icu, Strava is deprecated"
-  },
-  {
-    "version": "2.0.0",
-    "date": "2026-06-17",
-    "message": "Import trainings from Intervals.icu, Strava is deprecated"
-  },
-  {
     "version": "1.11.0",
     "date": "2026-06-04",
     "message": "Add new weight tracking badges for weekly, monthly, and quarterly progress"
@@ -170,11 +160,6 @@
     "message": "Fix settings color with dark background"
   },
   {
-    "version": "1.7.4",
-    "date": "2026-05-27",
-    "message": "Minor improvements"
-  },
-  {
     "version": "1.7.3",
     "date": "2026-05-27",
     "message": "Add recovery detail screen"
@@ -238,11 +223,6 @@
     "version": "1.4.1",
     "date": "2026-04-24",
     "message": "Add laps"
-  },
-  {
-    "version": "1.4.1",
-    "date": "2026-04-23",
-    "message": "Add Google site verification"
   },
   {
     "version": "1.4.0",
