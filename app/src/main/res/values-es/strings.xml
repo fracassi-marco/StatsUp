@@ -352,6 +352,7 @@
     <string name="weight_delete_confirm_body">Esta medición se eliminará permanentemente.</string>
     <string name="weight_unit_kg">kg</string>
     <string name="weight_bmi_display">%1$.1f — %2$s</string>
+    <string name="weight_ideal_range_label">Peso saludable (IMC 18,5–24,9)</string>
     <string name="weight_import_success">%1$d mediciones importadas</string>
     <string name="weight_import_error">Error al importar</string>
     <string name="settings_personal_data">Datos personales</string>

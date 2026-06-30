@@ -18,10 +18,10 @@ class WeightStatsUseCase {
         val maxWeight = sorted.maxOf { it.weightKg }
         val weightLostFromMax = maxWeight - latestWeight
 
-        val bmi = if (heightCm > 0) {
-            val hm = heightCm / 100.0
-            latestWeight / (hm * hm)
-        } else null
+        val hm = heightCm / 100.0
+        val bmi = if (heightCm > 0) latestWeight / (hm * hm) else null
+        val idealWeightMin = if (heightCm > 0) 18.5 * hm * hm else null
+        val idealWeightMax = if (heightCm > 0) 24.9 * hm * hm else null
 
         val bmiCategory = bmi?.let { bmiCategory(it) } ?: BmiCategory.NORMAL
 
@@ -53,7 +53,9 @@ class WeightStatsUseCase {
             measurementStreak = measurementStreak,
             totalMeasurements = sorted.size,
             chartPoints = chartPoints,
-            earnedBadges = badges
+            earnedBadges = badges,
+            idealWeightMin = idealWeightMin,
+            idealWeightMax = idealWeightMax
         )
     }
 

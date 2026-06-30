@@ -18,5 +18,7 @@ data class WeightStats(
     val measurementStreak: Int = 0,
     val totalMeasurements: Int = 0,
     val chartPoints: List<Pair<Long, Double>> = emptyList(),
-    val earnedBadges: List<Badge> = emptyList()
+    val earnedBadges: List<Badge> = emptyList(),
+    val idealWeightMin: Double? = null,
+    val idealWeightMax: Double? = null
 )

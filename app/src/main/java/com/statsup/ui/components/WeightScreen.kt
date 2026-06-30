@@ -286,6 +286,24 @@ private fun BmiCard(stats: WeightStats) {
             }
             Spacer(modifier = Modifier.height(10.dp))
             BmiBar(bmi)
+            if (stats.idealWeightMin != null && stats.idealWeightMax != null) {
+                val kgUnit = stringResource(R.string.weight_unit_kg)
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(R.string.weight_ideal_range_label),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                    Text(
+                        text = "%.1f – %.1f $kgUnit".format(stats.idealWeightMin, stats.idealWeightMax),
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
+            }
         }
     }
 }

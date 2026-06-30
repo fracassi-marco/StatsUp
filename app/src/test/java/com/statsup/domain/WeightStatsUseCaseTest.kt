@@ -147,6 +147,27 @@ class WeightStatsUseCaseTest {
     }
 
     // -------------------------------------------------------------------------
+    // Ideal weight range
+    // -------------------------------------------------------------------------
+
+    @Test
+    fun `calculates ideal weight range from height`() {
+        val entries = listOf(entry(LocalDate.now(), 80.0))
+        val stats = useCase(entries, 175, 0.0)
+        // 18.5 * 1.75^2 = 56.66, 24.9 * 1.75^2 = 76.26
+        assertEquals(56.66, stats.idealWeightMin!!, 0.1)
+        assertEquals(76.26, stats.idealWeightMax!!, 0.1)
+    }
+
+    @Test
+    fun `ideal weight range is null when height is zero`() {
+        val entries = listOf(entry(LocalDate.now(), 80.0))
+        val stats = useCase(entries, 0, 0.0)
+        assertNull(stats.idealWeightMin)
+        assertNull(stats.idealWeightMax)
+    }
+
+    // -------------------------------------------------------------------------
     // Chart points ordering
     // -------------------------------------------------------------------------
 
