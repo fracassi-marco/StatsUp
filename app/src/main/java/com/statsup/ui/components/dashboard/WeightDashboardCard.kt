@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -110,10 +112,12 @@ fun WeightDashboardCard(
                 }
             }
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                modifier = Modifier.size(20.dp)
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.primary, CircleShape)
+                    .size(24.dp)
             )
         }
     }

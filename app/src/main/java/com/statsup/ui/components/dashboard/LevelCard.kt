@@ -1,12 +1,12 @@
 package com.statsup.ui.components.dashboard
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,18 +18,52 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.statsup.R
+import com.statsup.ui.components.PrimaryCard
 import com.statsup.ui.viewmodel.DashboardViewModel
 
 @Composable
-fun LevelCard(viewModel: DashboardViewModel, onClick: () -> Unit = {}) {
+fun LevelCard(viewModel: DashboardViewModel, onClick: (() -> Unit)? = null) {
     val level = viewModel.level()
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .clickable(onClick = onClick)
+    PrimaryCard(
+        onClick = onClick,
+        bottom = {
+            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)) {
+                LinearProgressIndicator(
+                    progress = { level.progress },
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                when {
+                    level.isMaxLevel -> Text(
+                        text = stringResource(R.string.level_card_max_level),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                    level.isDecaying -> Text(
+                        text = stringResource(R.string.level_card_decay_warning, level.dailyDecayRate),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                    else -> Text(
+                        text = stringResource(R.string.level_card_xp_to_next, level.nextLevelXp - level.currentLevelXp),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
+        }
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(end = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -49,37 +83,6 @@ fun LevelCard(viewModel: DashboardViewModel, onClick: () -> Unit = {}) {
             Text(
                 text = stringResource(R.string.level_card_total_xp, level.totalXp),
                 style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.ExtraBold)
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        LinearProgressIndicator(
-            progress = { level.progress },
-            modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        when {
-            level.isMaxLevel -> Text(
-                text = stringResource(R.string.level_card_max_level),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.End
-            )
-            level.isDecaying -> Text(
-                text = stringResource(R.string.level_card_decay_warning, level.dailyDecayRate),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.End
-            )
-            else -> Text(
-                text = stringResource(R.string.level_card_xp_to_next, level.nextLevelXp - level.currentLevelXp),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.End
             )
         }
     }

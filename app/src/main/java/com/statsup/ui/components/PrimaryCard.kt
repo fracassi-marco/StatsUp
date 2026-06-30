@@ -68,7 +68,7 @@ fun PrimaryCard(
                         modifier = Modifier.size(32.dp)
                     )
                 }
-                Box(modifier = Modifier.padding(0.dp, 16.dp)) {
+                Box(modifier = Modifier.weight(1f).padding(0.dp, 16.dp)) {
                     content()
                 }
                 if (onClick != null) {
@@ -83,7 +83,7 @@ fun PrimaryCard(
                 } else
                     Spacer(Modifier.size(24.dp))
             }
-            Row {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 bottom()
             }
         }
