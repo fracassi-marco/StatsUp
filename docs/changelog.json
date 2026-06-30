@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.3.0",
+    "date": "2026-06-30",
+    "message": "UX UI Improvements"
+  },
+  {
     "version": "2.2.0",
     "date": "2026-06-26",
     "message": "Improve cumulative data chart visualization"
