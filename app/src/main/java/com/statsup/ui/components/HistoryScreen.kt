@@ -156,24 +156,23 @@ fun TrainingListItem(training: Training, onTrainingClick: (String) -> Unit) {
         colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
-        // Titolo centrato
-        Text(
-            text = training.name,
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp),
-            textAlign = TextAlign.Center
-        )
-        // Data centrata
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp, 0.dp, 10.dp, 4.dp),
-            text = formatLocal(training.date),
-            fontSize = 10.sp,
-            textAlign = TextAlign.Center
-        )
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = training.name,
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = formatLocal(training.date),
+                fontSize = 10.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
