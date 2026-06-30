@@ -5,11 +5,16 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import java.io.File
+import kotlinx.coroutines.sync.Semaphore
 
 object MapSnapshotCache {
 
     private const val TAG = "MapSnapshotCache"
     private const val DIR = "map_snapshots"
+
+    // Serializes MapView snapshot renders: only 1 runs at a time to avoid frame drops
+    // when multiple uncached items are visible simultaneously.
+    val renderSemaphore = Semaphore(1)
 
     private fun cacheFile(context: Context, trainingId: String): File {
         val dir = File(context.cacheDir, DIR)

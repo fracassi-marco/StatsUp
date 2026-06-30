@@ -1,5 +1,6 @@
 package com.statsup.ui.components
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +31,7 @@ import com.statsup.domain.Trip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
@@ -54,125 +57,139 @@ fun MapListItemPreview(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    var cachedBitmap by remember(trainingId) {
-        mutableStateOf(MapSnapshotCache.load(context, trainingId))
+    var cachedBitmap by remember(trainingId) { mutableStateOf<Bitmap?>(null) }
+    var diskChecked by remember(trainingId) { mutableStateOf(false) }
+
+    // Disk read off the main thread: avoids blocking composition for every list item.
+    LaunchedEffect(trainingId) {
+        val fromDisk = withContext(Dispatchers.IO) { MapSnapshotCache.load(context, trainingId) }
+        cachedBitmap = fromDisk
+        diskChecked = true
     }
 
     Box(modifier = modifier) {
-        if (cachedBitmap != null) {
-            Image(
-                bitmap = cachedBitmap!!.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .height(height.dp),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Log.d("MapSnapshotCache", "Rendering MapView for training $trainingId (no cache found)")
-
-            val mapView = remember {
-                MapView(
-                    context,
-                    GoogleMapOptions()
-                        .liteMode(true)
-                        .compassEnabled(false)
-                        .rotateGesturesEnabled(false)
-                        .scrollGesturesEnabled(false)
-                        .tiltGesturesEnabled(false)
-                        .zoomGesturesEnabled(false)
-                ).also {
-                    it.onCreate(null)
-                    it.onResume()
-                }
+        when {
+            cachedBitmap != null -> {
+                Image(
+                    bitmap = cachedBitmap!!.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .height(height.dp),
+                    contentScale = ContentScale.Crop
+                )
             }
+            diskChecked -> {
+                Log.d("MapSnapshotCache", "Rendering MapView for training $trainingId (no cache found)")
 
-            DisposableEffect(mapView) {
-                val job = coroutineScope.launch {
-                    val googleMap = suspendCancellableCoroutine { cont ->
-                        mapView.getMapAsync { gm -> cont.resume(gm) }
+                val mapView = remember {
+                    MapView(
+                        context,
+                        GoogleMapOptions()
+                            .liteMode(true)
+                            .compassEnabled(false)
+                            .rotateGesturesEnabled(false)
+                            .scrollGesturesEnabled(false)
+                            .tiltGesturesEnabled(false)
+                            .zoomGesturesEnabled(false)
+                    ).also {
+                        it.onCreate(null)
+                        it.onResume()
                     }
+                }
 
-                    googleMap.addPolyline(
-                        PolylineOptions()
-                            .addAll(trip.steps())
-                            .width(6f)
-                            .color(android.graphics.Color.argb(178, 0, 0, 255))
-                            .geodesic(true)
-                    )
-                    googleMap.addCircle(
-                        CircleOptions()
-                            .center(trip.begin())
-                            .strokeColor(android.graphics.Color.GREEN)
-                            .fillColor(android.graphics.Color.argb(204, 0, 255, 0))
-                            .radius(10.0)
-                            .strokeWidth(1f)
-                    )
-                    googleMap.addCircle(
-                        CircleOptions()
-                            .center(trip.end())
-                            .strokeColor(android.graphics.Color.RED)
-                            .fillColor(android.graphics.Color.argb(204, 255, 0, 0))
-                            .radius(10.0)
-                            .strokeWidth(1f)
-                    )
+                DisposableEffect(mapView) {
+                    val job = coroutineScope.launch {
+                        // Serialized: only 1 MapView renders at a time.
+                        // Cancellation during acquire() is safe — semaphore not yet held.
+                        // Cancellation inside the block releases the permit via finally.
+                        MapSnapshotCache.renderSemaphore.withPermit {
+                            val googleMap = suspendCancellableCoroutine { cont ->
+                                mapView.getMapAsync { gm -> cont.resume(gm) }
+                            }
 
-                    // Attendi il tile statico iniziale
-                    withTimeoutOrNull(5_000.milliseconds) {
-                        suspendCancellableCoroutine { cont ->
-                            googleMap.setOnMapLoadedCallback { cont.resume(Unit) }
-                        }
-                    }
+                            googleMap.addPolyline(
+                                PolylineOptions()
+                                    .addAll(trip.steps())
+                                    .width(6f)
+                                    .color(android.graphics.Color.argb(178, 0, 0, 255))
+                                    .geodesic(true)
+                            )
+                            googleMap.addCircle(
+                                CircleOptions()
+                                    .center(trip.begin())
+                                    .strokeColor(android.graphics.Color.GREEN)
+                                    .fillColor(android.graphics.Color.argb(204, 0, 255, 0))
+                                    .radius(10.0)
+                                    .strokeWidth(1f)
+                            )
+                            googleMap.addCircle(
+                                CircleOptions()
+                                    .center(trip.end())
+                                    .strokeColor(android.graphics.Color.RED)
+                                    .fillColor(android.graphics.Color.argb(204, 255, 0, 0))
+                                    .radius(10.0)
+                                    .strokeWidth(1f)
+                            )
 
-                    // Registra la callback PRIMA di spostare la camera per evitare race condition,
-                    // poi aggiorna la camera sul percorso e attendi il tile aggiornato.
-                    withTimeoutOrNull(5_000.milliseconds) {
-                        suspendCancellableCoroutine { cont ->
-                            googleMap.setOnMapLoadedCallback { cont.resume(Unit) }
-                            try {
-                                googleMap.moveCamera(
-                                    CameraUpdateFactory.newLatLngBounds(trip.getBoundariesWithPadding(0.15), 0)
-                                )
-                            } catch (_: Exception) {
-                                try {
-                                    googleMap.moveCamera(
-                                        CameraUpdateFactory.newLatLngBounds(trip.boundaries, 20)
-                                    )
-                                } catch (_: Exception) {
-                                    googleMap.moveCamera(
-                                        CameraUpdateFactory.newLatLngZoom(trip.boundaries.center, 13f)
-                                    )
+                            // Attendi il tile statico iniziale
+                            withTimeoutOrNull(5_000.milliseconds) {
+                                suspendCancellableCoroutine { cont ->
+                                    googleMap.setOnMapLoadedCallback { cont.resume(Unit) }
                                 }
+                            }
+
+                            // Registra la callback PRIMA di spostare la camera per evitare race condition,
+                            // poi aggiorna la camera sul percorso e attendi il tile aggiornato.
+                            withTimeoutOrNull(5_000.milliseconds) {
+                                suspendCancellableCoroutine { cont ->
+                                    googleMap.setOnMapLoadedCallback { cont.resume(Unit) }
+                                    try {
+                                        googleMap.moveCamera(
+                                            CameraUpdateFactory.newLatLngBounds(trip.getBoundariesWithPadding(0.15), 0)
+                                        )
+                                    } catch (_: Exception) {
+                                        try {
+                                            googleMap.moveCamera(
+                                                CameraUpdateFactory.newLatLngBounds(trip.boundaries, 20)
+                                            )
+                                        } catch (_: Exception) {
+                                            googleMap.moveCamera(
+                                                CameraUpdateFactory.newLatLngZoom(trip.boundaries.center, 13f)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+                            val bitmap = suspendCancellableCoroutine { cont ->
+                                googleMap.snapshot { bm -> cont.resume(bm) }
+                            }
+
+                            if (bitmap != null) {
+                                withContext(Dispatchers.IO) {
+                                    MapSnapshotCache.save(context, trainingId, bitmap)
+                                }
+                                cachedBitmap = bitmap
                             }
                         }
                     }
 
-                    val bitmap = suspendCancellableCoroutine { cont ->
-                        googleMap.snapshot { bm -> cont.resume(bm) }
-                    }
-
-                    if (bitmap != null) {
-                        withContext(Dispatchers.IO) {
-                            MapSnapshotCache.save(context, trainingId, bitmap)
-                        }
-                        cachedBitmap = bitmap
+                    onDispose {
+                        job.cancel()
+                        mapView.onPause()
+                        mapView.onStop()
+                        mapView.onDestroy()
                     }
                 }
 
-                onDispose {
-                    job.cancel()
-                    mapView.onPause()
-                    mapView.onStop()
-                    mapView.onDestroy()
-                }
+                AndroidView(
+                    factory = { mapView },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .height(height.dp)
+                )
             }
-
-            AndroidView(
-                factory = { mapView },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .height(height.dp)
-            )
         }
 
         if (onClick != null) {
