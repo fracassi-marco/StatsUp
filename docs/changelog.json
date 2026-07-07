@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.5.1",
+    "date": "2026-07-07",
+    "message": "Improve import from Intervals.icu"
+  },
+  {
     "version": "2.5.0",
     "date": "2026-07-07",
     "message": "Added search for workouts by start point, finish point and name"
