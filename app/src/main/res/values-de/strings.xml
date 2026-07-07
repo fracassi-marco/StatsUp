@@ -414,6 +414,7 @@
     <string name="import_notification_channel_name">Import</string>
     <string name="import_notification_title">Aktivitäten werden importiert…</string>
     <string name="import_notification_text">Deine Aktivitäten werden im Hintergrund heruntergeladen</string>
+    <string name="import_notification_progress">%1$d / %2$d Aktivitäten</string>
 
     <string name="crash_title">Unerwarteter Fehler</string>
     <string name="crash_subtitle">Die App ist abgestürzt. Bitte melde diesen Fehler dem Entwickler.</string>

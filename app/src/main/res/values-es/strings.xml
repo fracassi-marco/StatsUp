@@ -414,6 +414,7 @@
     <string name="import_notification_channel_name">Importar</string>
     <string name="import_notification_title">Importando actividades…</string>
     <string name="import_notification_text">Descargando tus actividades en segundo plano</string>
+    <string name="import_notification_progress">%1$d / %2$d actividades</string>
 
     <string name="crash_title">Error inesperado</string>
     <string name="crash_subtitle">La aplicación se ha cerrado inesperadamente. Comunica este error al desarrollador.</string>

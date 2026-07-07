@@ -413,6 +413,7 @@
     <string name="import_notification_channel_name">Import</string>
     <string name="import_notification_title">Importing activities…</string>
     <string name="import_notification_text">Downloading your activities in the background</string>
+    <string name="import_notification_progress">%1$d / %2$d activities</string>
 
     <string name="crash_title">Unexpected Error</string>
     <string name="crash_subtitle">The app crashed. Please report this error to the developer.</string>

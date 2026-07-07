@@ -42,6 +42,7 @@ class MainViewModel(
     init {
         viewModelScope.launch {
             ImportEventBus.result.collect { result ->
+                stopLoading()
                 when (result) {
                     is ImportResult.Success -> newTrainingsCounter.emit(result.count)
                     is ImportResult.Error -> importError.emit(result.message)
@@ -97,7 +98,6 @@ class MainViewModel(
                     oauthToken.athleteId?.let { settingRepository.saveAthleteId(it) }
                     val isFullImport = fullImportPending
                     fullImportPending = false
-                    stopLoading()
                     context.startForegroundService(
                         ImportForegroundService.intent(context, oauthToken.accessToken, isFullImport)
                     )

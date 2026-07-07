@@ -39,6 +39,11 @@ class ImportForegroundService : Service() {
                 val api = IntervalsIcuTrainingApi(settingRepository)
                 val activeToken = resolveToken(token, api, settingRepository)
 
+                val notificationManager = getSystemService(NotificationManager::class.java)
+                val onProgress: suspend (Int, Int) -> Unit = { current, total ->
+                    notificationManager.notify(NOTIFICATION_ID, buildProgressNotification(applicationContext, current, total))
+                }
+
                 val geocoding = AndroidGeocodingRepository(applicationContext)
                 val count = if (fullImport) {
                     FullImportUseCase(
@@ -47,9 +52,9 @@ class ImportForegroundService : Service() {
                         db.bookmarkedTrainingRepository,
                         api,
                         geocoding
-                    )(activeToken).count()
+                    )(activeToken, onProgress).count()
                 } else {
-                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding)(activeToken).count()
+                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding)(activeToken, onProgress).count()
                 }
                 ImportEventBus.emitSuccess(count)
             } catch (e: ApiException) {
@@ -124,6 +129,16 @@ class ImportForegroundService : Service() {
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setOngoing(true)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build()
+
+        fun buildProgressNotification(context: Context, current: Int, total: Int) =
+            NotificationCompat.Builder(context, CHANNEL_ID)
+                .setContentTitle(context.getString(R.string.import_notification_title))
+                .setContentText(context.getString(R.string.import_notification_progress, current, total))
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setOngoing(true)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setProgress(total, current, false)
                 .build()
 
         fun createChannel(context: Context) {

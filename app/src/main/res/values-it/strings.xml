@@ -414,6 +414,7 @@
     <string name="import_notification_channel_name">Importazione</string>
     <string name="import_notification_title">Importazione attività…</string>
     <string name="import_notification_text">Download delle attività in corso in background</string>
+    <string name="import_notification_progress">%1$d / %2$d attività</string>
 
     <string name="crash_title">Errore inatteso</string>
     <string name="crash_subtitle">L\'app è andata in crash. Segnala questo errore allo sviluppatore.</string>

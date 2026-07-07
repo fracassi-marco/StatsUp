@@ -22,13 +22,15 @@ class FullImportUseCase(
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
     }
 
-    suspend operator fun invoke(token: String): List<Training> {
+    suspend operator fun invoke(token: String, onProgress: (suspend (Int, Int) -> Unit)? = null): List<Training> {
         val savedBookmarks = bookmarkedTrainingRepository.getAllBookmarksList()
 
         trainingRepository.deleteAll()
 
         val downloaded = trainingApi.download(token, latest = null)
-        val trainings = downloaded.map { training ->
+        val total = downloaded.size
+        val trainings = downloaded.mapIndexed { index, training ->
+            onProgress?.invoke(index + 1, total)
             val withPolyline = if (training.trip == null) {
                 val polyline = trainingApi.fetchPolyline(token, training.id)
                 delay(300.milliseconds)
