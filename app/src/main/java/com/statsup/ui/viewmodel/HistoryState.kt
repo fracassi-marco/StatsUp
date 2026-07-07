@@ -4,18 +4,26 @@ import com.statsup.domain.Training
 
 data class HistoryState(
     val activities: List<Training> = emptyList(),
-    val selectedSportType: String? = null // null = tutti gli sport
+    val selectedSportType: String? = null,
+    val searchQuery: String = ""
 ) {
     val show = activities.isNotEmpty()
 
-    // Filtra gli allenamenti in base al tipo di sport selezionato
-    val filteredActivities: List<Training> = if (selectedSportType == null) {
-        activities
-    } else {
-        activities.filter { it.sportType == selectedSportType }
-    }
+    val filteredActivities: List<Training> = activities
+        .let { list ->
+            if (selectedSportType == null) list
+            else list.filter { it.sportType == selectedSportType }
+        }
+        .let { list ->
+            val q = searchQuery.trim()
+            if (q.isEmpty()) list
+            else list.filter { training ->
+                training.name.contains(q, ignoreCase = true) ||
+                training.startLocationLabel?.contains(q, ignoreCase = true) == true ||
+                training.endLocationLabel?.contains(q, ignoreCase = true) == true
+            }
+        }
 
-    // Ottieni la lista di tutti i tipi di sport disponibili
     val availableSportTypes: List<String> = activities
         .mapNotNull { it.sportType }
         .distinct()

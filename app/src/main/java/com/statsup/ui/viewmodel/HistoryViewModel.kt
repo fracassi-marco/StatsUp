@@ -29,4 +29,8 @@ class HistoryViewModel(private val trainingRepository: TrainingRepository) : Vie
     fun setSportTypeFilter(sportType: String?) {
         _state.value = state.value.copy(selectedSportType = sportType)
     }
+
+    fun setSearchQuery(query: String) {
+        _state.value = state.value.copy(searchQuery = query)
+    }
 }

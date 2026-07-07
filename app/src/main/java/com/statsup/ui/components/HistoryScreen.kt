@@ -14,23 +14,33 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.DirectionsRun
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +50,6 @@ import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
 import com.statsup.ui.viewmodel.HistoryViewModel
-import androidx.compose.ui.platform.LocalLocale
 import java.time.format.DateTimeFormatter
 
 
@@ -51,7 +60,10 @@ fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (String) -> Unit
     if (state.show) {
         Column {
             ScreenTitle(text = stringResource(R.string.history_title))
-            // Filtri per tipo di sport
+            TrainingSearchBar(
+                query = state.searchQuery,
+                onQueryChange = { viewModel.setSearchQuery(it) }
+            )
             if (state.availableSportTypes.isNotEmpty()) {
                 SportTypeFilter(
                     availableSportTypes = state.availableSportTypes,
@@ -66,9 +78,8 @@ fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (String) -> Unit
                 training.date.format(monthYearFormatter)
             }
 
-            // Mostra messaggio se non ci sono allenamenti
             if (groupedTrainings.isEmpty()) {
-                EmptyHistoryState(hasFilter = state.selectedSportType != null)
+                EmptyHistoryState(hasFilter = state.selectedSportType != null || state.searchQuery.isNotEmpty())
             } else {
                 LazyColumn {
                     groupedTrainings.forEach { (monthYear, trainings) ->
@@ -90,6 +101,32 @@ fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (String) -> Unit
             }
         }
     }
+}
+
+@Composable
+fun TrainingSearchBar(query: String, onQueryChange: (String) -> Unit) {
+    val focusManager = LocalFocusManager.current
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        placeholder = { Text(stringResource(R.string.search_trainings_hint), style = MaterialTheme.typography.bodySmall) },
+        textStyle = MaterialTheme.typography.bodySmall,
+        shape = RoundedCornerShape(50),
+        leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
+        trailingIcon = {
+            if (query.isNotEmpty()) {
+                IconButton(onClick = { onQueryChange("") }) {
+                    Icon(Icons.Outlined.Clear, contentDescription = null)
+                }
+            }
+        },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() })
+    )
 }
 
 @Composable

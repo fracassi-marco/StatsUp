@@ -118,6 +118,7 @@
     <string name="add_bookmark">Aggiungi</string>
     <string name="no_trainings_yet">Nessun allenamento ancora</string>
     <string name="no_trainings_with_filter">Nessun allenamento trovato per questo tipo di sport</string>
+    <string name="search_trainings_hint">Cerca allenamenti…</string>
     <string name="import_trainings_hint">Tocca il pulsante di importazione per sincronizzare gli allenamenti da intervals.icu</string>
     <string name="welcome_title">Benvenuto in StatsUp!</string>
     <string name="welcome_subtitle">Inizia a monitorare i tuoi progressi atletici importando gli allenamenti da intervals.icu</string>

@@ -117,6 +117,7 @@
     <string name="add_bookmark">Add</string>
     <string name="no_trainings_yet">No trainings yet</string>
     <string name="no_trainings_with_filter">No trainings found for this sport type</string>
+    <string name="search_trainings_hint">Search trainings…</string>
     <string name="import_trainings_hint">Tap the import button to sync your trainings from intervals.icu</string>
     <string name="welcome_title">Welcome to StatsUp!</string>
     <string name="welcome_subtitle">Start tracking your athletic progress by importing your trainings from intervals.icu</string>
