@@ -13,6 +13,7 @@ import com.statsup.domain.ApiException
 import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.IntervalsIcuTrainingApi
+import com.statsup.infrastructure.repository.AndroidGeocodingRepository
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -38,15 +39,17 @@ class ImportForegroundService : Service() {
                 val api = IntervalsIcuTrainingApi(settingRepository)
                 val activeToken = resolveToken(token, api, settingRepository)
 
+                val geocoding = AndroidGeocodingRepository(applicationContext)
                 val count = if (fullImport) {
                     FullImportUseCase(
                         db.trainingRepository,
                         db.athleteRepository,
                         db.bookmarkedTrainingRepository,
-                        api
+                        api,
+                        geocoding
                     )(activeToken).count()
                 } else {
-                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api)(activeToken).count()
+                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding)(activeToken).count()
                 }
                 ImportEventBus.emitSuccess(count)
             } catch (e: ApiException) {

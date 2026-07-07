@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Landscape
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.SentimentSatisfied
 import androidx.compose.material.icons.filled.Speed
@@ -469,6 +470,41 @@ fun TrainingDetailScreen(
                             HrZonesSection(zoneTimes = zoneTimes)
                         }
 
+                        // Sezione Posizione GPS
+                        val hasLocationData = !training.startLocationLabel.isNullOrBlank() ||
+                                !training.endLocationLabel.isNullOrBlank()
+                        if (hasLocationData) {
+                            val hasPreviousSections =
+                                (training.distance > 0 || training.movingTime > 0) ||
+                                        hasElevationData || hasPerformanceData ||
+                                        laps.isNotEmpty() ||
+                                        (!training.hrZoneTimes.isNullOrEmpty() && training.hrZoneTimes!!.any { it > 0 })
+                            if (hasPreviousSections) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+                            }
+                            StatSection(
+                                title = stringResource(id = R.string.location_section),
+                                icon = Icons.Default.Place
+                            )
+                            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                training.startLocationLabel?.let { label ->
+                                    LocationItem(
+                                        label = stringResource(id = R.string.location_start),
+                                        locationLabel = label,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+                                training.endLocationLabel?.let { label ->
+                                    LocationItem(
+                                        label = stringResource(id = R.string.location_end),
+                                        locationLabel = label,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+                            }
+                        }
+
                         // Sezione Nota (se bookmarkato e c'è una nota)
                         if (isBookmarked && bookmarkNote.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(8.dp))
@@ -705,6 +741,40 @@ fun StatItemWithIcon(
     }
 }
 
+
+@Composable
+private fun LocationItem(label: String, locationLabel: String, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Place,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        )
+        Column(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .weight(1f)
+        ) {
+            Text(
+                text = label,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.padding(bottom = 2.dp)
+            )
+            Text(
+                text = locationLabel,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
 
 private fun formatPaceFromMinutes(paceInMinutes: Double, locale: Locale): String {
     if (paceInMinutes == 0.0) return "0:00"

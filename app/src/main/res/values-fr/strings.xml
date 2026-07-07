@@ -405,6 +405,9 @@
     <string name="level_name_19">Absolu</string>
     <string name="level_name_20">Éternel</string>
     <string name="activity_source">%1$s &gt; %2$s</string>
+    <string name="location_section">Emplacement</string>
+    <string name="location_start">Départ</string>
+    <string name="location_end">Arrivée</string>
     <string name="calories">Calories</string>
     <string name="kcal">kcal</string>
     <string name="import_notification_channel_name">Importation</string>

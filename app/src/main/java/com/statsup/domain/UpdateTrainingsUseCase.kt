@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.statsup.domain.repository.AthleteRepository
+import com.statsup.domain.repository.GeocodingRepository
 import com.statsup.domain.repository.TrainingRepository
 
 class UpdateTrainingsUseCase(
     private val trainingRepository: TrainingRepository,
     private val athleteRepository: AthleteRepository,
-    private val trainingApi: TrainingApi) {
+    private val trainingApi: TrainingApi,
+    private val geocodingRepository: GeocodingRepository? = null
+) {
 
     private val jsonMapper = jsonMapper { addModule(kotlinModule()) }.apply {
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
@@ -27,8 +30,14 @@ class UpdateTrainingsUseCase(
             val withLaps = if (laps.isNotEmpty()) withPolyline.copy(lapsJson = jsonMapper.writeValueAsString(laps))
                 else withPolyline
             val elevPoints = trainingApi.fetchElevationStream(token, training.id)
-            if (!elevPoints.isNullOrEmpty()) withLaps.copy(elevationPointsJson = jsonMapper.writeValueAsString(elevPoints))
+            val withElevation = if (!elevPoints.isNullOrEmpty()) withLaps.copy(elevationPointsJson = jsonMapper.writeValueAsString(elevPoints))
             else withLaps
+            val trip = withElevation.trip
+            if (trip != null && geocodingRepository != null) {
+                val startLabel = geocodingRepository.reverseGeocode(trip.begin().latitude, trip.begin().longitude)
+                val endLabel = geocodingRepository.reverseGeocode(trip.end().latitude, trip.end().longitude)
+                withElevation.copy(startLocationLabel = startLabel, endLocationLabel = endLabel)
+            } else withElevation
         }
         trainings.forEach { training ->
             val center = training.trip?.centerPoint()
