@@ -22,14 +22,16 @@ class FullImportUseCase(
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
     }
 
-    suspend operator fun invoke(token: String, onProgress: (suspend (Int, Int) -> Unit)? = null): List<Training> {
+    suspend operator fun invoke(token: String, onProgress: (suspend (Int, Int) -> Unit)? = null): Int {
         val savedBookmarks = bookmarkedTrainingRepository.getAllBookmarksList()
 
         trainingRepository.deleteAll()
 
         val downloaded = trainingApi.download(token, latest = null)
         val total = downloaded.size
-        val trainings = downloaded.mapIndexed { index, training ->
+        val importedIds = HashSet<String>(total)
+
+        downloaded.forEachIndexed { index, training ->
             onProgress?.invoke(index + 1, total)
             val withPolyline = if (training.trip == null) {
                 val polyline = trainingApi.fetchPolyline(token, training.id)
@@ -41,29 +43,27 @@ class FullImportUseCase(
                 else withPolyline
             val elevPoints = trainingApi.fetchElevationStream(token, training.id)
             val withElevation = if (!elevPoints.isNullOrEmpty()) withLaps.copy(elevationPointsJson = jsonMapper.writeValueAsString(elevPoints))
-            else withLaps
+                else withLaps
             val trip = withElevation.trip
-            if (trip != null && geocodingRepository != null) {
+            val enriched = if (trip != null && geocodingRepository != null) {
                 val startLabel = geocodingRepository.reverseGeocode(trip.begin().latitude, trip.begin().longitude)
                 val endLabel = geocodingRepository.reverseGeocode(trip.end().latitude, trip.end().longitude)
                 withElevation.copy(startLocationLabel = startLabel, endLocationLabel = endLabel)
             } else withElevation
-        }
-        trainings.forEach { training ->
-            val center = training.trip?.centerPoint()
+            val center = enriched.trip?.centerPoint()
             trainingRepository.add(
-                if (center != null) training.copy(centerLat = center.latitude, centerLng = center.longitude)
-                else training
+                if (center != null) enriched.copy(centerLat = center.latitude, centerLng = center.longitude)
+                else enriched
             )
+            importedIds.add(enriched.id)
         }
 
-        val importedIds = trainings.map { it.id }.toSet()
         savedBookmarks
             .filter { it.trainingId in importedIds }
             .forEach { bookmarkedTrainingRepository.addBookmark(it.copy(id = 0)) }
 
         val athlete = trainingApi.athlete(token)
         athleteRepository.update(athlete)
-        return trainings
+        return total
     }
 }

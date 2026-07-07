@@ -5,7 +5,6 @@ import com.statsup.domain.repository.TrainingRepository
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -37,7 +36,7 @@ class UpdateTrainingsUseCaseTest {
     // --- Happy path ---
 
     @Test
-    fun `returns trainings downloaded from API`() = runTest {
+    fun `returns count of downloaded trainings`() = runTest {
         val trainings = listOf(makeTraining(id = "1"), makeTraining(id = "2"))
         whenever(trainingRepository.latest()).thenReturn(null)
         whenever(trainingApi.download(token, null)).thenReturn(trainings)
@@ -45,7 +44,7 @@ class UpdateTrainingsUseCaseTest {
 
         val result = useCase(token)
 
-        assertEquals(trainings, result)
+        assertEquals(2, result)
     }
 
     @Test
@@ -97,7 +96,7 @@ class UpdateTrainingsUseCaseTest {
         val result = useCase(token)
 
         verify(trainingApi).download(token, latest)
-        assertEquals(newTrainings, result)
+        assertEquals(1, result)
     }
 
     // --- Edge cases ---
@@ -110,7 +109,7 @@ class UpdateTrainingsUseCaseTest {
 
         val result = useCase(token)
 
-        assertTrue(result.isEmpty())
+        assertEquals(0, result)
         verify(trainingRepository, never()).add(any())
     }
 
@@ -127,7 +126,7 @@ class UpdateTrainingsUseCaseTest {
     }
 
     @Test
-    fun `returns empty list when there are no new trainings since latest`() = runTest {
+    fun `returns zero when there are no new trainings since latest`() = runTest {
         val latest = makeTraining(id = "99")
         whenever(trainingRepository.latest()).thenReturn(latest)
         whenever(trainingApi.download(token, latest)).thenReturn(emptyList())
@@ -135,7 +134,7 @@ class UpdateTrainingsUseCaseTest {
 
         val result = useCase(token)
 
-        assertTrue(result.isEmpty())
+        assertEquals(0, result)
     }
 
     @Test

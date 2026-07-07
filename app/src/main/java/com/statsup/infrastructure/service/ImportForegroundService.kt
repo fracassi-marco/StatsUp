@@ -52,9 +52,9 @@ class ImportForegroundService : Service() {
                         db.bookmarkedTrainingRepository,
                         api,
                         geocoding
-                    )(activeToken, onProgress).count()
+                    )(activeToken, onProgress)
                 } else {
-                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding)(activeToken, onProgress).count()
+                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding)(activeToken, onProgress)
                 }
                 ImportEventBus.emitSuccess(count)
             } catch (e: ApiException) {

@@ -6,7 +6,6 @@ import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -46,7 +45,7 @@ class FullImportUseCaseTest {
     // --- Happy path ---
 
     @Test
-    fun `returns trainings downloaded from API`() = runTest {
+    fun `returns count of downloaded trainings`() = runTest {
         val trainings = listOf(makeTraining(id = "1"), makeTraining(id = "2"))
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
         whenever(trainingApi.download(token, null)).thenReturn(trainings)
@@ -54,7 +53,7 @@ class FullImportUseCaseTest {
 
         val result = useCase(token)
 
-        assertEquals(trainings, result)
+        assertEquals(2, result)
     }
 
     @Test
@@ -182,7 +181,7 @@ class FullImportUseCaseTest {
     }
 
     @Test
-    fun `when API returns empty list all bookmarks are lost`() = runTest {
+    fun `when API returns empty list returns zero and no bookmarks are restored`() = runTest {
         // Potential data-loss scenario: if the API returns [] (network glitch?),
         // all trainings are deleted and no bookmarks survive. Test documents this behaviour.
         val bookmark = BookmarkedTraining(id = 1L, trainingId = "42")
@@ -192,7 +191,7 @@ class FullImportUseCaseTest {
 
         val result = useCase(token)
 
-        assertTrue(result.isEmpty())
+        assertEquals(0, result)
         // trainingId=42 is not in importedIds (empty), so bookmark is dropped silently
         verify(bookmarkedTrainingRepository, never()).addBookmark(any())
     }
@@ -206,7 +205,7 @@ class FullImportUseCaseTest {
 
         val result = useCase(token)
 
-        assertEquals(trainings, result)
+        assertEquals(1, result)
         verify(bookmarkedTrainingRepository, never()).addBookmark(any())
     }
 
