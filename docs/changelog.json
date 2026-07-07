@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.5.0",
+    "date": "2026-07-07",
+    "message": "Added search for workouts by start point, finish point and name"
+  },
+  {
     "version": "2.4.0",
     "date": "2026-06-30",
     "message": "Add ideal weight"
