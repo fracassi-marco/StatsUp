@@ -182,6 +182,8 @@
     <string name="profile_records_empty">No records available.\nComplete at least one running activity.</string>
     <string name="profile_records_activity_section">Activity records</string>
     <string name="profile_records_best_efforts_section">Best efforts</string>
+    <string name="profile_records_peaks_section">Highest peaks reached</string>
+    <string name="profile_records_peaks_empty">No peaks recorded yet.\nPeak names are matched automatically after syncing high-altitude activities.</string>
     <string name="profile_badge_earned">✓ Earned</string>
     <string name="profile_badge_not_earned">Not yet earned</string>
 

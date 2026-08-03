@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import kotlinx.coroutines.delay
 import com.statsup.domain.repository.AthleteRepository
 import com.statsup.domain.repository.GeocodingRepository
+import com.statsup.domain.repository.PeakLookupRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
 import kotlin.time.Duration.Companion.milliseconds
@@ -15,7 +16,8 @@ class FullImportUseCase(
     private val athleteRepository: AthleteRepository,
     private val bookmarkedTrainingRepository: DbBookmarkedTrainingRepository,
     private val trainingApi: TrainingApi,
-    private val geocodingRepository: GeocodingRepository? = null
+    private val geocodingRepository: GeocodingRepository? = null,
+    private val peakLookupRepository: PeakLookupRepository? = null
 ) {
 
     private val jsonMapper = jsonMapper { addModule(kotlinModule()) }.apply {
@@ -50,12 +52,13 @@ class FullImportUseCase(
                 val endLabel = geocodingRepository.reverseGeocode(trip.end().latitude, trip.end().longitude)
                 withElevation.copy(startLocationLabel = startLabel, endLocationLabel = endLabel)
             } else withElevation
-            val center = enriched.trip?.centerPoint()
+            val withPeak = resolvePeak(enriched, elevPoints)
+            val center = withPeak.trip?.centerPoint()
             trainingRepository.add(
-                if (center != null) enriched.copy(centerLat = center.latitude, centerLng = center.longitude)
-                else enriched
+                if (center != null) withPeak.copy(centerLat = center.latitude, centerLng = center.longitude)
+                else withPeak
             )
-            importedIds.add(enriched.id)
+            importedIds.add(withPeak.id)
         }
 
         savedBookmarks
@@ -65,5 +68,20 @@ class FullImportUseCase(
         val athlete = trainingApi.athlete(token)
         athleteRepository.update(athlete)
         return total
+    }
+
+    private suspend fun resolvePeak(training: Training, elevPoints: List<Double>?): Training {
+        if (peakLookupRepository == null || training.peakName != null || training.elevHigh < MIN_PEAK_ELEVATION_METERS) {
+            return training
+        }
+        if (elevPoints.isNullOrEmpty()) return training.copy(peakName = "")
+        val summit = estimateSummitLatLng(training.trip, elevPoints) ?: return training.copy(peakName = "")
+        val peak = peakLookupRepository.findNearestPeak(summit, elevPoints.max())
+        delay(300.milliseconds)
+        return training.copy(peakName = peak?.name ?: "", peakElevation = peak?.elevation)
+    }
+
+    companion object {
+        private const val MIN_PEAK_ELEVATION_METERS = 1200.0
     }
 }

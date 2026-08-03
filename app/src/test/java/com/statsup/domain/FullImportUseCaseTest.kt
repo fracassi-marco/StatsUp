@@ -1,6 +1,9 @@
 package com.statsup.domain
 
+import com.google.android.gms.maps.model.LatLng
 import com.statsup.domain.repository.AthleteRepository
+import com.statsup.domain.repository.Peak
+import com.statsup.domain.repository.PeakLookupRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.repository.DbBookmarkedTrainingRepository
 import kotlinx.coroutines.runBlocking
@@ -9,6 +12,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argThat
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -224,6 +228,53 @@ class FullImportUseCaseTest {
         val captor = argumentCaptor<BookmarkedTraining>()
         verify(bookmarkedTrainingRepository).addBookmark(captor.capture())
         assertEquals(0L, captor.firstValue.id)
+    }
+
+    // --- Peak lookup enrichment ---
+
+    private val summitRoute = listOf(LatLng(45.0, 7.0), LatLng(45.9, 7.6), LatLng(46.0, 8.0))
+    private val summitPolyline = com.google.maps.android.PolyUtil.encode(summitRoute)
+
+    // PolyUtil round-trips through a fixed-precision encoding, so match with a small tolerance.
+    private fun LatLng.isCloseTo(lat: Double, lng: Double) =
+        Math.abs(latitude - lat) < 1e-4 && Math.abs(longitude - lng) < 1e-4
+
+    @Test
+    fun `does not look up a peak when elevHigh is below the threshold`() = runTest {
+        val peakLookupRepository: PeakLookupRepository = mock()
+        val lowTraining = makeTraining(id = "1").copy(elevHigh = 500.0)
+        whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
+        whenever(trainingApi.download(token, null)).thenReturn(listOf(lowTraining))
+        whenever(trainingApi.athlete(token)).thenReturn(athlete)
+        val useCaseWithPeaks = FullImportUseCase(
+            trainingRepository, athleteRepository, bookmarkedTrainingRepository, trainingApi,
+            peakLookupRepository = peakLookupRepository
+        )
+
+        useCaseWithPeaks(token)
+
+        verify(peakLookupRepository, never()).findNearestPeak(any(), any())
+    }
+
+    @Test
+    fun `resolves and persists the peak name when a nearby peak is found`() = runTest {
+        val peakLookupRepository: PeakLookupRepository = mock()
+        val highTraining = makeTraining(id = "1").copy(elevHigh = 3500.0, map = Route(summaryPolyline = summitPolyline))
+        val elevPoints = listOf(2000.0, 3500.0, 2500.0)
+        val peak = Peak(name = "Monte Rosa", latLng = LatLng(45.9, 7.6), elevation = 4634.0)
+        whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
+        whenever(trainingApi.download(token, null)).thenReturn(listOf(highTraining))
+        whenever(trainingApi.athlete(token)).thenReturn(athlete)
+        whenever(trainingApi.fetchElevationStream(token, "1")).thenReturn(elevPoints)
+        whenever(peakLookupRepository.findNearestPeak(argThat { isCloseTo(45.9, 7.6) }, org.mockito.kotlin.eq(3500.0))).thenReturn(peak)
+        val useCaseWithPeaks = FullImportUseCase(
+            trainingRepository, athleteRepository, bookmarkedTrainingRepository, trainingApi,
+            peakLookupRepository = peakLookupRepository
+        )
+
+        useCaseWithPeaks(token)
+
+        verify(trainingRepository).add(argThat { peakName == "Monte Rosa" && peakElevation == 4634.0 })
     }
 
     // --- Helper ---

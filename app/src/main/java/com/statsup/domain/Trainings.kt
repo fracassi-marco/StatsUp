@@ -10,6 +10,14 @@ import java.time.ZonedDateTime
 import java.time.ZonedDateTime.now
 import java.time.temporal.ChronoUnit
 
+data class PeakRecord(
+    val peakName: String,
+    val elevation: Double,
+    val date: ZonedDateTime,
+    val activityName: String,
+    val trainingId: String
+)
+
 data class RecoveryContribution(
     val training: Training,
     val load: Double,
@@ -340,6 +348,17 @@ class Trainings(
             }
 
         return records
+    }
+
+    fun topPeaks(limit: Int = 10): List<PeakRecord> {
+        return trainings
+            .filter { !it.peakName.isNullOrBlank() }
+            .groupBy { it.peakName }
+            .values
+            .map { group -> group.maxBy { it.peakElevation ?: it.elevHigh } }
+            .sortedByDescending { it.peakElevation ?: it.elevHigh }
+            .take(limit)
+            .map { PeakRecord(it.peakName!!, it.peakElevation ?: it.elevHigh, it.date, it.name, it.id) }
     }
 
     fun recoveryTime(): Double {

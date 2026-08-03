@@ -183,6 +183,8 @@
     <string name="profile_records_empty">No hay récords disponibles.\nCompleta al menos una actividad de carrera.</string>
     <string name="profile_records_activity_section">Récords de actividad</string>
     <string name="profile_records_best_efforts_section">Mejores marcas</string>
+    <string name="profile_records_peaks_section">Picos más altos alcanzados</string>
+    <string name="profile_records_peaks_empty">Todavía no hay picos registrados.\nLos nombres de los picos se detectan automáticamente tras sincronizar actividades en alta montaña.</string>
     <string name="profile_badge_earned">✓ Conseguido</string>
     <string name="profile_badge_not_earned">Aún no conseguido</string>
 

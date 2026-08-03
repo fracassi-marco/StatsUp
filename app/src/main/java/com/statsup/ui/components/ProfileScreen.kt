@@ -33,7 +33,11 @@ import com.statsup.ui.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel, onNavigateBack: () -> Unit) {
+fun ProfileScreen(
+    viewModel: ProfileViewModel,
+    onNavigateBack: () -> Unit,
+    onOpenTraining: (String) -> Unit = {}
+) {
     val tabs = listOf(
         stringResource(R.string.profile_tab_monthly),
         stringResource(R.string.profile_tab_annual),
@@ -107,7 +111,9 @@ fun ProfileScreen(viewModel: ProfileViewModel, onNavigateBack: () -> Unit) {
             } else {
                 RecordsSection(
                     personalRecords = viewModel.personalRecords,
-                    bestEfforts = viewModel.bestEfforts
+                    bestEfforts = viewModel.bestEfforts,
+                    topPeaks = viewModel.topPeaks,
+                    onOpenTraining = onOpenTraining
                 )
             }
         }

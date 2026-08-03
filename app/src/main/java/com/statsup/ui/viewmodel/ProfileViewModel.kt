@@ -11,6 +11,7 @@ import com.statsup.domain.Badge
 import com.statsup.domain.BadgeCategory
 import com.statsup.domain.BestEffort
 import com.statsup.domain.EvaluateBadgesUseCase
+import com.statsup.domain.PeakRecord
 import com.statsup.domain.PersonalRecord
 import com.statsup.domain.Provider
 import com.statsup.domain.Trainings
@@ -22,6 +23,13 @@ import com.statsup.ui.buildPersonalRecordLabels
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+private data class ComputedProfileData(
+    val badges: List<Badge>,
+    val bestEfforts: List<BestEffort>,
+    val personalRecords: List<PersonalRecord>,
+    val topPeaks: List<PeakRecord>
+)
 
 class ProfileViewModel(
     private val trainingRepository: TrainingRepository,
@@ -42,6 +50,9 @@ class ProfileViewModel(
     var personalRecords: List<PersonalRecord> by mutableStateOf(emptyList())
         private set
 
+    var topPeaks: List<PeakRecord> by mutableStateOf(emptyList())
+        private set
+
     private val evaluateBadges = EvaluateBadgesUseCase()
     private val recordLabels = buildPersonalRecordLabels(context)
 
@@ -52,7 +63,7 @@ class ProfileViewModel(
                 val monthlyDistGoal = settingRepository.loadMonthlyGoal()
                 val monthlyTrainGoal = settingRepository.loadMonthlyTrainingGoal()
                 val strings = buildBadgeStringMap(context, monthlyDistGoal, monthlyTrainGoal)
-                val (computedBadges, computedBestEfforts, computedRecords) = withContext(Dispatchers.Default) {
+                val computed = withContext(Dispatchers.Default) {
                     val b = evaluateBadges(
                         trainings = trainings,
                         monthlyDistanceGoalKm = monthlyDistGoal,
@@ -60,11 +71,12 @@ class ProfileViewModel(
                         strings = strings
                     )
                     val t = Trainings(trainings, provider = Provider.Distance)
-                    Triple(b, t.bestEfforts(), t.personalRecords(recordLabels))
+                    ComputedProfileData(b, t.bestEfforts(), t.personalRecords(recordLabels), t.topPeaks())
                 }
-                badges = computedBadges
-                bestEfforts = computedBestEfforts
-                personalRecords = computedRecords
+                badges = computed.badges
+                bestEfforts = computed.bestEfforts
+                personalRecords = computed.personalRecords
+                topPeaks = computed.topPeaks
             }
         }
     }

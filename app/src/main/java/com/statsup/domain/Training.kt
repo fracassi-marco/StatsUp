@@ -78,7 +78,9 @@ data class Training(
     var hrZones: List<Int>? = null,
     var elevationPointsJson: String? = null,
     var startLocationLabel: String? = null,
-    var endLocationLabel: String? = null
+    var endLocationLabel: String? = null,
+    var peakName: String? = null,
+    var peakElevation: Double? = null
 ) {
     val date: ZonedDateTime by lazy { ZonedDateTime.parse(startDate) }
 

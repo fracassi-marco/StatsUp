@@ -183,6 +183,8 @@
     <string name="profile_records_empty">Nessun record disponibile.\nCompleta almeno un\'attività di corsa.</string>
     <string name="profile_records_activity_section">Record attività</string>
     <string name="profile_records_best_efforts_section">Migliori prestazioni</string>
+    <string name="profile_records_peaks_section">Vette più alte raggiunte</string>
+    <string name="profile_records_peaks_empty">Ancora nessuna vetta registrata.\nI nomi delle vette vengono riconosciuti automaticamente dopo la sincronizzazione di attività in alta quota.</string>
     <string name="profile_badge_earned">✓ Conquistato</string>
     <string name="profile_badge_not_earned">Non ancora conquistato</string>
 

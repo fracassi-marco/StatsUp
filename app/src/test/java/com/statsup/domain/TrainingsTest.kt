@@ -444,7 +444,10 @@ class TrainingsTest {
         movingTime: Int = 3600,
         sportType: String = "Run",
         hasHeartrate: Boolean = false,
-        averageHeartrate: Double? = null
+        averageHeartrate: Double? = null,
+        elevHigh: Double = 0.0,
+        peakName: String? = null,
+        peakElevation: Double? = null
     ) = Training(
         id = id,
         name = "Training $id",
@@ -463,10 +466,53 @@ class TrainingsTest {
         hasHeartrate = hasHeartrate,
         averageHeartrate = averageHeartrate,
         maxHeartrate = 0.0,
-        elevHigh = 0.0,
+        elevHigh = elevHigh,
         elevLow = 0.0,
         map = null,
         uploadId = 0L,
-        sufferScore = null
+        sufferScore = null,
+        peakName = peakName,
+        peakElevation = peakElevation
     )
+
+    // -------------------------------------------------------------------------
+    // topPeaks
+    // -------------------------------------------------------------------------
+
+    @Test
+    fun `topPeaks excludes trainings without a resolved peak name`() {
+        val noPeak = run("1", now, peakName = null)
+        val checkedNoMatch = run("2", now, peakName = "", elevHigh = 2000.0)
+        val result = trainings(listOf(noPeak, checkedNoMatch)).topPeaks()
+        assertTrue(result.isEmpty())
+    }
+
+    @Test
+    fun `topPeaks dedupes by peak name keeping the highest elevation ascent`() {
+        val firstAscent = run("1", now.minusDays(2), peakName = "Monte Rosa", peakElevation = 4600.0)
+        val secondAscent = run("2", now, peakName = "Monte Rosa", peakElevation = 4634.0)
+        val result = trainings(listOf(firstAscent, secondAscent)).topPeaks()
+        assertEquals(1, result.size)
+        assertEquals(4634.0, result[0].elevation, 0.0)
+        assertEquals(secondAscent.name, result[0].activityName)
+        assertEquals(secondAscent.id, result[0].trainingId)
+    }
+
+    @Test
+    fun `topPeaks sorts by elevation descending and respects the limit`() {
+        val peaks = listOf(
+            run("1", now, peakName = "Cervino", peakElevation = 4478.0),
+            run("2", now, peakName = "Monte Bianco", peakElevation = 4809.0),
+            run("3", now, peakName = "Gran Paradiso", peakElevation = 4061.0)
+        )
+        val result = trainings(peaks).topPeaks(limit = 2)
+        assertEquals(listOf("Monte Bianco", "Cervino"), result.map { it.peakName })
+    }
+
+    @Test
+    fun `topPeaks falls back to elevHigh when the peak has no official elevation`() {
+        val training = run("1", now, peakName = "Unnamed Bump", peakElevation = null, elevHigh = 1850.0)
+        val result = trainings(listOf(training)).topPeaks()
+        assertEquals(1850.0, result[0].elevation, 0.0)
+    }
 }

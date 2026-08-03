@@ -14,6 +14,7 @@ import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.IntervalsIcuTrainingApi
 import com.statsup.infrastructure.repository.AndroidGeocodingRepository
+import com.statsup.infrastructure.repository.OverpassPeakRepository
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -45,16 +46,18 @@ class ImportForegroundService : Service() {
                 }
 
                 val geocoding = AndroidGeocodingRepository(applicationContext)
+                val peakLookup = OverpassPeakRepository()
                 val count = if (fullImport) {
                     FullImportUseCase(
                         db.trainingRepository,
                         db.athleteRepository,
                         db.bookmarkedTrainingRepository,
                         api,
-                        geocoding
+                        geocoding,
+                        peakLookup
                     )(activeToken, onProgress)
                 } else {
-                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding)(activeToken, onProgress)
+                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding, peakLookup)(activeToken, onProgress)
                 }
                 ImportEventBus.emitSuccess(count)
             } catch (e: ApiException) {

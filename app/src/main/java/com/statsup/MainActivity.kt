@@ -147,7 +147,13 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                                 composable(Screens.PROFILE) {
-                                    ProfileScreen(profileViewModel) { navController.popBackStack() }
+                                    ProfileScreen(
+                                        profileViewModel,
+                                        onNavigateBack = { navController.popBackStack() },
+                                        onOpenTraining = { trainingId ->
+                                            navController.navigate(Screens.trainingDetailRoute(trainingId))
+                                        }
+                                    )
                                 }
                                 composable(Screens.LEVELS) {
                                     LevelsScreen(dashboardViewModel) { navController.popBackStack() }
