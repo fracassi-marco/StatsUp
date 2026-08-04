@@ -45,6 +45,16 @@
     <string name="fitness_score_factor_weight_trend">Trend peso</string>
     <string name="fitness_score_factor_excluded">Dati insufficienti — ridistribuito sugli altri fattori</string>
     <string name="fitness_score_weight_label">Peso: %1$d%%</string>
+    <string name="fitness_score_factor_training_load_desc">Misura il tuo volume di allenamento recente negli ultimi 28 giorni, dando più peso alle sessioni più recenti.</string>
+    <string name="fitness_score_factor_recovery_desc">Basato sul tempo trascorso dall\'ultimo sforzo intenso: più riposo abbassa l\'affaticamento e alza il punteggio.</string>
+    <string name="fitness_score_factor_consistency_desc">Premia l\'allenamento in più giorni negli ultimi 28, fino a un ideale di 16 giorni attivi.</string>
+    <string name="fitness_score_factor_load_balance_desc">Confronta il tuo carico allenante degli ultimi 7 giorni con quello degli ultimi 28. Il punteggio migliore evita picchi improvvisi di carico.</string>
+    <string name="fitness_score_factor_intensity_balance_desc">Premia un buon equilibrio tra sforzi facili e intensi in base alla frequenza cardiaca: circa 80%% facile, 20%% intenso.</string>
+    <string name="fitness_score_factor_sport_variety_desc">Premia l\'allenamento in più sport invece che in uno solo.</string>
+    <string name="fitness_score_factor_performance_trend_desc">Confronta il tuo miglior passo di corsa sulle distanze di gara comuni negli ultimi 90 giorni con quelle dei 90 giorni precedenti.</string>
+    <string name="fitness_score_factor_medium_term_trend_desc">Confronta la tua distanza media mensile degli ultimi 3 mesi con quella tipica dell\'anno precedente.</string>
+    <string name="fitness_score_factor_weight_trend_desc">Confronta il tuo andamento di peso recente con il tuo obiettivo, oppure premia la stabilità se non hai un obiettivo attivo.</string>
+    <string name="cd_fitness_score_factor_info">Maggiori informazioni su questo fattore</string>
     <string name="streak_days">Serie</string>
     <string name="streak_current_days">%1$d giorni</string>
     <string name="streak_best">Migliore: %1$d giorni</string>

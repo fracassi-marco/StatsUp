@@ -45,6 +45,16 @@
     <string name="fitness_score_factor_weight_trend">Tendance de poids</string>
     <string name="fitness_score_factor_excluded">Données insuffisantes — redistribué aux autres facteurs</string>
     <string name="fitness_score_weight_label">Poids : %1$d%%</string>
+    <string name="fitness_score_factor_training_load_desc">Mesure votre volume d\'entraînement récent sur les 28 derniers jours, en donnant plus de poids aux séances les plus récentes.</string>
+    <string name="fitness_score_factor_recovery_desc">Basé sur le temps écoulé depuis votre dernier effort intense : plus de repos réduit la fatigue et augmente le score.</string>
+    <string name="fitness_score_factor_consistency_desc">Récompense l\'entraînement sur davantage de jours parmi les 28 derniers, jusqu\'à un idéal de 16 jours actifs.</string>
+    <string name="fitness_score_factor_load_balance_desc">Compare votre charge d\'entraînement des 7 derniers jours à celle des 28 derniers jours. Le meilleur score évite les pics soudains de charge.</string>
+    <string name="fitness_score_factor_intensity_balance_desc">Récompense un bon équilibre entre efforts faciles et intenses selon la fréquence cardiaque : environ 80 %% facile, 20 %% intense.</string>
+    <string name="fitness_score_factor_sport_variety_desc">Récompense la pratique de plusieurs sports plutôt que d\'un seul.</string>
+    <string name="fitness_score_factor_performance_trend_desc">Compare votre meilleure allure de course sur les distances de course courantes des 90 derniers jours à celle des 90 jours précédents.</string>
+    <string name="fitness_score_factor_medium_term_trend_desc">Compare votre distance mensuelle moyenne des 3 derniers mois à celle habituelle de l\'année précédente.</string>
+    <string name="fitness_score_factor_weight_trend_desc">Compare votre tendance de poids récente à votre objectif, ou récompense la stabilité si vous n\'avez pas d\'objectif actif.</string>
+    <string name="cd_fitness_score_factor_info">Plus d\'informations sur ce facteur</string>
     <string name="streak_days">Série</string>
     <string name="streak_current_days">%1$d jours</string>
     <string name="streak_best">Meilleur : %1$d jours</string>

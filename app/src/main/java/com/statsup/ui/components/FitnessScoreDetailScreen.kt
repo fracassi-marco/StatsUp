@@ -9,14 +9,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -112,6 +123,8 @@ private fun FitnessScoreTrendCard(trend: List<FitnessScoreTrendPoint>) {
 
 @Composable
 private fun FitnessScoreFactorRow(factor: FitnessScoreFactor) {
+    var showInfo by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
@@ -122,10 +135,20 @@ private fun FitnessScoreFactorRow(factor: FitnessScoreFactor) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(factorLabel(factor.type)),
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = stringResource(factorLabel(factor.type)),
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                    )
+                    IconButton(onClick = { showInfo = true }, modifier = Modifier.size(24.dp).padding(start = 4.dp)) {
+                        Icon(
+                            imageVector = Icons.Outlined.Info,
+                            contentDescription = stringResource(R.string.cd_fitness_score_factor_info),
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
+                    }
+                }
                 Text(
                     text = factor.score.toInt().toString(),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.ExtraBold),
@@ -155,6 +178,19 @@ private fun FitnessScoreFactorRow(factor: FitnessScoreFactor) {
             }
         }
     }
+
+    if (showInfo) {
+        AlertDialog(
+            onDismissRequest = { showInfo = false },
+            title = { Text(stringResource(factorLabel(factor.type))) },
+            text = { Text(stringResource(factorDescription(factor.type))) },
+            confirmButton = {
+                TextButton(onClick = { showInfo = false }) {
+                    Text(stringResource(R.string.done))
+                }
+            }
+        )
+    }
 }
 
 private fun factorLabel(type: FitnessFactorType): Int = when (type) {
@@ -167,4 +203,16 @@ private fun factorLabel(type: FitnessFactorType): Int = when (type) {
     FitnessFactorType.PERFORMANCE_TREND -> R.string.fitness_score_factor_performance_trend
     FitnessFactorType.MEDIUM_TERM_TREND -> R.string.fitness_score_factor_medium_term_trend
     FitnessFactorType.WEIGHT_TREND -> R.string.fitness_score_factor_weight_trend
+}
+
+private fun factorDescription(type: FitnessFactorType): Int = when (type) {
+    FitnessFactorType.TRAINING_LOAD -> R.string.fitness_score_factor_training_load_desc
+    FitnessFactorType.RECOVERY -> R.string.fitness_score_factor_recovery_desc
+    FitnessFactorType.CONSISTENCY -> R.string.fitness_score_factor_consistency_desc
+    FitnessFactorType.LOAD_BALANCE -> R.string.fitness_score_factor_load_balance_desc
+    FitnessFactorType.INTENSITY_BALANCE -> R.string.fitness_score_factor_intensity_balance_desc
+    FitnessFactorType.SPORT_VARIETY -> R.string.fitness_score_factor_sport_variety_desc
+    FitnessFactorType.PERFORMANCE_TREND -> R.string.fitness_score_factor_performance_trend_desc
+    FitnessFactorType.MEDIUM_TERM_TREND -> R.string.fitness_score_factor_medium_term_trend_desc
+    FitnessFactorType.WEIGHT_TREND -> R.string.fitness_score_factor_weight_trend_desc
 }

@@ -45,6 +45,16 @@
     <string name="fitness_score_factor_weight_trend">Gewichtstrend</string>
     <string name="fitness_score_factor_excluded">Nicht genügend Daten — auf die anderen Faktoren umverteilt</string>
     <string name="fitness_score_weight_label">Gewicht: %1$d%%</string>
+    <string name="fitness_score_factor_training_load_desc">Misst dein aktuelles Trainingsvolumen der letzten 28 Tage, wobei neuere Einheiten stärker gewichtet werden.</string>
+    <string name="fitness_score_factor_recovery_desc">Basiert auf der Zeit seit deiner letzten intensiven Belastung: mehr Erholung senkt die Ermüdung und erhöht den Wert.</string>
+    <string name="fitness_score_factor_consistency_desc">Belohnt Training an mehr Tagen der letzten 28, bis zu einem Idealwert von 16 aktiven Tagen.</string>
+    <string name="fitness_score_factor_load_balance_desc">Vergleicht deine Trainingsbelastung der letzten 7 Tage mit der der letzten 28 Tage. Der beste Wert vermeidet plötzliche Belastungsspitzen.</string>
+    <string name="fitness_score_factor_intensity_balance_desc">Belohnt ein gutes Verhältnis zwischen lockeren und intensiven Einheiten anhand der Herzfrequenz: etwa 80 %% locker, 20 %% intensiv.</string>
+    <string name="fitness_score_factor_sport_variety_desc">Belohnt Training in mehreren Sportarten statt nur einer.</string>
+    <string name="fitness_score_factor_performance_trend_desc">Vergleicht dein bestes Lauftempo über gängige Wettkampfdistanzen der letzten 90 Tage mit den 90 Tagen davor.</string>
+    <string name="fitness_score_factor_medium_term_trend_desc">Vergleicht deine durchschnittliche monatliche Distanz der letzten 3 Monate mit der üblichen Distanz des Vorjahres.</string>
+    <string name="fitness_score_factor_weight_trend_desc">Vergleicht deinen aktuellen Gewichtstrend mit deinem Ziel oder belohnt Stabilität, wenn kein aktives Ziel besteht.</string>
+    <string name="cd_fitness_score_factor_info">Weitere Informationen zu diesem Faktor</string>
     <string name="streak_days">Serie</string>
     <string name="streak_current_days">%1$d Tage</string>
     <string name="streak_best">Beste: %1$d Tage</string>

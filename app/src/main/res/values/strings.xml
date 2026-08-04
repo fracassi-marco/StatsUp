@@ -44,6 +44,16 @@
     <string name="fitness_score_factor_weight_trend">Weight Trend</string>
     <string name="fitness_score_factor_excluded">Not enough data — redistributed to other factors</string>
     <string name="fitness_score_weight_label">Weight: %1$d%%</string>
+    <string name="fitness_score_factor_training_load_desc">Measures your recent training volume over the last 28 days, weighted toward more recent sessions.</string>
+    <string name="fitness_score_factor_recovery_desc">Based on time since your last hard effort — more rest lowers fatigue and raises this score.</string>
+    <string name="fitness_score_factor_consistency_desc">Rewards training on more days out of the last 28, up to an ideal of 16 active days.</string>
+    <string name="fitness_score_factor_load_balance_desc">Compares your training load over the last 7 days to the last 28 days. The best score avoids sudden spikes in load.</string>
+    <string name="fitness_score_factor_intensity_balance_desc">Rewards a healthy mix of easy and hard efforts based on heart rate — about 80%% easy, 20%% hard.</string>
+    <string name="fitness_score_factor_sport_variety_desc">Rewards training across multiple sports rather than just one.</string>
+    <string name="fitness_score_factor_performance_trend_desc">Compares your best running pace over common race distances in the last 90 days to the 90 days before that.</string>
+    <string name="fitness_score_factor_medium_term_trend_desc">Compares your average monthly distance over the last 3 months to your typical monthly distance over the previous year.</string>
+    <string name="fitness_score_factor_weight_trend_desc">Compares your recent weight trend to your weight goal, or rewards stability if you have no active goal.</string>
+    <string name="cd_fitness_score_factor_info">More information about this factor</string>
     <string name="streak_days">Streak</string>
     <string name="streak_current_days">%1$d days</string>
     <string name="streak_best">Best: %1$d days</string>

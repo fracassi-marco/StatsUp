@@ -45,6 +45,16 @@
     <string name="fitness_score_factor_weight_trend">Tendencia de peso</string>
     <string name="fitness_score_factor_excluded">Datos insuficientes — redistribuido a los otros factores</string>
     <string name="fitness_score_weight_label">Peso: %1$d%%</string>
+    <string name="fitness_score_factor_training_load_desc">Mide tu volumen de entrenamiento reciente de los últimos 28 días, dando más peso a las sesiones más recientes.</string>
+    <string name="fitness_score_factor_recovery_desc">Se basa en el tiempo transcurrido desde tu último esfuerzo intenso: más descanso reduce la fatiga y aumenta la puntuación.</string>
+    <string name="fitness_score_factor_consistency_desc">Premia entrenar en más días de los últimos 28, hasta un ideal de 16 días activos.</string>
+    <string name="fitness_score_factor_load_balance_desc">Compara tu carga de entrenamiento de los últimos 7 días con la de los últimos 28. La mejor puntuación evita picos repentinos de carga.</string>
+    <string name="fitness_score_factor_intensity_balance_desc">Premia un buen equilibrio entre esfuerzos suaves e intensos según la frecuencia cardíaca: alrededor del 80%% suave, 20%% intenso.</string>
+    <string name="fitness_score_factor_sport_variety_desc">Premia entrenar en varios deportes en lugar de uno solo.</string>
+    <string name="fitness_score_factor_performance_trend_desc">Compara tu mejor ritmo de carrera en distancias de competición habituales de los últimos 90 días con los 90 días anteriores.</string>
+    <string name="fitness_score_factor_medium_term_trend_desc">Compara tu distancia media mensual de los últimos 3 meses con la habitual del año anterior.</string>
+    <string name="fitness_score_factor_weight_trend_desc">Compara tu tendencia de peso reciente con tu objetivo, o premia la estabilidad si no tienes un objetivo activo.</string>
+    <string name="cd_fitness_score_factor_info">Más información sobre este factor</string>
     <string name="streak_days">Racha</string>
     <string name="streak_current_days">%1$d días</string>
     <string name="streak_best">Mejor: %1$d días</string>
