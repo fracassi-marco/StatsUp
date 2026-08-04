@@ -1,5 +1,7 @@
 package com.statsup.domain
 
+import java.time.ZonedDateTime
+
 enum class FitnessFactorType {
     TRAINING_LOAD, RECOVERY, CONSISTENCY, LOAD_BALANCE, INTENSITY_BALANCE,
     SPORT_VARIETY, PERFORMANCE_TREND, MEDIUM_TERM_TREND, WEIGHT_TREND
@@ -19,4 +21,9 @@ data class FitnessScore(
     val recoveryHours: Double = 0.0,
     val activeDays28: Int = 0,
     val weeklyWeightRateKg: Double? = null
+)
+
+data class FitnessScoreTrendPoint(
+    val date: ZonedDateTime,
+    val score: Int
 )

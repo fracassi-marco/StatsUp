@@ -33,6 +33,7 @@
     <string name="fitness_score_detail_title">Fitnesslevel-Detail</string>
     <string name="fitness_score_detail_explanation">Dein Fitnesslevel kombiniert mehrere Trainings-, Erholungs- und Gewichtssignale in einem einzigen Wert von 0 bis 100.</string>
     <string name="fitness_score_factors_title">Faktoren</string>
+    <string name="fitness_score_trend_title">Verlauf der letzten 30 Tage</string>
     <string name="fitness_score_factor_training_load">Trainingsbelastung</string>
     <string name="fitness_score_factor_recovery">Erholung</string>
     <string name="fitness_score_factor_consistency">Konstanz</string>

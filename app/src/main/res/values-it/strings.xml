@@ -33,6 +33,7 @@
     <string name="fitness_score_detail_title">Dettaglio forma fisica</string>
     <string name="fitness_score_detail_explanation">La forma fisica combina più segnali di allenamento, recupero e peso in un unico punteggio da 0 a 100.</string>
     <string name="fitness_score_factors_title">Fattori</string>
+    <string name="fitness_score_trend_title">Andamento ultimi 30 giorni</string>
     <string name="fitness_score_factor_training_load">Carico allenante</string>
     <string name="fitness_score_factor_recovery">Recupero</string>
     <string name="fitness_score_factor_consistency">Costanza</string>

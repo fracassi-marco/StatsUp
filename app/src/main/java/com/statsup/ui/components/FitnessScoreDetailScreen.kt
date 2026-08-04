@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.statsup.R
 import com.statsup.domain.FitnessFactorType
 import com.statsup.domain.FitnessScoreFactor
+import com.statsup.domain.FitnessScoreTrendPoint
 import com.statsup.ui.viewmodel.FitnessScoreViewModel
 
 @Composable
@@ -43,6 +44,12 @@ fun FitnessScoreDetailScreen(viewModel: FitnessScoreViewModel, onNavigateBack: (
         ) {
             item {
                 FitnessScoreSummaryCard(fitnessScore.score)
+            }
+
+            if (viewModel.fitnessScoreTrend.size >= 2) {
+                item {
+                    FitnessScoreTrendCard(viewModel.fitnessScoreTrend)
+                }
             }
 
             item {
@@ -85,6 +92,20 @@ private fun FitnessScoreSummaryCard(score: Int) {
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun FitnessScoreTrendCard(trend: List<FitnessScoreTrendPoint>) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = stringResource(R.string.fitness_score_trend_title),
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            FitnessScoreTrendChart(points = trend)
         }
     }
 }

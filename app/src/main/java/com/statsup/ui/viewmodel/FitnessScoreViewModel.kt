@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.domain.FitnessScore
+import com.statsup.domain.FitnessScoreTrendPoint
+import com.statsup.domain.FitnessScoreTrendUseCase
 import com.statsup.domain.FitnessScoreUseCase
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
@@ -24,15 +26,21 @@ class FitnessScoreViewModel(
     var fitnessScore by mutableStateOf(FitnessScore())
         private set
 
+    var fitnessScoreTrend by mutableStateOf(emptyList<FitnessScoreTrendPoint>())
+        private set
+
     private val useCase = FitnessScoreUseCase()
+    private val trendUseCase = FitnessScoreTrendUseCase(useCase)
 
     init {
         viewModelScope.launch {
             combine(trainingRepository.all(), weightRepository.all()) { trainings, weightEntries ->
                 trainings to weightEntries
             }.collect { (trainings, weightEntries) ->
-                fitnessScore = withContext(Dispatchers.Default) {
-                    useCase(trainings, weightEntries, settingRepository.loadWeightTargetKg())
+                withContext(Dispatchers.Default) {
+                    val weightTargetKg = settingRepository.loadWeightTargetKg()
+                    fitnessScore = useCase(trainings, weightEntries, weightTargetKg)
+                    fitnessScoreTrend = trendUseCase(trainings, weightEntries, weightTargetKg)
                 }
             }
         }

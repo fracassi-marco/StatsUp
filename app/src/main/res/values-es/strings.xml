@@ -33,6 +33,7 @@
     <string name="fitness_score_detail_title">Detalle del nivel de forma física</string>
     <string name="fitness_score_detail_explanation">Tu nivel de forma física combina varias señales de entrenamiento, recuperación y peso en una única puntuación de 0 a 100.</string>
     <string name="fitness_score_factors_title">Factores</string>
+    <string name="fitness_score_trend_title">Tendencia de los últimos 30 días</string>
     <string name="fitness_score_factor_training_load">Carga de entrenamiento</string>
     <string name="fitness_score_factor_recovery">Recuperación</string>
     <string name="fitness_score_factor_consistency">Constancia</string>

@@ -32,6 +32,7 @@
     <string name="fitness_score_detail_title">Fitness Level Detail</string>
     <string name="fitness_score_detail_explanation">Your Fitness Level combines multiple training, recovery and weight signals into a single 0-100 score.</string>
     <string name="fitness_score_factors_title">Factors</string>
+    <string name="fitness_score_trend_title">30-Day Trend</string>
     <string name="fitness_score_factor_training_load">Training Load</string>
     <string name="fitness_score_factor_recovery">Recovery</string>
     <string name="fitness_score_factor_consistency">Consistency</string>
