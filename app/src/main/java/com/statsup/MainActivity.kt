@@ -38,6 +38,7 @@ import com.statsup.ui.components.AllRoutesMapScreen
 import com.statsup.ui.components.BookmarksScreen
 import com.statsup.ui.components.BottomMenuBar
 import com.statsup.ui.components.DashboardScreen
+import com.statsup.ui.components.FitnessScoreDetailScreen
 import com.statsup.ui.components.HistoryScreen
 import com.statsup.ui.components.ImportButton
 import com.statsup.ui.components.LoadingBox
@@ -55,6 +56,7 @@ import com.statsup.ui.theme.StatsUpTheme
 import com.statsup.ui.viewmodel.AllRoutesViewModel
 import com.statsup.ui.viewmodel.BookmarksViewModel
 import com.statsup.ui.viewmodel.DashboardViewModel
+import com.statsup.ui.viewmodel.FitnessScoreViewModel
 import com.statsup.ui.viewmodel.HistoryViewModel
 import com.statsup.ui.viewmodel.MainViewModel
 import com.statsup.ui.viewmodel.ProfileViewModel
@@ -94,6 +96,7 @@ class MainActivity : ComponentActivity() {
             val bookmarksViewModel: BookmarksViewModel = viewModel { BookmarksViewModel(db.bookmarkedTrainingRepository, db.trainingRepository) }
             val profileViewModel: ProfileViewModel = viewModel { ProfileViewModel(db.trainingRepository, db.athleteRepository, settingRepository, applicationContext) }
             val weightViewModel: WeightViewModel = viewModel { WeightViewModel(DbWeightRepository(db.weightRepository), settingRepository, applicationContext) }
+            val fitnessScoreViewModel: FitnessScoreViewModel = viewModel { FitnessScoreViewModel(db.trainingRepository, DbWeightRepository(db.weightRepository), settingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
@@ -134,10 +137,12 @@ class MainActivity : ComponentActivity() {
                                     DashboardScreen(
                                         viewModel = dashboardViewModel,
                                         weightViewModel = weightViewModel,
+                                        fitnessScoreViewModel = fitnessScoreViewModel,
                                         onProfileClick = { navController.navigate(Screens.PROFILE) },
                                         onLevelClick = { navController.navigate(Screens.LEVELS) },
                                         onRecoveryClick = { navController.navigate(Screens.RECOVERY_DETAIL) },
-                                        onWeightClick = { navController.navigate(Screens.WEIGHT) }
+                                        onWeightClick = { navController.navigate(Screens.WEIGHT) },
+                                        onFitnessScoreClick = { navController.navigate(Screens.FITNESS_SCORE_DETAIL) }
                                     )
                                 }
                                 composable(Screens.WEIGHT) {
@@ -160,6 +165,9 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(Screens.RECOVERY_DETAIL) {
                                     RecoveryDetailScreen(dashboardViewModel) { navController.popBackStack() }
+                                }
+                                composable(Screens.FITNESS_SCORE_DETAIL) {
+                                    FitnessScoreDetailScreen(fitnessScoreViewModel) { navController.popBackStack() }
                                 }
                                 composable(Screens.History.route) {
                                     HistoryScreen(historyViewModel) { trainingId ->

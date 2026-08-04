@@ -390,33 +390,33 @@ class Trainings(
         }.sortedByDescending { it.contributionHours }
     }
 
-    private fun activityLoad(training: Training): Double {
-        val score = training.sufferScore
-        if (score != null && score > 0) return score
-
-        val durationMin = training.movingTime / 60.0
-        val distanceKm = training.distance / 1000.0
-        val zoneWeight = if (training.hasHeartrate == true &&
-            training.averageHeartrate != null &&
-            training.averageHeartrate!! > 0
-        ) {
-            val pct = training.averageHeartrate!! / 190.0
-            when {
-                pct < 0.60 -> 1.0
-                pct < 0.70 -> 1.5
-                pct < 0.80 -> 2.5
-                pct < 0.90 -> 4.0
-                else -> 6.0
-            }
-        } else {
-            2.0
-        }
-        return (zoneWeight * durationMin * 0.6) + (distanceKm * 0.8)
-    }
-
     private fun median(values: List<Double>): Double {
         val sorted = values.sorted()
         val mid = sorted.size / 2
         return if (sorted.size % 2 == 0) (sorted[mid - 1] + sorted[mid]) / 2.0 else sorted[mid]
     }
+}
+
+internal fun activityLoad(training: Training): Double {
+    val score = training.sufferScore
+    if (score != null && score > 0) return score
+
+    val durationMin = training.movingTime / 60.0
+    val distanceKm = training.distance / 1000.0
+    val zoneWeight = if (training.hasHeartrate == true &&
+        training.averageHeartrate != null &&
+        training.averageHeartrate!! > 0
+    ) {
+        val pct = training.averageHeartrate!! / 190.0
+        when {
+            pct < 0.60 -> 1.0
+            pct < 0.70 -> 1.5
+            pct < 0.80 -> 2.5
+            pct < 0.90 -> 4.0
+            else -> 6.0
+        }
+    } else {
+        2.0
+    }
+    return (zoneWeight * durationMin * 0.6) + (distanceKm * 0.8)
 }

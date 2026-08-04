@@ -45,6 +45,7 @@ import com.statsup.R
 import com.statsup.domain.Badge
 import com.statsup.domain.GoalAchievement
 import com.statsup.ui.components.dashboard.ActivityHeatmap
+import com.statsup.ui.components.dashboard.FitnessScoreCard
 import com.statsup.ui.components.dashboard.LevelCard
 import com.statsup.ui.components.dashboard.DistanceMonthOverMonthChart
 import com.statsup.ui.components.dashboard.HeartRateZonesCard
@@ -59,6 +60,7 @@ import com.statsup.ui.components.dashboard.BestEffortsCard
 import com.statsup.ui.components.dashboard.TopTrainingTypes
 import com.statsup.ui.components.dashboard.WeightDashboardCard
 import com.statsup.ui.viewmodel.DashboardViewModel
+import com.statsup.ui.viewmodel.FitnessScoreViewModel
 import com.statsup.ui.viewmodel.WeightViewModel
 import com.statsup.domain.TargetSuggestion
 
@@ -66,10 +68,12 @@ import com.statsup.domain.TargetSuggestion
 fun DashboardScreen(
     viewModel: DashboardViewModel,
     weightViewModel: WeightViewModel,
+    fitnessScoreViewModel: FitnessScoreViewModel,
     onProfileClick: () -> Unit = {},
     onLevelClick: () -> Unit = {},
     onRecoveryClick: () -> Unit = {},
-    onWeightClick: () -> Unit = {}
+    onWeightClick: () -> Unit = {},
+    onFitnessScoreClick: () -> Unit = {}
 ) {
     var celebrationAchievement by remember { mutableStateOf<GoalAchievement?>(null) }
     var badgeQueue by remember { mutableStateOf<List<Badge>>(emptyList()) }
@@ -148,6 +152,8 @@ fun DashboardScreen(
         )
         Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(start = 20.dp, end = 20.dp, bottom = 20.dp)) {
 
+            FitnessScoreCard(fitnessScoreViewModel, onClick = onFitnessScoreClick)
+            Spacer(modifier = Modifier.height(10.dp))
             LevelCard(viewModel, onClick = onLevelClick)
             Spacer(modifier = Modifier.height(10.dp))
             MonthlyDistanceGoalCard(viewModel)
