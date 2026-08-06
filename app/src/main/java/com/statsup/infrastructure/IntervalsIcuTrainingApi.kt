@@ -66,6 +66,21 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             .map { it.toTraining() }
     }
 
+    override suspend fun fetchActivityById(token: String, activityId: String): Training? {
+        val response = Http().get(
+            url = "https://intervals.icu/api/v1/activity/$activityId",
+            auth = Bearer(token),
+            headers = mapOf("Accept" to "application/json")
+        )
+        if (response.statusCode !in 200..299) return null
+        return try {
+            jsonMapper.readValue(response.body, ActivityDto::class.java).toTraining()
+        } catch (e: Exception) {
+            android.util.Log.e("IntervalsIcu", "fetchActivityById $activityId error: ${e.message}")
+            null
+        }
+    }
+
     override suspend fun athlete(token: String): Athlete {
         val id = athleteId()
         val response = Http().get(

@@ -302,6 +302,11 @@
     <string name="delete_training_confirm_title">Aktivität löschen</string>
     <string name="delete_training_confirm_body">Diese Aktivität wird aus der App gelöscht. Du kannst sie jederzeit von intervals.icu neu importieren.</string>
     <string name="delete_training_confirm_action">Löschen</string>
+    <string name="cd_reimport_training">Diese Aktivität erneut importieren</string>
+    <string name="reimport_training_confirm_title">Erneut importieren</string>
+    <string name="reimport_training_confirm_body">Die Aktivität wird erneut von intervals.icu heruntergeladen und überschreibt dabei lokale Änderungen.</string>
+    <string name="reimport_training_confirm_action">Erneut importieren</string>
+    <string name="reimport_training_success">Aktivität erneut importiert</string>
 
     <!-- Weight tracking -->
     <string name="weight_screen_title">Gewicht</string>

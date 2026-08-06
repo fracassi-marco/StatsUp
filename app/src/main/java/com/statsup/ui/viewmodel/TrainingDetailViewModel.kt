@@ -52,6 +52,9 @@ class TrainingDetailViewModel(
     private val _showDeleteDialog = mutableStateOf(false)
     val showDeleteDialog: State<Boolean> = _showDeleteDialog
 
+    private val _showReimportDialog = mutableStateOf(false)
+    val showReimportDialog: State<Boolean> = _showReimportDialog
+
     private val _laps = mutableStateOf<List<Lap>>(emptyList())
     val laps: State<List<Lap>> = _laps
 
@@ -155,6 +158,19 @@ class TrainingDetailViewModel(
 
     fun dismissDeleteDialog() {
         _showDeleteDialog.value = false
+    }
+
+    fun requestReimportTraining() {
+        _showReimportDialog.value = true
+    }
+
+    fun dismissReimportDialog() {
+        _showReimportDialog.value = false
+    }
+
+    /** Reloads the training from the local repository, e.g. after a forced re-import. */
+    fun reload() {
+        loadTraining()
     }
 
     fun confirmDeleteTraining(onDeleted: () -> Unit) {

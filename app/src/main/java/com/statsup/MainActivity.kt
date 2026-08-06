@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -103,6 +104,10 @@ class MainActivity : ComponentActivity() {
                 onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
             )
             val fullImportLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartActivityForResult(),
+                onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
+            )
+            val reimportLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
                 onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
             )
@@ -207,6 +212,7 @@ class MainActivity : ComponentActivity() {
                                     val trainingId = backStackEntry.arguments?.getString("trainingId") ?: ""
                                     val context = LocalContext.current
                                     val scope = rememberCoroutineScope()
+                                    val reimportSuccessMessage = stringResource(id = R.string.reimport_training_success)
                                     val detailViewModel: TrainingDetailViewModel = viewModel(backStackEntry) {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
@@ -254,8 +260,29 @@ class MainActivity : ComponentActivity() {
                                             detailViewModel.confirmDeleteTraining {
                                                 navController.popBackStack()
                                             }
+                                        },
+                                        showReimportDialog = detailViewModel.showReimportDialog.value,
+                                        onRequestReimport = { detailViewModel.requestReimportTraining() },
+                                        onDismissReimportDialog = { detailViewModel.dismissReimportDialog() },
+                                        onConfirmReimport = {
+                                            detailViewModel.dismissReimportDialog()
+                                            authService?.let { service ->
+                                                reimportLauncher.launch(mainViewModel.startReimport(service, trainingId))
+                                            }
                                         }
                                     )
+
+                                    LaunchedEffect(trainingId) {
+                                        mainViewModel.reimportedTrainingId.collect { reimportedId ->
+                                            if (reimportedId == trainingId) {
+                                                detailViewModel.reload()
+                                                snackBarHostState.showSnackbar(
+                                                    message = reimportSuccessMessage,
+                                                    duration = SnackbarDuration.Short
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
 
                                 // Map Fullscreen Screen

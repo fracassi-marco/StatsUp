@@ -36,8 +36,10 @@ class MainViewModel(
     val loading: State<Boolean> = _loading
     val newTrainingsCounter = MutableSharedFlow<Int>()
     val importError = MutableSharedFlow<String>()
+    val reimportedTrainingId = MutableSharedFlow<String>()
 
     private var fullImportPending = false
+    private var reimportPendingTrainingId: String? = null
 
     init {
         viewModelScope.launch {
@@ -45,6 +47,7 @@ class MainViewModel(
                 stopLoading()
                 when (result) {
                     is ImportResult.Success -> newTrainingsCounter.emit(result.count)
+                    is ImportResult.ReimportSuccess -> reimportedTrainingId.emit(result.trainingId)
                     is ImportResult.Error -> importError.emit(result.message)
                 }
             }
@@ -98,9 +101,17 @@ class MainViewModel(
                     oauthToken.athleteId?.let { settingRepository.saveAthleteId(it) }
                     val isFullImport = fullImportPending
                     fullImportPending = false
-                    context.startForegroundService(
-                        ImportForegroundService.intent(context, oauthToken.accessToken, isFullImport)
-                    )
+                    val reimportTrainingId = reimportPendingTrainingId
+                    reimportPendingTrainingId = null
+                    if (reimportTrainingId != null) {
+                        context.startForegroundService(
+                            ImportForegroundService.reimportIntent(context, oauthToken.accessToken, reimportTrainingId)
+                        )
+                    } else {
+                        context.startForegroundService(
+                            ImportForegroundService.intent(context, oauthToken.accessToken, isFullImport)
+                        )
+                    }
                 } catch (e: Exception) {
                     Log.e("StatsUp", "Crash durante token exchange", e)
                     stopLoading()
@@ -119,6 +130,12 @@ class MainViewModel(
 
     fun startFullImport(authService: AuthorizationService): Intent {
         fullImportPending = true
+        startLoading()
+        return buildAuthIntent(authService)
+    }
+
+    fun startReimport(authService: AuthorizationService, trainingId: String): Intent {
+        reimportPendingTrainingId = trainingId
         startLoading()
         return buildAuthIntent(authService)
     }

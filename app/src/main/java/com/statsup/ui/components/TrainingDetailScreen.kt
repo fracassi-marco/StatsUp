@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Landscape
@@ -100,7 +101,11 @@ fun TrainingDetailScreen(
     showDeleteDialog: Boolean,
     onRequestDelete: () -> Unit,
     onDismissDeleteDialog: () -> Unit,
-    onConfirmDelete: () -> Unit
+    onConfirmDelete: () -> Unit,
+    showReimportDialog: Boolean = false,
+    onRequestReimport: () -> Unit = {},
+    onDismissReimportDialog: () -> Unit = {},
+    onConfirmReimport: () -> Unit = {}
 ) {
     val locale = LocalConfiguration.current.locales[0]
 
@@ -624,6 +629,15 @@ fun TrainingDetailScreen(
                             modifier = Modifier.size(24.dp)
                         )
                     }
+                    // Pulsante forza reimport di questo allenamento
+                    IconButton(onClick = onRequestReimport) {
+                        Icon(
+                            Icons.Filled.Refresh,
+                            contentDescription = stringResource(id = R.string.cd_reimport_training),
+                            tint = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
         }
@@ -658,6 +672,24 @@ fun TrainingDetailScreen(
                 },
                 dismissButton = {
                     androidx.compose.material3.TextButton(onClick = onDismissDeleteDialog) {
+                        Text(stringResource(id = R.string.cancel))
+                    }
+                }
+            )
+        }
+
+        if (showReimportDialog) {
+            AlertDialog(
+                onDismissRequest = onDismissReimportDialog,
+                title = { Text(stringResource(id = R.string.reimport_training_confirm_title)) },
+                text = { Text(stringResource(id = R.string.reimport_training_confirm_body)) },
+                confirmButton = {
+                    Button(onClick = onConfirmReimport) {
+                        Text(stringResource(id = R.string.reimport_training_confirm_action))
+                    }
+                },
+                dismissButton = {
+                    androidx.compose.material3.TextButton(onClick = onDismissReimportDialog) {
                         Text(stringResource(id = R.string.cancel))
                     }
                 }

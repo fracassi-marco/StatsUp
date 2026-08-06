@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.statsup.R
 import com.statsup.domain.ApiException
 import com.statsup.domain.FullImportUseCase
+import com.statsup.domain.ReimportTrainingUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.IntervalsIcuTrainingApi
 import com.statsup.infrastructure.repository.AndroidGeocodingRepository
@@ -30,6 +31,7 @@ class ImportForegroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val token = intent?.getStringExtra(EXTRA_TOKEN) ?: run { stopSelf(); return START_NOT_STICKY }
         val fullImport = intent.getBooleanExtra(EXTRA_FULL_IMPORT, false)
+        val reimportTrainingId = intent.getStringExtra(EXTRA_REIMPORT_TRAINING_ID)
 
         startForeground(NOTIFICATION_ID, buildNotification(this))
 
@@ -47,19 +49,24 @@ class ImportForegroundService : Service() {
 
                 val geocoding = AndroidGeocodingRepository(applicationContext)
                 val peakLookup = OverpassPeakRepository()
-                val count = if (fullImport) {
-                    FullImportUseCase(
-                        db.trainingRepository,
-                        db.athleteRepository,
-                        db.bookmarkedTrainingRepository,
-                        api,
-                        geocoding,
-                        peakLookup
-                    )(activeToken, onProgress)
+                if (reimportTrainingId != null) {
+                    ReimportTrainingUseCase(db.trainingRepository, api, geocoding, peakLookup)(activeToken, reimportTrainingId)
+                    ImportEventBus.emitReimportSuccess(reimportTrainingId)
                 } else {
-                    UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding, peakLookup)(activeToken, onProgress)
+                    val count = if (fullImport) {
+                        FullImportUseCase(
+                            db.trainingRepository,
+                            db.athleteRepository,
+                            db.bookmarkedTrainingRepository,
+                            api,
+                            geocoding,
+                            peakLookup
+                        )(activeToken, onProgress)
+                    } else {
+                        UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding, peakLookup)(activeToken, onProgress)
+                    }
+                    ImportEventBus.emitSuccess(count)
                 }
-                ImportEventBus.emitSuccess(count)
             } catch (e: ApiException) {
                 Log.e("StatsUp", "API error during import", e)
                 if (e.isAuthError) clearStoredCredentials()
@@ -118,11 +125,18 @@ class ImportForegroundService : Service() {
         const val CHANNEL_ID = "import_channel"
         private const val EXTRA_TOKEN = "token"
         private const val EXTRA_FULL_IMPORT = "full_import"
+        private const val EXTRA_REIMPORT_TRAINING_ID = "reimport_training_id"
 
         fun intent(context: Context, token: String, fullImport: Boolean): Intent =
             Intent(context, ImportForegroundService::class.java).apply {
                 putExtra(EXTRA_TOKEN, token)
                 putExtra(EXTRA_FULL_IMPORT, fullImport)
+            }
+
+        fun reimportIntent(context: Context, token: String, trainingId: String): Intent =
+            Intent(context, ImportForegroundService::class.java).apply {
+                putExtra(EXTRA_TOKEN, token)
+                putExtra(EXTRA_REIMPORT_TRAINING_ID, trainingId)
             }
 
         fun buildNotification(context: Context) =
