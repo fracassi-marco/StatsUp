@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.8.1",
+    "date": "2026-08-07",
+    "message": "Improve reimport single trainig"
+  },
+  {
     "version": "2.8.0",
     "date": "2026-08-06",
     "message": "Reimport single trainig"
