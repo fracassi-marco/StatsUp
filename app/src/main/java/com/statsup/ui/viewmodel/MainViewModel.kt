@@ -27,6 +27,8 @@ import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.ResponseTypeValues.CODE
 
+data class ReimportedTraining(val trainingId: String, val peakName: String?)
+
 class MainViewModel(
     private val settingRepository: SettingRepository,
     private val trainingApi: TrainingApi
@@ -36,7 +38,7 @@ class MainViewModel(
     val loading: State<Boolean> = _loading
     val newTrainingsCounter = MutableSharedFlow<Int>()
     val importError = MutableSharedFlow<String>()
-    val reimportedTrainingId = MutableSharedFlow<String>()
+    val reimportedTraining = MutableSharedFlow<ReimportedTraining>()
 
     private var fullImportPending = false
     private var reimportPendingTrainingId: String? = null
@@ -47,7 +49,9 @@ class MainViewModel(
                 stopLoading()
                 when (result) {
                     is ImportResult.Success -> newTrainingsCounter.emit(result.count)
-                    is ImportResult.ReimportSuccess -> reimportedTrainingId.emit(result.trainingId)
+                    is ImportResult.ReimportSuccess -> reimportedTraining.emit(
+                        ReimportedTraining(result.trainingId, result.peakName)
+                    )
                     is ImportResult.Error -> importError.emit(result.message)
                 }
             }

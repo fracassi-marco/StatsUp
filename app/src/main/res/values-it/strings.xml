@@ -307,6 +307,7 @@
     <string name="reimport_training_confirm_body">L\'attività verrà riscaricata da intervals.icu, sovrascrivendo eventuali modifiche locali.</string>
     <string name="reimport_training_confirm_action">Reimporta</string>
     <string name="reimport_training_success">Attività reimportata</string>
+    <string name="reimport_training_new_peak">Attività reimportata — nuovo record di vetta: %1$s</string>
 
     <!-- Weight tracking -->
     <string name="weight_screen_title">Peso</string>

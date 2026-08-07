@@ -50,8 +50,8 @@ class ImportForegroundService : Service() {
                 val geocoding = AndroidGeocodingRepository(applicationContext)
                 val peakLookup = OverpassPeakRepository()
                 if (reimportTrainingId != null) {
-                    ReimportTrainingUseCase(db.trainingRepository, api, geocoding, peakLookup)(activeToken, reimportTrainingId)
-                    ImportEventBus.emitReimportSuccess(reimportTrainingId)
+                    val reimported = ReimportTrainingUseCase(db.trainingRepository, api, geocoding, peakLookup)(activeToken, reimportTrainingId)
+                    ImportEventBus.emitReimportSuccess(reimportTrainingId, reimported.peakName?.takeIf { it.isNotBlank() })
                 } else {
                     val count = if (fullImport) {
                         FullImportUseCase(

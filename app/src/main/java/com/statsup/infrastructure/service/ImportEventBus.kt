@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 
 sealed interface ImportResult {
     data class Success(val count: Int) : ImportResult
-    data class ReimportSuccess(val trainingId: String) : ImportResult
+    data class ReimportSuccess(val trainingId: String, val peakName: String? = null) : ImportResult
     data class Error(val message: String) : ImportResult
 }
 
@@ -14,6 +14,8 @@ object ImportEventBus {
     val result = _result.asSharedFlow()
 
     suspend fun emitSuccess(count: Int) { _result.emit(ImportResult.Success(count)) }
-    suspend fun emitReimportSuccess(trainingId: String) { _result.emit(ImportResult.ReimportSuccess(trainingId)) }
+    suspend fun emitReimportSuccess(trainingId: String, peakName: String? = null) {
+        _result.emit(ImportResult.ReimportSuccess(trainingId, peakName))
+    }
     suspend fun emitError(message: String) { _result.emit(ImportResult.Error(message)) }
 }

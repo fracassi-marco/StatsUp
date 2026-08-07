@@ -213,6 +213,7 @@ class MainActivity : ComponentActivity() {
                                     val context = LocalContext.current
                                     val scope = rememberCoroutineScope()
                                     val reimportSuccessMessage = stringResource(id = R.string.reimport_training_success)
+                                    val reimportNewPeakMessageTemplate = stringResource(id = R.string.reimport_training_new_peak)
                                     val detailViewModel: TrainingDetailViewModel = viewModel(backStackEntry) {
                                         TrainingDetailViewModel(
                                             db.trainingRepository,
@@ -273,11 +274,14 @@ class MainActivity : ComponentActivity() {
                                     )
 
                                     LaunchedEffect(trainingId) {
-                                        mainViewModel.reimportedTrainingId.collect { reimportedId ->
-                                            if (reimportedId == trainingId) {
+                                        mainViewModel.reimportedTraining.collect { reimported ->
+                                            if (reimported.trainingId == trainingId) {
                                                 detailViewModel.reload()
+                                                val message = reimported.peakName?.let { peakName ->
+                                                    reimportNewPeakMessageTemplate.format(peakName)
+                                                } ?: reimportSuccessMessage
                                                 snackBarHostState.showSnackbar(
-                                                    message = reimportSuccessMessage,
+                                                    message = message,
                                                     duration = SnackbarDuration.Short
                                                 )
                                             }
