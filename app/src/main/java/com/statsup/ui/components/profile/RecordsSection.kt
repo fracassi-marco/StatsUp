@@ -35,6 +35,7 @@ import com.statsup.R
 import com.statsup.domain.BestEffort
 import com.statsup.domain.PeakRecord
 import com.statsup.domain.PersonalRecord
+import com.statsup.domain.formatLocal
 import kotlinx.coroutines.launch
 
 @Composable
@@ -166,7 +167,7 @@ private fun PersonalRecordItem(record: PersonalRecord) {
                     color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = record.date.toLocalDate().toString(),
+                    text = formatLocal(record.date),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
@@ -196,7 +197,7 @@ private fun BestEffortItem(effort: BestEffort) {
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = effort.date.toLocalDate().toString(),
+                    text = formatLocal(effort.date),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
@@ -254,7 +255,7 @@ private fun PeakItem(peak: PeakRecord, onClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = peak.date.toLocalDate().toString(),
+                    text = formatLocal(peak.date),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
