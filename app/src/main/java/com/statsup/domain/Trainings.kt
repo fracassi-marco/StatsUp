@@ -36,8 +36,8 @@ class Trainings(
     fun ofMonth() = trainings.filter { it.date.month == now.month && it.date.year == now.year }
 
     fun by12Month(): Map<Month, Double> {
-        val minMonth = now.minusMonths(11)
-        val ofYear = trainings.filter { t -> t.date > minMonth.withDayOfMonth(1) }
+        val minMonth = now.minusMonths(11).withDayOfMonth(1).toLocalDate().atStartOfDay(now.zone)
+        val ofYear = trainings.filter { t -> !t.date.isBefore(minMonth) }
 
         return (11L downTo 0).map { Month.of(now.minusMonths(it).monthValue) }.associateWith {
             val ts = ofYear.filter { t -> t.date.month == it }
@@ -90,7 +90,7 @@ class Trainings(
         val ofMonth = ofMonth()
         val avg = provider.cumulative(ofMonth) / now.dayOfMonth
         val result = LinkedHashMap<Int, Double>()
-        (1..31).forEach {
+        (1..now.month.maxLength()).forEach {
             if (it > now.dayOfMonth) {
                 result[it] = avg
             } else {
@@ -143,7 +143,7 @@ class Trainings(
     fun cumulativeDaysTrend(): LinkedHashMap<Int, Double> {
         val result = LinkedHashMap<Int, Double>()
         val byDay: Map<Int, Double> = groupByDayTrend()
-        (1..31).forEach {
+        (1..now.month.maxLength()).forEach {
             result[it] = byDay.filter { bm -> bm.key <= it }.values.sum()
         }
         return result

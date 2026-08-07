@@ -17,6 +17,7 @@ import com.statsup.infrastructure.service.ImportEventBus
 import com.statsup.infrastructure.service.ImportForegroundService
 import com.statsup.infrastructure.service.ImportResult
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,9 +37,14 @@ class MainViewModel(
 
     private val _loading = mutableStateOf(false)
     val loading: State<Boolean> = _loading
-    val newTrainingsCounter = MutableSharedFlow<Int>()
-    val importError = MutableSharedFlow<String>()
-    val reimportedTraining = MutableSharedFlow<ReimportedTraining>()
+
+    // extraBufferCapacity + DROP_OLDEST makes emit() non-suspending: if no screen is
+    // currently collecting (e.g. the user navigated away while an import ran in the
+    // background), the event is buffered instead of blocking this class's single
+    // ImportEventBus collector forever, which would silently drop every later event too.
+    val newTrainingsCounter = MutableSharedFlow<Int>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val importError = MutableSharedFlow<String>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val reimportedTraining = MutableSharedFlow<ReimportedTraining>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     private var fullImportPending = false
     private var reimportPendingTrainingId: String? = null

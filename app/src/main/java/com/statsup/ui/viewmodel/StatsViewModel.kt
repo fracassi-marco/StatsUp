@@ -94,7 +94,7 @@ class StatsViewModel(
     fun trendOfMonth() = cumulativeMonth().values.last()
     fun doneOfPastMonth() = pastMonthTrainings().groupByDay().values.sum()
 
-    fun averageOfMonth() = trainings().groupByDay().values.filter { it != 0.0 }.average()
+    fun averageOfMonth() = trainings().groupByDay().values.filter { it != 0.0 }.let { if (it.isEmpty()) 0.0 else it.average() }
 
     fun maxOfYear() = trainings().byMonth().maxOf { it.value }
 
@@ -102,7 +102,7 @@ class StatsViewModel(
     fun trendOfYear() = cumulativeYear().values.last()
     fun doneOfPastYear() = pastYearTraining().byMonth().values.sum()
 
-    fun averageOfYear() = trainings().byMonth().values.filter { it != 0.0 }.average()
+    fun averageOfYear() = trainings().byMonth().values.filter { it != 0.0 }.let { if (it.isEmpty()) 0.0 else it.average() }
 
     fun performancePredictions(): List<PerformancePrediction> {
         val filtered = if (selectedSpan == 0) {

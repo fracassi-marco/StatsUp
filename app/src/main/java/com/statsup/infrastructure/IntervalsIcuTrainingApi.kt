@@ -188,20 +188,25 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             "${java.net.URLEncoder.encode(it.key, "UTF-8")}=${java.net.URLEncoder.encode(it.value, "UTF-8")}"
         }
         val url = java.net.URL("https://intervals.icu/api/oauth/token")
-        val conn = (withContext(Dispatchers.IO) {
+        val conn = withContext(Dispatchers.IO) {
             url.openConnection()
-        } as java.net.HttpURLConnection).apply {
-            requestMethod = "POST"
-            setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-            setRequestProperty("Accept", "application/json")
-            doOutput = true
-            outputStream.use { it.write(body.toByteArray(Charsets.UTF_8)) }
+        } as java.net.HttpURLConnection
+        val (statusCode, responseBody) = try {
+            conn.apply {
+                requestMethod = "POST"
+                setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+                setRequestProperty("Accept", "application/json")
+                doOutput = true
+                outputStream.use { it.write(body.toByteArray(Charsets.UTF_8)) }
+            }
+            val code = conn.responseCode
+            val text = try {
+                if (code in 200..299) conn.inputStream else conn.errorStream
+            } catch (_: Exception) { null }?.bufferedReader()?.readText() ?: ""
+            code to text
+        } finally {
+            conn.disconnect()
         }
-        val statusCode = conn.responseCode
-        val responseBody = try {
-            if (statusCode in 200..299) conn.inputStream else conn.errorStream
-        } catch (_: Exception) { null }?.bufferedReader()?.readText() ?: ""
-        conn.disconnect()
         if (statusCode !in 200..299) throw ApiException(statusCode)
         val result = jsonMapper.readValue(responseBody, TokenExchangeDto::class.java)
         // Prefer the top-level athlete_id; fall back to the nested athlete object.

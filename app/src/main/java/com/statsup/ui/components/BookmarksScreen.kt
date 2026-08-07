@@ -58,7 +58,7 @@ fun BookmarksScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(bottom = 16.dp)
             ) {
-                items(trainings) { bookmarkedTraining ->
+                items(trainings, key = { it.training.id }) { bookmarkedTraining ->
                     BookmarkedTrainingListItem(
                         bookmarkedTraining = bookmarkedTraining,
                         onTrainingClick = { onTrainingClick(bookmarkedTraining.training.id) }
