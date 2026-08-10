@@ -6,6 +6,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.os.PowerManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.statsup.R
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 class ImportForegroundService : Service() {
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private var wakeLock: PowerManager.WakeLock? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val token = intent?.getStringExtra(EXTRA_TOKEN) ?: run { stopSelf(); return START_NOT_STICKY }
@@ -36,6 +38,13 @@ class ImportForegroundService : Service() {
         startForeground(NOTIFICATION_ID, buildNotification(this))
 
         ImportEventBus.resetProgress()
+
+        // A full history import can take several minutes of network calls; without a wake lock
+        // some OEMs' battery managers suspend the app's CPU access once the screen turns off,
+        // even inside a foreground service, silently stalling or killing the import.
+        val powerManager = getSystemService(PowerManager::class.java)
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "StatsUp:import")
+            .apply { acquire(WAKE_LOCK_TIMEOUT_MILLIS) }
 
         scope.launch {
             try {
@@ -79,11 +88,17 @@ class ImportForegroundService : Service() {
                 ImportEventBus.emitError(e.message ?: "Import failed. Try again.")
             } finally {
                 ImportEventBus.resetProgress()
+                releaseWakeLock()
                 stopSelf()
             }
         }
 
         return START_NOT_STICKY
+    }
+
+    private fun releaseWakeLock() {
+        wakeLock?.let { if (it.isHeld) it.release() }
+        wakeLock = null
     }
 
     private suspend fun resolveToken(
@@ -121,11 +136,13 @@ class ImportForegroundService : Service() {
 
     override fun onDestroy() {
         scope.cancel()
+        releaseWakeLock()
         super.onDestroy()
     }
 
     companion object {
         private const val NOTIFICATION_ID = 1001
+        private const val WAKE_LOCK_TIMEOUT_MILLIS = 30 * 60 * 1000L
         const val CHANNEL_ID = "import_channel"
         private const val EXTRA_TOKEN = "token"
         private const val EXTRA_FULL_IMPORT = "full_import"

@@ -1,5 +1,6 @@
 package com.statsup.domain
 
+import android.util.Log
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
@@ -47,8 +48,14 @@ class UpdateTrainingsUseCase(
             }
         }
 
-        val athlete = trainingApi.athlete(token)
-        athleteRepository.update(athlete)
+        // New trainings are already persisted at this point (one at a time above); a failure
+        // refreshing the athlete profile is not worth reporting as a failed import.
+        try {
+            val athlete = trainingApi.athlete(token)
+            athleteRepository.update(athlete)
+        } catch (e: Exception) {
+            Log.w("UpdateTrainingsUseCase", "Athlete profile refresh failed after a successful import", e)
+        }
         return total
     }
 }

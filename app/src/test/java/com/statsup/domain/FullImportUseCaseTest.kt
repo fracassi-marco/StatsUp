@@ -118,6 +118,22 @@ class FullImportUseCaseTest {
     }
 
     @Test
+    fun `still returns successfully and keeps the replaced trainings when the trailing athlete fetch fails`() = runTest {
+        // The training history is already persisted (replaceAll) by the time athlete() runs;
+        // a failure refreshing the profile must not be reported as a failed import.
+        val trainings = listOf(makeTraining(id = "1"))
+        whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
+        whenever(trainingApi.download(token, null)).thenReturn(trainings)
+        whenever(trainingApi.athlete(token)).thenAnswer { throw ApiException(500) }
+
+        val result = useCase(token)
+
+        assertEquals(1, result)
+        verify(trainingRepository).replaceAll(trainings)
+        verify(athleteRepository, never()).update(any())
+    }
+
+    @Test
     fun `passes null as latest to API during full import`() = runTest {
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
         whenever(trainingApi.download(token, null)).thenReturn(emptyList())

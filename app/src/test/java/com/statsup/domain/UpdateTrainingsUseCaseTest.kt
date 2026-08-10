@@ -76,6 +76,22 @@ class UpdateTrainingsUseCaseTest {
         verify(athleteRepository).update(athlete)
     }
 
+    @Test
+    fun `still returns successfully and keeps the persisted trainings when the trailing athlete fetch fails`() = runTest {
+        // New trainings are already persisted (add, one at a time) by the time athlete() runs;
+        // a failure refreshing the profile must not be reported as a failed import.
+        val trainings = listOf(makeTraining(id = "1"))
+        whenever(trainingRepository.latest()).thenReturn(null)
+        whenever(trainingApi.download(token, null)).thenReturn(trainings)
+        whenever(trainingApi.athlete(token)).thenAnswer { throw ApiException(500) }
+
+        val result = useCase(token)
+
+        assertEquals(1, result)
+        verify(trainingRepository).add(trainings[0])
+        verify(athleteRepository, never()).update(any())
+    }
+
     // --- Latest training passed to API ---
 
     @Test

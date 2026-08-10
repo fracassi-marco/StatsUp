@@ -1,11 +1,14 @@
 package com.statsup
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -111,6 +114,22 @@ class MainActivity : ComponentActivity() {
                 contract = ActivityResultContracts.StartActivityForResult(),
                 onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
             )
+            val notificationPermissionLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestPermission(),
+                onResult = {}
+            )
+            // Without this permission the import progress notification never shows (silently,
+            // no crash), which is easy to mistake for the import having stalled or been killed
+            // once the screen turns off and the in-app progress overlay is no longer visible.
+            LaunchedEffect(Unit) {
+                if (ContextCompat.checkSelfPermission(
+                        applicationContext,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
             val isInitialLoading = historyViewModel.isInitialLoading.value
             val hasTrainings = historyViewModel.state.value.show
 

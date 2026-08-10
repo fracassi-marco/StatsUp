@@ -16,6 +16,7 @@ import com.statsup.domain.Training
 import com.statsup.domain.TrainingApi
 import com.statsup.domain.repository.SettingRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import topinambur.Bearer
 import topinambur.Http
@@ -24,6 +25,32 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeParseException
 
 private const val REQUEST_TIMEOUT_MILLIS = 15_000
+private const val MAX_ATTEMPTS = 3
+private val RETRY_DELAYS_MS = listOf(1000L, 3000L)
+private val RETRYABLE_STATUSES = setOf(429, 500, 502, 503, 504)
+
+/**
+ * Retries transient failures (retryable HTTP statuses and network errors such as timeouts or
+ * connectivity blips — common right after the phone wakes from standby) with backoff, mirroring
+ * OverpassPeakRepository's retry. Used only for calls whose failure aborts the whole import
+ * ([IntervalsIcuTrainingApi.download] and [IntervalsIcuTrainingApi.athlete]); non-retryable API
+ * errors (e.g. auth) are rethrown immediately.
+ */
+private suspend fun <T> withRetry(action: suspend () -> T): T {
+    var lastError: Throwable? = null
+    for (attempt in 1..MAX_ATTEMPTS) {
+        try {
+            return action()
+        } catch (e: ApiException) {
+            if (e.statusCode !in RETRYABLE_STATUSES) throw e
+            lastError = e
+        } catch (e: Exception) {
+            lastError = e
+        }
+        if (attempt < MAX_ATTEMPTS) delay(RETRY_DELAYS_MS[attempt - 1])
+    }
+    throw lastError ?: IllegalStateException("Request failed after $MAX_ATTEMPTS attempts")
+}
 
 class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) : TrainingApi {
 
@@ -41,7 +68,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         return id?.takeIf { it.isNotBlank() } ?: "0"
     }
 
-    override suspend fun download(token: String, latest: Training?): List<Training> {
+    override suspend fun download(token: String, latest: Training?): List<Training> = withRetry {
         val id = athleteId()
         val oldest = if (latest != null) {
             latest.startDateLocal?.take(10) ?: latest.date.toLocalDate().toString()
@@ -64,7 +91,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
 
         val dtos: List<ActivityDto> = jsonMapper.readValue(response.body, listType)
         val latestId = latest?.id
-        return dtos
+        dtos
             .filter { it.id != latestId }
             .map { it.toTraining() }
     }
@@ -85,7 +112,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         }
     }
 
-    override suspend fun athlete(token: String): Athlete {
+    override suspend fun athlete(token: String): Athlete = withRetry {
         val id = athleteId()
         val response = Http().get(
             url = "https://intervals.icu/api/v1/athlete/$id/profile",
@@ -95,7 +122,7 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         )
         checkStatus(response.statusCode)
         val dto = jsonMapper.readValue(response.body, AthleteProfileResponseDto::class.java)
-        return dto.athlete.toAthlete()
+        dto.athlete.toAthlete()
     }
 
     override suspend fun laps(token: String, activityId: String): List<Lap> {

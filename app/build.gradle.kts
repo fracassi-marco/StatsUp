@@ -80,6 +80,15 @@ android {
         htmlReport = true
         xmlReport = true
     }
+
+    testOptions {
+        unitTests {
+            // Domain code (e.g. FullImportUseCase, UpdateTrainingsUseCase) calls
+            // android.util.Log directly; without this, plain JVM unit tests crash on that call
+            // with "Method ... not mocked" instead of exercising the surrounding logic.
+            isReturnDefaultValues = true
+        }
+    }
 }
 
 kotlin {

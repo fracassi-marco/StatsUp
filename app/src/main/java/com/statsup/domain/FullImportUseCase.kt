@@ -1,5 +1,6 @@
 package com.statsup.domain
 
+import android.util.Log
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
@@ -56,8 +57,14 @@ class FullImportUseCase(
             .filter { it.trainingId in importedIds }
             .forEach { bookmarkedTrainingRepository.addBookmark(it.copy(id = 0)) }
 
-        val athlete = trainingApi.athlete(token)
-        athleteRepository.update(athlete)
+        // The training history is already saved at this point (replaceAll above); a failure
+        // refreshing the athlete profile is not worth reporting as a failed import.
+        try {
+            val athlete = trainingApi.athlete(token)
+            athleteRepository.update(athlete)
+        } catch (e: Exception) {
+            Log.w("FullImportUseCase", "Athlete profile refresh failed after a successful import", e)
+        }
         return total
     }
 }
