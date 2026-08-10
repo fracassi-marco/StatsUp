@@ -43,7 +43,7 @@ class UpdateTrainingsUseCase(
                 val endLabel = geocodingRepository.reverseGeocode(trip.end().latitude, trip.end().longitude)
                 withElevation.copy(startLocationLabel = startLabel, endLocationLabel = endLabel)
             } else withElevation
-            val withPeak = resolvePeak(enriched, elevPoints)
+            val withPeak = resolvePeak(enriched, elevPoints, peakLookupRepository)
             val center = withPeak.trip?.centerPoint()
             trainingRepository.add(
                 if (center != null) withPeak.copy(centerLat = center.latitude, centerLng = center.longitude)
@@ -54,19 +54,5 @@ class UpdateTrainingsUseCase(
         val athlete = trainingApi.athlete(token)
         athleteRepository.update(athlete)
         return total
-    }
-
-    private suspend fun resolvePeak(training: Training, elevPoints: List<Double>?): Training {
-        if (peakLookupRepository == null || training.peakName != null || training.elevHigh < MIN_PEAK_ELEVATION_METERS) {
-            return training
-        }
-        if (elevPoints.isNullOrEmpty()) return training.copy(peakName = "")
-        val summit = estimateSummitLatLng(training.trip, elevPoints) ?: return training.copy(peakName = "")
-        val peak = peakLookupRepository.findNearestPeak(summit, elevPoints.max())
-        return training.copy(peakName = peak?.name ?: "", peakElevation = peak?.elevation)
-    }
-
-    companion object {
-        private const val MIN_PEAK_ELEVATION_METERS = 1200.0
     }
 }

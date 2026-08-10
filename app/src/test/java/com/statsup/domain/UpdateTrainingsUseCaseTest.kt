@@ -225,6 +225,24 @@ class UpdateTrainingsUseCaseTest {
     }
 
     @Test
+    fun `leaves the peak unresolved instead of blank when the lookup fails`() = runTest {
+        val peakLookupRepository: PeakLookupRepository = mock()
+        val highTraining = makeTraining(id = "1").copy(elevHigh = 3500.0, map = Route(summaryPolyline = summitPolyline))
+        val elevPoints = listOf(2000.0, 3500.0, 2500.0)
+        whenever(trainingRepository.latest()).thenReturn(null)
+        whenever(trainingApi.download(token, null)).thenReturn(listOf(highTraining))
+        whenever(trainingApi.athlete(token)).thenReturn(athlete)
+        whenever(trainingApi.fetchElevationStream(token, "1")).thenReturn(elevPoints)
+        whenever(peakLookupRepository.findNearestPeak(any(), any()))
+            .thenThrow(com.statsup.domain.repository.PeakLookupException("Overpass unavailable"))
+        val useCaseWithPeaks = UpdateTrainingsUseCase(trainingRepository, athleteRepository, trainingApi, peakLookupRepository = peakLookupRepository)
+
+        useCaseWithPeaks(token)
+
+        verify(trainingRepository).add(argThat { peakName == null && peakElevation == null })
+    }
+
+    @Test
     fun `skips peak lookup entirely when no repository is configured`() = runTest {
         val highTraining = makeTraining(id = "1").copy(elevHigh = 3500.0)
         whenever(trainingRepository.latest()).thenReturn(null)

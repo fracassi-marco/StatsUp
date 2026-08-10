@@ -2,6 +2,7 @@ package com.statsup.domain
 
 import com.google.android.gms.maps.model.LatLng
 import com.statsup.domain.repository.Peak
+import com.statsup.domain.repository.PeakLookupException
 import com.statsup.domain.repository.PeakLookupRepository
 import com.statsup.domain.repository.TrainingRepository
 import kotlinx.coroutines.runBlocking
@@ -145,13 +146,30 @@ class ReimportTrainingUseCaseTest {
         val elevPoints = listOf(2000.0, 3500.0, 2500.0)
         whenever(trainingApi.fetchActivityById(token, "1")).thenReturn(highTraining)
         whenever(trainingApi.fetchElevationStream(token, "1")).thenReturn(elevPoints)
-        whenever(peakLookupRepository.findNearestPeak(any(), any())).thenReturn(null)
+        whenever(peakLookupRepository.findNearestPeak(any(), any()))
+            .thenThrow(PeakLookupException("Overpass unavailable"))
         whenever(trainingRepository.byId("1")).thenReturn(previouslyResolved)
         val useCaseWithPeaks = ReimportTrainingUseCase(trainingRepository, trainingApi, peakLookupRepository = peakLookupRepository)
 
         useCaseWithPeaks(token, "1")
 
         verify(trainingRepository).add(argThat { peakName == "Monte Rosa" && peakElevation == 4634.0 })
+    }
+
+    @Test
+    fun `persists an empty peak name sentinel when no peak is genuinely nearby on reimport`() = runTest {
+        val peakLookupRepository: PeakLookupRepository = mock()
+        val highTraining = makeTraining(id = "1").copy(elevHigh = 3500.0, map = Route(summaryPolyline = summitPolyline))
+        val elevPoints = listOf(2000.0, 3500.0, 2500.0)
+        whenever(trainingApi.fetchActivityById(token, "1")).thenReturn(highTraining)
+        whenever(trainingApi.fetchElevationStream(token, "1")).thenReturn(elevPoints)
+        whenever(peakLookupRepository.findNearestPeak(any(), any())).thenReturn(null)
+        whenever(trainingRepository.byId("1")).thenReturn(null)
+        val useCaseWithPeaks = ReimportTrainingUseCase(trainingRepository, trainingApi, peakLookupRepository = peakLookupRepository)
+
+        useCaseWithPeaks(token, "1")
+
+        verify(trainingRepository).add(argThat { peakName == "" && peakElevation == null })
     }
 
     // --- Helper ---

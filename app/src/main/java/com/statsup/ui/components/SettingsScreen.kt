@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Style
+import androidx.compose.material.icons.outlined.Terrain
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -53,7 +54,8 @@ fun SettingsScreen(
     viewModel: SettingsViewModel,
     weightViewModel: WeightViewModel,
     onImportSuccess: () -> Unit = {},
-    onFullImport: () -> Unit = {}
+    onFullImport: () -> Unit = {},
+    onResolveMissingPeaks: () -> Unit = {}
 ) {
     val monthlyGoalSheetState = rememberModalBottomSheetState()
     val monthlyTrainingGoalSheetState = rememberModalBottomSheetState()
@@ -177,6 +179,13 @@ fun SettingsScreen(
                 name = R.string.settings_full_import,
                 value = stringResource(R.string.settings_full_import_description),
                 onClick = { viewModel.showFullImportConfirmDialog() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            SettingsClickableComponent(
+                icon = Icons.Outlined.Terrain,
+                name = R.string.settings_resolve_missing_peaks,
+                value = stringResource(R.string.settings_resolve_missing_peaks_description),
+                onClick = onResolveMissingPeaks
             )
             Spacer(modifier = Modifier.height(8.dp))
             SettingsClickableComponent(

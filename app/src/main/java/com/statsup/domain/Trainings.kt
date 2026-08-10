@@ -350,7 +350,7 @@ class Trainings(
         return records
     }
 
-    fun topPeaks(limit: Int = 10): List<PeakRecord> {
+    fun topPeaks(limit: Int = 20): List<PeakRecord> {
         return trainings
             .filter { !it.peakName.isNullOrBlank() }
             .groupBy { it.peakName }

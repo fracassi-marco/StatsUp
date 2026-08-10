@@ -173,6 +173,9 @@
     <string name="settings_full_import_confirm_title">Re-import from intervals.icu</string>
     <string name="settings_full_import_confirm_body">This will delete all local data and re-download everything from intervals.icu. The operation may take a while. Are you sure?</string>
     <string name="settings_full_import_action">Re-import</string>
+    <string name="settings_resolve_missing_peaks">Resolve missing peaks</string>
+    <string name="settings_resolve_missing_peaks_description">Fill in peaks missed by past syncs</string>
+    <string name="missing_peaks_resolved_result">%1$d peaks resolved</string>
 
     <string name="span_month">Month</string>
     <string name="span_year">Year</string>

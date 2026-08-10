@@ -99,7 +99,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             auth = Bearer(token),
             headers = mapOf("Accept" to "application/json")
         )
-        if (response.statusCode !in 200..299) return emptyList()
+        if (response.statusCode !in 200..299) {
+            android.util.Log.w("IntervalsIcu", "laps $activityId HTTP ${response.statusCode}")
+            return emptyList()
+        }
         return try {
             val dto = jsonMapper.readValue(response.body, IntervalsResponseDto::class.java)
             dto.icuIntervals.mapIndexedNotNull { index, interval -> interval.toLap(index + 1) }
@@ -114,7 +117,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             url = "https://intervals.icu/api/v1/activity/$activityId/map",
             auth = Bearer(token)
         )
-        if (response.statusCode !in 200..299) return null
+        if (response.statusCode !in 200..299) {
+            android.util.Log.w("IntervalsIcu", "fetchPolyline $activityId HTTP ${response.statusCode}")
+            return null
+        }
         return try {
             val root = jsonMapper.readTree(response.body)
             val latlngs = root.get("latlngs") ?: return null
@@ -138,7 +144,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             auth = Bearer(token),
             headers = mapOf("Accept" to "application/json")
         )
-        if (response.statusCode !in 200..299) return null
+        if (response.statusCode !in 200..299) {
+            android.util.Log.w("IntervalsIcu", "fetchElevationStream $activityId HTTP ${response.statusCode}")
+            return null
+        }
         return try {
             val root = jsonMapper.readTree(response.body)
             if (!root.isArray) return null

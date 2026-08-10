@@ -99,6 +99,7 @@ class MainActivity : ComponentActivity() {
             val weightViewModel: WeightViewModel = viewModel { WeightViewModel(DbWeightRepository(db.weightRepository), settingRepository, applicationContext) }
             val fitnessScoreViewModel: FitnessScoreViewModel = viewModel { FitnessScoreViewModel(db.trainingRepository, DbWeightRepository(db.weightRepository), settingRepository) }
             val snackBarHostState = remember { SnackbarHostState() }
+            val missingPeaksResolvedMessageTemplate = stringResource(R.string.missing_peaks_resolved_result)
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
                 onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
@@ -108,6 +109,10 @@ class MainActivity : ComponentActivity() {
                 onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
             )
             val reimportLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.StartActivityForResult(),
+                onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
+            )
+            val resolveMissingPeaksLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult(),
                 onResult = { result -> authService?.let { mainViewModel.onOAuthResult(result, it, applicationContext) } }
             )
@@ -199,6 +204,11 @@ class MainActivity : ComponentActivity() {
                                         onFullImport = {
                                             authService?.let { service ->
                                                 fullImportLauncher.launch(mainViewModel.startFullImport(service))
+                                            }
+                                        },
+                                        onResolveMissingPeaks = {
+                                            authService?.let { service ->
+                                                resolveMissingPeaksLauncher.launch(mainViewModel.startResolveMissingPeaks(service))
                                             }
                                         }
                                     )
@@ -325,6 +335,14 @@ class MainActivity : ComponentActivity() {
                                 snackBarHostState.showSnackbar(
                                     message = error,
                                     duration = SnackbarDuration.Long
+                                )
+                            }
+                        }
+                        LaunchedEffect(Unit) {
+                            mainViewModel.missingPeaksResolved.collect { count ->
+                                snackBarHostState.showSnackbar(
+                                    message = missingPeaksResolvedMessageTemplate.format(count),
+                                    duration = SnackbarDuration.Short
                                 )
                             }
                         }

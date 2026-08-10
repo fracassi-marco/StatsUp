@@ -12,6 +12,7 @@ import com.statsup.R
 import com.statsup.domain.ApiException
 import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.ReimportTrainingUseCase
+import com.statsup.domain.ResolveMissingPeaksUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.IntervalsIcuTrainingApi
 import com.statsup.infrastructure.repository.AndroidGeocodingRepository
@@ -32,6 +33,7 @@ class ImportForegroundService : Service() {
         val token = intent?.getStringExtra(EXTRA_TOKEN) ?: run { stopSelf(); return START_NOT_STICKY }
         val fullImport = intent.getBooleanExtra(EXTRA_FULL_IMPORT, false)
         val reimportTrainingId = intent.getStringExtra(EXTRA_REIMPORT_TRAINING_ID)
+        val resolveMissingPeaks = intent.getBooleanExtra(EXTRA_RESOLVE_MISSING_PEAKS, false)
 
         startForeground(NOTIFICATION_ID, buildNotification(this))
 
@@ -52,6 +54,9 @@ class ImportForegroundService : Service() {
                 if (reimportTrainingId != null) {
                     val reimported = ReimportTrainingUseCase(db.trainingRepository, api, geocoding, peakLookup)(activeToken, reimportTrainingId)
                     ImportEventBus.emitReimportSuccess(reimportTrainingId, reimported.peakName?.takeIf { it.isNotBlank() })
+                } else if (resolveMissingPeaks) {
+                    val count = ResolveMissingPeaksUseCase(db.trainingRepository, api, peakLookup)(activeToken, onProgress)
+                    ImportEventBus.emitMissingPeaksResolved(count)
                 } else {
                     val count = if (fullImport) {
                         FullImportUseCase(
@@ -126,6 +131,7 @@ class ImportForegroundService : Service() {
         private const val EXTRA_TOKEN = "token"
         private const val EXTRA_FULL_IMPORT = "full_import"
         private const val EXTRA_REIMPORT_TRAINING_ID = "reimport_training_id"
+        private const val EXTRA_RESOLVE_MISSING_PEAKS = "resolve_missing_peaks"
 
         fun intent(context: Context, token: String, fullImport: Boolean): Intent =
             Intent(context, ImportForegroundService::class.java).apply {
@@ -137,6 +143,12 @@ class ImportForegroundService : Service() {
             Intent(context, ImportForegroundService::class.java).apply {
                 putExtra(EXTRA_TOKEN, token)
                 putExtra(EXTRA_REIMPORT_TRAINING_ID, trainingId)
+            }
+
+        fun resolveMissingPeaksIntent(context: Context, token: String): Intent =
+            Intent(context, ImportForegroundService::class.java).apply {
+                putExtra(EXTRA_TOKEN, token)
+                putExtra(EXTRA_RESOLVE_MISSING_PEAKS, true)
             }
 
         fun buildNotification(context: Context) =

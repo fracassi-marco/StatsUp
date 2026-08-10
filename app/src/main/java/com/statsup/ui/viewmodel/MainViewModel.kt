@@ -45,9 +45,11 @@ class MainViewModel(
     val newTrainingsCounter = MutableSharedFlow<Int>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val importError = MutableSharedFlow<String>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val reimportedTraining = MutableSharedFlow<ReimportedTraining>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val missingPeaksResolved = MutableSharedFlow<Int>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     private var fullImportPending = false
     private var reimportPendingTrainingId: String? = null
+    private var resolveMissingPeaksPending = false
 
     init {
         viewModelScope.launch {
@@ -58,6 +60,7 @@ class MainViewModel(
                     is ImportResult.ReimportSuccess -> reimportedTraining.emit(
                         ReimportedTraining(result.trainingId, result.peakName)
                     )
+                    is ImportResult.MissingPeaksResolved -> missingPeaksResolved.emit(result.count)
                     is ImportResult.Error -> importError.emit(result.message)
                 }
             }
@@ -113,12 +116,16 @@ class MainViewModel(
                     fullImportPending = false
                     val reimportTrainingId = reimportPendingTrainingId
                     reimportPendingTrainingId = null
-                    if (reimportTrainingId != null) {
-                        context.startForegroundService(
+                    val isResolveMissingPeaks = resolveMissingPeaksPending
+                    resolveMissingPeaksPending = false
+                    when {
+                        reimportTrainingId != null -> context.startForegroundService(
                             ImportForegroundService.reimportIntent(context, oauthToken.accessToken, reimportTrainingId)
                         )
-                    } else {
-                        context.startForegroundService(
+                        isResolveMissingPeaks -> context.startForegroundService(
+                            ImportForegroundService.resolveMissingPeaksIntent(context, oauthToken.accessToken)
+                        )
+                        else -> context.startForegroundService(
                             ImportForegroundService.intent(context, oauthToken.accessToken, isFullImport)
                         )
                     }
@@ -146,6 +153,12 @@ class MainViewModel(
 
     fun startReimport(authService: AuthorizationService, trainingId: String): Intent {
         reimportPendingTrainingId = trainingId
+        startLoading()
+        return buildAuthIntent(authService)
+    }
+
+    fun startResolveMissingPeaks(authService: AuthorizationService): Intent {
+        resolveMissingPeaksPending = true
         startLoading()
         return buildAuthIntent(authService)
     }
