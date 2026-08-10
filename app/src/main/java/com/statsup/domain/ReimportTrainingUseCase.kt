@@ -44,7 +44,8 @@ class ReimportTrainingUseCase(
             val endLabel = geocodingRepository.reverseGeocode(trip.end().latitude, trip.end().longitude)
             withElevation.copy(startLocationLabel = startLabel, endLocationLabel = endLabel)
         } else withElevation
-        val withPeak = resolvePeak(enriched, elevPoints)
+        val existing = existingTraining(trainingId)
+        val withPeak = resolvePeak(enriched, elevPoints, existing)
         val center = withPeak.trip?.centerPoint()
         val finalTraining = if (center != null) withPeak.copy(centerLat = center.latitude, centerLng = center.longitude) else withPeak
 
@@ -52,14 +53,31 @@ class ReimportTrainingUseCase(
         return finalTraining
     }
 
-    private suspend fun resolvePeak(training: Training, elevPoints: List<Double>?): Training {
-        if (peakLookupRepository == null || training.peakName != null || training.elevHigh < MIN_PEAK_ELEVATION_METERS) {
-            return training
+    private fun existingTraining(trainingId: String): Training? =
+        try {
+            trainingRepository.byId(trainingId)
+        } catch (e: Exception) {
+            null
         }
-        if (elevPoints.isNullOrEmpty()) return training.copy(peakName = "")
-        val summit = estimateSummitLatLng(training.trip, elevPoints) ?: return training.copy(peakName = "")
-        val peak = peakLookupRepository.findNearestPeak(summit, elevPoints.max())
-        return training.copy(peakName = peak?.name ?: "", peakElevation = peak?.elevation)
+
+    /**
+     * Re-resolving a peak involves live network calls (elevation stream, Overpass lookup)
+     * that can transiently fail. On reimport, unlike a first-time import, there may already
+     * be a resolved peak in the DB for this training: a transient failure must fall back to
+     * that existing value rather than blank it out, or the training silently drops out of the
+     * peaks ranking (see [com.statsup.domain.Trainings.topPeaks]).
+     */
+    private suspend fun resolvePeak(training: Training, elevPoints: List<Double>?, existing: Training?): Training {
+        if (peakLookupRepository == null || training.elevHigh < MIN_PEAK_ELEVATION_METERS) {
+            return training.copy(peakName = existing?.peakName, peakElevation = existing?.peakElevation)
+        }
+        val summit = if (elevPoints.isNullOrEmpty()) null else estimateSummitLatLng(training.trip, elevPoints)
+        val peak = summit?.let { peakLookupRepository.findNearestPeak(it, elevPoints!!.max()) }
+        return if (peak != null) {
+            training.copy(peakName = peak.name, peakElevation = peak.elevation)
+        } else {
+            training.copy(peakName = existing?.peakName, peakElevation = existing?.peakElevation)
+        }
     }
 
     companion object {
