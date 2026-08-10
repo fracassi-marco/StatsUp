@@ -28,22 +28,7 @@ class ReimportTrainingUseCase(
         val training = trainingApi.fetchActivityById(token, trainingId)
             ?: throw ApiException(404)
 
-        val withPolyline = if (training.trip == null) {
-            val polyline = trainingApi.fetchPolyline(token, training.id)
-            if (polyline != null) training.copy(map = Route(summaryPolyline = polyline)) else training
-        } else training
-        val laps = trainingApi.laps(token, training.id)
-        val withLaps = if (laps.isNotEmpty()) withPolyline.copy(lapsJson = jsonMapper.writeValueAsString(laps))
-            else withPolyline
-        val elevPoints = trainingApi.fetchElevationStream(token, training.id)
-        val withElevation = if (!elevPoints.isNullOrEmpty()) withLaps.copy(elevationPointsJson = jsonMapper.writeValueAsString(elevPoints))
-            else withLaps
-        val trip = withElevation.trip
-        val enriched = if (trip != null && geocodingRepository != null) {
-            val startLabel = geocodingRepository.reverseGeocode(trip.begin().latitude, trip.begin().longitude)
-            val endLabel = geocodingRepository.reverseGeocode(trip.end().latitude, trip.end().longitude)
-            withElevation.copy(startLocationLabel = startLabel, endLocationLabel = endLabel)
-        } else withElevation
+        val (enriched, elevPoints) = enrichTrainingDetails(training, token, trainingApi, geocodingRepository, jsonMapper)
         val existing = existingTraining(trainingId)
         val withPeak = resolvePeak(enriched, elevPoints, peakLookupRepository, existing)
         val center = withPeak.trip?.centerPoint()

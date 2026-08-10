@@ -20,35 +20,31 @@ class UpdateTrainingsUseCase(
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
     }
 
+    /**
+     * Trainings are persisted strictly in chronological order (oldest first), one at a time.
+     * This keeps [TrainingRepository.latest] — which drives the next incremental fetch's start
+     * date — always pointing at a contiguous, fully-saved prefix: if processing is interrupted
+     * partway, nothing after the last successfully-inserted training is ever skipped, so
+     * retrying resumes exactly where it left off with no gaps and no duplicates (inserts are
+     * REPLACE-on-conflict by id).
+     */
     suspend operator fun invoke(token: String, onProgress: (suspend (Int, Int) -> Unit)? = null): Int {
         val latestTraining = trainingRepository.latest()
-        val downloaded = trainingApi.download(token, latestTraining)
+        val downloaded = trainingApi.download(token, latestTraining).sortedBy { it.startDate }
         val total = downloaded.size
+        var processed = 0
 
-        downloaded.forEachIndexed { index, training ->
-            onProgress?.invoke(index + 1, total)
-            val withPolyline = if (training.trip == null) {
-                val polyline = trainingApi.fetchPolyline(token, training.id)
-                if (polyline != null) training.copy(map = Route(summaryPolyline = polyline)) else training
-            } else training
-            val laps = trainingApi.laps(token, training.id)
-            val withLaps = if (laps.isNotEmpty()) withPolyline.copy(lapsJson = jsonMapper.writeValueAsString(laps))
-                else withPolyline
-            val elevPoints = trainingApi.fetchElevationStream(token, training.id)
-            val withElevation = if (!elevPoints.isNullOrEmpty()) withLaps.copy(elevationPointsJson = jsonMapper.writeValueAsString(elevPoints))
-                else withLaps
-            val trip = withElevation.trip
-            val enriched = if (trip != null && geocodingRepository != null) {
-                val startLabel = geocodingRepository.reverseGeocode(trip.begin().latitude, trip.begin().longitude)
-                val endLabel = geocodingRepository.reverseGeocode(trip.end().latitude, trip.end().longitude)
-                withElevation.copy(startLocationLabel = startLabel, endLocationLabel = endLabel)
-            } else withElevation
-            val withPeak = resolvePeak(enriched, elevPoints, peakLookupRepository)
-            val center = withPeak.trip?.centerPoint()
-            trainingRepository.add(
-                if (center != null) withPeak.copy(centerLat = center.latitude, centerLng = center.longitude)
-                else withPeak
-            )
+        processChunksPipelined(downloaded, token, trainingApi, geocodingRepository, jsonMapper) { enrichedChunk ->
+            enrichedChunk.forEach { (enriched, elevPoints) ->
+                val withPeak = resolvePeak(enriched, elevPoints, peakLookupRepository)
+                val center = withPeak.trip?.centerPoint()
+                trainingRepository.add(
+                    if (center != null) withPeak.copy(centerLat = center.latitude, centerLng = center.longitude)
+                    else withPeak
+                )
+                processed++
+                onProgress?.invoke(processed, total)
+            }
         }
 
         val athlete = trainingApi.athlete(token)

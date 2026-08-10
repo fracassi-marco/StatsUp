@@ -15,6 +15,7 @@ import com.statsup.domain.TrainingApi
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.infrastructure.service.ImportEventBus
 import com.statsup.infrastructure.service.ImportForegroundService
+import com.statsup.infrastructure.service.ImportProgress
 import com.statsup.infrastructure.service.ImportResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -37,6 +38,9 @@ class MainViewModel(
 
     private val _loading = mutableStateOf(false)
     val loading: State<Boolean> = _loading
+
+    private val _syncProgress = mutableStateOf<ImportProgress?>(null)
+    val syncProgress: State<ImportProgress?> = _syncProgress
 
     // extraBufferCapacity + DROP_OLDEST makes emit() non-suspending: if no screen is
     // currently collecting (e.g. the user navigated away while an import ran in the
@@ -65,14 +69,21 @@ class MainViewModel(
                 }
             }
         }
+        viewModelScope.launch {
+            ImportEventBus.progress.collect { progress ->
+                _syncProgress.value = progress
+            }
+        }
     }
 
     private fun startLoading() {
+        _syncProgress.value = null
         _loading.value = true
     }
 
     private fun stopLoading() {
         _loading.value = false
+        _syncProgress.value = null
     }
 
     fun onOAuthResult(activityResult: ActivityResult, authService: AuthorizationService, context: Context) {

@@ -37,6 +37,8 @@ class ImportForegroundService : Service() {
 
         startForeground(NOTIFICATION_ID, buildNotification(this))
 
+        ImportEventBus.resetProgress()
+
         scope.launch {
             try {
                 val db = TrainingDatabase.getInstance(applicationContext)
@@ -47,6 +49,7 @@ class ImportForegroundService : Service() {
                 val notificationManager = getSystemService(NotificationManager::class.java)
                 val onProgress: suspend (Int, Int) -> Unit = { current, total ->
                     notificationManager.notify(NOTIFICATION_ID, buildProgressNotification(applicationContext, current, total))
+                    ImportEventBus.emitProgress(current, total)
                 }
 
                 val geocoding = AndroidGeocodingRepository(applicationContext)
@@ -80,6 +83,7 @@ class ImportForegroundService : Service() {
                 Log.e("StatsUp", "Error during import", e)
                 ImportEventBus.emitError(e.message ?: "Import failed. Try again.")
             } finally {
+                ImportEventBus.resetProgress()
                 stopSelf()
             }
         }

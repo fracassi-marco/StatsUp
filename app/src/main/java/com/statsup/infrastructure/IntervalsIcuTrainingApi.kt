@@ -23,6 +23,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeParseException
 
+private const val REQUEST_TIMEOUT_MILLIS = 15_000
+
 class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) : TrainingApi {
 
     private val jsonMapper = jsonMapper { addModule(kotlinModule()) }.apply {
@@ -54,7 +56,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             url = "https://intervals.icu/api/v1/athlete/$id/activities",
             params = params,
             auth = Bearer(token),
-            headers = mapOf("Accept" to "application/json")
+            headers = mapOf("Accept" to "application/json"),
+            timeoutMillis = REQUEST_TIMEOUT_MILLIS
         )
         checkStatus(response.statusCode)
         val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, ActivityDto::class.java)
@@ -70,7 +73,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val response = Http().get(
             url = "https://intervals.icu/api/v1/activity/$activityId",
             auth = Bearer(token),
-            headers = mapOf("Accept" to "application/json")
+            headers = mapOf("Accept" to "application/json"),
+            timeoutMillis = REQUEST_TIMEOUT_MILLIS
         )
         if (response.statusCode !in 200..299) return null
         return try {
@@ -86,7 +90,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val response = Http().get(
             url = "https://intervals.icu/api/v1/athlete/$id/profile",
             auth = Bearer(token),
-            headers = mapOf("Accept" to "application/json")
+            headers = mapOf("Accept" to "application/json"),
+            timeoutMillis = REQUEST_TIMEOUT_MILLIS
         )
         checkStatus(response.statusCode)
         val dto = jsonMapper.readValue(response.body, AthleteProfileResponseDto::class.java)
@@ -97,7 +102,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         val response = Http().get(
             url = "https://intervals.icu/api/v1/activity/$activityId/intervals",
             auth = Bearer(token),
-            headers = mapOf("Accept" to "application/json")
+            headers = mapOf("Accept" to "application/json"),
+            timeoutMillis = REQUEST_TIMEOUT_MILLIS
         )
         if (response.statusCode !in 200..299) {
             android.util.Log.w("IntervalsIcu", "laps $activityId HTTP ${response.statusCode}")
@@ -115,7 +121,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
     override suspend fun fetchPolyline(token: String, activityId: String): String? {
         val response = Http().get(
             url = "https://intervals.icu/api/v1/activity/$activityId/map",
-            auth = Bearer(token)
+            auth = Bearer(token),
+            timeoutMillis = REQUEST_TIMEOUT_MILLIS
         )
         if (response.statusCode !in 200..299) {
             android.util.Log.w("IntervalsIcu", "fetchPolyline $activityId HTTP ${response.statusCode}")
@@ -142,7 +149,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             url = "https://intervals.icu/api/v1/activity/$activityId/streams",
             params = mapOf("types" to "altitude"),
             auth = Bearer(token),
-            headers = mapOf("Accept" to "application/json")
+            headers = mapOf("Accept" to "application/json"),
+            timeoutMillis = REQUEST_TIMEOUT_MILLIS
         )
         if (response.statusCode !in 200..299) {
             android.util.Log.w("IntervalsIcu", "fetchElevationStream $activityId HTTP ${response.statusCode}")
@@ -174,7 +182,8 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
                 "refresh_token" to refreshToken,
                 "grant_type" to "refresh_token"
             ),
-            headers = mapOf("Accept" to "application/json")
+            headers = mapOf("Accept" to "application/json"),
+            timeoutMillis = REQUEST_TIMEOUT_MILLIS
         )
         checkStatus(response.statusCode)
         val result = jsonMapper.readValue(response.body, TokenRefreshDto::class.java)

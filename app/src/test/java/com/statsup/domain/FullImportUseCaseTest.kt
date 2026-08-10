@@ -61,19 +61,22 @@ class FullImportUseCaseTest {
     }
 
     @Test
-    fun `deletes all trainings before downloading`() = runTest {
+    fun `replaces the whole training history atomically after all data is fetched`() = runTest {
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
         whenever(trainingApi.download(token, null)).thenReturn(emptyList())
         whenever(trainingApi.athlete(token)).thenReturn(athlete)
 
         useCase(token)
 
-        // deleteAll() must be called exactly once
-        verify(trainingRepository).deleteAll()
+        // replaceAll() must be called exactly once — deleteAll() is never called directly by
+        // the use case, so a fetch failure never wipes existing data (see safety tests below).
+        verify(trainingRepository).replaceAll(emptyList())
+        verify(trainingRepository, never()).deleteAll()
+        verify(trainingRepository, never()).add(any())
     }
 
     @Test
-    fun `saves each downloaded training to repository`() = runTest {
+    fun `saves each downloaded training in a single atomic replaceAll call`() = runTest {
         val trainings = listOf(makeTraining(id = "10"), makeTraining(id = "20"))
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
         whenever(trainingApi.download(token, null)).thenReturn(trainings)
@@ -81,9 +84,26 @@ class FullImportUseCaseTest {
 
         useCase(token)
 
-        verify(trainingRepository).add(trainings[0])
-        verify(trainingRepository).add(trainings[1])
-        verify(trainingRepository, times(2)).add(any())
+        verify(trainingRepository).replaceAll(argThat { size == 2 && containsAll(trainings) })
+    }
+
+    @Test
+    fun `never touches the repository at all if fetching from the API fails`() = runTest {
+        // Safety guarantee: a network failure while fetching must never delete existing data.
+        // The old data stays intact and the user can just retry the full import.
+        whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
+        whenever(trainingApi.download(token, null)).thenAnswer { throw ApiException(500) }
+
+        try {
+            useCase(token)
+            org.junit.Assert.fail("Expected an ApiException to be thrown")
+        } catch (e: ApiException) {
+            // expected
+        }
+
+        verify(trainingRepository, never()).deleteAll()
+        verify(trainingRepository, never()).replaceAll(any())
+        verify(trainingRepository, never()).add(any())
     }
 
     @Test
@@ -165,9 +185,9 @@ class FullImportUseCaseTest {
     // --- Edge cases ---
 
     @Test
-    fun `reads saved bookmarks BEFORE deleting trainings`() = runTest {
-        // This is crucial: if bookmarks were read after deleteAll(), cascade FK delete
-        // would have already wiped them from DB.
+    fun `reads saved bookmarks BEFORE replacing trainings`() = runTest {
+        // This is crucial: if bookmarks were read after replaceAll() (which deletes then
+        // re-inserts), cascade FK delete would have already wiped them from DB.
         // We verify getAllBookmarksList() is called (the fact that the mock returns data
         // proves it was called before any delete that might cascade).
         whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
@@ -181,7 +201,7 @@ class FullImportUseCaseTest {
             trainingRepository
         )
         orderVerifier.verify(bookmarkedTrainingRepository).getAllBookmarksList()
-        orderVerifier.verify(trainingRepository).deleteAll()
+        orderVerifier.verify(trainingRepository).replaceAll(any())
     }
 
     @Test
@@ -274,7 +294,7 @@ class FullImportUseCaseTest {
 
         useCaseWithPeaks(token)
 
-        verify(trainingRepository).add(argThat { peakName == "Monte Rosa" && peakElevation == 4634.0 })
+        verify(trainingRepository).replaceAll(argThat { any { it.peakName == "Monte Rosa" && it.peakElevation == 4634.0 } })
     }
 
     @Test
@@ -295,7 +315,7 @@ class FullImportUseCaseTest {
 
         useCaseWithPeaks(token)
 
-        verify(trainingRepository).add(argThat { peakName == null && peakElevation == null })
+        verify(trainingRepository).replaceAll(argThat { any { it.peakName == null && it.peakElevation == null } })
     }
 
     // --- Helper ---

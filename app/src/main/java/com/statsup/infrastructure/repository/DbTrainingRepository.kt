@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
+import androidx.room.Transaction
 import com.statsup.domain.Training
 import com.statsup.domain.repository.TrainingRepository
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,15 @@ import kotlinx.coroutines.flow.Flow
 interface DbTrainingRepository : TrainingRepository {
     @Insert(onConflict = REPLACE)
     override suspend fun add(training: Training): Long
+
+    @Insert(onConflict = REPLACE)
+    suspend fun addAll(trainings: List<Training>)
+
+    @Transaction
+    override suspend fun replaceAll(trainings: List<Training>) {
+        deleteAll()
+        addAll(trainings)
+    }
 
     @Query("SELECT * FROM training ORDER BY startDate DESC")
     override fun all(): Flow<List<Training>>

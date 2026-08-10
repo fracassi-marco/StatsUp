@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity() {
                     if (isInitialLoading) {
                         SplashScreen()
                     } else {
-                        LoadingBox(isLoading = mainViewModel.loading.value) {
+                        LoadingBox(isLoading = mainViewModel.loading.value, progress = mainViewModel.syncProgress.value) {
                             Scaffold(
                                 modifier = Modifier.fillMaxSize(),
                                 bottomBar = {
