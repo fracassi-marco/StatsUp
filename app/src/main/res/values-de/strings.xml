@@ -174,9 +174,6 @@
     <string name="settings_full_import_confirm_title">Von intervals.icu neu importieren</string>
     <string name="settings_full_import_confirm_body">Dies löscht alle lokalen Daten und lädt alles von intervals.icu neu herunter. Der Vorgang kann eine Weile dauern. Bist du sicher?</string>
     <string name="settings_full_import_action">Neu importieren</string>
-    <string name="settings_resolve_missing_peaks">Fehlende Gipfel auflösen</string>
-    <string name="settings_resolve_missing_peaks_description">Gipfel nachträglich auflösen, die bei früheren Syncs fehlgeschlagen sind</string>
-    <string name="missing_peaks_resolved_result">%1$d Gipfel aufgelöst</string>
 
     <string name="span_month">Monat</string>
     <string name="span_year">Jahr</string>

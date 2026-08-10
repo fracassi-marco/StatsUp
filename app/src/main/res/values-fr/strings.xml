@@ -174,9 +174,6 @@
     <string name="settings_full_import_confirm_title">Ré-importer depuis intervals.icu</string>
     <string name="settings_full_import_confirm_body">Cela supprimera toutes les données locales et tout re-téléchargera depuis intervals.icu. L\'opération peut prendre un moment. Êtes-vous sûr ?</string>
     <string name="settings_full_import_action">Ré-importer</string>
-    <string name="settings_resolve_missing_peaks">Résoudre les sommets manquants</string>
-    <string name="settings_resolve_missing_peaks_description">Récupère les sommets non résolus lors de synchronisations précédentes</string>
-    <string name="missing_peaks_resolved_result">%1$d sommets résolus</string>
 
     <string name="span_month">Mois</string>
     <string name="span_year">Année</string>
