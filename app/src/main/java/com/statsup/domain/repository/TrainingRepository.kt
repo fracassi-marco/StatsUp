@@ -18,4 +18,9 @@ interface TrainingRepository {
     suspend fun replaceAll(trainings: List<Training>)
     suspend fun getAllTrainings(): List<Training>
     suspend fun updateCenter(id: String, lat: Double, lng: Double)
+    /**
+     * Trainings whose peak lookup never completed (`peakName == null`, see [com.statsup.domain.resolvePeak]) —
+     * candidates for a retry sweep, as opposed to `peakName == ""` which is a confirmed "no peak nearby".
+     */
+    suspend fun unresolvedPeakCandidates(): List<Training>
 }

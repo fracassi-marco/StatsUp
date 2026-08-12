@@ -13,6 +13,7 @@ import com.statsup.R
 import com.statsup.domain.ApiException
 import com.statsup.domain.FullImportUseCase
 import com.statsup.domain.ReimportTrainingUseCase
+import com.statsup.domain.RetryUnresolvedPeaksUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.IntervalsIcuTrainingApi
 import com.statsup.infrastructure.repository.AndroidGeocodingRepository
@@ -76,6 +77,15 @@ class ImportForegroundService : Service() {
                         )(activeToken, onProgress)
                     } else {
                         UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding, peakLookup)(activeToken, onProgress)
+                    }
+                    // Trainings a previous run left with peakName == null (Overpass lookup failed)
+                    // are never revisited by UpdateTrainingsUseCase, since it only looks at
+                    // trainings newer than the latest stored one — sweep them here instead.
+                    try {
+                        val retried = RetryUnresolvedPeaksUseCase(db.trainingRepository, peakLookup)()
+                        if (retried > 0) Log.i("StatsUp", "Retried $retried previously unresolved peak(s)")
+                    } catch (e: Exception) {
+                        Log.w("StatsUp", "Retrying unresolved peaks failed, will try again next sync", e)
                     }
                     ImportEventBus.emitSuccess(count)
                 }

@@ -43,5 +43,8 @@ interface DbTrainingRepository : TrainingRepository {
 
     @Query("UPDATE training SET centerLat = :lat, centerLng = :lng WHERE id = :id")
     override suspend fun updateCenter(id: String, lat: Double, lng: Double)
+
+    @Query("SELECT * FROM training WHERE peakName IS NULL")
+    override suspend fun unresolvedPeakCandidates(): List<Training>
 }
 
