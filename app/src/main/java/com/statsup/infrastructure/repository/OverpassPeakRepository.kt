@@ -15,10 +15,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
 import kotlin.random.Random
 import topinambur.Http
 import topinambur.ServerResponse
@@ -39,17 +35,6 @@ fun parseOverpassPeaks(json: String): List<Peak> {
         val elevation = tags.get("ele")?.asText()?.toDoubleOrNull()
         Peak(name = name, latLng = LatLng(lat, lon), elevation = elevation)
     }
-}
-
-private fun haversineMeters(a: LatLng, b: LatLng): Double {
-    val earthRadiusMeters = 6371000.0
-    val dLat = Math.toRadians(b.latitude - a.latitude)
-    val dLng = Math.toRadians(b.longitude - a.longitude)
-    val sinDLat = sin(dLat / 2)
-    val sinDLng = sin(dLng / 2)
-    val h = sinDLat * sinDLat +
-        cos(Math.toRadians(a.latitude)) * cos(Math.toRadians(b.latitude)) * sinDLng * sinDLng
-    return 2 * earthRadiusMeters * atan2(sqrt(h), sqrt(1 - h))
 }
 
 /**

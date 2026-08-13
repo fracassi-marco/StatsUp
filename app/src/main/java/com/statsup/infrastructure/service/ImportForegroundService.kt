@@ -17,6 +17,8 @@ import com.statsup.domain.RetryUnresolvedPeaksUseCase
 import com.statsup.domain.UpdateTrainingsUseCase
 import com.statsup.infrastructure.IntervalsIcuTrainingApi
 import com.statsup.infrastructure.repository.AndroidGeocodingRepository
+import com.statsup.infrastructure.repository.FallbackPeakLookupRepository
+import com.statsup.infrastructure.repository.GeoNamesPeakRepository
 import com.statsup.infrastructure.repository.OverpassPeakRepository
 import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
@@ -61,7 +63,7 @@ class ImportForegroundService : Service() {
                 }
 
                 val geocoding = AndroidGeocodingRepository(applicationContext)
-                val peakLookup = OverpassPeakRepository()
+                val peakLookup = FallbackPeakLookupRepository(OverpassPeakRepository(), GeoNamesPeakRepository())
                 if (reimportTrainingId != null) {
                     val reimported = ReimportTrainingUseCase(db.trainingRepository, api, geocoding, peakLookup)(activeToken, reimportTrainingId)
                     ImportEventBus.emitReimportSuccess(reimportTrainingId, reimported.peakName?.takeIf { it.isNotBlank() })
@@ -78,8 +80,8 @@ class ImportForegroundService : Service() {
                     } else {
                         UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding, peakLookup)(activeToken, onProgress)
                     }
-                    // Trainings a previous run left with peakName == null (Overpass lookup failed)
-                    // are never revisited by UpdateTrainingsUseCase, since it only looks at
+                    // Trainings a previous run left with peakName == null (both Overpass and the
+                    // GeoNames fallback failed) are never revisited by UpdateTrainingsUseCase, since it only looks at
                     // trainings newer than the latest stored one — sweep them here instead.
                     try {
                         val retried = RetryUnresolvedPeaksUseCase(db.trainingRepository, peakLookup)()
