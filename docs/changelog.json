@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.9.5",
+    "date": "2026-08-14",
+    "message": "Optimize peak resolution during full re-import"
+  },
+  {
     "version": "2.9.4",
     "date": "2026-08-14",
     "message": "Optimize peak resolution during full re-import"
