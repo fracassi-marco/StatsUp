@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.9.6",
+    "date": "2026-08-14",
+    "message": "Add total distance to month header in history screen"
+  },
+  {
     "version": "2.9.5",
     "date": "2026-08-14",
     "message": "Optimize peak resolution during full re-import"
