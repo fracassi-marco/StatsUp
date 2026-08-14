@@ -37,7 +37,10 @@ class FullImportUseCaseTest {
         athleteRepository = mock()
         bookmarkedTrainingRepository = mock()
         trainingApi = mock()
-        runBlocking { whenever(trainingApi.laps(any(), any())).thenReturn(emptyList()) }
+        runBlocking {
+            whenever(trainingApi.laps(any(), any())).thenReturn(emptyList())
+            whenever(trainingRepository.getAllTrainings()).thenReturn(emptyList())
+        }
         useCase = FullImportUseCase(
             trainingRepository,
             athleteRepository,
@@ -274,6 +277,73 @@ class FullImportUseCaseTest {
     // PolyUtil round-trips through a fixed-precision encoding, so match with a small tolerance.
     private fun LatLng.isCloseTo(lat: Double, lng: Double) =
         Math.abs(latitude - lat) < 1e-4 && Math.abs(longitude - lng) < 1e-4
+
+    @Test
+    fun `reuses an already-resolved peak from the existing training instead of re-querying the network`() = runTest {
+        // A full re-import must not throw away peak names already resolved by a previous
+        // incremental sync, nor waste an Overpass round-trip re-confirming them.
+        val peakLookupRepository: PeakLookupRepository = mock()
+        val downloadedTraining = makeTraining(id = "1").copy(elevHigh = 3500.0, map = Route(summaryPolyline = summitPolyline))
+        val existingTraining = downloadedTraining.copy(peakName = "Monte Rosa", peakElevation = 4634.0)
+        whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
+        whenever(trainingRepository.getAllTrainings()).thenReturn(listOf(existingTraining))
+        whenever(trainingApi.download(token, null)).thenReturn(listOf(downloadedTraining))
+        whenever(trainingApi.athlete(token)).thenReturn(athlete)
+        whenever(trainingApi.fetchElevationStream(token, "1")).thenReturn(listOf(2000.0, 3500.0, 2500.0))
+        val useCaseWithPeaks = FullImportUseCase(
+            trainingRepository, athleteRepository, bookmarkedTrainingRepository, trainingApi,
+            peakLookupRepository = peakLookupRepository
+        )
+
+        useCaseWithPeaks(token)
+
+        verify(peakLookupRepository, never()).findNearestPeak(any(), any())
+        verify(trainingRepository).replaceAll(argThat { any { it.peakName == "Monte Rosa" && it.peakElevation == 4634.0 } })
+    }
+
+    @Test
+    fun `reuses an existing confirmed negative instead of re-querying the network`() = runTest {
+        val peakLookupRepository: PeakLookupRepository = mock()
+        val downloadedTraining = makeTraining(id = "1").copy(elevHigh = 3500.0, map = Route(summaryPolyline = summitPolyline))
+        val existingTraining = downloadedTraining.copy(peakName = "", peakElevation = null)
+        whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
+        whenever(trainingRepository.getAllTrainings()).thenReturn(listOf(existingTraining))
+        whenever(trainingApi.download(token, null)).thenReturn(listOf(downloadedTraining))
+        whenever(trainingApi.athlete(token)).thenReturn(athlete)
+        whenever(trainingApi.fetchElevationStream(token, "1")).thenReturn(listOf(2000.0, 3500.0, 2500.0))
+        val useCaseWithPeaks = FullImportUseCase(
+            trainingRepository, athleteRepository, bookmarkedTrainingRepository, trainingApi,
+            peakLookupRepository = peakLookupRepository
+        )
+
+        useCaseWithPeaks(token)
+
+        verify(peakLookupRepository, never()).findNearestPeak(any(), any())
+        verify(trainingRepository).replaceAll(argThat { any { it.peakName == "" } })
+    }
+
+    @Test
+    fun `still queries the network for a training left unresolved by a previous import`() = runTest {
+        val peakLookupRepository: PeakLookupRepository = mock()
+        val downloadedTraining = makeTraining(id = "1").copy(elevHigh = 3500.0, map = Route(summaryPolyline = summitPolyline))
+        val existingTraining = downloadedTraining.copy(peakName = null, peakElevation = null)
+        val peak = Peak(name = "Monte Rosa", latLng = LatLng(45.9, 7.6), elevation = 4634.0)
+        whenever(bookmarkedTrainingRepository.getAllBookmarksList()).thenReturn(emptyList())
+        whenever(trainingRepository.getAllTrainings()).thenReturn(listOf(existingTraining))
+        whenever(trainingApi.download(token, null)).thenReturn(listOf(downloadedTraining))
+        whenever(trainingApi.athlete(token)).thenReturn(athlete)
+        whenever(trainingApi.fetchElevationStream(token, "1")).thenReturn(listOf(2000.0, 3500.0, 2500.0))
+        whenever(peakLookupRepository.findNearestPeak(argThat { isCloseTo(45.9, 7.6) }, org.mockito.kotlin.eq(3500.0))).thenReturn(peak)
+        val useCaseWithPeaks = FullImportUseCase(
+            trainingRepository, athleteRepository, bookmarkedTrainingRepository, trainingApi,
+            peakLookupRepository = peakLookupRepository
+        )
+
+        useCaseWithPeaks(token)
+
+        verify(peakLookupRepository).findNearestPeak(any(), any())
+        verify(trainingRepository).replaceAll(argThat { any { it.peakName == "Monte Rosa" && it.peakElevation == 4634.0 } })
+    }
 
     @Test
     fun `does not look up a peak when elevHigh is below the threshold`() = runTest {

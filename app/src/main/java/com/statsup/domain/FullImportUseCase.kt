@@ -31,6 +31,14 @@ class FullImportUseCase(
      */
     suspend operator fun invoke(token: String, onProgress: (suspend (Int, Int) -> Unit)? = null): Int {
         val savedBookmarks = bookmarkedTrainingRepository.getAllBookmarksList()
+        // A full re-import re-downloads every training from scratch, but peak resolution
+        // shouldn't be redone from scratch too: re-querying Overpass/GeoNames for hundreds of
+        // already-resolved trainings just burns through rate limits (and their retry backoffs
+        // slow the whole import down) while re-adding nothing, since a stable route resolves to
+        // the same peak every time. Existing resolved values (including confirmed negatives) are
+        // reused as-is; only trainings that were never successfully resolved actually hit the
+        // network below.
+        val existingById = trainingRepository.getAllTrainings().associateBy { it.id }
 
         val downloaded = trainingApi.download(token, latest = null)
         val total = downloaded.size
@@ -39,7 +47,12 @@ class FullImportUseCase(
 
         processChunksPipelined(downloaded, token, trainingApi, geocodingRepository, jsonMapper) { enrichedChunk ->
             enrichedChunk.forEach { (enriched, elevPoints) ->
-                val withPeak = resolvePeak(enriched, elevPoints, peakLookupRepository)
+                val existing = existingById[enriched.id]
+                val withPeak = if (existing?.peakName != null) {
+                    enriched.copy(peakName = existing.peakName, peakElevation = existing.peakElevation)
+                } else {
+                    resolvePeak(enriched, elevPoints, peakLookupRepository, existing)
+                }
                 val center = withPeak.trip?.centerPoint()
                 enrichedTrainings.add(
                     if (center != null) withPeak.copy(centerLat = center.latitude, centerLng = center.longitude)

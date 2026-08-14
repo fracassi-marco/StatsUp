@@ -55,12 +55,12 @@ class OverpassPeakRepository : PeakLookupRepository {
             android.util.Log.d("OverpassPeak", "cache hit near (${latLng.latitude},${latLng.longitude}) -> ${it.second?.name}")
             return it.second
         }
-        val result = queryOverpass(latLng)
+        val result = queryOverpass(latLng, elevationHint)
         resolvedNearby.add(latLng to result)
         return result
     }
 
-    private suspend fun queryOverpass(latLng: LatLng): Peak? {
+    private suspend fun queryOverpass(latLng: LatLng, elevationHint: Double): Peak? {
         val query = "[out:json][timeout:15];" +
             "node[\"natural\"=\"peak\"][\"name\"]" +
             "(around:$SEARCH_RADIUS_METERS,${latLng.latitude},${latLng.longitude});" +
@@ -76,7 +76,7 @@ class OverpassPeakRepository : PeakLookupRepository {
                         val response = fetchWithHardTimeout(endpoint, query)
                         if (response.statusCode in 200..299) {
                             val parsed = parseOverpassPeaks(response.body)
-                            val chosen = parsed.minByOrNull { haversineMeters(latLng, it.latLng) }
+                            val chosen = choosePeak(parsed, latLng, elevationHint)
                             android.util.Log.d(
                                 "OverpassPeak",
                                 "query via $endpoint (${latLng.latitude},${latLng.longitude}) r=${SEARCH_RADIUS_METERS}m -> " +

@@ -64,7 +64,7 @@ class GeoNamesPeakRepository : PeakLookupRepository {
                     )
                     if (response.statusCode in 200..299) {
                         val parsed = parseGeoNamesPeaks(response.body)
-                        val chosen = parsed.minByOrNull { haversineMeters(latLng, it.latLng) }
+                        val chosen = choosePeak(parsed, latLng, elevationHint)
                         android.util.Log.d(
                             "GeoNamesPeak",
                             "query (${latLng.latitude},${latLng.longitude}) r=${SEARCH_RADIUS_KM}km -> " +
