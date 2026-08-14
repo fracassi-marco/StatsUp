@@ -85,7 +85,8 @@ fun HistoryScreen(viewModel: HistoryViewModel, onTrainingClick: (String) -> Unit
                     groupedTrainings.forEach { (monthYear, trainings) ->
                         // Header del mese
                         item(key = "header_$monthYear") {
-                            MonthHeader(monthYear = monthYear)
+                            val totalKm = trainings.sumOf { it.distanceInKilometers() }
+                            MonthHeader(monthYear = monthYear, totalKm = totalKm)
                         }
 
                         // Items del mese
@@ -170,9 +171,14 @@ fun SportTypeFilter(
 
 
 @Composable
-fun MonthHeader(monthYear: String) {
+fun MonthHeader(monthYear: String, totalKm: Double) {
     Text(
-        text = monthYear.replaceFirstChar { it.uppercase() },
+        text = stringResource(
+            R.string.month_header_with_distance,
+            monthYear.replaceFirstChar { it.uppercase() },
+            String.format(LocalLocale.current.platformLocale, "%.2f", totalKm),
+            stringResource(R.string.km)
+        ),
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.primary,

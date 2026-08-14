@@ -85,6 +85,7 @@
     <string name="settings_screen_language_system">Sistema</string>
 
     <string name="km">Km</string>
+    <string name="month_header_with_distance">%1$s - %2$s %3$s</string>
     <string name="m">m</string>
     <string name="bpm">bpm</string>
     <string name="h">Ore</string>
