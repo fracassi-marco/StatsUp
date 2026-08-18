@@ -71,6 +71,6 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "benManesVersions" }
+ben-manes-versions = { id = "io.github.ben-manes.versions", version.ref = "benManesVersions" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

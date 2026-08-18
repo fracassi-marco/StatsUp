@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">StatsUp</string>
 
     <string name="splits_section_title">Splits pro km</string>
@@ -48,7 +48,7 @@
     <string name="fitness_score_factor_training_load_desc">Misst dein aktuelles Trainingsvolumen der letzten 28 Tage, wobei neuere Einheiten stärker gewichtet werden.</string>
     <string name="fitness_score_factor_recovery_desc">Basiert auf der Zeit seit deiner letzten intensiven Belastung: mehr Erholung senkt die Ermüdung und erhöht den Wert.</string>
     <string name="fitness_score_factor_consistency_desc">Belohnt Training an mehr Tagen der letzten 28, bis zu einem Idealwert von 16 aktiven Tagen.</string>
-    <string name="fitness_score_factor_load_balance_desc">Vergleicht deine Trainingsbelastung der letzten 7 Tage mit der der letzten 28 Tage. Der beste Wert vermeidet plötzliche Belastungsspitzen.</string>
+    <string name="fitness_score_factor_load_balance_desc">Vergleicht deine Trainingsbelastung der letzten 7 Tage mit derjenigen der letzten 28 Tage. Der beste Wert vermeidet plötzliche Belastungsspitzen.</string>
     <string name="fitness_score_factor_intensity_balance_desc">Belohnt ein gutes Verhältnis zwischen lockeren und intensiven Einheiten anhand der Herzfrequenz: etwa 80 %% locker, 20 %% intensiv.</string>
     <string name="fitness_score_factor_sport_variety_desc">Belohnt Training in mehreren Sportarten statt nur einer.</string>
     <string name="fitness_score_factor_performance_trend_desc">Vergleicht dein bestes Lauftempo über gängige Wettkampfdistanzen der letzten 90 Tage mit den 90 Tagen davor.</string>
@@ -56,8 +56,14 @@
     <string name="fitness_score_factor_weight_trend_desc">Vergleicht deinen aktuellen Gewichtstrend mit deinem Ziel oder belohnt Stabilität, wenn kein aktives Ziel besteht.</string>
     <string name="cd_fitness_score_factor_info">Weitere Informationen zu diesem Faktor</string>
     <string name="streak_days">Serie</string>
-    <string name="streak_current_days">%1$d Tage</string>
-    <string name="streak_best">Beste: %1$d Tage</string>
+    <plurals name="streak_current_days">
+        <item quantity="one">%1$d Tag</item>
+        <item quantity="other">%1$d Tage</item>
+    </plurals>
+    <plurals name="streak_best">
+        <item quantity="one">Beste: %1$d Tag</item>
+        <item quantity="other">Beste: %1$d Tage</item>
+    </plurals>
     <string name="level_card_label">Lv. %1$d · %2$s</string>
     <string name="level_card_total_xp">%1$d XP</string>
     <string name="level_card_xp_to_next">%1$d XP bis zur nächsten Stufe</string>
@@ -239,8 +245,14 @@
     <string name="badge_monthly_diamond_desc">Monatliche Distanz ≥ 200 km</string>
     <string name="badge_monthly_goal_dist_name">Ziel %1$d km</string>
     <string name="badge_monthly_goal_dist_desc">Du hast dein monatliches Distanzziel von %1$d km erreicht</string>
-    <string name="badge_monthly_goal_freq_name">Ziel %1$d Aktivitäten</string>
-    <string name="badge_monthly_goal_freq_desc">Du hast dein monatliches Ziel von %1$d Aktivitäten erreicht</string>
+    <plurals name="badge_monthly_goal_freq_name">
+        <item quantity="one">Ziel %1$d Aktivität</item>
+        <item quantity="other">Ziel %1$d Aktivitäten</item>
+    </plurals>
+    <plurals name="badge_monthly_goal_freq_desc">
+        <item quantity="one">Du hast dein monatliches Ziel von %1$d Aktivität erreicht</item>
+        <item quantity="other">Du hast dein monatliches Ziel von %1$d Aktivitäten erreicht</item>
+    </plurals>
     <string name="badge_monthly_streak_week_name">Perfekte Woche</string>
     <string name="badge_monthly_streak_week_desc">7 Aktivitäten in 7 aufeinanderfolgenden Tagen im Monat</string>
     <string name="badge_monthly_elevation_2k_name">Alpinist</string>
@@ -319,7 +331,10 @@
     <string name="weight_no_entries">Noch keine Messungen</string>
     <string name="weight_personal_best_label">persönlicher Rekord</string>
     <string name="weight_max_label">Maximum</string>
-    <string name="weight_measurements_count">%d Messungen insgesamt</string>
+    <plurals name="weight_measurements_count">
+        <item quantity="one">%d Messung insgesamt</item>
+        <item quantity="other">%d Messungen insgesamt</item>
+    </plurals>
     <string name="weight_bmi">BMI</string>
     <string name="weight_bmi_value">BMI: %s</string>
     <string name="weight_bmi_underweight">Untergewicht</string>
@@ -340,7 +355,10 @@
     <string name="weight_target_detail_formula">Fortschritt = (Maximum − Aktuell) ÷ (Maximum − Ziel) × 100</string>
     <string name="weight_target_expand_hint">Wie wird das berechnet</string>
     <string name="weight_gamification_title">Fortschritt</string>
-    <string name="weight_streak_weeks">%d Wochen</string>
+    <plurals name="weight_streak_weeks">
+        <item quantity="one">%d Woche</item>
+        <item quantity="other">%d Wochen</item>
+    </plurals>
     <string name="weight_streak_label">aufeinanderfolgende Wochen</string>
     <string name="badge_weight_first_name">Erster Schritt</string>
     <string name="badge_weight_first_desc">Du hast deine erste Gewichtsmessung aufgezeichnet</string>
@@ -390,7 +408,10 @@
     <string name="weight_unit_kg">kg</string>
     <string name="weight_bmi_display">%1$.1f — %2$s</string>
     <string name="weight_ideal_range_label">Gesundes Gewicht (BMI 18,5–24,9)</string>
-    <string name="weight_import_success">%1$d Messungen importiert</string>
+    <plurals name="weight_import_success">
+        <item quantity="one">%1$d Messung importiert</item>
+        <item quantity="other">%1$d Messungen importiert</item>
+    </plurals>
     <string name="weight_import_error">Importfehler</string>
     <string name="settings_personal_data">Persönliche Daten</string>
     <string name="settings_weight_height">Größe</string>
@@ -411,10 +432,13 @@
     <string name="export_tcx">TCX exportieren</string>
 
     <!-- Map / routes -->
-    <string name="all_routes_displayed">%1$d Routen angezeigt</string>
+    <plurals name="all_routes_displayed">
+        <item quantity="one">%1$d Route angezeigt</item>
+        <item quantity="other">%1$d Routen angezeigt</item>
+    </plurals>
 
     <!-- Profile -->
-    <string name="profile_badges_count">%1$d/%2$d Abzeichen</string>
+    <string name="profile_badges_count" tools:ignore="PluralsCandidate">%1$d/%2$d Abzeichen</string>
 
     <!-- Activity heatmap -->
     <string name="heatmap_recent">Aktuell</string>
@@ -450,11 +474,14 @@
     <string name="import_notification_channel_name">Import</string>
     <string name="import_notification_title">Aktivitäten werden importiert…</string>
     <string name="import_notification_text">Deine Aktivitäten werden im Hintergrund heruntergeladen</string>
-    <string name="import_notification_progress">%1$d / %2$d Aktivitäten</string>
+    <string name="import_notification_progress" tools:ignore="PluralsCandidate">%1$d / %2$d Aktivitäten</string>
 
     <string name="reminder_notification_channel_name">Erinnerungen</string>
     <string name="reminder_inactivity_title">Zeit, aktiv zu werden! 🏃</string>
-    <string name="reminder_inactivity_text">Du hast seit %1$d Tagen nicht trainiert — leg heute wieder los.</string>
+    <plurals name="reminder_inactivity_text">
+        <item quantity="one">Du hast seit %1$d Tag nicht trainiert — leg heute wieder los.</item>
+        <item quantity="other">Du hast seit %1$d Tagen nicht trainiert — leg heute wieder los.</item>
+    </plurals>
     <string name="reminder_streak_risk_title">Brich deine Serie nicht ab! 🔥</string>
     <string name="reminder_streak_risk_text">Deine %1$d-Tage-Serie läuft noch — trainiere heute, um sie fortzusetzen.</string>
     <string name="reminder_distance_goal_risk_title">Monatliches Distanzziel in Gefahr</string>
@@ -465,7 +492,10 @@
     <string name="reminder_distance_goal_near_text">Du bist bei %1$d%% deines monatlichen Distanzziels — noch ein letzter Schub!</string>
     <string name="reminder_training_goal_near_text">Du bist bei %1$d%% deines monatlichen Trainingsziels — noch ein letzter Schub!</string>
     <string name="reminder_weight_title">Gewichtscheck</string>
-    <string name="reminder_weight_text">Du hast seit %1$d Tagen dein Gewicht nicht erfasst.</string>
+    <plurals name="reminder_weight_text">
+        <item quantity="one">Du hast seit %1$d Tag dein Gewicht nicht erfasst.</item>
+        <item quantity="other">Du hast seit %1$d Tagen dein Gewicht nicht erfasst.</item>
+    </plurals>
 
     <string name="crash_title">Unerwarteter Fehler</string>
     <string name="crash_subtitle">Die App ist abgestürzt. Bitte melde diesen Fehler dem Entwickler.</string>

@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,7 +48,11 @@ fun StreakCard(viewModel: DashboardViewModel) {
                 )
             }
             Text(
-                text = stringResource(R.string.streak_current_days, viewModel.currentStreak()),
+                text = pluralStringResource(
+                    R.plurals.streak_current_days,
+                    viewModel.currentStreak(),
+                    viewModel.currentStreak()
+                ),
                 style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.ExtraBold)
             )
         }
@@ -60,7 +65,7 @@ fun StreakCard(viewModel: DashboardViewModel) {
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = stringResource(R.string.streak_best, viewModel.bestStreak()),
+            text = pluralStringResource(R.plurals.streak_best, viewModel.bestStreak(), viewModel.bestStreak()),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
             modifier = Modifier.fillMaxWidth(),

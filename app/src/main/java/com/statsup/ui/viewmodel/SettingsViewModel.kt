@@ -1,6 +1,7 @@
 package com.statsup.ui.viewmodel
 
 import android.app.LocaleManager
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.LocaleList
@@ -21,12 +22,17 @@ import com.statsup.ui.viewmodel.WeightViewModel
 import kotlinx.coroutines.launch
 
 
+@SuppressLint("StaticFieldLeak") // Only application context is ever stored here (see below)
 class SettingsViewModel(
     private val settingRepository: SettingRepository,
     private val trainingRepository: TrainingRepository,
     private val dataExportImportService: DataExportImportService,
-    private val context: Context
+    context: Context
 ) : ViewModel() {
+
+    // Only the application context is retained here (never an Activity context),
+    // so this ViewModel cannot leak a shorter-lived Context.
+    private val context: Context = context.applicationContext
 
     private val languageTags = listOf("", "it", "en", "fr", "es")
 

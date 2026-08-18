@@ -131,7 +131,7 @@ object ActivityExportService {
         if (points.isEmpty()) return emptyList()
         if (points.size == 1) return listOf(start.format(ISO_UTC))
 
-        val distances = DoubleArray(points.size) { 0.0 }
+        val distances = DoubleArray(points.size)
         for (i in 1 until points.size) {
             distances[i] = distances[i - 1] + haversine(
                 points[i - 1].latitude, points[i - 1].longitude,

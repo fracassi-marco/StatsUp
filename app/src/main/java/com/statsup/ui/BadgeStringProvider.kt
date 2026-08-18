@@ -50,8 +50,16 @@ fun buildBadgeStringMap(
             km
         ),
         "monthly_goal_freq" to BadgeStringSet(
-            context.getString(R.string.badge_monthly_goal_freq_name, monthlyTrainingGoal),
-            context.getString(R.string.badge_monthly_goal_freq_desc, monthlyTrainingGoal),
+            context.resources.getQuantityString(
+                R.plurals.badge_monthly_goal_freq_name,
+                monthlyTrainingGoal,
+                monthlyTrainingGoal
+            ),
+            context.resources.getQuantityString(
+                R.plurals.badge_monthly_goal_freq_desc,
+                monthlyTrainingGoal,
+                monthlyTrainingGoal
+            ),
             activities
         ),
         "monthly_streak_week" to BadgeStringSet(

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">StatsUp</string>
 
     <string name="splits_section_title">Splits per km</string>
@@ -30,7 +30,7 @@
     <string name="recovery_detail_no_activities">No recent activities in the last 7 days.</string>
     <string name="fitness_score_title">Fitness Level</string>
     <string name="fitness_score_detail_title">Fitness Level Detail</string>
-    <string name="fitness_score_detail_explanation">Your Fitness Level combines multiple training, recovery and weight signals into a single 0-100 score.</string>
+    <string name="fitness_score_detail_explanation">Your Fitness Level combines multiple training, recovery and weight signals into a single 0–100 score.</string>
     <string name="fitness_score_factors_title">Factors</string>
     <string name="fitness_score_trend_title">30-Day Trend</string>
     <string name="fitness_score_factor_training_load">Training Load</string>
@@ -55,8 +55,14 @@
     <string name="fitness_score_factor_weight_trend_desc">Compares your recent weight trend to your weight goal, or rewards stability if you have no active goal.</string>
     <string name="cd_fitness_score_factor_info">More information about this factor</string>
     <string name="streak_days">Streak</string>
-    <string name="streak_current_days">%1$d days</string>
-    <string name="streak_best">Best: %1$d days</string>
+    <plurals name="streak_current_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="streak_best">
+        <item quantity="one">Best: %1$d day</item>
+        <item quantity="other">Best: %1$d days</item>
+    </plurals>
     <string name="level_card_label">Lv. %1$d · %2$s</string>
     <string name="level_card_total_xp">%1$d XP</string>
     <string name="level_card_xp_to_next">%1$d XP to next level</string>
@@ -238,8 +244,14 @@
     <string name="badge_monthly_diamond_desc">Monthly distance ≥ 200 km</string>
     <string name="badge_monthly_goal_dist_name">%1$d km goal</string>
     <string name="badge_monthly_goal_dist_desc">You reached your monthly distance goal of %1$d km</string>
-    <string name="badge_monthly_goal_freq_name">%1$d activities goal</string>
-    <string name="badge_monthly_goal_freq_desc">You reached your monthly goal of %1$d activities</string>
+    <plurals name="badge_monthly_goal_freq_name">
+        <item quantity="one">%1$d activity goal</item>
+        <item quantity="other">%1$d activities goal</item>
+    </plurals>
+    <plurals name="badge_monthly_goal_freq_desc">
+        <item quantity="one">You reached your monthly goal of %1$d activity</item>
+        <item quantity="other">You reached your monthly goal of %1$d activities</item>
+    </plurals>
     <string name="badge_monthly_streak_week_name">Perfect Week</string>
     <string name="badge_monthly_streak_week_desc">7 activities in 7 consecutive days this month</string>
     <string name="badge_monthly_elevation_2k_name">Alpinist</string>
@@ -318,7 +330,10 @@
     <string name="weight_no_entries">No measurements yet</string>
     <string name="weight_personal_best_label">min</string>
     <string name="weight_max_label">max</string>
-    <string name="weight_measurements_count">%d total measurements</string>
+    <plurals name="weight_measurements_count">
+        <item quantity="one">%d total measurement</item>
+        <item quantity="other">%d total measurements</item>
+    </plurals>
     <string name="weight_bmi">BMI</string>
     <string name="weight_bmi_value">BMI: %s</string>
     <string name="weight_bmi_underweight">Underweight</string>
@@ -339,7 +354,10 @@
     <string name="weight_target_detail_formula">Progress = (peak − current) ÷ (peak − target) × 100</string>
     <string name="weight_target_expand_hint">How it is calculated</string>
     <string name="weight_gamification_title">Progress</string>
-    <string name="weight_streak_weeks">%d weeks</string>
+    <plurals name="weight_streak_weeks">
+        <item quantity="one">%d week</item>
+        <item quantity="other">%d weeks</item>
+    </plurals>
     <string name="weight_streak_label">consecutive weeks</string>
     <string name="badge_weight_first_name">First step</string>
     <string name="badge_weight_first_desc">You recorded your first weight entry</string>
@@ -389,7 +407,10 @@
     <string name="weight_unit_kg">kg</string>
     <string name="weight_bmi_display">%1$.1f — %2$s</string>
     <string name="weight_ideal_range_label">Healthy range (BMI 18.5–24.9)</string>
-    <string name="weight_import_success">%1$d measurements imported</string>
+    <plurals name="weight_import_success">
+        <item quantity="one">%1$d measurement imported</item>
+        <item quantity="other">%1$d measurements imported</item>
+    </plurals>
     <string name="weight_import_error">Import failed</string>
     <string name="settings_personal_data">Personal data</string>
     <string name="settings_weight_height">Height</string>
@@ -410,10 +431,15 @@
     <string name="export_tcx">Export TCX</string>
 
     <!-- Map / routes -->
-    <string name="all_routes_displayed">%1$d routes displayed</string>
+    <plurals name="all_routes_displayed">
+        <item quantity="one">%1$d route displayed</item>
+        <item quantity="other">%1$d routes displayed</item>
+    </plurals>
 
     <!-- Profile -->
-    <string name="profile_badges_count">%1$d/%2$d badges</string>
+    <!-- profile_badges_count and import_notification_progress intentionally use two independent
+         counts (earned/total, current/total), so a single plural quantity would be ambiguous. -->
+    <string name="profile_badges_count" tools:ignore="PluralsCandidate">%1$d/%2$d badges</string>
 
     <!-- Activity heatmap -->
     <string name="heatmap_recent">Recent</string>
@@ -449,11 +475,14 @@
     <string name="import_notification_channel_name">Import</string>
     <string name="import_notification_title">Importing activities…</string>
     <string name="import_notification_text">Downloading your activities in the background</string>
-    <string name="import_notification_progress">%1$d / %2$d activities</string>
+    <string name="import_notification_progress" tools:ignore="PluralsCandidate">%1$d / %2$d activities</string>
 
     <string name="reminder_notification_channel_name">Reminders</string>
     <string name="reminder_inactivity_title">Time to move! 🏃</string>
-    <string name="reminder_inactivity_text">You haven\'t trained in %1$d days — get back at it today.</string>
+    <plurals name="reminder_inactivity_text">
+        <item quantity="one">You haven\'t trained in %1$d day — get back at it today.</item>
+        <item quantity="other">You haven\'t trained in %1$d days — get back at it today.</item>
+    </plurals>
     <string name="reminder_streak_risk_title">Don\'t break your streak! 🔥</string>
     <string name="reminder_streak_risk_text">Your %1$d-day streak is still alive — train today to keep it going.</string>
     <string name="reminder_distance_goal_risk_title">Monthly distance goal at risk</string>
@@ -464,7 +493,10 @@
     <string name="reminder_distance_goal_near_text">You\'re at %1$d%% of your monthly distance goal — one more push!</string>
     <string name="reminder_training_goal_near_text">You\'re at %1$d%% of your monthly training goal — one more push!</string>
     <string name="reminder_weight_title">Weight check-in</string>
-    <string name="reminder_weight_text">You haven\'t logged your weight in %1$d days.</string>
+    <plurals name="reminder_weight_text">
+        <item quantity="one">You haven\'t logged your weight in %1$d day.</item>
+        <item quantity="other">You haven\'t logged your weight in %1$d days.</item>
+    </plurals>
 
     <string name="crash_title">Unexpected Error</string>
     <string name="crash_subtitle">The app crashed. Please report this error to the developer.</string>

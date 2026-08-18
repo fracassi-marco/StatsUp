@@ -101,7 +101,11 @@ class ReminderWorker(
             is ReminderEvent.Inactivity -> Triple(
                 NOTIFICATION_ID_INACTIVITY,
                 context.getString(R.string.reminder_inactivity_title),
-                context.getString(R.string.reminder_inactivity_text, event.daysSinceLastTraining)
+                context.resources.getQuantityString(
+                    R.plurals.reminder_inactivity_text,
+                    event.daysSinceLastTraining,
+                    event.daysSinceLastTraining
+                )
             )
             is ReminderEvent.StreakAtRisk -> Triple(
                 NOTIFICATION_ID_STREAK_RISK,
@@ -131,7 +135,11 @@ class ReminderWorker(
             is ReminderEvent.WeightReminder -> Triple(
                 NOTIFICATION_ID_WEIGHT,
                 context.getString(R.string.reminder_weight_title),
-                context.getString(R.string.reminder_weight_text, event.daysSinceLastEntry)
+                context.resources.getQuantityString(
+                    R.plurals.reminder_weight_text,
+                    event.daysSinceLastEntry,
+                    event.daysSinceLastEntry
+                )
             )
         }
     }

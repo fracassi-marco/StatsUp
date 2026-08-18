@@ -1,8 +1,11 @@
 package com.statsup.ui.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -18,11 +21,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@SuppressLint("StaticFieldLeak") // Only application context is ever stored here (see below)
 class WeightViewModel(
     private val weightRepository: WeightRepository,
     private val settingRepository: SettingRepository,
-    private val context: Context
+    context: Context
 ) : ViewModel() {
+
+    // Only the application context is retained here (never an Activity context),
+    // so this ViewModel cannot leak a shorter-lived Context.
+    private val context: Context = context.applicationContext
 
     var stats by mutableStateOf(WeightStats())
         private set
@@ -30,10 +38,10 @@ class WeightViewModel(
     var entries by mutableStateOf(emptyList<WeightEntry>())
         private set
 
-    var heightCm by mutableStateOf(settingRepository.loadHeightCm())
+    var heightCm by mutableIntStateOf(settingRepository.loadHeightCm())
         private set
 
-    var weightTargetKg by mutableStateOf(settingRepository.loadWeightTargetKg())
+    var weightTargetKg by mutableDoubleStateOf(settingRepository.loadWeightTargetKg())
         private set
 
     var isLoading by mutableStateOf(true)
@@ -79,7 +87,11 @@ class WeightViewModel(
                 val existingDates = weightRepository.getAllSync().map { it.date }.toSet()
                 val newEntries = parsed.filter { it.date !in existingDates }
                 weightRepository.insertAll(newEntries)
-                importMessage = context.getString(R.string.weight_import_success, newEntries.size)
+                importMessage = context.resources.getQuantityString(
+                    R.plurals.weight_import_success,
+                    newEntries.size,
+                    newEntries.size
+                )
             }.onFailure {
                 importMessage = context.getString(R.string.weight_import_error)
             }

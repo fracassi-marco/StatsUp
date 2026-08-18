@@ -56,6 +56,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -256,7 +257,11 @@ private fun WeightHeaderCard(stats: WeightStats) {
                 )
             }
             Text(
-                text = stringResource(R.string.weight_measurements_count, stats.totalMeasurements),
+                text = pluralStringResource(
+                    R.plurals.weight_measurements_count,
+                    stats.totalMeasurements,
+                    stats.totalMeasurements
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
             )
@@ -554,7 +559,11 @@ private fun WeightGamificationCard(stats: WeightStats) {
             ) {
                 Column {
                     Text(
-                        text = stringResource(R.string.weight_streak_weeks, stats.measurementStreak),
+                        text = pluralStringResource(
+                            R.plurals.weight_streak_weeks,
+                            stats.measurementStreak,
+                            stats.measurementStreak
+                        ),
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                     )
                     Text(

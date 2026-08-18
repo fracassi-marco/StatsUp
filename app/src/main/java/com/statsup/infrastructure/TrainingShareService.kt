@@ -9,6 +9,7 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Typeface
 import androidx.core.content.FileProvider
+import androidx.core.graphics.toColorInt
 import com.google.android.gms.maps.model.LatLng
 import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
@@ -27,11 +28,11 @@ object TrainingShareService {
     private const val MAP_RIGHT = 1020f
     private const val HEADER_BOTTOM = 180f
 
-    private val BG_COLOR = android.graphics.Color.parseColor("#1A1A1A")
-    private val PRIMARY_COLOR = android.graphics.Color.parseColor("#FF5722")
-    private val TEXT_PRIMARY = android.graphics.Color.parseColor("#FFFFFF")
-    private val TEXT_SECONDARY = android.graphics.Color.parseColor("#AAAAAA")
-    private val DIVIDER_COLOR = android.graphics.Color.parseColor("#333333")
+    private val BG_COLOR = "#1A1A1A".toColorInt()
+    private val PRIMARY_COLOR = "#FF5722".toColorInt()
+    private val TEXT_PRIMARY = "#FFFFFF".toColorInt()
+    private val TEXT_SECONDARY = "#AAAAAA".toColorInt()
+    private val DIVIDER_COLOR = "#333333".toColorInt()
 
     fun share(context: Context, training: Training) {
         val bitmap = createBitmap(training)
@@ -199,9 +200,9 @@ object TrainingShareService {
 
         // Start dot (green) and end dot (red)
         paint.style = Paint.Style.FILL
-        paint.color = android.graphics.Color.parseColor("#4CAF50")
+        paint.color = "#4CAF50".toColorInt()
         canvas.drawCircle(toX(points.first().longitude), toY(points.first().latitude), 12f, paint)
-        paint.color = android.graphics.Color.parseColor("#F44336")
+        paint.color = "#F44336".toColorInt()
         canvas.drawCircle(toX(points.last().longitude), toY(points.last().latitude), 12f, paint)
 
         paint.style = Paint.Style.FILL

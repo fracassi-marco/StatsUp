@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -94,7 +95,11 @@ fun AllRoutesMapScreen(
                         )
                     ) {
                         Text(
-                            text = stringResource(R.string.all_routes_displayed, trainings.size),
+                            text = pluralStringResource(
+                                R.plurals.all_routes_displayed,
+                                trainings.size,
+                                trainings.size
+                            ),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )

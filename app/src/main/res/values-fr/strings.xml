@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">StatsUp</string>
 
     <string name="splits_section_title">Par km</string>
@@ -56,8 +56,16 @@
     <string name="fitness_score_factor_weight_trend_desc">Compare votre tendance de poids récente à votre objectif, ou récompense la stabilité si vous n\'avez pas d\'objectif actif.</string>
     <string name="cd_fitness_score_factor_info">Plus d\'informations sur ce facteur</string>
     <string name="streak_days">Série</string>
-    <string name="streak_current_days">%1$d jours</string>
-    <string name="streak_best">Meilleur : %1$d jours</string>
+    <plurals name="streak_current_days">
+        <item quantity="one">%1$d jour</item>
+        <item quantity="many">%1$d jours</item>
+        <item quantity="other">%1$d jours</item>
+    </plurals>
+    <plurals name="streak_best">
+        <item quantity="one">Meilleur : %1$d jour</item>
+        <item quantity="many">Meilleur : %1$d jours</item>
+        <item quantity="other">Meilleur : %1$d jours</item>
+    </plurals>
     <string name="level_card_label">Nv. %1$d · %2$s</string>
     <string name="level_card_total_xp">%1$d XP</string>
     <string name="level_card_xp_to_next">%1$d XP pour le niveau suivant</string>
@@ -239,8 +247,16 @@
     <string name="badge_monthly_diamond_desc">Distance mensuelle ≥ 200 km</string>
     <string name="badge_monthly_goal_dist_name">Objectif %1$d km</string>
     <string name="badge_monthly_goal_dist_desc">Vous avez atteint votre objectif mensuel de distance de %1$d km</string>
-    <string name="badge_monthly_goal_freq_name">Objectif %1$d activités</string>
-    <string name="badge_monthly_goal_freq_desc">Vous avez atteint votre objectif mensuel de %1$d activités</string>
+    <plurals name="badge_monthly_goal_freq_name">
+        <item quantity="one">Objectif %1$d activité</item>
+        <item quantity="many">Objectif %1$d activités</item>
+        <item quantity="other">Objectif %1$d activités</item>
+    </plurals>
+    <plurals name="badge_monthly_goal_freq_desc">
+        <item quantity="one">Vous avez atteint votre objectif mensuel de %1$d activité</item>
+        <item quantity="many">Vous avez atteint votre objectif mensuel de %1$d activités</item>
+        <item quantity="other">Vous avez atteint votre objectif mensuel de %1$d activités</item>
+    </plurals>
     <string name="badge_monthly_streak_week_name">Semaine parfaite</string>
     <string name="badge_monthly_streak_week_desc">7 activités en 7 jours consécutifs ce mois</string>
     <string name="badge_monthly_elevation_2k_name">Alpiniste</string>
@@ -319,7 +335,11 @@
     <string name="weight_no_entries">Aucune mesure pour l\'instant</string>
     <string name="weight_personal_best_label">min</string>
     <string name="weight_max_label">max</string>
-    <string name="weight_measurements_count">%d mesures au total</string>
+    <plurals name="weight_measurements_count">
+        <item quantity="one">%d mesure au total</item>
+        <item quantity="many">%d mesures au total</item>
+        <item quantity="other">%d mesures au total</item>
+    </plurals>
     <string name="weight_bmi">IMC</string>
     <string name="weight_bmi_value">IMC : %s</string>
     <string name="weight_bmi_underweight">Insuffisance pondérale</string>
@@ -340,7 +360,11 @@
     <string name="weight_target_detail_formula">Progrès = (maximum − actuel) ÷ (maximum − objectif) × 100</string>
     <string name="weight_target_expand_hint">Comment c\'est calculé</string>
     <string name="weight_gamification_title">Progrès</string>
-    <string name="weight_streak_weeks">%d semaines</string>
+    <plurals name="weight_streak_weeks">
+        <item quantity="one">%d semaine</item>
+        <item quantity="many">%d semaines</item>
+        <item quantity="other">%d semaines</item>
+    </plurals>
     <string name="weight_streak_label">semaines consécutives</string>
     <string name="badge_weight_first_name">Premier pas</string>
     <string name="badge_weight_first_desc">Vous avez enregistré votre première mesure de poids</string>
@@ -390,7 +414,11 @@
     <string name="weight_unit_kg">kg</string>
     <string name="weight_bmi_display">%1$.1f — %2$s</string>
     <string name="weight_ideal_range_label">Poids sain (IMC 18,5–24,9)</string>
-    <string name="weight_import_success">%1$d mesures importées</string>
+    <plurals name="weight_import_success">
+        <item quantity="one">%1$d mesure importée</item>
+        <item quantity="many">%1$d mesures importées</item>
+        <item quantity="other">%1$d mesures importées</item>
+    </plurals>
     <string name="weight_import_error">Erreur lors de l\'import</string>
     <string name="settings_personal_data">Données personnelles</string>
     <string name="settings_weight_height">Taille</string>
@@ -411,10 +439,14 @@
     <string name="export_tcx">Exporter TCX</string>
 
     <!-- Map / routes -->
-    <string name="all_routes_displayed">%1$d itinéraires affichés</string>
+    <plurals name="all_routes_displayed">
+        <item quantity="one">%1$d itinéraire affiché</item>
+        <item quantity="many">%1$d itinéraires affichés</item>
+        <item quantity="other">%1$d itinéraires affichés</item>
+    </plurals>
 
     <!-- Profile -->
-    <string name="profile_badges_count">%1$d/%2$d badges</string>
+    <string name="profile_badges_count" tools:ignore="PluralsCandidate">%1$d/%2$d badges</string>
 
     <!-- Activity heatmap -->
     <string name="heatmap_recent">Récent</string>
@@ -450,11 +482,15 @@
     <string name="import_notification_channel_name">Importation</string>
     <string name="import_notification_title">Importation des activités…</string>
     <string name="import_notification_text">Téléchargement de vos activités en arrière-plan</string>
-    <string name="import_notification_progress">%1$d / %2$d activités</string>
+    <string name="import_notification_progress" tools:ignore="PluralsCandidate">%1$d / %2$d activités</string>
 
     <string name="reminder_notification_channel_name">Rappels</string>
     <string name="reminder_inactivity_title">C’est le moment de bouger ! 🏃</string>
-    <string name="reminder_inactivity_text">Vous ne vous êtes pas entraîné depuis %1$d jours — reprenez dès aujourd’hui.</string>
+    <plurals name="reminder_inactivity_text">
+        <item quantity="one">Vous ne vous êtes pas entraîné depuis %1$d jour — reprenez dès aujourd’hui.</item>
+        <item quantity="many">Vous ne vous êtes pas entraîné depuis %1$d jours — reprenez dès aujourd’hui.</item>
+        <item quantity="other">Vous ne vous êtes pas entraîné depuis %1$d jours — reprenez dès aujourd’hui.</item>
+    </plurals>
     <string name="reminder_streak_risk_title">Ne cassez pas votre série ! 🔥</string>
     <string name="reminder_streak_risk_text">Votre série de %1$d jours est toujours en cours — entraînez-vous aujourd’hui pour la continuer.</string>
     <string name="reminder_distance_goal_risk_title">Objectif mensuel de distance en danger</string>
@@ -465,7 +501,11 @@
     <string name="reminder_distance_goal_near_text">Vous êtes à %1$d%% de votre objectif mensuel de distance — encore un effort !</string>
     <string name="reminder_training_goal_near_text">Vous êtes à %1$d%% de votre objectif mensuel d’entraînements — encore un effort !</string>
     <string name="reminder_weight_title">Suivi du poids</string>
-    <string name="reminder_weight_text">Vous n’avez pas enregistré votre poids depuis %1$d jours.</string>
+    <plurals name="reminder_weight_text">
+        <item quantity="one">Vous n’avez pas enregistré votre poids depuis %1$d jour.</item>
+        <item quantity="many">Vous n’avez pas enregistré votre poids depuis %1$d jours.</item>
+        <item quantity="other">Vous n’avez pas enregistré votre poids depuis %1$d jours.</item>
+    </plurals>
 
     <string name="crash_title">Erreur inattendue</string>
     <string name="crash_subtitle">L\'application a planté. Merci de signaler cette erreur au développeur.</string>

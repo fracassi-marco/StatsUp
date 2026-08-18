@@ -20,8 +20,8 @@ fun SettingsClickableComponent(
     @StringRes name: Int,
     icon: ImageVector,
     onClick: () -> Unit,
-    value: String = "",
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    value: String = ""
 ) {
     SecondaryCard(onClick = onClick, icon = icon, modifier = modifier) {
         Row(
