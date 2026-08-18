@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.10.0",
+    "date": "2026-08-18",
+    "message": "Add reminders feature"
+  },
+  {
     "version": "2.9.6",
     "date": "2026-08-14",
     "message": "Add total distance to month header in history screen"
