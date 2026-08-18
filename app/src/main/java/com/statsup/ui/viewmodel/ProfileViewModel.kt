@@ -40,10 +40,6 @@ class ProfileViewModel(
     context: Context
 ) : ViewModel() {
 
-    // Only the application context is retained here (never an Activity context),
-    // so this ViewModel cannot leak a shorter-lived Context.
-    private val context: Context = context.applicationContext
-
     var athlete: Athlete? by mutableStateOf(null)
         private set
 

@@ -18,7 +18,6 @@ import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.service.DataExportImportService
 import com.statsup.infrastructure.service.ReminderWorker
-import com.statsup.ui.viewmodel.WeightViewModel
 import kotlinx.coroutines.launch
 
 
