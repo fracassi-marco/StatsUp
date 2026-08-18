@@ -49,9 +49,9 @@ fun SettingsToggleComponent(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    SecondaryCard(onClick = { onCheckedChange(!checked) }, icon = icon) {
+    SecondaryCard(onClick = { onCheckedChange(!checked) }, icon = icon, showArrow = false) {
         Row(
-            modifier = Modifier.fillMaxWidth(0.8f),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

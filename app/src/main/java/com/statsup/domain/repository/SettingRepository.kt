@@ -25,6 +25,15 @@ interface SettingRepository {
     fun loadHeightCm(): Int
     fun saveWeightTargetKg(value: Double)
     fun loadWeightTargetKg(): Double
+    fun saveRemindersEnabled(value: Boolean)
+    fun loadRemindersEnabled(): Boolean
+    /**
+     * Marks a reminder kind ([ReminderEvent.dedupeKey]) as fired for a given period marker
+     * (e.g. an ISO date for daily reminders, a year-month for monthly goal reminders) so
+     * ReminderWorker doesn't notify about the same thing more than once per period.
+     */
+    fun saveReminderLastFired(key: String, periodMarker: String)
+    fun loadReminderLastFired(key: String): String?
     fun exportSettings(): ExportSettings
     fun importSettings(settings: ExportSettings)
     fun clearAllSettings()

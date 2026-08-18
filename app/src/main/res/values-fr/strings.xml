@@ -78,6 +78,7 @@
     <string name="settings_screen_set_goal">Définir comme mon objectif</string>
 
     <string name="settings_screen_app">Application</string>
+    <string name="settings_reminders_enabled">Rappels</string>
     <string name="settings_screen_theme">Thème</string>
     <string name="settings_screen_set_theme">Définir le thème</string>
     <string name="settings_screen_language">Langue</string>
@@ -450,6 +451,21 @@
     <string name="import_notification_title">Importation des activités…</string>
     <string name="import_notification_text">Téléchargement de vos activités en arrière-plan</string>
     <string name="import_notification_progress">%1$d / %2$d activités</string>
+
+    <string name="reminder_notification_channel_name">Rappels</string>
+    <string name="reminder_inactivity_title">C’est le moment de bouger ! 🏃</string>
+    <string name="reminder_inactivity_text">Vous ne vous êtes pas entraîné depuis %1$d jours — reprenez dès aujourd’hui.</string>
+    <string name="reminder_streak_risk_title">Ne cassez pas votre série ! 🔥</string>
+    <string name="reminder_streak_risk_text">Votre série de %1$d jours est toujours en cours — entraînez-vous aujourd’hui pour la continuer.</string>
+    <string name="reminder_distance_goal_risk_title">Objectif mensuel de distance en danger</string>
+    <string name="reminder_distance_goal_risk_text">Vous n’êtes qu’à %1$d%% de votre objectif mensuel de distance — il est temps de rattraper le retard.</string>
+    <string name="reminder_training_goal_risk_title">Objectif mensuel d’entraînements en danger</string>
+    <string name="reminder_training_goal_risk_text">Vous n’êtes qu’à %1$d%% de votre objectif mensuel d’entraînements — il est temps de rattraper le retard.</string>
+    <string name="reminder_goal_near_title">Presque au bout ! 🎯</string>
+    <string name="reminder_distance_goal_near_text">Vous êtes à %1$d%% de votre objectif mensuel de distance — encore un effort !</string>
+    <string name="reminder_training_goal_near_text">Vous êtes à %1$d%% de votre objectif mensuel d’entraînements — encore un effort !</string>
+    <string name="reminder_weight_title">Suivi du poids</string>
+    <string name="reminder_weight_text">Vous n’avez pas enregistré votre poids depuis %1$d jours.</string>
 
     <string name="crash_title">Erreur inattendue</string>
     <string name="crash_subtitle">L\'application a planté. Merci de signaler cette erreur au développeur.</string>

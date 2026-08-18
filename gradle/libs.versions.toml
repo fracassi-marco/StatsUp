@@ -26,6 +26,7 @@ playServicesMaps = "20.0.0"
 roomRuntime = "2.8.4"
 roomCompiler = "2.8.4"
 roomKtx = "2.8.4"
+workRuntimeKtx = "2.11.2"
 topinambur = "1.14.1"
 leakcanary = "2.14"
 lottie = "6.7.1"
@@ -38,6 +39,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 appauth = { module = "net.openid:appauth", version.ref = "appauth" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonModuleKotlin" }

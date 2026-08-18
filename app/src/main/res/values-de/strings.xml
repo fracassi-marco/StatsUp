@@ -78,6 +78,7 @@
     <string name="settings_screen_set_goal">Als mein Ziel festlegen</string>
 
     <string name="settings_screen_app">App</string>
+    <string name="settings_reminders_enabled">Erinnerungen</string>
     <string name="settings_screen_theme">Design</string>
     <string name="settings_screen_set_theme">Design festlegen</string>
     <string name="settings_screen_language">Sprache</string>
@@ -450,6 +451,21 @@
     <string name="import_notification_title">Aktivitäten werden importiert…</string>
     <string name="import_notification_text">Deine Aktivitäten werden im Hintergrund heruntergeladen</string>
     <string name="import_notification_progress">%1$d / %2$d Aktivitäten</string>
+
+    <string name="reminder_notification_channel_name">Erinnerungen</string>
+    <string name="reminder_inactivity_title">Zeit, aktiv zu werden! 🏃</string>
+    <string name="reminder_inactivity_text">Du hast seit %1$d Tagen nicht trainiert — leg heute wieder los.</string>
+    <string name="reminder_streak_risk_title">Brich deine Serie nicht ab! 🔥</string>
+    <string name="reminder_streak_risk_text">Deine %1$d-Tage-Serie läuft noch — trainiere heute, um sie fortzusetzen.</string>
+    <string name="reminder_distance_goal_risk_title">Monatliches Distanzziel in Gefahr</string>
+    <string name="reminder_distance_goal_risk_text">Du bist erst bei %1$d%% deines monatlichen Distanzziels — Zeit aufzuholen.</string>
+    <string name="reminder_training_goal_risk_title">Monatliches Trainingsziel in Gefahr</string>
+    <string name="reminder_training_goal_risk_text">Du bist erst bei %1$d%% deines monatlichen Trainingsziels — Zeit aufzuholen.</string>
+    <string name="reminder_goal_near_title">Fast geschafft! 🎯</string>
+    <string name="reminder_distance_goal_near_text">Du bist bei %1$d%% deines monatlichen Distanzziels — noch ein letzter Schub!</string>
+    <string name="reminder_training_goal_near_text">Du bist bei %1$d%% deines monatlichen Trainingsziels — noch ein letzter Schub!</string>
+    <string name="reminder_weight_title">Gewichtscheck</string>
+    <string name="reminder_weight_text">Du hast seit %1$d Tagen dein Gewicht nicht erfasst.</string>
 
     <string name="crash_title">Unerwarteter Fehler</string>
     <string name="crash_subtitle">Die App ist abgestürzt. Bitte melde diesen Fehler dem Entwickler.</string>

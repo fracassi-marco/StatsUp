@@ -94,12 +94,29 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         return sharedPreferences().getFloat("settings.weightTargetKg", 0f).toDouble()
     }
 
+    override fun saveRemindersEnabled(value: Boolean) {
+        sharedPreferences().edit { putBoolean("settings.remindersEnabled", value) }
+    }
+
+    override fun loadRemindersEnabled(): Boolean {
+        return sharedPreferences().getBoolean("settings.remindersEnabled", true)
+    }
+
+    override fun saveReminderLastFired(key: String, periodMarker: String) {
+        sharedPreferences().edit { putString("reminder.lastFired.$key", periodMarker) }
+    }
+
+    override fun loadReminderLastFired(key: String): String? {
+        return sharedPreferences().getString("reminder.lastFired.$key", null)
+    }
+
     override fun exportSettings(): ExportSettings {
         return ExportSettings(
             theme = loadTheme(),
             monthlyGoal = loadMonthlyGoal(),
             monthlyTrainingGoal = loadMonthlyTrainingGoal(),
-            autoTargets = loadAutoTargets()
+            autoTargets = loadAutoTargets(),
+            remindersEnabled = loadRemindersEnabled()
         )
     }
 
@@ -108,6 +125,7 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         saveMonthlyGoal(settings.monthlyGoal)
         saveMonthlyTrainingGoal(settings.monthlyTrainingGoal)
         saveAutoTargets(settings.autoTargets)
+        saveRemindersEnabled(settings.remindersEnabled)
     }
 
     override fun clearAllSettings() {

@@ -142,6 +142,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    // WorkManager (background reminders)
+    implementation(libs.androidx.work.runtime.ktx)
     // Maps
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)

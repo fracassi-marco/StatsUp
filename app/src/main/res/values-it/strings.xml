@@ -78,6 +78,7 @@
     <string name="settings_screen_set_goal">Imposta come mio obiettivo</string>
 
     <string name="settings_screen_app">App</string>
+    <string name="settings_reminders_enabled">Promemoria</string>
     <string name="settings_screen_theme">Tema</string>
     <string name="settings_screen_set_theme">Imposta tema</string>
     <string name="settings_screen_language">Lingua</string>
@@ -450,6 +451,21 @@
     <string name="import_notification_title">Importazione attività…</string>
     <string name="import_notification_text">Download delle attività in corso in background</string>
     <string name="import_notification_progress">%1$d / %2$d attività</string>
+
+    <string name="reminder_notification_channel_name">Promemoria</string>
+    <string name="reminder_inactivity_title">È ora di muoversi! 🏃</string>
+    <string name="reminder_inactivity_text">Non ti alleni da %1$d giorni: rimettiti in moto oggi.</string>
+    <string name="reminder_streak_risk_title">Non interrompere la tua serie! 🔥</string>
+    <string name="reminder_streak_risk_text">La tua serie di %1$d giorni è ancora viva: allenati oggi per continuarla.</string>
+    <string name="reminder_distance_goal_risk_title">Obiettivo mensile di distanza a rischio</string>
+    <string name="reminder_distance_goal_risk_text">Sei solo al %1$d%% del tuo obiettivo mensile di distanza: è ora di recuperare.</string>
+    <string name="reminder_training_goal_risk_title">Obiettivo mensile di allenamenti a rischio</string>
+    <string name="reminder_training_goal_risk_text">Sei solo al %1$d%% del tuo obiettivo mensile di allenamenti: è ora di recuperare.</string>
+    <string name="reminder_goal_near_title">Ci sei quasi! 🎯</string>
+    <string name="reminder_distance_goal_near_text">Sei al %1$d%% del tuo obiettivo mensile di distanza: un ultimo sforzo!</string>
+    <string name="reminder_training_goal_near_text">Sei al %1$d%% del tuo obiettivo mensile di allenamenti: un ultimo sforzo!</string>
+    <string name="reminder_weight_title">Controllo peso</string>
+    <string name="reminder_weight_text">Non registri il tuo peso da %1$d giorni.</string>
 
     <string name="crash_title">Errore inatteso</string>
     <string name="crash_subtitle">L\'app è andata in crash. Segnala questo errore allo sviluppatore.</string>

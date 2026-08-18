@@ -16,6 +16,7 @@ import com.statsup.domain.Trainings
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.service.DataExportImportService
+import com.statsup.infrastructure.service.ReminderWorker
 import com.statsup.ui.viewmodel.WeightViewModel
 import kotlinx.coroutines.launch
 
@@ -44,6 +45,8 @@ class SettingsViewModel(
     var showThemeSheet by mutableStateOf(false)
         private set
     var autoTargets by mutableStateOf(settingRepository.loadAutoTargets())
+        private set
+    var remindersEnabled by mutableStateOf(settingRepository.loadRemindersEnabled())
         private set
     var language by mutableIntStateOf(loadCurrentLanguageIndex())
         private set
@@ -182,6 +185,12 @@ class SettingsViewModel(
         settingRepository.saveAutoTargets(autoTargets)
     }
 
+    fun toggleRemindersEnabled() {
+        remindersEnabled = !remindersEnabled
+        settingRepository.saveRemindersEnabled(remindersEnabled)
+        if (remindersEnabled) ReminderWorker.schedule(context) else ReminderWorker.cancel(context)
+    }
+
     fun saveMonthlyGoal() {
         settingRepository.saveMonthlyGoal(monthlyGoal)
         hideMonthlyGoalSheet()
@@ -245,6 +254,8 @@ class SettingsViewModel(
                     monthlyTrainingGoal = settingRepository.loadMonthlyTrainingGoal()
                     theme = settingRepository.loadTheme()
                     autoTargets = settingRepository.loadAutoTargets()
+                    remindersEnabled = settingRepository.loadRemindersEnabled()
+                    if (remindersEnabled) ReminderWorker.schedule(context) else ReminderWorker.cancel(context)
                     importSuccessful = true
                 } else {
                     exportImportMessage = "Import failed: ${result.exceptionOrNull()?.message}"

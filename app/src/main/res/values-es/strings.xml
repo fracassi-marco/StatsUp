@@ -78,6 +78,7 @@
     <string name="settings_screen_set_goal">Establecer como mi objetivo</string>
 
     <string name="settings_screen_app">Aplicación</string>
+    <string name="settings_reminders_enabled">Recordatorios</string>
     <string name="settings_screen_theme">Tema</string>
     <string name="settings_screen_set_theme">Establecer tema</string>
     <string name="settings_screen_language">Idioma</string>
@@ -450,6 +451,21 @@
     <string name="import_notification_title">Importando actividades…</string>
     <string name="import_notification_text">Descargando tus actividades en segundo plano</string>
     <string name="import_notification_progress">%1$d / %2$d actividades</string>
+
+    <string name="reminder_notification_channel_name">Recordatorios</string>
+    <string name="reminder_inactivity_title">¡Hora de moverse! 🏃</string>
+    <string name="reminder_inactivity_text">Llevas %1$d días sin entrenar: vuelve a la acción hoy.</string>
+    <string name="reminder_streak_risk_title">¡No rompas tu racha! 🔥</string>
+    <string name="reminder_streak_risk_text">Tu racha de %1$d días sigue viva: entrena hoy para mantenerla.</string>
+    <string name="reminder_distance_goal_risk_title">Objetivo mensual de distancia en riesgo</string>
+    <string name="reminder_distance_goal_risk_text">Solo estás al %1$d%% de tu objetivo mensual de distancia: hora de ponerte al día.</string>
+    <string name="reminder_training_goal_risk_title">Objetivo mensual de entrenamientos en riesgo</string>
+    <string name="reminder_training_goal_risk_text">Solo estás al %1$d%% de tu objetivo mensual de entrenamientos: hora de ponerte al día.</string>
+    <string name="reminder_goal_near_title">¡Ya casi! 🎯</string>
+    <string name="reminder_distance_goal_near_text">Estás al %1$d%% de tu objetivo mensual de distancia: ¡un último esfuerzo!</string>
+    <string name="reminder_training_goal_near_text">Estás al %1$d%% de tu objetivo mensual de entrenamientos: ¡un último esfuerzo!</string>
+    <string name="reminder_weight_title">Control de peso</string>
+    <string name="reminder_weight_text">Llevas %1$d días sin registrar tu peso.</string>
 
     <string name="crash_title">Error inesperado</string>
     <string name="crash_subtitle">La aplicación se ha cerrado inesperadamente. Comunica este error al desarrollador.</string>

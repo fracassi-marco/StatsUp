@@ -2,7 +2,9 @@ package com.statsup
 
 import android.app.Application
 import android.content.Intent
+import com.statsup.infrastructure.repository.SharedPreferencesSettingRepository
 import com.statsup.infrastructure.service.ImportForegroundService
+import com.statsup.infrastructure.service.ReminderWorker
 import com.statsup.ui.components.MapSnapshotCache
 import kotlin.system.exitProcess
 import androidx.core.content.edit
@@ -12,8 +14,16 @@ class StatsUpApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ImportForegroundService.createChannel(this)
+        ReminderWorker.createChannel(this)
+        scheduleRemindersIfEnabled()
         clearMapSnapshotCacheIfNeeded()
         installCrashHandler()
+    }
+
+    private fun scheduleRemindersIfEnabled() {
+        if (SharedPreferencesSettingRepository(this).loadRemindersEnabled()) {
+            ReminderWorker.schedule(this)
+        }
     }
 
     private fun clearMapSnapshotCacheIfNeeded() {

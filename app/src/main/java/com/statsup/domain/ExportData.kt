@@ -33,6 +33,9 @@ data class ExportSettings(
     val monthlyTrainingGoal: Int,
 
     @SerializedName("autoTargets")
-    val autoTargets: Boolean = false
+    val autoTargets: Boolean = false,
+
+    @SerializedName("remindersEnabled")
+    val remindersEnabled: Boolean = true
 )
 

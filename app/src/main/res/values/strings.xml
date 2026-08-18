@@ -77,6 +77,7 @@
     <string name="settings_screen_set_goal">Set as my goal</string>
 
     <string name="settings_screen_app">App</string>
+    <string name="settings_reminders_enabled">Reminders</string>
     <string name="settings_screen_theme">Theme</string>
     <string name="settings_screen_set_theme">Set theme</string>
     <string name="settings_screen_language">Language</string>
@@ -449,6 +450,21 @@
     <string name="import_notification_title">Importing activities…</string>
     <string name="import_notification_text">Downloading your activities in the background</string>
     <string name="import_notification_progress">%1$d / %2$d activities</string>
+
+    <string name="reminder_notification_channel_name">Reminders</string>
+    <string name="reminder_inactivity_title">Time to move! 🏃</string>
+    <string name="reminder_inactivity_text">You haven\'t trained in %1$d days — get back at it today.</string>
+    <string name="reminder_streak_risk_title">Don\'t break your streak! 🔥</string>
+    <string name="reminder_streak_risk_text">Your %1$d-day streak is still alive — train today to keep it going.</string>
+    <string name="reminder_distance_goal_risk_title">Monthly distance goal at risk</string>
+    <string name="reminder_distance_goal_risk_text">You\'re only at %1$d%% of your monthly distance goal — time to catch up.</string>
+    <string name="reminder_training_goal_risk_title">Monthly training goal at risk</string>
+    <string name="reminder_training_goal_risk_text">You\'re only at %1$d%% of your monthly training goal — time to catch up.</string>
+    <string name="reminder_goal_near_title">Almost there! 🎯</string>
+    <string name="reminder_distance_goal_near_text">You\'re at %1$d%% of your monthly distance goal — one more push!</string>
+    <string name="reminder_training_goal_near_text">You\'re at %1$d%% of your monthly training goal — one more push!</string>
+    <string name="reminder_weight_title">Weight check-in</string>
+    <string name="reminder_weight_text">You haven\'t logged your weight in %1$d days.</string>
 
     <string name="crash_title">Unexpected Error</string>
     <string name="crash_subtitle">The app crashed. Please report this error to the developer.</string>

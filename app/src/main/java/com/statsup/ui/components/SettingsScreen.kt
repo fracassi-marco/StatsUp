@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Style
 import androidx.compose.material.icons.outlined.Upload
@@ -152,6 +153,13 @@ fun SettingsScreen(
                 name = R.string.settings_screen_language,
                 value = viewModel.languageLabel(systemLanguageLabel),
                 onClick = { viewModel.showLanguage() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            SettingsToggleComponent(
+                icon = Icons.Outlined.Notifications,
+                name = R.string.settings_reminders_enabled,
+                checked = viewModel.remindersEnabled,
+                onCheckedChange = { viewModel.toggleRemindersEnabled() }
             )
             Title(text = stringResource(R.string.settings_data_management), marginTop = 22.dp)
             SettingsClickableComponent(

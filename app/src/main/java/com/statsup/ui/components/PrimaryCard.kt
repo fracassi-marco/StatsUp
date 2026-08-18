@@ -28,6 +28,7 @@ fun SecondaryCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     icon: ImageVector? = null,
+    showArrow: Boolean = true,
     bottom: @Composable () -> Unit = {},
     content: @Composable () -> Unit
 ) {
@@ -37,6 +38,7 @@ fun SecondaryCard(
         colors = CardDefaults.cardColors().copy(containerColor = MaterialTheme.colorScheme.background),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         icon = icon,
+        showArrow = showArrow,
         bottom = bottom,
         content = content
     )
@@ -49,6 +51,7 @@ fun PrimaryCard(
     colors: CardColors = CardDefaults.cardColors(),
     border: BorderStroke? = null,
     icon: ImageVector? = null,
+    showArrow: Boolean = true,
     bottom: @Composable () -> Unit = {},
     content: @Composable () -> Unit
 ) {
@@ -71,17 +74,20 @@ fun PrimaryCard(
                 Box(modifier = Modifier.weight(1f).padding(0.dp, 16.dp)) {
                     content()
                 }
-                if (onClick != null) {
-                    Icon(
-                        Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.primary, CircleShape)
-                            .size(24.dp)
-                    )
-                } else
-                    Spacer(Modifier.size(24.dp))
+                if (showArrow) {
+                    if (onClick != null) {
+                        Icon(
+                            Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.primary, CircleShape)
+                                .size(24.dp)
+                        )
+                    } else {
+                        Spacer(Modifier.size(24.dp))
+                    }
+                }
             }
             Row(modifier = Modifier.fillMaxWidth()) {
                 bottom()
