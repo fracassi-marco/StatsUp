@@ -136,6 +136,8 @@ dependencies {
     implementation(libs.jetchart)
     // Lottie
     implementation(libs.lottie.compose)
+    // Coil (image loading & caching)
+    implementation(libs.coil.compose)
     // Room
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)

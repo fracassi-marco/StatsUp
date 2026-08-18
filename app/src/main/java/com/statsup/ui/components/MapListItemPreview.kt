@@ -1,8 +1,6 @@
 package com.statsup.ui.components
 
-import android.graphics.Bitmap
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -17,11 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import coil3.compose.AsyncImage
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.MapView
@@ -57,21 +55,20 @@ fun MapListItemPreview(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    var cachedBitmap by remember(trainingId) { mutableStateOf<Bitmap?>(null) }
-    var diskChecked by remember(trainingId) { mutableStateOf(false) }
+    // Only a cheap disk existence check is done here: decoding the cached JPEG and
+    // keeping the resulting bitmap in memory (so it isn't re-decoded on every
+    // scroll/recomposition) is delegated to Coil via AsyncImage below.
+    var cacheFileExists by remember(trainingId) { mutableStateOf<Boolean?>(null) }
 
-    // Disk read off the main thread: avoids blocking composition for every list item.
     LaunchedEffect(trainingId) {
-        val fromDisk = withContext(Dispatchers.IO) { MapSnapshotCache.load(context, trainingId) }
-        cachedBitmap = fromDisk
-        diskChecked = true
+        cacheFileExists = withContext(Dispatchers.IO) { MapSnapshotCache.exists(context, trainingId) }
     }
 
     Box(modifier = modifier) {
         when {
-            cachedBitmap != null -> {
-                Image(
-                    bitmap = cachedBitmap!!.asImageBitmap(),
+            cacheFileExists == true -> {
+                AsyncImage(
+                    model = MapSnapshotCache.cacheFile(context, trainingId),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
@@ -79,7 +76,7 @@ fun MapListItemPreview(
                     contentScale = ContentScale.Crop
                 )
             }
-            diskChecked -> {
+            cacheFileExists == false -> {
                 Log.d("MapSnapshotCache", "Rendering MapView for training $trainingId (no cache found)")
 
                 val mapView = remember {
@@ -170,7 +167,7 @@ fun MapListItemPreview(
                                 withContext(Dispatchers.IO) {
                                     MapSnapshotCache.save(context, trainingId, bitmap)
                                 }
-                                cachedBitmap = bitmap
+                                cacheFileExists = true
                             }
                         }
                     }

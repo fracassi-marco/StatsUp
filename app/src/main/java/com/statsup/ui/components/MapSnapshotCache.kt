@@ -2,7 +2,6 @@ package com.statsup.ui.components
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import java.io.File
 import kotlinx.coroutines.sync.Semaphore
@@ -16,19 +15,21 @@ object MapSnapshotCache {
     // when multiple uncached items are visible simultaneously.
     val renderSemaphore = Semaphore(1)
 
-    private fun cacheFile(context: Context, trainingId: String): File {
+    fun cacheFile(context: Context, trainingId: String): File {
         val dir = File(context.cacheDir, DIR)
         if (!dir.exists()) dir.mkdirs()
         return File(dir, "$trainingId.jpg")
     }
 
-    fun load(context: Context, trainingId: String): Bitmap? {
+    // Only a cheap existence check: the actual decode + memory caching of the
+    // bitmap is delegated to Coil (see MapListItemPreview), which avoids
+    // re-decoding the full-resolution JPEG on every recomposition/scroll.
+    fun exists(context: Context, trainingId: String): Boolean {
         return try {
-            val file = cacheFile(context, trainingId)
-            if (file.exists()) BitmapFactory.decodeFile(file.absolutePath) else null
+            cacheFile(context, trainingId).exists()
         } catch (t: Throwable) {
-            Log.e(TAG, "Error loading snapshot for $trainingId", t)
-            null
+            Log.e(TAG, "Error checking snapshot for $trainingId", t)
+            false
         }
     }
 
