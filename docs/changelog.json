@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.11.0",
+    "date": "2026-08-19",
+    "message": "Improve data export/import"
+  },
+  {
     "version": "2.10.0",
     "date": "2026-08-18",
     "message": "Add reminders feature"
