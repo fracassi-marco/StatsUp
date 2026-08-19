@@ -243,7 +243,7 @@ class SettingsViewModel(
         showFullImportDialog = false
     }
 
-    fun confirmImport() {
+    fun confirmImport(weightViewModel: WeightViewModel) {
         importUri?.let { uri ->
             viewModelScope.launch {
                 isExportImportLoading = true
@@ -260,6 +260,11 @@ class SettingsViewModel(
                     theme = settingRepository.loadTheme()
                     autoTargets = settingRepository.loadAutoTargets()
                     remindersEnabled = settingRepository.loadRemindersEnabled()
+                    heightCm = settingRepository.loadHeightCm()
+                    val weightTargetKg = settingRepository.loadWeightTargetKg()
+                    weightTargetInt = weightTargetKg.toInt().coerceAtLeast(30)
+                    weightTargetDec = ((weightTargetKg * 10).toInt() % 10).coerceAtLeast(0)
+                    weightViewModel.reloadFromSettings()
                     if (remindersEnabled) ReminderWorker.schedule(context) else ReminderWorker.cancel(context)
                     importSuccessful = true
                 } else {

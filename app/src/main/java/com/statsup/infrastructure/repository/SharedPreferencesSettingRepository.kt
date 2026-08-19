@@ -116,7 +116,9 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
             monthlyGoal = loadMonthlyGoal(),
             monthlyTrainingGoal = loadMonthlyTrainingGoal(),
             autoTargets = loadAutoTargets(),
-            remindersEnabled = loadRemindersEnabled()
+            remindersEnabled = loadRemindersEnabled(),
+            heightCm = loadHeightCm(),
+            weightTargetKg = loadWeightTargetKg()
         )
     }
 
@@ -126,6 +128,8 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         saveMonthlyTrainingGoal(settings.monthlyTrainingGoal)
         saveAutoTargets(settings.autoTargets)
         saveRemindersEnabled(settings.remindersEnabled)
+        saveHeightCm(settings.heightCm)
+        saveWeightTargetKg(settings.weightTargetKg)
     }
 
     override fun clearAllSettings() {

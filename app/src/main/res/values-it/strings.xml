@@ -173,8 +173,8 @@
     <string name="hr_zones_no_data">Nessun dato di frequenza cardiaca questo mese</string>
 
     <string name="settings_data_management">Gestione dati</string>
-    <string name="settings_export_to_json">Esporta in JSON</string>
-    <string name="settings_import_from_json">Importa da JSON</string>
+    <string name="settings_export_to_json">Esporta su file</string>
+    <string name="settings_import_from_json">Importa da file</string>
     <string name="settings_import_confirm_title">Importa dati</string>
     <string name="settings_import_confirm_body">Questo eliminerà tutti i dati attuali e li sostituirà con quelli importati. Questa azione non può essere annullata. Sei sicuro di voler continuare?</string>
     <string name="settings_import_action">Importa</string>

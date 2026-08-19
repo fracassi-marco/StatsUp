@@ -2,79 +2,30 @@ package com.statsup.infrastructure.service
 
 import android.content.Context
 import android.net.Uri
-import com.google.gson.ExclusionStrategy
-import com.google.gson.FieldAttributes
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
 import com.statsup.domain.ExportData
-import com.statsup.domain.Route
+import com.statsup.domain.StatsUpExportFormat
 import com.statsup.domain.repository.SettingRepository
 import com.statsup.infrastructure.repository.TrainingDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
-import java.lang.reflect.Type
+import java.nio.charset.StandardCharsets
 
+/**
+ * Exports the whole local database (trainings, bookmarks, athlete, settings, weight history)
+ * to a single compact text file (see [StatsUpExportFormat]), and imports it back.
+ *
+ * Import is destructive by design: it is meant to restore a device to an exact previous state,
+ * not to merge two histories. All local data is wiped and replaced with the content of the
+ * imported file, which becomes the sole source of truth.
+ */
 class DataExportImportService(
     private val context: Context,
     private val database: TrainingDatabase,
     private val settingRepository: SettingRepository
 ) {
-    private val gson: Gson = GsonBuilder()
-        .setPrettyPrinting()
-        .registerTypeAdapter(Route::class.java, object : JsonSerializer<Route>, JsonDeserializer<Route> {
-            override fun serialize(src: Route?, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-                val obj = JsonObject()
-                src?.id?.let { obj.addProperty("id", it) }
-                src?.summaryPolyline?.let { obj.addProperty("summaryPolyline", it) }
-                src?.resourceState?.let { obj.addProperty("resourceState", it) }
-                return obj
-            }
-
-            override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Route {
-                val obj = json.asJsonObject
-                return Route(
-                    id = if (obj.has("id")) obj.get("id").asString else null,
-                    summaryPolyline = if (obj.has("summaryPolyline")) obj.get("summaryPolyline").asString else null,
-                    resourceState = if (obj.has("resourceState")) obj.get("resourceState").asInt else null
-                )
-            }
-        })
-        .setExclusionStrategies(object : ExclusionStrategy {
-            override fun shouldSkipField(f: FieldAttributes): Boolean {
-                // Skip lazy properties and Kotlin synthetic fields
-                val fieldName = f.name
-
-                // Check if it's a lazy property by checking if the type is Lazy
-                if (f.declaredType.toString().contains("Lazy")) {
-                    return true
-                }
-
-                // Skip known lazy properties
-                if (fieldName == "date" || fieldName == "trip") {
-                    return true
-                }
-
-                // Skip Kotlin synthetic fields
-                if (fieldName.startsWith("$") || fieldName.contains("$")) {
-                    return true
-                }
-
-                return false
-            }
-
-            override fun shouldSkipClass(clazz: Class<*>): Boolean {
-                return false
-            }
-        })
-        .create()
 
     suspend fun exportData(uri: Uri): Result<Unit> = withContext(Dispatchers.IO) {
         try {
@@ -82,19 +33,23 @@ class DataExportImportService(
             val bookmarks = database.bookmarkedTrainingRepository.getAllBookmarksList()
             val athlete = database.athleteRepository.load()
             val settings = settingRepository.exportSettings()
+            val weightEntries = database.weightRepository.getAllSync()
 
             val exportData = ExportData(
                 trainings = trainings,
                 bookmarkedTrainings = bookmarks,
                 athlete = athlete,
-                settings = settings
+                settings = settings,
+                weightEntries = weightEntries
             )
 
+            val text = StatsUpExportFormat.serialize(exportData)
+
             context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                OutputStreamWriter(outputStream).use { writer ->
-                    gson.toJson(exportData, writer)
+                OutputStreamWriter(outputStream, StandardCharsets.UTF_8).use { writer ->
+                    writer.write(text)
                 }
-            }
+            } ?: return@withContext Result.failure(Exception("Cannot open output file"))
 
             Result.success(Unit)
         } catch (e: Exception) {
@@ -104,43 +59,34 @@ class DataExportImportService(
 
     suspend fun importData(uri: Uri): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            val exportData = context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                InputStreamReader(inputStream).use { reader ->
-                    gson.fromJson(reader, ExportData::class.java)
-                }
-            }
+            val text = context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                BufferedReader(InputStreamReader(inputStream, StandardCharsets.UTF_8)).readText()
+            } ?: return@withContext Result.failure(Exception("Failed to read file"))
 
-            if (exportData == null) {
-                return@withContext Result.failure(Exception("Failed to read file"))
-            }
+            val exportData = StatsUpExportFormat.parse(text)
 
-            // Clear all existing data
-            database.trainingRepository.deleteAll()
+            // The imported file becomes the new source of truth: every existing record is
+            // discarded first, no merge is attempted with what's already on the device.
+            // Trainings are handled by replaceAll(), which performs delete+insert atomically
+            // in a single @Transaction: no separate deleteAll() call is needed (and doing so
+            // here would only add a non-transactional window where trainings are momentarily
+            // absent, without any benefit).
             database.bookmarkedTrainingRepository.deleteAllBookmarks()
             database.athleteRepository.deleteAthlete()
+            database.weightRepository.deleteAll()
             settingRepository.clearAllSettings()
 
-            // Import new data
-            exportData.trainings.forEach { training ->
-                // Gson uses Unsafe.allocateInstance() which bypasses the constructor, leaving
-                // lazy delegate fields (date$delegate, trip$delegate) as null. Re-create each
-                // Training through the constructor via copy() so lazy delegates are initialised.
-                val safeTraining = training.copy()
-                val withCenter = if (safeTraining.centerLat == null) {
-                    val center = safeTraining.trip?.centerPoint()
-                    if (center != null) safeTraining.copy(centerLat = center.latitude, centerLng = center.longitude)
-                    else safeTraining
-                } else safeTraining
-                database.trainingRepository.add(withCenter)
-            }
+            database.trainingRepository.replaceAll(computeCenters(exportData))
 
             exportData.bookmarkedTrainings.forEach { bookmark ->
-                database.bookmarkedTrainingRepository.addBookmark(bookmark)
+                database.bookmarkedTrainingRepository.addBookmark(bookmark.copy(id = 0))
             }
 
             exportData.athlete?.let { athlete ->
                 database.athleteRepository.update(athlete)
             }
+
+            database.weightRepository.insertAll(exportData.weightEntries.map { it.copy(id = 0) })
 
             settingRepository.importSettings(exportData.settings)
 
@@ -149,5 +95,12 @@ class DataExportImportService(
             Result.failure(e)
         }
     }
-}
 
+    private fun computeCenters(exportData: ExportData) = exportData.trainings.map { training ->
+        if (training.centerLat == null) {
+            val center = training.trip?.centerPoint()
+            if (center != null) training.copy(centerLat = center.latitude, centerLng = center.longitude)
+            else training
+        } else training
+    }
+}

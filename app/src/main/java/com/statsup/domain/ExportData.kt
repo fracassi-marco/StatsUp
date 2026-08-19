@@ -1,41 +1,25 @@
 package com.statsup.domain
 
-import com.google.gson.annotations.SerializedName
-
+/**
+ * Full snapshot of every piece of user data StatsUp stores locally, used by the
+ * compact text export/import (see [StatsUpExportFormat]). An import always replaces
+ * the whole local state with the content of this snapshot — there is no merge.
+ */
 data class ExportData(
-    @SerializedName("version")
-    val version: Int = 1,
-
-    @SerializedName("exportDate")
     val exportDate: Long = System.currentTimeMillis(),
-
-    @SerializedName("trainings")
     val trainings: List<Training>,
-
-    @SerializedName("bookmarkedTrainings")
     val bookmarkedTrainings: List<BookmarkedTraining>,
-
-    @SerializedName("athlete")
     val athlete: Athlete?,
-
-    @SerializedName("settings")
-    val settings: ExportSettings
+    val settings: ExportSettings,
+    val weightEntries: List<WeightEntry> = emptyList()
 )
 
 data class ExportSettings(
-    @SerializedName("theme")
     val theme: Int,
-
-    @SerializedName("monthlyGoal")
     val monthlyGoal: Int,
-
-    @SerializedName("monthlyTrainingGoal")
     val monthlyTrainingGoal: Int,
-
-    @SerializedName("autoTargets")
     val autoTargets: Boolean = false,
-
-    @SerializedName("remindersEnabled")
-    val remindersEnabled: Boolean = true
+    val remindersEnabled: Boolean = true,
+    val heightCm: Int = 0,
+    val weightTargetKg: Double = 0.0
 )
-

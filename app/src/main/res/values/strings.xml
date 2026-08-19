@@ -170,8 +170,8 @@
     <string name="hr_zones_no_data">No heart rate data this month</string>
 
     <string name="settings_data_management">Data Management</string>
-    <string name="settings_export_to_json">Export to JSON</string>
-    <string name="settings_import_from_json">Import from JSON</string>
+    <string name="settings_export_to_json">Export to file</string>
+    <string name="settings_import_from_json">Import from file</string>
     <string name="settings_import_confirm_title">Import Data</string>
     <string name="settings_import_confirm_body">This will delete all current data and replace it with the imported data. This action cannot be undone. Are you sure you want to continue?</string>
     <string name="settings_import_action">Import</string>

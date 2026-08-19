@@ -80,7 +80,7 @@ fun SettingsScreen(
 
     // Export launcher
     val exportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument("application/json")
+        contract = ActivityResultContracts.CreateDocument("text/plain")
     ) { uri: Uri? ->
         uri?.let { viewModel.exportData(it) }
     }
@@ -167,7 +167,7 @@ fun SettingsScreen(
                 name = R.string.settings_export_data,
                 value = stringResource(R.string.settings_export_to_json),
                 onClick = {
-                    exportLauncher.launch("statsup_export_${System.currentTimeMillis()}.json")
+                    exportLauncher.launch("statsup_export_${System.currentTimeMillis()}.txt")
                 }
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -176,7 +176,7 @@ fun SettingsScreen(
                 name = R.string.settings_import_data,
                 value = stringResource(R.string.settings_import_from_json),
                 onClick = {
-                    importLauncher.launch("application/json")
+                    importLauncher.launch("text/plain")
                 }
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -498,7 +498,7 @@ fun SettingsScreen(
                     Text(stringResource(R.string.settings_import_confirm_body))
                 },
                 confirmButton = {
-                    TextButton(onClick = { viewModel.confirmImport() }) {
+                    TextButton(onClick = { viewModel.confirmImport(weightViewModel) }) {
                         Text(stringResource(R.string.settings_import_action))
                     }
                 },

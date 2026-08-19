@@ -115,6 +115,17 @@ class WeightViewModel(
         refreshStats()
     }
 
+    /**
+     * Re-reads height/weight-target from [settingRepository] after a full data import
+     * replaced the underlying preferences (see [DataExportImportService.importData]) — the
+     * in-memory state above would otherwise keep stale pre-import values.
+     */
+    fun reloadFromSettings() {
+        heightCm = settingRepository.loadHeightCm()
+        weightTargetKg = settingRepository.loadWeightTargetKg()
+        refreshStats()
+    }
+
     private fun refreshStats() {
         viewModelScope.launch {
             val entries = withContext(Dispatchers.IO) { weightRepository.getAllSync() }
