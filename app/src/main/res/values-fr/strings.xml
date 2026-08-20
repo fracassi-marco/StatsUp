@@ -116,6 +116,8 @@
     <string name="done">Terminé</string>
     <string name="past">Passé</string>
     <string name="min_altitude">Alt. min</string>
+    <string name="peak_section">Sommet</string>
+    <string name="peak_height">Hauteur</string>
     <string name="average_pace">Allure moy.</string>
     <string name="average_speed">Vitesse moy.</string>
     <string name="pace_unit">min/km</string>

@@ -7,5 +7,6 @@ data class PersonalRecord(
     val emoji: String,
     val formattedValue: String,
     val date: ZonedDateTime,
-    val activityName: String
+    val activityName: String,
+    val trainingId: String
 )

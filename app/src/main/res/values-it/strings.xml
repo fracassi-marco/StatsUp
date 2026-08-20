@@ -116,6 +116,8 @@
     <string name="done">Fatto</string>
     <string name="past">Passato</string>
     <string name="min_altitude">Quota min</string>
+    <string name="peak_section">Cima</string>
+    <string name="peak_height">Altezza</string>
     <string name="average_pace">Ritmo medio</string>
     <string name="average_speed">Velocità media</string>
     <string name="pace_unit">min/km</string>

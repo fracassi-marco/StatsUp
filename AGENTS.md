@@ -12,7 +12,7 @@ Run these checks in order. If one fails, fix it and retry.
 ```
 bash scripts/check_translations.sh
 ```
-Compares all `<string name>` keys in `app/src/main/res/values/strings.xml` (English, default) against `values-it/`, `values-es/`, `values-fr/`. Fails if any key is missing or extra in any locale.
+Compares all `<string name>` keys in `app/src/main/res/values/strings.xml` (English, default) against `values-it/`, `values-es/`, `values-fr/`, `values-de/`. Fails if any key is missing or extra in any locale.
 
 ### 2. Compiles and builds
 ```
@@ -66,7 +66,7 @@ Report outdated dependencies as a final note to the user. Does not block task co
 
 ## Conventions
 
-- All strings must be added to **all 4 locale files** simultaneously.
+- All strings must be added to **all 5 locale files** simultaneously.
 - New dependencies go in `gradle/libs.versions.toml`, not hardcoded in `build.gradle.kts`.
 - Kotlin code style: no unused imports, no unused parameters, no unreachable code.
 - When adding a new `*UseCase.kt` in `domain/`, add a corresponding `*UseCaseTest.kt` in `app/src/test/java/com/statsup/domain/`.

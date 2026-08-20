@@ -88,11 +88,11 @@ fun RecordsSection(
                 0 -> RecordsList(
                     items = personalRecords,
                     emptyText = stringResource(R.string.profile_records_empty)
-                ) { PersonalRecordItem(it) }
+                ) { record -> PersonalRecordItem(record, onClick = { onOpenTraining(record.trainingId) }) }
                 1 -> RecordsList(
                     items = bestEfforts,
                     emptyText = stringResource(R.string.profile_records_empty)
-                ) { BestEffortItem(it) }
+                ) { effort -> BestEffortItem(effort, onClick = { onOpenTraining(effort.trainingId) }) }
                 else -> RecordsList(
                     items = topPeaks,
                     emptyText = stringResource(R.string.profile_records_peaks_empty)
@@ -134,9 +134,11 @@ private fun <T> RecordsList(
 }
 
 @Composable
-private fun PersonalRecordItem(record: PersonalRecord) {
+private fun PersonalRecordItem(record: PersonalRecord, onClick: () -> Unit) {
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
@@ -177,9 +179,11 @@ private fun PersonalRecordItem(record: PersonalRecord) {
 }
 
 @Composable
-private fun BestEffortItem(effort: BestEffort) {
+private fun BestEffortItem(effort: BestEffort, onClick: () -> Unit) {
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(

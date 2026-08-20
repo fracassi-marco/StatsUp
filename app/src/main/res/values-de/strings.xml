@@ -114,6 +114,8 @@
     <string name="done">Fertig</string>
     <string name="past">Vergangen</string>
     <string name="min_altitude">Min Höhe</string>
+    <string name="peak_section">Gipfel</string>
+    <string name="peak_height">Höhe</string>
     <string name="average_pace">Ø-Tempo</string>
     <string name="average_speed">Ø-Geschwindigkeit</string>
     <string name="pace_unit">min/km</string>

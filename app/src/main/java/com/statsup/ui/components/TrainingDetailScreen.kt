@@ -354,7 +354,8 @@ fun TrainingDetailScreen(
                         // Sezione Altimetria
                         val hasElevationData = training.totalElevationGain > 0 ||
                                 training.elevHigh > 0 ||
-                                training.elevLow > 0
+                                training.elevLow > 0 ||
+                                !training.peakName.isNullOrBlank()
 
                         if (hasElevationData) {
                             val hasPreviousSections =
@@ -432,6 +433,33 @@ fun TrainingDetailScreen(
                                              ),
                                             unit = stringResource(id = R.string.m),
                                             modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+                                }
+                            }
+
+                            val peakName = training.peakName
+                            if (!peakName.isNullOrBlank()) {
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    StatItemWithIcon(
+                                        icon = Icons.Default.Landscape,
+                                        label = stringResource(id = R.string.peak_section),
+                                        value = peakName,
+                                        unit = "",
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    val peakElevation = training.peakElevation
+                                    if (peakElevation != null && peakElevation > 0) {
+                                        StatItemWithIcon(
+                                            icon = Icons.Default.Terrain,
+                                            label = stringResource(id = R.string.peak_height),
+                                            value = String.format(locale, "%.0f", peakElevation),
+                                            unit = stringResource(id = R.string.m),
+                                            modifier = Modifier.weight(1f)
                                         )
                                     }
                                 }

@@ -116,6 +116,8 @@
     <string name="done">Listo</string>
     <string name="past">Pasado</string>
     <string name="min_altitude">Alt. mín</string>
+    <string name="peak_section">Cima</string>
+    <string name="peak_height">Altura</string>
     <string name="average_pace">Ritmo prom.</string>
     <string name="average_speed">Velocidad prom.</string>
     <string name="pace_unit">min/km</string>
