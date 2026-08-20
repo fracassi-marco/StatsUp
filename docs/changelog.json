@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.13.0",
+    "date": "2026-08-20",
+    "message": "Add uphill, downhill, and flat percentage calculations to training details"
+  },
+  {
     "version": "2.12.1",
     "date": "2026-08-20",
     "message": "Add peak details in training details page"
