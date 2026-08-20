@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.13.1",
+    "date": "2026-08-20",
+    "message": "Improve handling of flat segments"
+  },
+  {
     "version": "2.13.0",
     "date": "2026-08-20",
     "message": "Add uphill, downhill, and flat percentage calculations to training details"
