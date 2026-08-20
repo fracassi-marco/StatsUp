@@ -23,10 +23,19 @@ data class GradeBreakdown(
  * The raw stream is typically sampled once per second, so on a gradual climb the altitude delta
  * *between two consecutive raw samples* is tiny — much smaller than the GPS/barometric noise
  * itself — even though the climb is very real over a longer stretch. Comparing adjacent raw
- * samples directly against [noiseThresholdMeters] would therefore misclassify real climbs as
+ * samples directly against a fixed elevation threshold would therefore misclassify real climbs as
  * flat. To avoid that, the stream is first downsampled to at most [maxSegments] points by
  * averaging each bin (this cancels out sample-to-sample noise while preserving the actual
  * trend), and grade is computed between these averaged points instead of the raw samples.
+ *
+ * Classification is done on the *grade* (elevation delta divided by the segment's distance),
+ * not on the raw elevation delta. Using an absolute elevation threshold would systematically
+ * underestimate flat distance on longer trainings: with [maxSegments] capped at 100, a long
+ * training is cut into much longer segments, so even a gentle, essentially flat road easily
+ * accumulates more than a couple of meters of elevation noise/drift over a single (long)
+ * segment and would incorrectly be counted as sloped. Comparing the grade instead of the
+ * absolute delta scales correctly with the segment's distance regardless of how coarse the
+ * downsampling is.
  *
  * Returns null when there isn't enough data to compute a meaningful breakdown.
  */
@@ -34,7 +43,7 @@ fun computeGradeBreakdown(
     elevationPoints: List<Double>,
     totalDistanceMeters: Double,
     maxSegments: Int = 100,
-    noiseThresholdMeters: Double = 1.0
+    flatGradeThresholdPercent: Double = 1.0
 ): GradeBreakdown? {
     if (elevationPoints.size < 2 || totalDistanceMeters <= 0) return null
 
@@ -50,9 +59,10 @@ fun computeGradeBreakdown(
 
     for (i in 0 until segmentCount) {
         val delta = smoothed[i + 1] - smoothed[i]
+        val gradePercent = delta / segmentDistance * 100.0
         when {
-            delta > noiseThresholdMeters -> uphillDistance += segmentDistance
-            delta < -noiseThresholdMeters -> downhillDistance += segmentDistance
+            gradePercent > flatGradeThresholdPercent -> uphillDistance += segmentDistance
+            gradePercent < -flatGradeThresholdPercent -> downhillDistance += segmentDistance
         }
     }
 

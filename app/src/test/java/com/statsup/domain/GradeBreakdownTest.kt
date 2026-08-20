@@ -20,7 +20,8 @@ class GradeBreakdownTest {
 
     @Test
     fun `all uphill segments are reported as 100 percent uphill`() {
-        val points = listOf(100.0, 110.0, 120.0, 130.0)
+        // 20m of climb per 1000m segment is a 2% grade, clearly above the flat threshold.
+        val points = listOf(100.0, 120.0, 140.0, 160.0)
         val result = computeGradeBreakdown(points, totalDistanceMeters = 3000.0)
 
         assertEquals(100.0, result!!.uphillPercent, 0.001)
@@ -30,8 +31,9 @@ class GradeBreakdownTest {
 
     @Test
     fun `all downhill segments are reported as 100 percent downhill`() {
-        val points = listOf(130.0, 120.0, 110.0, 100.0)
+        val points = listOf(160.0, 140.0, 120.0, 100.0)
         val result = computeGradeBreakdown(points, totalDistanceMeters = 3000.0)
+
 
         assertEquals(0.0, result!!.uphillPercent, 0.001)
         assertEquals(100.0, result.downhillPercent, 0.001)
@@ -39,13 +41,26 @@ class GradeBreakdownTest {
     }
 
     @Test
-    fun `flat segments below the noise threshold are not counted as climbing or descending`() {
+    fun `flat segments below the grade threshold are not counted as climbing or descending`() {
         val points = listOf(100.0, 100.2, 99.9, 100.1)
-        val result = computeGradeBreakdown(points, totalDistanceMeters = 3000.0, noiseThresholdMeters = 0.5)
+        val result = computeGradeBreakdown(points, totalDistanceMeters = 3000.0, flatGradeThresholdPercent = 0.5)
 
         assertEquals(0.0, result!!.uphillPercent, 0.001)
         assertEquals(0.0, result.downhillPercent, 0.001)
         assertEquals(100.0, result.flatPercent, 0.001)
+    }
+
+    @Test
+    fun `a long, coarsely segmented flat training is not underestimated as sloped`() {
+        // A 50km flat training downsampled into 100 segments of 500m each. A couple of meters
+        // of elevation noise/drift over a single 500m segment is a grade well under 1%, so with
+        // an absolute-elevation threshold it used to be wrongly counted as uphill/downhill,
+        // underestimating the flat percentage. Using grade instead fixes this.
+        val noise = doubleArrayOf(0.0, 2.0, -1.5, 1.0, -2.0)
+        val points = (0..100).map { i -> 100.0 + noise[i % noise.size] }
+        val result = computeGradeBreakdown(points, totalDistanceMeters = 50_000.0)
+
+        assertEquals(100.0, result!!.flatPercent, 0.001)
     }
 
     @Test
@@ -71,8 +86,9 @@ class GradeBreakdownTest {
 
     @Test
     fun `mixed profile splits distance proportionally across the three segments`() {
-        // 4 equal segments over 4000m (1000m each): up, down, flat, up
-        val points = listOf(100.0, 110.0, 100.0, 100.0, 110.0)
+        // 4 equal segments over 4000m (1000m each): up, down, flat, up. Each sloped segment
+        // climbs/descends 20m over 1000m, a 2% grade, clearly above the flat threshold.
+        val points = listOf(100.0, 120.0, 100.0, 100.0, 120.0)
         val result = computeGradeBreakdown(points, totalDistanceMeters = 4000.0)
 
         assertEquals(50.0, result!!.uphillPercent, 0.001)
