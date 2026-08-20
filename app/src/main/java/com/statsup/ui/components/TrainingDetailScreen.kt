@@ -19,6 +19,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.DirectionsRun
+import androidx.compose.material.icons.automirrored.filled.TrendingDown
+import androidx.compose.material.icons.automirrored.filled.TrendingFlat
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Bookmark
@@ -69,6 +71,7 @@ import androidx.compose.ui.unit.sp
 import com.statsup.R
 import com.statsup.domain.Lap
 import com.statsup.domain.Measure
+import com.statsup.domain.computeGradeBreakdown
 import com.statsup.domain.SportTypeFormatter
 import com.statsup.domain.Training
 import com.statsup.domain.formatLocal
@@ -470,6 +473,39 @@ fun TrainingDetailScreen(
                                     elevationPoints = elevationPoints,
                                     totalDistanceKm = training.distanceInKilometers()
                                 )
+
+                                val gradeBreakdown = remember(elevationPoints, training.distance) {
+                                    computeGradeBreakdown(elevationPoints, training.distance)
+                                }
+                                if (gradeBreakdown != null) {
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                    ) {
+                                        StatItemWithIcon(
+                                            icon = Icons.AutoMirrored.Filled.TrendingUp,
+                                            label = stringResource(id = R.string.uphill_percent),
+                                            value = String.format(locale, "%.0f", gradeBreakdown.uphillPercent),
+                                            unit = "%",
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        StatItemWithIcon(
+                                            icon = Icons.AutoMirrored.Filled.TrendingDown,
+                                            label = stringResource(id = R.string.downhill_percent),
+                                            value = String.format(locale, "%.0f", gradeBreakdown.downhillPercent),
+                                            unit = "%",
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        StatItemWithIcon(
+                                            icon = Icons.AutoMirrored.Filled.TrendingFlat,
+                                            label = stringResource(id = R.string.flat_percent),
+                                            value = String.format(locale, "%.0f", gradeBreakdown.flatPercent),
+                                            unit = "%",
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
                             }
                         }
 

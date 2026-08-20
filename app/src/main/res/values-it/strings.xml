@@ -126,6 +126,9 @@
     <string name="view_fullscreen_map">Vedi mappa intera</string>
     <string name="elevation_per_km">Dis./km</string>
     <string name="vam">VAM</string>
+    <string name="uphill_percent">Salita</string>
+    <string name="downhill_percent">Discesa</string>
+    <string name="flat_percent">Piano</string>
 
     <string name="m_per_km">m/km</string>
     <string name="m_per_hour">m/h</string>

@@ -126,6 +126,9 @@
     <string name="view_fullscreen_map">Ver mapa completo</string>
     <string name="elevation_per_km">Desn./km</string>
     <string name="vam">VAM</string>
+    <string name="uphill_percent">Subida</string>
+    <string name="downhill_percent">Bajada</string>
+    <string name="flat_percent">Llano</string>
 
     <string name="m_per_km">m/km</string>
     <string name="m_per_hour">m/h</string>
