@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.12.1",
+    "date": "2026-08-20",
+    "message": "Add peak details in training details page"
+  },
+  {
     "version": "2.12.0",
     "date": "2026-08-20",
     "message": "Add peak details in training details page"
