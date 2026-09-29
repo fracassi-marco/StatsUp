@@ -79,23 +79,23 @@ class EvaluateLevelUseCaseTest {
     }
 
     @Test
-    fun `decays at 3 xp per day between 4 and 30 days of inactivity`() {
+    fun `decays at 5 xp per day between 4 and 30 days of inactivity`() {
         val trainings = listOf(trainingWithXp(200, today.minusDays(10).atStartOfDay()))
         val level = useCase(trainings, now = today)
-        // decay = (10 - 3) * 3 = 21
-        assertEquals(179, level.totalXp)
+        // decay = (10 - 3) * 5 = 35
+        assertEquals(165, level.totalXp)
         assertTrue(level.isDecaying)
-        assertEquals(3, level.dailyDecayRate)
+        assertEquals(5, level.dailyDecayRate)
     }
 
     @Test
-    fun `decays at 5 xp per day beyond 30 days of inactivity`() {
+    fun `decays at 10 xp per day beyond 30 days of inactivity`() {
         val trainings = listOf(trainingWithXp(300, today.minusDays(40).atStartOfDay()))
         val level = useCase(trainings, now = today)
-        // decay = 27 * 3 + (40 - 30) * 5 = 81 + 50 = 131
-        assertEquals(169, level.totalXp)
+        // decay = 27 * 5 + (40 - 30) * 10 = 135 + 100 = 235
+        assertEquals(65, level.totalXp)
         assertTrue(level.isDecaying)
-        assertEquals(5, level.dailyDecayRate)
+        assertEquals(10, level.dailyDecayRate)
     }
 
     @Test

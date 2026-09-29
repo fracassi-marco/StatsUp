@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.statsup.R
 import com.statsup.domain.Level
+import com.statsup.domain.LevelXpTrendPoint
 import com.statsup.ui.viewmodel.DashboardViewModel
 
 private data class LevelDef(
@@ -69,6 +70,7 @@ private val ALL_LEVELS = listOf(
 @Composable
 fun LevelsScreen(viewModel: DashboardViewModel, onNavigateBack: () -> Unit) {
     val level = viewModel.level()
+    val xpTrend = viewModel.levelXpTrend()
     val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
@@ -97,9 +99,28 @@ fun LevelsScreen(viewModel: DashboardViewModel, onNavigateBack: () -> Unit) {
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            if (xpTrend.size >= 2) {
+                item {
+                    LevelXpTrendCard(xpTrend)
+                }
+            }
             items(ALL_LEVELS) { def ->
                 LevelRow(def = def, currentLevel = level)
             }
+        }
+    }
+}
+
+@Composable
+private fun LevelXpTrendCard(trend: List<LevelXpTrendPoint>) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = stringResource(R.string.levels_xp_trend_title),
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            LevelXpTrendChart(points = trend)
         }
     }
 }

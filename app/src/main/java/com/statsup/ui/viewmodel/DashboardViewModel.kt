@@ -15,6 +15,8 @@ import com.statsup.domain.EvaluateBadgesUseCase
 import com.statsup.domain.EvaluateLevelUseCase
 import com.statsup.domain.GoalAchievement
 import com.statsup.domain.Level
+import com.statsup.domain.LevelXpTrendPoint
+import com.statsup.domain.LevelXpTrendUseCase
 import com.statsup.domain.Provider
 import com.statsup.domain.SuggestAutoTargetsUseCase
 import com.statsup.domain.TargetSuggestion
@@ -61,6 +63,7 @@ class DashboardViewModel(
         val recoveryTime: Double = 0.0,
         val recoveryBreakdown: List<RecoveryContribution> = emptyList(),
         val level: Level = Level(1, R.string.level_name_1, "🌱", 0, 0, 200, false, 0, 0),
+        val levelXpTrend: List<LevelXpTrendPoint> = emptyList(),
     )
 
     private var trainings: List<Training> = emptyList()
@@ -80,6 +83,7 @@ class DashboardViewModel(
     private val suggestTargets = SuggestAutoTargetsUseCase()
     private val evaluateBadges = EvaluateBadgesUseCase()
     private val evaluateLevel = EvaluateLevelUseCase()
+    private val levelXpTrend = LevelXpTrendUseCase()
 
     private val _badgesEarned = MutableSharedFlow<List<Badge>>(extraBufferCapacity = 10)
     val badgesEarned: SharedFlow<List<Badge>> = _badgesEarned.asSharedFlow()
@@ -138,6 +142,7 @@ class DashboardViewModel(
             recoveryTime = noneT.recoveryTime(),
             recoveryBreakdown = noneT.recoveryBreakdown(),
             level = evaluateLevel(newTrainings),
+            levelXpTrend = levelXpTrend(newTrainings),
         )
     }
 
@@ -283,4 +288,5 @@ class DashboardViewModel(
     }
 
     fun level(): Level = computed.level
+    fun levelXpTrend(): List<LevelXpTrendPoint> = computed.levelXpTrend
 }

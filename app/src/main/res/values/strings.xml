@@ -73,6 +73,7 @@
     <string name="level_up_close">Let\'s go!</string>
     <string name="levels_title">Levels</string>
     <string name="levels_xp_progress">%1$d / %2$d XP in current level</string>
+    <string name="levels_xp_trend_title">30-Day XP Trend</string>
     <string name="dashboard_title">Dashboard</string>
     <string name="stats_title">Statistics</string>
     <string name="history_title">History</string>

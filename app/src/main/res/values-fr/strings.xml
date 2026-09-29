@@ -76,6 +76,7 @@
     <string name="level_up_close">Allons-y !</string>
     <string name="levels_title">Niveaux</string>
     <string name="levels_xp_progress">%1$d / %2$d XP dans le niveau actuel</string>
+    <string name="levels_xp_trend_title">Évolution des XP sur 30 jours</string>
     <string name="dashboard_title">Tableau de bord</string>
     <string name="stats_title">Statistiques</string>
     <string name="history_title">Historique</string>

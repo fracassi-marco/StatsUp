@@ -53,8 +53,8 @@ class EvaluateLevelUseCase {
         val isDecaying = daysSinceLast > 3
         val dailyDecayRate = when {
             daysSinceLast <= 3  -> 0
-            daysSinceLast <= 30 -> 3
-            else                -> 5
+            daysSinceLast <= 30 -> 5
+            else                -> 10
         }
 
         return Level(
@@ -72,8 +72,8 @@ class EvaluateLevelUseCase {
 
     private fun decayXp(daysSinceLast: Int): Int = when {
         daysSinceLast <= 3  -> 0
-        daysSinceLast <= 30 -> (daysSinceLast - 3) * 3
-        else                -> (27 * 3) + (daysSinceLast - 30) * 5
+        daysSinceLast <= 30 -> (daysSinceLast - 3) * 5
+        else                -> (27 * 5) + (daysSinceLast - 30) * 10
     }
 
     private fun Training.xp(): Int =
