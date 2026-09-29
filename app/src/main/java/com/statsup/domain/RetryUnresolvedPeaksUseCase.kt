@@ -20,7 +20,7 @@ class RetryUnresolvedPeaksUseCase(
     suspend operator fun invoke(): Int {
         if (peakLookupRepository == null) return 0
         var resolvedCount = 0
-        for (training in trainingRepository.unresolvedPeakCandidates()) {
+        for (training in trainingRepository.unresolvedPeakCandidates(MIN_PEAK_ELEVATION_METERS)) {
             val elevPoints = training.elevationPointsJson?.let { decodeElevationPoints(training.id, it) }
             val retried = resolvePeak(training, elevPoints, peakLookupRepository, existing = training)
             if (retried.peakName != null) {

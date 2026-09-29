@@ -19,8 +19,10 @@ interface TrainingRepository {
     suspend fun getAllTrainings(): List<Training>
     suspend fun updateCenter(id: String, lat: Double, lng: Double)
     /**
-     * Trainings whose peak lookup never completed (`peakName == null`, see [com.statsup.domain.resolvePeak]) —
-     * candidates for a retry sweep, as opposed to `peakName == ""` which is a confirmed "no peak nearby".
+     * Trainings whose peak lookup never completed (`peakName == null`, see [com.statsup.domain.resolvePeak]) and
+     * whose `elevHigh` reaches [minElevationMeters] — candidates for a retry sweep, as opposed to `peakName == ""`
+     * which is a confirmed "no peak nearby". Filtering by elevation here keeps the sweep from re-querying peak
+     * lookup services for trainings that [com.statsup.domain.resolvePeak] would immediately skip anyway.
      */
-    suspend fun unresolvedPeakCandidates(): List<Training>
+    suspend fun unresolvedPeakCandidates(minElevationMeters: Double): List<Training>
 }

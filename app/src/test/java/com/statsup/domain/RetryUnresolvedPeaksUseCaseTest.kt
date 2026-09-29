@@ -42,12 +42,12 @@ class RetryUnresolvedPeaksUseCaseTest {
         val result = useCase()
 
         assertEquals(0, result)
-        verify(trainingRepository, never()).unresolvedPeakCandidates()
+        verify(trainingRepository, never()).unresolvedPeakCandidates(MIN_PEAK_ELEVATION_METERS)
     }
 
     @Test
     fun `returns zero when there are no unresolved candidates`() = runTest {
-        whenever(trainingRepository.unresolvedPeakCandidates()).thenReturn(emptyList())
+        whenever(trainingRepository.unresolvedPeakCandidates(MIN_PEAK_ELEVATION_METERS)).thenReturn(emptyList())
         val useCase = RetryUnresolvedPeaksUseCase(trainingRepository, peakLookupRepository)
 
         val result = useCase()
@@ -59,7 +59,7 @@ class RetryUnresolvedPeaksUseCaseTest {
     fun `resolves and persists a previously unresolved peak`() = runTest {
         val candidate = makeUnresolvedTraining(id = "1")
         val peak = Peak(name = "Monte Rosa", latLng = LatLng(45.9, 7.6), elevation = 4634.0)
-        whenever(trainingRepository.unresolvedPeakCandidates()).thenReturn(listOf(candidate))
+        whenever(trainingRepository.unresolvedPeakCandidates(MIN_PEAK_ELEVATION_METERS)).thenReturn(listOf(candidate))
         whenever(peakLookupRepository.findNearestPeak(argThat { isCloseTo(45.9, 7.6) }, eq(3500.0))).thenReturn(peak)
         val useCase = RetryUnresolvedPeaksUseCase(trainingRepository, peakLookupRepository)
 
@@ -72,7 +72,7 @@ class RetryUnresolvedPeaksUseCaseTest {
     @Test
     fun `persists the confirmed no-peak-nearby sentinel when the retry finds nothing`() = runTest {
         val candidate = makeUnresolvedTraining(id = "1")
-        whenever(trainingRepository.unresolvedPeakCandidates()).thenReturn(listOf(candidate))
+        whenever(trainingRepository.unresolvedPeakCandidates(MIN_PEAK_ELEVATION_METERS)).thenReturn(listOf(candidate))
         whenever(peakLookupRepository.findNearestPeak(any(), any())).thenReturn(null)
         val useCase = RetryUnresolvedPeaksUseCase(trainingRepository, peakLookupRepository)
 
@@ -85,7 +85,7 @@ class RetryUnresolvedPeaksUseCaseTest {
     @Test
     fun `leaves the candidate unresolved and does not write when the retry fails again`() = runTest {
         val candidate = makeUnresolvedTraining(id = "1")
-        whenever(trainingRepository.unresolvedPeakCandidates()).thenReturn(listOf(candidate))
+        whenever(trainingRepository.unresolvedPeakCandidates(MIN_PEAK_ELEVATION_METERS)).thenReturn(listOf(candidate))
         whenever(peakLookupRepository.findNearestPeak(any(), any()))
             .thenThrow(PeakLookupException("Overpass unavailable"))
         val useCase = RetryUnresolvedPeaksUseCase(trainingRepository, peakLookupRepository)
@@ -99,7 +99,7 @@ class RetryUnresolvedPeaksUseCaseTest {
     @Test
     fun `leaves the candidate unresolved when its elevation stream was never stored`() = runTest {
         val candidate = makeUnresolvedTraining(id = "1", elevationPointsJson = null)
-        whenever(trainingRepository.unresolvedPeakCandidates()).thenReturn(listOf(candidate))
+        whenever(trainingRepository.unresolvedPeakCandidates(MIN_PEAK_ELEVATION_METERS)).thenReturn(listOf(candidate))
         val useCase = RetryUnresolvedPeaksUseCase(trainingRepository, peakLookupRepository)
 
         val result = useCase()
@@ -112,7 +112,7 @@ class RetryUnresolvedPeaksUseCaseTest {
     @Test
     fun `retries every candidate returned by the repository`() = runTest {
         val candidates = listOf(makeUnresolvedTraining(id = "1"), makeUnresolvedTraining(id = "2"))
-        whenever(trainingRepository.unresolvedPeakCandidates()).thenReturn(candidates)
+        whenever(trainingRepository.unresolvedPeakCandidates(MIN_PEAK_ELEVATION_METERS)).thenReturn(candidates)
         whenever(peakLookupRepository.findNearestPeak(any(), any())).thenReturn(null)
         val useCase = RetryUnresolvedPeaksUseCase(trainingRepository, peakLookupRepository)
 
