@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.14.0",
+    "date": "2026-09-29",
+    "message": "✨Improve import performance"
+  },
+  {
     "version": "2.13.1",
     "date": "2026-08-20",
     "message": "Improve handling of flat segments"
