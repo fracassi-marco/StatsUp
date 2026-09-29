@@ -80,16 +80,22 @@ class ImportForegroundService : Service() {
                     } else {
                         UpdateTrainingsUseCase(db.trainingRepository, db.athleteRepository, api, geocoding, peakLookup)(activeToken, onProgress)
                     }
+                    // Report the requested import as done now, so the UI unblocks as soon as the
+                    // trainings the user actually asked for are in — the sweep below can take
+                    // minutes on its own (unrelated historical backlog) and must never hold up
+                    // this signal.
+                    ImportEventBus.emitSuccess(count)
+
                     // Trainings a previous run left with peakName == null (both Overpass and the
                     // GeoNames fallback failed) are never revisited by UpdateTrainingsUseCase, since it only looks at
-                    // trainings newer than the latest stored one — sweep them here instead.
+                    // trainings newer than the latest stored one — sweep them here instead, after
+                    // reporting success, since it's unrelated maintenance work.
                     try {
                         val retried = RetryUnresolvedPeaksUseCase(db.trainingRepository, peakLookup)()
                         if (retried > 0) Log.i("StatsUp", "Retried $retried previously unresolved peak(s)")
                     } catch (e: Exception) {
                         Log.w("StatsUp", "Retrying unresolved peaks failed, will try again next sync", e)
                     }
-                    ImportEventBus.emitSuccess(count)
                 }
             } catch (e: ApiException) {
                 Log.e("StatsUp", "API error during import", e)
