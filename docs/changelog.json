@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.15.0",
+    "date": "2026-09-29",
+    "message": "✨ Add Level XP trend feature with chart visualization"
+  },
+  {
     "version": "2.14.0",
     "date": "2026-09-29",
     "message": "✨Improve import performance"
