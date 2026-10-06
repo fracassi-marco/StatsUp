@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.16.1",
+    "date": "2026-10-06",
+    "message": "Extend planned weight line to target date for improved chart visibility"
+  },
+  {
     "version": "2.16.0",
     "date": "2026-10-06",
     "message": "Add weight target date and plan features with chart visualization"
