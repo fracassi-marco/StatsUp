@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import com.statsup.domain.ExportSettings
 import com.statsup.domain.repository.SettingRepository
+import java.time.LocalDate
 
 class SharedPreferencesSettingRepository(private val context: Context) : SettingRepository {
     override fun saveApiToken(token: String) {
@@ -94,6 +95,29 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         return sharedPreferences().getFloat("settings.weightTargetKg", 0f).toDouble()
     }
 
+    override fun saveWeightTargetDate(value: LocalDate?) {
+        saveEpochDay("settings.weightTargetDate", value)
+    }
+
+    override fun loadWeightTargetDate(): LocalDate? = loadEpochDay("settings.weightTargetDate")
+
+    override fun saveWeightPlanStartDate(value: LocalDate?) {
+        saveEpochDay("settings.weightPlanStartDate", value)
+    }
+
+    override fun loadWeightPlanStartDate(): LocalDate? = loadEpochDay("settings.weightPlanStartDate")
+
+    private fun saveEpochDay(key: String, value: LocalDate?) {
+        sharedPreferences().edit {
+            if (value == null) remove(key) else putLong(key, value.toEpochDay())
+        }
+    }
+
+    private fun loadEpochDay(key: String): LocalDate? {
+        val prefs = sharedPreferences()
+        return if (prefs.contains(key)) LocalDate.ofEpochDay(prefs.getLong(key, 0L)) else null
+    }
+
     override fun saveRemindersEnabled(value: Boolean) {
         sharedPreferences().edit { putBoolean("settings.remindersEnabled", value) }
     }
@@ -118,7 +142,9 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
             autoTargets = loadAutoTargets(),
             remindersEnabled = loadRemindersEnabled(),
             heightCm = loadHeightCm(),
-            weightTargetKg = loadWeightTargetKg()
+            weightTargetKg = loadWeightTargetKg(),
+            weightTargetDateEpochDay = loadWeightTargetDate()?.toEpochDay(),
+            weightPlanStartEpochDay = loadWeightPlanStartDate()?.toEpochDay()
         )
     }
 
@@ -130,6 +156,8 @@ class SharedPreferencesSettingRepository(private val context: Context) : Setting
         saveRemindersEnabled(settings.remindersEnabled)
         saveHeightCm(settings.heightCm)
         saveWeightTargetKg(settings.weightTargetKg)
+        saveWeightTargetDate(settings.weightTargetDateEpochDay?.let(LocalDate::ofEpochDay))
+        saveWeightPlanStartDate(settings.weightPlanStartEpochDay?.let(LocalDate::ofEpochDay))
     }
 
     override fun clearAllSettings() {

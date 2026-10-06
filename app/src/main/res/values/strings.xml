@@ -359,6 +359,14 @@
     <string name="weight_target_detail_lost">Lost from peak: %s</string>
     <string name="weight_target_detail_formula">Progress = (peak − current) ÷ (peak − target) × 100</string>
     <string name="weight_target_expand_hint">How it is calculated</string>
+    <string name="weight_plan_title">Target plan · last 30 days</string>
+    <string name="weight_plan_subtitle">Goal: %1$s by %2$s</string>
+    <string name="weight_plan_legend_plan">Plan</string>
+    <string name="weight_plan_legend_actual">Actual</string>
+    <string name="weight_plan_on_track">Today the plan expects %1$s: you are on track</string>
+    <string name="weight_plan_ahead">Today the plan expects %1$s: you are %2$s ahead</string>
+    <string name="weight_plan_behind">Today the plan expects %1$s: you are %2$s behind</string>
+    <string name="weight_plan_required_rate">Required pace: %s/week</string>
     <string name="weight_gamification_title">Progress</string>
     <plurals name="weight_streak_weeks">
         <item quantity="one">%d week</item>
@@ -421,6 +429,8 @@
     <string name="settings_personal_data">Personal data</string>
     <string name="settings_weight_height">Height</string>
     <string name="settings_weight_target">Weight target</string>
+    <string name="settings_weight_target_date">Weight target date</string>
+    <string name="settings_weight_target_date_remove">Remove</string>
     <string name="settings_weight_not_set">Not set</string>
 
     <!-- Content descriptions -->

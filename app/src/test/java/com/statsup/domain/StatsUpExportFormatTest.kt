@@ -134,7 +134,9 @@ class StatsUpExportFormatTest {
                 autoTargets = true,
                 remindersEnabled = false,
                 heightCm = 180,
-                weightTargetKg = 72.5
+                weightTargetKg = 72.5,
+                weightTargetDateEpochDay = 20_800L,
+                weightPlanStartEpochDay = 20_700L
             ),
             weightEntries = listOf(WeightEntry(id = 1, date = 1000L, weightKg = 73.2))
         )

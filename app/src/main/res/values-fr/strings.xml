@@ -365,6 +365,14 @@
     <string name="weight_target_detail_lost">Perdu depuis le maximum : %s</string>
     <string name="weight_target_detail_formula">Progrès = (maximum − actuel) ÷ (maximum − objectif) × 100</string>
     <string name="weight_target_expand_hint">Comment c\'est calculé</string>
+    <string name="weight_plan_title">Plan objectif · 30 derniers jours</string>
+    <string name="weight_plan_subtitle">Objectif : %1$s d\'ici le %2$s</string>
+    <string name="weight_plan_legend_plan">Plan</string>
+    <string name="weight_plan_legend_actual">Réel</string>
+    <string name="weight_plan_on_track">Aujourd\'hui le plan prévoit %1$s : vous êtes dans les temps</string>
+    <string name="weight_plan_ahead">Aujourd\'hui le plan prévoit %1$s : vous avez %2$s d\'avance</string>
+    <string name="weight_plan_behind">Aujourd\'hui le plan prévoit %1$s : vous avez %2$s de retard</string>
+    <string name="weight_plan_required_rate">Rythme nécessaire : %s/semaine</string>
     <string name="weight_gamification_title">Progrès</string>
     <plurals name="weight_streak_weeks">
         <item quantity="one">%d semaine</item>
@@ -429,6 +437,8 @@
     <string name="settings_personal_data">Données personnelles</string>
     <string name="settings_weight_height">Taille</string>
     <string name="settings_weight_target">Poids cible</string>
+    <string name="settings_weight_target_date">Date objectif de poids</string>
+    <string name="settings_weight_target_date_remove">Supprimer</string>
     <string name="settings_weight_not_set">Non défini</string>
 
     <!-- Content descriptions -->

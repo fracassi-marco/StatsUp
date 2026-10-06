@@ -19,6 +19,7 @@ import com.statsup.domain.repository.TrainingRepository
 import com.statsup.infrastructure.service.DataExportImportService
 import com.statsup.infrastructure.service.ReminderWorker
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 
 @SuppressLint("StaticFieldLeak") // Only application context is ever stored here (see below)
@@ -80,6 +81,9 @@ class SettingsViewModel(
     var weightTargetDec by mutableIntStateOf(
         ((settingRepository.loadWeightTargetKg() * 10).toInt() % 10).coerceAtLeast(0)
     )
+        private set
+
+    var showWeightTargetDatePicker by mutableStateOf(false)
         private set
 
     init {
@@ -298,6 +302,13 @@ class SettingsViewModel(
         val kg = weightTargetInt + weightTargetDec / 10.0
         weightViewModel.saveWeightTarget(kg)
         hideWeightTargetSheet()
+    }
+
+    fun showWeightTargetDatePicker() { showWeightTargetDatePicker = true }
+    fun hideWeightTargetDatePicker() { showWeightTargetDatePicker = false }
+    fun saveWeightTargetDate(weightViewModel: WeightViewModel, date: LocalDate?) {
+        weightViewModel.saveWeightTargetDate(date)
+        hideWeightTargetDatePicker()
     }
 }
 

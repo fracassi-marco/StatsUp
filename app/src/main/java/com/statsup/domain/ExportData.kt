@@ -21,5 +21,7 @@ data class ExportSettings(
     val autoTargets: Boolean = false,
     val remindersEnabled: Boolean = true,
     val heightCm: Int = 0,
-    val weightTargetKg: Double = 0.0
+    val weightTargetKg: Double = 0.0,
+    val weightTargetDateEpochDay: Long? = null,
+    val weightPlanStartEpochDay: Long? = null
 )

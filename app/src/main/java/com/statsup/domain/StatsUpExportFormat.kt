@@ -172,6 +172,8 @@ object StatsUpExportFormat {
                 .bool(data.settings.remindersEnabled)
                 .num(data.settings.heightCm)
                 .num(data.settings.weightTargetKg)
+                .num(data.settings.weightTargetDateEpochDay)
+                .num(data.settings.weightPlanStartEpochDay)
                 .build()
         ).append('\n')
 
@@ -344,7 +346,9 @@ object StatsUpExportFormat {
             autoTargets = settingsRow.boolNonNull(),
             remindersEnabled = settingsRow.boolNonNull(),
             heightCm = settingsRow.intNonNull(),
-            weightTargetKg = settingsRow.doubleNonNull()
+            weightTargetKg = settingsRow.doubleNonNull(),
+            weightTargetDateEpochDay = settingsRow.long(),
+            weightPlanStartEpochDay = settingsRow.long()
         )
 
         val athleteCount = expectSection("#ATHLETE")

@@ -11,6 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.statsup.domain.WeightEntry
+import com.statsup.domain.WeightPlan
+import com.statsup.domain.WeightPlanUseCase
 import com.statsup.domain.WeightStats
 import com.statsup.domain.WeightStatsUseCase
 import com.statsup.domain.repository.SettingRepository
@@ -20,6 +22,7 @@ import com.statsup.infrastructure.service.WeightImportService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 @SuppressLint("StaticFieldLeak") // Only application context is ever stored here (see below)
 class WeightViewModel(
@@ -44,6 +47,12 @@ class WeightViewModel(
     var weightTargetKg by mutableDoubleStateOf(settingRepository.loadWeightTargetKg())
         private set
 
+    var weightTargetDate by mutableStateOf(settingRepository.loadWeightTargetDate())
+        private set
+
+    var plan by mutableStateOf<WeightPlan?>(null)
+        private set
+
     var isLoading by mutableStateOf(true)
         private set
 
@@ -54,14 +63,13 @@ class WeightViewModel(
         private set
 
     private val useCase = WeightStatsUseCase()
+    private val planUseCase = WeightPlanUseCase()
 
     init {
         viewModelScope.launch {
             weightRepository.all().collect { entries ->
                 this@WeightViewModel.entries = entries
-                stats = withContext(Dispatchers.Default) {
-                    useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg)
-                }
+                computeStats(entries)
                 isLoading = false
             }
         }
@@ -112,7 +120,20 @@ class WeightViewModel(
     fun saveWeightTarget(kg: Double) {
         weightTargetKg = kg
         settingRepository.saveWeightTargetKg(kg)
+        restartPlan()
         refreshStats()
+    }
+
+    fun saveWeightTargetDate(date: LocalDate?) {
+        weightTargetDate = date
+        settingRepository.saveWeightTargetDate(date)
+        restartPlan()
+        refreshStats()
+    }
+
+    /** A new target (weight or date) starts a new plan line from today's weight. */
+    private fun restartPlan() {
+        settingRepository.saveWeightPlanStartDate(LocalDate.now())
     }
 
     /**
@@ -123,15 +144,23 @@ class WeightViewModel(
     fun reloadFromSettings() {
         heightCm = settingRepository.loadHeightCm()
         weightTargetKg = settingRepository.loadWeightTargetKg()
+        weightTargetDate = settingRepository.loadWeightTargetDate()
         refreshStats()
     }
 
     private fun refreshStats() {
         viewModelScope.launch {
-            val entries = withContext(Dispatchers.IO) { weightRepository.getAllSync() }
-            stats = withContext(Dispatchers.Default) {
-                useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg)
-            }
+            computeStats(withContext(Dispatchers.IO) { weightRepository.getAllSync() })
         }
+    }
+
+    private suspend fun computeStats(entries: List<WeightEntry>) {
+        val planStart = settingRepository.loadWeightPlanStartDate()
+        val (newStats, newPlan) = withContext(Dispatchers.Default) {
+            useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg) to
+                planUseCase(entries, weightTargetKg, weightTargetDate, planStart)
+        }
+        stats = newStats
+        plan = newPlan
     }
 }

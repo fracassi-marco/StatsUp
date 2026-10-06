@@ -1,6 +1,7 @@
 package com.statsup.domain.repository
 
 import com.statsup.domain.ExportSettings
+import java.time.LocalDate
 
 interface SettingRepository {
     fun saveApiToken(token: String)
@@ -25,6 +26,11 @@ interface SettingRepository {
     fun loadHeightCm(): Int
     fun saveWeightTargetKg(value: Double)
     fun loadWeightTargetKg(): Double
+    fun saveWeightTargetDate(value: LocalDate?)
+    fun loadWeightTargetDate(): LocalDate?
+    /** Day the current weight plan (target weight + date) was set; the plan line starts here. */
+    fun saveWeightPlanStartDate(value: LocalDate?)
+    fun loadWeightPlanStartDate(): LocalDate?
     fun saveRemindersEnabled(value: Boolean)
     fun loadRemindersEnabled(): Boolean
     /**

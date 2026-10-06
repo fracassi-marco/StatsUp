@@ -66,6 +66,7 @@ import com.chargemap.compose.numberpicker.NumberPicker
 import com.statsup.R
 import com.statsup.domain.BmiCategory
 import com.statsup.domain.WeightEntry
+import com.statsup.domain.WeightPlan
 import com.statsup.domain.WeightStats
 import com.statsup.ui.viewmodel.WeightViewModel
 import kotlinx.coroutines.launch
@@ -73,6 +74,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import kotlin.math.abs
 
 @Composable
 fun WeightScreen(
@@ -157,6 +159,8 @@ fun WeightScreen(
             if (viewModel.weightTargetKg > 0 && stats.latestWeight != null) {
                 WeightTargetCard(stats, viewModel.weightTargetKg)
             }
+
+            viewModel.plan?.let { WeightPlanCard(it) }
 
             if (stats.totalMeasurements > 0) {
                 WeightGamificationCard(stats)
@@ -504,6 +508,63 @@ private fun WeightTargetCard(stats: WeightStats, targetKg: Double) {
         }
     }
 }
+
+@Composable
+private fun WeightPlanCard(plan: WeightPlan) {
+    val kgUnit = stringResource(R.string.weight_unit_kg)
+    val dateFmt = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+    val planColor = MaterialTheme.colorScheme.tertiary
+    val actualColor = MaterialTheme.colorScheme.primary
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = stringResource(R.string.weight_plan_title),
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold)
+            )
+            Text(
+                text = stringResource(
+                    R.string.weight_plan_subtitle,
+                    "%.1f $kgUnit".format(plan.targetKg),
+                    plan.targetDate.format(dateFmt)
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            WeightPlanChart(plan)
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                WeightPlanLegendItem(planColor, stringResource(R.string.weight_plan_legend_plan), dashed = true)
+                WeightPlanLegendItem(actualColor, stringResource(R.string.weight_plan_legend_actual), dashed = false)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            val planned = "%.1f $kgUnit".format(plan.plannedToday)
+            val gap = "%.1f $kgUnit".format(abs(plan.deltaFromPlan))
+            val ahead = if (plan.isLossGoal) plan.deltaFromPlan < 0 else plan.deltaFromPlan > 0
+            val (statusText, statusColor) = when {
+                abs(plan.deltaFromPlan) < PLAN_ON_TRACK_TOLERANCE_KG ->
+                    stringResource(R.string.weight_plan_on_track, planned) to MaterialTheme.colorScheme.primary
+                ahead -> stringResource(R.string.weight_plan_ahead, planned, gap) to MaterialTheme.colorScheme.primary
+                else -> stringResource(R.string.weight_plan_behind, planned, gap) to MaterialTheme.colorScheme.error
+            }
+            Text(
+                text = statusText,
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                color = statusColor
+            )
+            plan.requiredWeeklyRate?.let { rate ->
+                val sign = if (rate >= 0) "+" else ""
+                Text(
+                    text = stringResource(R.string.weight_plan_required_rate, "$sign%.2f $kgUnit".format(rate)),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
+            }
+        }
+    }
+}
+
+private const val PLAN_ON_TRACK_TOLERANCE_KG = 0.2
 
 @Composable
 private fun WeightTargetDetailRow(label: String, value: String) {

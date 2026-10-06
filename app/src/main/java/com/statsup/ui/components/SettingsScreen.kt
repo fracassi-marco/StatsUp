@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.EmojiEvents
+import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Refresh
@@ -24,12 +25,16 @@ import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +52,11 @@ import com.statsup.R
 import com.statsup.ui.viewmodel.SettingsViewModel
 import com.statsup.ui.viewmodel.WeightViewModel
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,6 +124,15 @@ fun SettingsScreen(
                 value = if (weightViewModel.weightTargetKg > 0) "%.1f kg".format(weightViewModel.weightTargetKg)
                         else stringResource(R.string.settings_weight_not_set),
                 onClick = { viewModel.showWeightTargetSheet() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            SettingsClickableComponent(
+                icon = Icons.Outlined.Event,
+                name = R.string.settings_weight_target_date,
+                value = weightViewModel.weightTargetDate
+                    ?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                    ?: stringResource(R.string.settings_weight_not_set),
+                onClick = { viewModel.showWeightTargetDatePicker() }
             )
             Spacer(modifier = Modifier.height(8.dp))
             SettingsToggleComponent(
@@ -467,6 +486,14 @@ fun SettingsScreen(
             }
         }
 
+        if (viewModel.showWeightTargetDatePicker) {
+            WeightTargetDatePickerDialog(
+                initialDate = weightViewModel.weightTargetDate,
+                onDismiss = { viewModel.hideWeightTargetDatePicker() },
+                onSave = { date -> viewModel.saveWeightTargetDate(weightViewModel, date) }
+            )
+        }
+
         // Full import from Strava confirmation dialog
         if (viewModel.showFullImportDialog) {
             AlertDialog(
@@ -509,4 +536,53 @@ fun SettingsScreen(
                 }
             )
         }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun WeightTargetDatePickerDialog(
+    initialDate: LocalDate?,
+    onDismiss: () -> Unit,
+    onSave: (LocalDate?) -> Unit
+) {
+    val today = LocalDate.now()
+    val state = rememberDatePickerState(
+        initialSelectedDateMillis = (initialDate ?: today.plusMonths(3))
+            .atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli(),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean =
+                Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneOffset.UTC).toLocalDate().isAfter(today)
+
+            override fun isSelectableYear(year: Int): Boolean = year >= today.year
+        }
+    )
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                enabled = state.selectedDateMillis != null,
+                onClick = {
+                    state.selectedDateMillis?.let { millis ->
+                        onSave(Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate())
+                    }
+                }
+            ) {
+                Text(stringResource(R.string.save))
+            }
+        },
+        dismissButton = {
+            Row {
+                if (initialDate != null) {
+                    TextButton(onClick = { onSave(null) }) {
+                        Text(stringResource(R.string.settings_weight_target_date_remove))
+                    }
+                }
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        }
+    ) {
+        DatePicker(state = state)
+    }
 }
