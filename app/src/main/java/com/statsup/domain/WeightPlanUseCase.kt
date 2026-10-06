@@ -59,8 +59,12 @@ class WeightPlanUseCase {
             return startKg + (targetKg - startKg) * (elapsed / totalDays)
         }
 
+        // Show the actual weigh-ins of the last [windowDays] days, but extend the planned
+        // (ideal) line all the way to the target date so the goal is visible on the chart.
         val windowStart = today.minusDays((windowDays - 1).toLong())
-        val planned = (0 until windowDays).map { i ->
+        val windowEnd = if (targetDate.isAfter(today)) targetDate else today
+        val plannedDays = ChronoUnit.DAYS.between(windowStart, windowEnd).toInt()
+        val planned = (0..plannedDays).map { i ->
             val day = windowStart.plusDays(i.toLong())
             day to plannedAt(day)
         }
@@ -73,7 +77,7 @@ class WeightPlanUseCase {
 
         return WeightPlan(
             windowStart = windowStart,
-            windowEnd = today,
+            windowEnd = windowEnd,
             targetDate = targetDate,
             targetKg = targetKg,
             isLossGoal = targetKg < startKg,

@@ -40,10 +40,14 @@ class WeightPlanUseCaseTest {
 
         // 150 days from 95 to 80 → -0.1 kg/day, 50 days elapsed → 90 kg today
         assertEquals(90.0, result.plannedToday, 1e-9)
-        assertEquals(30, result.plannedPoints.size)
+        // The planned line extends all the way to the target date (100 days out),
+        // not just to today, so the goal is always visible on the chart.
         assertEquals(today.minusDays(29), result.plannedPoints.first().first)
-        assertEquals(today, result.plannedPoints.last().first)
+        assertEquals(today.plusDays(100), result.plannedPoints.last().first)
+        assertEquals(130, result.plannedPoints.size)
+        assertEquals(today.plusDays(100), result.windowEnd)
         assertEquals(92.9, result.plannedPoints.first().second, 1e-9)
+        assertEquals(80.0, result.plannedPoints.last().second, 1e-9)
         assertEquals(-2.0, result.deltaFromPlan, 1e-9)
         assertTrue(result.isLossGoal)
     }
