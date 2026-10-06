@@ -430,6 +430,7 @@
     <string name="settings_weight_height">Height</string>
     <string name="settings_weight_target">Weight target</string>
     <string name="settings_weight_target_date">Weight target date</string>
+    <string name="settings_weight_plan_start_date">Plan start date</string>
     <string name="settings_weight_target_date_remove">Remove</string>
     <string name="settings_weight_not_set">Not set</string>
 

@@ -8,11 +8,12 @@ import java.time.temporal.ChronoUnit
 data class WeightPlan(
     val windowStart: LocalDate,
     val windowEnd: LocalDate,
+    val planStart: LocalDate,
     val targetDate: LocalDate,
     val targetKg: Double,
     /** True when the plan is about losing weight (target below the starting weight). */
     val isLossGoal: Boolean,
-    /** One planned weight per day of the window, from [windowStart] to [windowEnd]. */
+    /** One planned weight per day from [planStart] (or [windowStart] if later) to [windowEnd]. */
     val plannedPoints: List<Pair<LocalDate, Double>>,
     /** Actual measurements inside the window (last measurement of each day). */
     val actualPoints: List<Pair<LocalDate, Double>>,
@@ -61,11 +62,13 @@ class WeightPlanUseCase {
 
         // Show the actual weigh-ins of the last [windowDays] days, but extend the planned
         // (ideal) line all the way to the target date so the goal is visible on the chart.
+        // The planned line itself only exists from the plan's start date onward.
         val windowStart = today.minusDays((windowDays - 1).toLong())
         val windowEnd = if (targetDate.isAfter(today)) targetDate else today
-        val plannedDays = ChronoUnit.DAYS.between(windowStart, windowEnd).toInt()
+        val plannedStart = start.coerceAtLeast(windowStart).coerceAtMost(windowEnd)
+        val plannedDays = ChronoUnit.DAYS.between(plannedStart, windowEnd).toInt()
         val planned = (0..plannedDays).map { i ->
-            val day = windowStart.plusDays(i.toLong())
+            val day = plannedStart.plusDays(i.toLong())
             day to plannedAt(day)
         }
         val actual = byDay.filterKeys { !it.isBefore(windowStart) && !it.isAfter(today) }.toList()
@@ -78,6 +81,7 @@ class WeightPlanUseCase {
         return WeightPlan(
             windowStart = windowStart,
             windowEnd = windowEnd,
+            planStart = start,
             targetDate = targetDate,
             targetKg = targetKg,
             isLossGoal = targetKg < startKg,

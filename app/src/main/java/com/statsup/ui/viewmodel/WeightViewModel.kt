@@ -50,6 +50,9 @@ class WeightViewModel(
     var weightTargetDate by mutableStateOf(settingRepository.loadWeightTargetDate())
         private set
 
+    var weightPlanStartDate by mutableStateOf(settingRepository.loadWeightPlanStartDate())
+        private set
+
     var plan by mutableStateOf<WeightPlan?>(null)
         private set
 
@@ -120,20 +123,20 @@ class WeightViewModel(
     fun saveWeightTarget(kg: Double) {
         weightTargetKg = kg
         settingRepository.saveWeightTargetKg(kg)
-        restartPlan()
         refreshStats()
     }
 
     fun saveWeightTargetDate(date: LocalDate?) {
         weightTargetDate = date
         settingRepository.saveWeightTargetDate(date)
-        restartPlan()
         refreshStats()
     }
 
-    /** A new target (weight or date) starts a new plan line from today's weight. */
-    private fun restartPlan() {
-        settingRepository.saveWeightPlanStartDate(LocalDate.now())
+    /** Lets the user pick when the plan started (e.g. "I've been on this diet since..."). */
+    fun saveWeightPlanStartDate(date: LocalDate?) {
+        weightPlanStartDate = date
+        settingRepository.saveWeightPlanStartDate(date)
+        refreshStats()
     }
 
     /**
@@ -145,6 +148,7 @@ class WeightViewModel(
         heightCm = settingRepository.loadHeightCm()
         weightTargetKg = settingRepository.loadWeightTargetKg()
         weightTargetDate = settingRepository.loadWeightTargetDate()
+        weightPlanStartDate = settingRepository.loadWeightPlanStartDate()
         refreshStats()
     }
 
@@ -155,10 +159,9 @@ class WeightViewModel(
     }
 
     private suspend fun computeStats(entries: List<WeightEntry>) {
-        val planStart = settingRepository.loadWeightPlanStartDate()
         val (newStats, newPlan) = withContext(Dispatchers.Default) {
             useCase(entries.sortedBy { it.date }, heightCm, weightTargetKg) to
-                planUseCase(entries, weightTargetKg, weightTargetDate, planStart)
+                planUseCase(entries, weightTargetKg, weightTargetDate, weightPlanStartDate)
         }
         stats = newStats
         plan = newPlan

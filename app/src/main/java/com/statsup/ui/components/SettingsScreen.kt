@@ -135,6 +135,15 @@ fun SettingsScreen(
                 onClick = { viewModel.showWeightTargetDatePicker() }
             )
             Spacer(modifier = Modifier.height(8.dp))
+            SettingsClickableComponent(
+                icon = Icons.Outlined.Event,
+                name = R.string.settings_weight_plan_start_date,
+                value = weightViewModel.weightPlanStartDate
+                    ?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                    ?: stringResource(R.string.settings_weight_not_set),
+                onClick = { viewModel.showWeightPlanStartDatePicker() }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             SettingsToggleComponent(
                 icon = Icons.Outlined.AutoMode,
                 name = R.string.settings_screen_goals_auto_targets,
@@ -494,6 +503,15 @@ fun SettingsScreen(
             )
         }
 
+        if (viewModel.showWeightPlanStartDatePicker) {
+            WeightPlanStartDatePickerDialog(
+                initialDate = weightViewModel.weightPlanStartDate,
+                targetDate = weightViewModel.weightTargetDate,
+                onDismiss = { viewModel.hideWeightPlanStartDatePicker() },
+                onSave = { date -> viewModel.saveWeightPlanStartDate(weightViewModel, date) }
+            )
+        }
+
         // Full import from Strava confirmation dialog
         if (viewModel.showFullImportDialog) {
             AlertDialog(
@@ -554,6 +572,59 @@ private fun WeightTargetDatePickerDialog(
                 Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneOffset.UTC).toLocalDate().isAfter(today)
 
             override fun isSelectableYear(year: Int): Boolean = year >= today.year
+        }
+    )
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                enabled = state.selectedDateMillis != null,
+                onClick = {
+                    state.selectedDateMillis?.let { millis ->
+                        onSave(Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate())
+                    }
+                }
+            ) {
+                Text(stringResource(R.string.save))
+            }
+        },
+        dismissButton = {
+            Row {
+                if (initialDate != null) {
+                    TextButton(onClick = { onSave(null) }) {
+                        Text(stringResource(R.string.settings_weight_target_date_remove))
+                    }
+                }
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        }
+    ) {
+        DatePicker(state = state)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun WeightPlanStartDatePickerDialog(
+    initialDate: LocalDate?,
+    targetDate: LocalDate?,
+    onDismiss: () -> Unit,
+    onSave: (LocalDate?) -> Unit
+) {
+    val today = LocalDate.now()
+    val state = rememberDatePickerState(
+        initialSelectedDateMillis = (initialDate ?: today)
+            .atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli(),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                val date = Instant.ofEpochMilli(utcTimeMillis).atZone(ZoneOffset.UTC).toLocalDate()
+                return targetDate == null || !date.isAfter(targetDate)
+            }
+
+            override fun isSelectableYear(year: Int): Boolean =
+                targetDate == null || year <= targetDate.year
         }
     )
     DatePickerDialog(

@@ -73,6 +73,20 @@ class WeightPlanUseCaseTest {
     }
 
     @Test
+    fun `planned line only begins at the plan start date when that is inside the window`() {
+        val start = today.minusDays(10)
+        val entries = listOf(entry(start, 95.0), entry(today, 92.0))
+        val result = plan(entries, planStart = start)!!
+
+        // Plan started only 10 days ago: no planned line before that, even though the
+        // chart window covers the last 30 days.
+        assertEquals(start, result.plannedPoints.first().first)
+        assertEquals(95.0, result.plannedPoints.first().second, 1e-9)
+        assertEquals(today.plusDays(100), result.plannedPoints.last().first)
+        assertEquals(start, result.planStart)
+    }
+
+    @Test
     fun `required weekly rate is computed from latest weight`() {
         val entries = listOf(entry(today, 87.0))
         val result = plan(entries, targetDate = today.plusDays(70), planStart = today)!!

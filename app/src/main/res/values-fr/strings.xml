@@ -438,6 +438,7 @@
     <string name="settings_weight_height">Taille</string>
     <string name="settings_weight_target">Poids cible</string>
     <string name="settings_weight_target_date">Date objectif de poids</string>
+    <string name="settings_weight_plan_start_date">Date de début du plan</string>
     <string name="settings_weight_target_date_remove">Supprimer</string>
     <string name="settings_weight_not_set">Non défini</string>
 

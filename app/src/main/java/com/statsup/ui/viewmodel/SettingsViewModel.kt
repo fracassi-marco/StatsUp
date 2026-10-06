@@ -86,6 +86,9 @@ class SettingsViewModel(
     var showWeightTargetDatePicker by mutableStateOf(false)
         private set
 
+    var showWeightPlanStartDatePicker by mutableStateOf(false)
+        private set
+
     init {
         viewModelScope.launch {
             trainingRepository.all().collect { trainings = it }
@@ -309,6 +312,13 @@ class SettingsViewModel(
     fun saveWeightTargetDate(weightViewModel: WeightViewModel, date: LocalDate?) {
         weightViewModel.saveWeightTargetDate(date)
         hideWeightTargetDatePicker()
+    }
+
+    fun showWeightPlanStartDatePicker() { showWeightPlanStartDatePicker = true }
+    fun hideWeightPlanStartDatePicker() { showWeightPlanStartDatePicker = false }
+    fun saveWeightPlanStartDate(weightViewModel: WeightViewModel, date: LocalDate?) {
+        weightViewModel.saveWeightPlanStartDate(date)
+        hideWeightPlanStartDatePicker()
     }
 }
 
