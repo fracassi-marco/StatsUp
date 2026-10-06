@@ -1,5 +1,10 @@
 [
   {
+    "version": "2.16.2",
+    "date": "2026-10-06",
+    "message": "Add weight plan start date feature with date picker and UI integration"
+  },
+  {
     "version": "2.16.1",
     "date": "2026-10-06",
     "message": "Extend planned weight line to target date for improved chart visibility"
