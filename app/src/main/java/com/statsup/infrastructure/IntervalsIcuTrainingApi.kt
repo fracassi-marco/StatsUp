@@ -25,6 +25,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeParseException
 
 private const val REQUEST_TIMEOUT_MILLIS = 15_000
+const val OAUTH_REDIRECT_URI = "statsup://oauth"
 private const val MAX_ATTEMPTS = 3
 private val RETRY_DELAYS_MS = listOf(1000L, 3000L)
 private val RETRYABLE_STATUSES = setOf(429, 500, 502, 503, 504)
@@ -86,6 +87,9 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
             headers = mapOf("Accept" to "application/json"),
             timeoutMillis = REQUEST_TIMEOUT_MILLIS
         )
+        if (response.statusCode !in 200..299) {
+            android.util.Log.e("IntervalsIcu", "download HTTP ${response.statusCode}: ${response.body}")
+        }
         checkStatus(response.statusCode)
         val listType = jsonMapper.typeFactory.constructCollectionType(List::class.java, ActivityDto::class.java)
 
@@ -222,13 +226,16 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         )
     }
 
-    override suspend fun exchangeCode(code: String): OAuthToken {
-        val params = mapOf(
-            "client_id" to BuildConfig.INTERVALS_ICU_CLIENT_ID,
-            "client_secret" to BuildConfig.INTERVALS_ICU_CLIENT_SECRET,
-            "code" to code,
-            "grant_type" to "authorization_code"
-        )
+    override suspend fun exchangeCode(code: String, codeVerifier: String?): OAuthToken {
+        val params = buildMap {
+            put("client_id", BuildConfig.INTERVALS_ICU_CLIENT_ID)
+            put("client_secret", BuildConfig.INTERVALS_ICU_CLIENT_SECRET)
+            put("code", code)
+            put("redirect_uri", OAUTH_REDIRECT_URI)
+            put("grant_type", "authorization_code")
+            // AppAuth always uses PKCE, so the server requires the matching verifier
+            if (codeVerifier != null) put("code_verifier", codeVerifier)
+        }
         val body = params.entries.joinToString("&") {
             "${java.net.URLEncoder.encode(it.key, "UTF-8")}=${java.net.URLEncoder.encode(it.value, "UTF-8")}"
         }
@@ -252,7 +259,10 @@ class IntervalsIcuTrainingApi(private val settingRepository: SettingRepository) 
         } finally {
             conn.disconnect()
         }
-        if (statusCode !in 200..299) throw ApiException(statusCode)
+        if (statusCode !in 200..299) {
+            android.util.Log.e("IntervalsIcu", "exchangeCode HTTP $statusCode: $responseBody")
+            throw ApiException(statusCode)
+        }
         val result = jsonMapper.readValue(responseBody, TokenExchangeDto::class.java)
         // Prefer the top-level athlete_id; fall back to the nested athlete object.
         // Ensure the ID always carries the "i" prefix expected by the REST API.

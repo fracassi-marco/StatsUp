@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.statsup.BuildConfig
 import com.statsup.domain.TrainingApi
 import com.statsup.domain.repository.SettingRepository
+import com.statsup.infrastructure.OAUTH_REDIRECT_URI
 import com.statsup.infrastructure.service.ImportEventBus
 import com.statsup.infrastructure.service.ImportForegroundService
 import com.statsup.infrastructure.service.ImportProgress
@@ -112,7 +113,7 @@ class MainViewModel(
             viewModelScope.launch {
                 try {
                     val oauthToken = withContext(Dispatchers.IO) {
-                        trainingApi.exchangeCode(code)
+                        trainingApi.exchangeCode(code, result.request.codeVerifier)
                     }
                     settingRepository.saveApiToken(oauthToken.accessToken)
                     settingRepository.saveApiRefreshToken(oauthToken.refreshToken)
@@ -161,7 +162,7 @@ class MainViewModel(
     }
 
     private fun buildAuthIntent(authService: AuthorizationService): Intent {
-        val redirectUri = REDIRECT_URI.toUri()
+        val redirectUri = OAUTH_REDIRECT_URI.toUri()
         val authorizeUri = "https://intervals.icu/oauth/authorize".toUri()
         val tokenUri = "https://intervals.icu/oauth/token".toUri()
 
@@ -172,9 +173,5 @@ class MainViewModel(
             .build()
 
         return authService.getAuthorizationRequestIntent(request)
-    }
-
-    companion object {
-        private const val REDIRECT_URI = "statsup://oauth"
     }
 }

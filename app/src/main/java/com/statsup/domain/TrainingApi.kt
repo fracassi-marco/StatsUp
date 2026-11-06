@@ -15,5 +15,5 @@ interface TrainingApi {
     suspend fun fetchPolyline(token: String, activityId: String): String?
     suspend fun fetchElevationStream(token: String, activityId: String): List<Double>?
     suspend fun refreshToken(refreshToken: String): OAuthToken
-    suspend fun exchangeCode(code: String): OAuthToken
+    suspend fun exchangeCode(code: String, codeVerifier: String?): OAuthToken
 }
